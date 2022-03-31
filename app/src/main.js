@@ -26,9 +26,9 @@ const {
   app, BrowserWindow, ipcMain, nativeTheme,
 } = require('electron');
 const path = require('path');
-const xml = require('fs').readFileSync('./lib/test/test-2.xml', 'utf8');
-const ISRAProject = require('./lib/src/model/classes/ISRAProject/isra-project');
-const { xmlJSON } = require('./lib/src/api/index');
+// const xml = require('fs').readFileSync('../lib/test/test-2.xml', 'utf8');
+// const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
+// const { xmlJSON } = require('../../lib/src/api/index');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -39,10 +39,10 @@ function createWindow() {
     },
   });
 
-  win.loadFile(path.join(__dirname, 'app/src/index.html'));
+  win.loadFile(path.join(__dirname, 'index.html'));
 
   // initialise ISRA project
-  const newISRAProject = new ISRAProject();
+  // const newISRAProject = new ISRAProject();
 
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
@@ -57,7 +57,7 @@ function createWindow() {
     nativeTheme.themeSource = 'system';
   });
 
-  ipcMain.handle('parse:xml', () => xmlJSON(xml));
+  // ipcMain.handle('parse:xml', () => xmlJSON(xml));
 }
 
 app.whenReady().then(() => {
