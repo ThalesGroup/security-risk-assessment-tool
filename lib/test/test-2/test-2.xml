@@ -3,24 +3,24 @@
 	<my:templateVersion>44</my:templateVersion>
 	<my:projectName>Sample Mobile Application</my:projectName>
 	<my:projectOrganization>ITE</my:projectOrganization>
-	<my:projectVersion>1.00</my:projectVersion>
+	<my:projectVersion>1.0</my:projectVersion>
 	
 	
 	<my:ISRA_tracking>
 										<my:trackingIteration>2</my:trackingIteration>
-										<my:trackingSecurityOfficer>t0263774</my:trackingSecurityOfficer>
+										<my:trackingSecurityOfficer>anotherUser</my:trackingSecurityOfficer>
 										<my:trackingDate>2022-03-24</my:trackingDate>
-										<my:trackingComment>fgfdg</my:trackingComment>
+										<my:trackingComment>a comment</my:trackingComment>
 									</my:ISRA_tracking><my:ISRA_tracking>
 										<my:trackingIteration>2</my:trackingIteration>
 										<my:trackingSecurityOfficer>t0263774</my:trackingSecurityOfficer>
 										<my:trackingDate>2022-03-29</my:trackingDate>
-										<my:trackingComment></my:trackingComment>
+										<my:trackingComment>a comment 2</my:trackingComment>
 									</my:ISRA_tracking><my:ISRA_tracking>
 										<my:trackingIteration>3</my:trackingIteration>
 										<my:trackingSecurityOfficer>t0263774</my:trackingSecurityOfficer>
 										<my:trackingDate>2022-03-29</my:trackingDate>
-										<my:trackingComment></my:trackingComment>
+										<my:trackingComment>a comment 3</my:trackingComment>
 									</my:ISRA_tracking><my:businessAssetsCount>5</my:businessAssetsCount>
 	<my:supportingAssetsCount>5</my:supportingAssetsCount>
 	<my:risksCount>6</my:risksCount>
