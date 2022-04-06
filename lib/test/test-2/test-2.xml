@@ -433,7 +433,7 @@
 	<my:projectVersion>1.0</my:projectVersion>
 	<my:vulnerabilityId>1</my:vulnerabilityId>
 	<my:vulnerabilityName>Man in the middle attack through network interception</my:vulnerabilityName>
-	<my:vulnerabilityFamily></my:vulnerabilityFamily>
+	<my:vulnerabilityFamily>API Abuse‎</my:vulnerabilityFamily>
 	<my:vulnerabilityTrackingID></my:vulnerabilityTrackingID>
 	<my:vulnerabilityTrackingURI></my:vulnerabilityTrackingURI>
 	<my:vulnerabilityCVE></my:vulnerabilityCVE>
