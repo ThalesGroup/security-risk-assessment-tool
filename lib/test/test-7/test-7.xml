@@ -37,18 +37,7 @@
 		<my:Criticity my:label="Low">1</my:Criticity>
 		<my:Criticity my:label="Not Applicable">0</my:Criticity>
 	</my:BusinessAssetsDesc>
-	<my:BusinessAsset>
-		<my:businessAssetId>1</my:businessAssetId>
-		<my:businessAssetName></my:businessAssetName>
-		<my:businessAssetType>Data</my:businessAssetType>
-		<my:businessAssetDescription></my:businessAssetDescription>
-		<my:businessAssetConfidentiality>3</my:businessAssetConfidentiality>
-		<my:businessAssetIntegrity>3</my:businessAssetIntegrity>
-		<my:businessAssetAvailability>3</my:businessAssetAvailability>
-		<my:businessAssetAuthenticity>3</my:businessAssetAuthenticity>
-		<my:businessAssetAuthorization>3</my:businessAssetAuthorization>
-		<my:businessAssetNonRepudiation>3</my:businessAssetNonRepudiation>
-	</my:BusinessAsset>
+	
 	<my:SupportingAssetsDesc>
 		<my:supportingAssetDiagram></my:supportingAssetDiagram>
 	</my:SupportingAssetsDesc>
