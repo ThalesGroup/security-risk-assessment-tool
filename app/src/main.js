@@ -27,7 +27,6 @@ const {
 } = require('electron');
 const path = require('path');
 const xml = require('fs').readFileSync('lib/test/test-2/test-2.xml', 'utf8');
-// const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 const { xml2JSON } = require('../../lib/src/api/index');
 
 function createWindow() {
@@ -40,9 +39,6 @@ function createWindow() {
   });
 
   win.loadFile(path.join(__dirname, 'index.html'));
-
-  // initialise ISRA project
-  // const newISRAProject = new ISRAProject();
 
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
