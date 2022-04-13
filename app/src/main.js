@@ -28,7 +28,7 @@ const {
 const path = require('path');
 const xml = require('fs').readFileSync('lib/test/test-2/test-2.xml', 'utf8');
 // const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
-const { xmlJSON } = require('../../lib/src/api/index');
+const { xml2JSON } = require('../../lib/src/api/index');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -57,7 +57,7 @@ function createWindow() {
     nativeTheme.themeSource = 'system';
   });
 
-  ipcMain.handle('parse:xml', () => xmlJSON(xml));
+  ipcMain.handle('parse:xml', () => xml2JSON(xml).properties);
 }
 
 app.whenReady().then(() => {
