@@ -32,7 +32,8 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
   document.getElementById('theme-source').innerHTML = 'System';
 });
 
-document.getElementById('parse').addEventListener('click', async () => {
-  const result = await window.parse.xml();
+document.getElementById('file-selector').addEventListener('change', async (event) => {
+  const file = event.target.files[0].path;
+  const result = await window.parse.xml(file);
   console.log(result);
 });

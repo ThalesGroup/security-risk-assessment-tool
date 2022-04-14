@@ -26,7 +26,7 @@ const {
   app, BrowserWindow, ipcMain, nativeTheme,
 } = require('electron');
 const path = require('path');
-const xml = require('fs').readFileSync('lib/test/test-2/test-2.xml', 'utf8');
+const fs = require('fs');
 const { xml2JSON } = require('../../lib/src/api/index');
 
 function createWindow() {
@@ -53,7 +53,10 @@ function createWindow() {
     nativeTheme.themeSource = 'system';
   });
 
-  ipcMain.handle('parse:xml', () => xml2JSON(xml).properties);
+  ipcMain.handle('parse:xml', (event, filePath) => {
+    const xmlData = fs.readFileSync(filePath, 'utf8');
+    return xml2JSON(xmlData).properties;
+  });
 }
 
 app.whenReady().then(() => {
