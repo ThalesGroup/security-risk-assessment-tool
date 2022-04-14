@@ -5,7 +5,8 @@
   "main": "./app/src/main.js",
   "scripts": {
     "start": "electron .",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "jsdoc": "jsdoc -c lib/doc/jsdoc.json"
   },
   "author": "ThalesDIS",
   "license": "Apache-2.0 License",
@@ -14,7 +15,8 @@
     "eslint": "^8.9.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "jsdoc": "^3.6.10"
   },
   "dependencies": {
     "ajv": "^8.10.0",
