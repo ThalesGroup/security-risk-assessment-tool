@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: parser.js</title>
+    <title>JSDoc: Source: api/xml-json/parser.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: parser.js</h1>
+    <h1 class="page-title">Source: api/xml-json/parser.js</h1>
 
     
 
@@ -26,7 +26,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/*----------------------------------------------------------------------------
+            <pre class="prettyprint source linenums"><code>/*
+* ----------------------------------------------------------------------------
 *
 *     Copyright © 2022 THALES. All Rights Reserved.
  *
@@ -57,14 +58,24 @@ const validateJsonSchema = require('./validate-json-schema');
 const populateClass = require('./populate-class');
 
 /**
-     * name of xml element used to edit name, remove namespace &amp; NaN values
-     * @param {string} name - name of xml element.
-     */
-
+  * Parses imported ISRA XML into JSON using xml2js, and populates class attributes
+  * @module XML2JSON
+  * @param {string} xml - content of xml file
+  * @return {object} ISRA Project JSON
+  * @throws if result is undefined: XML not well formed at (position of xml element)
+  * @throws if result is null/ result.ISRA is undefined: Invalid ISRA XML
+ * @example
+ * const xml = require('fs').readFileSync('path-to-xml-file');
+ * const israProject = parser(xml);
+*/
 const parser = (xml) => ((xmlCopy) => {
   const xmlData = xmlCopy.replace(/xsi:nil="true"/g, '');
 
-  // fix spelling errors
+  /** to fix spelling errors
+   * @function editName
+   * @param {string} name - name of xml element
+   * @returns {string} edited xml name
+   * */
   const editName = (name) => {
     let tagname = name;
     tagname = tagname.match('ISRA_tracking') ? tagname.replace('_', '') : tagname;
@@ -75,6 +86,11 @@ const parser = (xml) => ((xmlCopy) => {
     return tagname;
   };
 
+  /** to remove namespace
+   * @function removeNameSpacePreifx
+   * @param {string} name - name of xml element
+   * @returns {string} edited xml name
+   * */
   const removeNameSpacePreifx = (name) => {
     let attrname = name;
     const tags = attrname.split(':');
@@ -83,16 +99,26 @@ const parser = (xml) => ((xmlCopy) => {
     return attrname;
   };
 
+  /** to remove NaN value of xml element
+   * @function removeNaN
+   * @param {string} value - value of xml element
+   * @returns {string} edited xml value
+   * */
   const removeNaN = (value) => {
     if (value === 'NaN') return '';
     return value;
   };
 
   let israProject = {};
+  /** parse xml content to JSON
+   * @function parseString
+   * @param {string} xmlData - content of xml file
+   * @param {object} processors - parser options
+   * @param {function} function - processed data
+   * */
   parseString(
     xmlData,
     {
-      // parser options
       tagNameProcessors: [editName, removeNameSpacePreifx],
       attrNameProcessors: [removeNameSpacePreifx],
       valueProcessors: [removeNaN],
@@ -103,9 +129,31 @@ const parser = (xml) => ((xmlCopy) => {
       if (result === undefined) throw new Error(`XML not well formed at \nXML ${xmlErr}`);
       else if (result === null || result.ISRA === undefined) throw new Error('Invalid ISRA XML');
       else {
-        // alter xml data to fit schema
+      /** modify parsed ISRA JSON to fit schema
+       * @function alterISRA
+       * @param {object} ISRA - israMeta JSON that has been parsed
+       * @param {string} xmlDAta - content of xml file
+       * @returns {object} edited ISRA JSON data
+       * */
+
         const israJSONData = alterISRA(result.ISRA, xmlData);
+
+        /** validate ISRA JSON against schema
+       * @function validateJsonSchema
+       * @param {object} israJSONData - edited ISRA JSON data
+       * @returns {object} valid ISRA JSON data
+       * @throws Failed to validate json against schema at (position of schema)
+       * */
+
         const israValidJSONData = validateJsonSchema(israJSONData);
+
+        /** populating each ISRA JSON data to the corresponding classes
+         * @function populateClass
+         * @param {object} israValidJSONData - valid ISRA JSON data
+         * @returns {object} populated ISRAProject instance
+         * @throws value of class property set is invalid
+         * */
+
         israProject = populateClass(israValidJSONData).getISRAProject();
 
         const data = JSON.stringify(israProject.properties, null, 4);
@@ -130,13 +178,13 @@ module.exports = parser;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#parser">parser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-XML2JSON.html">XML2JSON</a></li></ul><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Apr 14 2022 16:09:30 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 18 2022 15:29:39 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

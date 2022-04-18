@@ -1,0 +1,25 @@
+{
+    "ISRAmeta": {
+        "projectName": "",
+        "projectOrganization": "",
+        "projectVersion": "",
+        "ISRAtracking": [],
+        "businessAssetsCount": 0,
+        "supportingAssetsCount": 0,
+        "risksCount": 0,
+        "vulnerabilitiesCount": 0
+    },
+    "ProjectContext": {
+        "projectDescription": "",
+        "projectURL": "",
+        "projectDescriptionAttachment": "",
+        "securityProjectObjectives": "",
+        "securityOfficerObjectives": "",
+        "securityAssumptions": ""
+    },
+    "BusinessAsset": [],
+    "SupportingAssetsDesc": "",
+    "SupportingAsset": [],
+    "Risk": [],
+    "Vulnerability": []
+}
