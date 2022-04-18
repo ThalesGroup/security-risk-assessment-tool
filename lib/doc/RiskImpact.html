@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BusinessAssetProperties</title>
+    <title>JSDoc: Class: RiskImpact</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BusinessAssetProperties</h1>
+    <h1 class="page-title">Class: RiskImpact</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BusinessAssetProperties<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>RiskImpact<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Create a Business Asset Properties instance with private members</p></div>
+            <div class="class-description"><p>Create a RiskImpact with private members: Impact evaluation section to calculate riskImpact</p></div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="BusinessAssetProperties"><span class="type-signature"></span>new BusinessAssetProperties<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="RiskImpact"><span class="type-signature"></span>new RiskImpact<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line44">line 44</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -122,7 +122,7 @@
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef): id ref is not null/integer</p>
+        <p>Risk id (riskIdRef): id ref is not a null/integer</p>
     
     </div>
 
@@ -132,8 +132,7 @@
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef):
-confidentiality is not a null/integer or is invalid</p>
+        <p>Risk (riskIdRef): risk impact is an invalid null/integer</p>
     
     </div>
 
@@ -143,8 +142,7 @@ confidentiality is not a null/integer or is invalid</p>
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef):
-integrity is not a null/integer or is invalid</p>
+        <p>Risk (riskIdRef): business asset confidentiality flag is an invalid null/integer</p>
     
     </div>
 
@@ -154,8 +152,7 @@ integrity is not a null/integer or is invalid</p>
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef):
-availability is not a null/integer or is invalid</p>
+        <p>Risk (riskIdRef): business asset integrity flag is an invalid null/integer</p>
     
     </div>
 
@@ -165,8 +162,7 @@ availability is not a null/integer or is invalid</p>
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef):
-authenticity is not a null/integer or is invalid</p>
+        <p>Risk (riskIdRef): business asset availability flag is an invalid null/integer</p>
     
     </div>
 
@@ -176,8 +172,7 @@ authenticity is not a null/integer or is invalid</p>
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef):
-authorization is not a null/integer or is invalid</p>
+        <p>Risk (riskIdRef): business asset authenticity flag is an invalid null/integer</p>
     
     </div>
 
@@ -187,8 +182,17 @@ authorization is not a null/integer or is invalid</p>
 
     <div class="param-desc">
     
-        <p>Business asset id (businessAssetIdRef):
-nonrepudiation is not a null/integer or is invalid</p>
+        <p>Risk (riskIdRef): business asset authorization flag is an invalid null/integer</p>
+    
+    </div>
+
+</li>
+    
+        <li>
+
+    <div class="param-desc">
+    
+        <p>Risk (riskIdRef): business asset non-repudiation flag is an invalid null/integer</p>
     
     </div>
 
@@ -221,13 +225,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetAuthenticity"><span class="type-signature"></span>businessAssetAuthenticity<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="businessAssetAuthenticityFlag"><span class="type-signature"></span>businessAssetAuthenticityFlag<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>value of authenticity selected</p>
+    <p>value of flag of business asset authenticity</p>
 </div>
 
 
@@ -278,7 +282,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line106">line 106</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -296,13 +300,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetAuthorization"><span class="type-signature"></span>businessAssetAuthorization<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="businessAssetAuthorizationFlag"><span class="type-signature"></span>businessAssetAuthorizationFlag<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>value of authorization selected</p>
+    <p>value of flag of business asset authorization</p>
 </div>
 
 
@@ -353,7 +357,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line117">line 117</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -371,13 +375,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetAvailability"><span class="type-signature"></span>businessAssetAvailability<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="businessAssetAvailabilityFlag"><span class="type-signature"></span>businessAssetAvailabilityFlag<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>value of availability selected</p>
+    <p>value of flag of business asset availability</p>
 </div>
 
 
@@ -428,7 +432,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line95">line 95</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -446,13 +450,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetConfidentiality"><span class="type-signature"></span>businessAssetConfidentiality<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="businessAssetConfidentialityFlag"><span class="type-signature"></span>businessAssetConfidentialityFlag<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>value of confidentiality selected</p>
+    <p>value of flag of business asset confidentiality</p>
 </div>
 
 
@@ -503,7 +507,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line73">line 73</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -521,13 +525,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetIdRef"><span class="type-signature"></span>businessAssetIdRef<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="businessAssetIntegrityFlag"><span class="type-signature"></span>businessAssetIntegrityFlag<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>references id of corresponding business asset</p>
+    <p>value of flag of business asset integrity</p>
 </div>
 
 
@@ -578,7 +582,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line62">line 62</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -596,13 +600,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetIntegrity"><span class="type-signature"></span>businessAssetIntegrity<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="businessAssetNonRepudiationFlag"><span class="type-signature"></span>businessAssetNonRepudiationFlag<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>value of integrity selected</p>
+    <p>value of flag of business asset non-repudiation</p>
 </div>
 
 
@@ -653,7 +657,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line84">line 84</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line120">line 120</a>
     </li></ul></dd>
     
 
@@ -671,13 +675,85 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="businessAssetNonRepudiation"><span class="type-signature"></span>businessAssetNonRepudiation<span class="type-signature"> :integer|null</span></h4>
+<h4 class="name" id="properties"><span class="type-signature"></span>properties<span class="type-signature"> :object</span></h4>
 
 
 
 
 <div class="description">
-    <p>value of nonrepudiation selected</p>
+    <p>get object of each value of RiskImpact member property</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line129">line 129</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="riskIdRef"><span class="type-signature"></span>riskIdRef<span class="type-signature"> :integer|null</span></h4>
+
+
+
+
+<div class="description">
+    <p>referenced value of riskId from Risk</p>
 </div>
 
 
@@ -728,7 +804,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line128">line 128</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -746,13 +822,13 @@ nonrepudiation is not a null/integer or is invalid</p>
 
         
             
-<h4 class="name" id="properties"><span class="type-signature"></span>properties<span class="type-signature"> :function</span></h4>
+<h4 class="name" id="riskImpact"><span class="type-signature"></span>riskImpact<span class="type-signature"> :integer|null</span></h4>
 
 
 
 
 <div class="description">
-    <p>get object of each value of BusinessAssetProperties member property</p>
+    <p>calculated value of risk impact</p>
 </div>
 
 
@@ -761,7 +837,10 @@ nonrepudiation is not a null/integer or is invalid</p>
     <ul>
         <li>
             
-<span class="param-type">function</span>
+<span class="param-type">integer</span>
+|
+
+<span class="param-type">null</span>
 
 
         </li>
@@ -800,7 +879,7 @@ nonrepudiation is not a null/integer or is invalid</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_classes_BusinessAsset_business-asset-properties.js.html">model/classes/BusinessAsset/business-asset-properties.js</a>, <a href="model_classes_BusinessAsset_business-asset-properties.js.html#line139">line 139</a>
+        <a href="model_classes_Risk_risk-impact.js.html">model/classes/Risk/risk-impact.js</a>, <a href="model_classes_Risk_risk-impact.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
