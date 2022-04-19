@@ -51,23 +51,31 @@
 * -----------------------------------------------------------------------------
 */
 
-const fs = require('fs');
+// const fs = require('fs');
 const { parseString } = require('xml2js');
 const alterISRA = require('./alter-isra/alter-isra');
 const validateJsonSchema = require('./validate-json-schema');
 const populateClass = require('./populate-class');
 
 /**
-  * Parses imported ISRA XML into JSON using xml2js, and populates class attributes
+  * Parses imported ISRA XML into JSON using xml2js, validate JSON against
+  * schema using ajv, and populates class attributes
   * @module XML2JSON
+*/
+
+/**
+  * Parses imported ISRA XML into JSON using xml2js, validate JSON against
+  * schema using ajv, and populates class attributes
+  * @function parser
   * @param {string} xml - content of xml file
   * @return {object} ISRA Project JSON
   * @throws if result is undefined: XML not well formed at (position of xml element)
   * @throws if result is null/ result.ISRA is undefined: Invalid ISRA XML
- * @example
- * const xml = require('fs').readFileSync('path-to-xml-file');
- * const israProject = parser(xml);
+  * @example
+  * const xml = require('fs').readFileSync('path-to-xml-file');
+  * const israProject = parser(xml);
 */
+
 const parser = (xml) => ((xmlCopy) => {
   const xmlData = xmlCopy.replace(/xsi:nil="true"/g, '');
 
@@ -110,6 +118,7 @@ const parser = (xml) => ((xmlCopy) => {
   };
 
   let israProject = {};
+
   /** parse xml content to JSON
    * @function parseString
    * @param {string} xmlData - content of xml file
@@ -129,37 +138,17 @@ const parser = (xml) => ((xmlCopy) => {
       if (result === undefined) throw new Error(`XML not well formed at \nXML ${xmlErr}`);
       else if (result === null || result.ISRA === undefined) throw new Error('Invalid ISRA XML');
       else {
-      /** modify parsed ISRA JSON to fit schema
-       * @function alterISRA
-       * @param {object} ISRA - israMeta JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited ISRA JSON data
-       * */
-
         const israJSONData = alterISRA(result.ISRA, xmlData);
-
-        /** validate ISRA JSON against schema
-       * @function validateJsonSchema
-       * @param {object} israJSONData - edited ISRA JSON data
-       * @returns {object} valid ISRA JSON data
-       * @throws Failed to validate json against schema at (position of schema)
-       * */
+        // console.log(israJSONData.ISRAmeta.templateVersion[0]);
 
         const israValidJSONData = validateJsonSchema(israJSONData);
 
-        /** populating each ISRA JSON data to the corresponding classes
-         * @function populateClass
-         * @param {object} israValidJSONData - valid ISRA JSON data
-         * @returns {object} populated ISRAProject instance
-         * @throws value of class property set is invalid
-         * */
-
         israProject = populateClass(israValidJSONData).getISRAProject();
 
-        const data = JSON.stringify(israProject.properties, null, 4);
-        fs.writeFile('ISRAdata.json', data, (err) => {
-          if (err) throw err;
-        });
+        // const data = JSON.stringify(israProject.properties, null, 4);
+        // fs.writeFile('ISRAdata.json', data, (err) => {
+        //   if (err) throw err;
+        // });
       }
     },
   );
@@ -178,13 +167,13 @@ module.exports = parser;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-XML2JSON.html">XML2JSON</a></li></ul><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-XML2JSON.html">XML2JSON</a></li></ul><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alterBusinessAssets">alterBusinessAssets</a></li><li><a href="global.html#alterISRA">alterISRA</a></li><li><a href="global.html#alterISRAmeta">alterISRAmeta</a></li><li><a href="global.html#alterProjectContext">alterProjectContext</a></li><li><a href="global.html#alterRisks">alterRisks</a></li><li><a href="global.html#alterSupportingAssets">alterSupportingAssets</a></li><li><a href="global.html#alterVulnerability">alterVulnerability</a></li><li><a href="global.html#populateClass">populateClass</a></li><li><a href="global.html#validateJsonSchema">validateJsonSchema</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 18 2022 18:26:49 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 19 2022 17:46:52 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

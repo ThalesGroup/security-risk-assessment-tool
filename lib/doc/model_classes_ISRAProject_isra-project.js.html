@@ -79,8 +79,8 @@ const Vulnerability = require('../Vulnerability/vulnerability');
   * @throws Vulnerability (vulnerabilityId): doesn't exist
 */
 class ISRAProject {
-  // value of latest version of electron
-  #appVersion = process.versions.electron;
+  // value of latest app template version
+  #appVersion;
 
   #projectName;
 
@@ -107,16 +107,24 @@ class ISRAProject {
   // map of ISRAMetaTracking in project
   #metaTrackingMap = new Map();
 
-  // counts number of existing BusinessAssets
+  /** counts number of existing BusinessAssets
+    * @type {integer}
+  */
   #businessAssetsCount = 0;
 
-  // counts number of existing SupportingAssets
+  /** counts number of existing SupportingAssets
+    * @type {integer}
+  */
   #supportingAssetsCount = 0;
 
-  // counts number of existing Risks
+  /** counts number of existing Risks
+    * @type {integer}
+  */
   #risksCount = 0;
 
-  // counts number of existing Vulnerabilities
+  /** counts number of existing Vulnerabilities
+    * @type {integer}
+  */
   #vulnerabilitiesCount = 0;
 
   /** text input of name of project
@@ -125,6 +133,10 @@ class ISRAProject {
   set projectName(projectName) {
     if (typeof projectName === 'string') this.#projectName = projectName;
     else throw new Error('Project name is not a string');
+  }
+
+  get projectName() {
+    return this.#projectName;
   }
 
   /** value of selected organization of project
@@ -136,6 +148,10 @@ class ISRAProject {
     } else throw new Error('Project organization is an invalid string');
   }
 
+  get projectOrganization() {
+    return this.#projectOrganization;
+  }
+
   /** text input of version of project
     * @type {string}
   */
@@ -144,8 +160,12 @@ class ISRAProject {
     else throw new Error('Project version is not a string');
   }
 
+  get projectVersion() {
+    return this.#projectOrganization;
+  }
+
   /** obj of ProjectContext
-    * @type {ProjectContext}
+    * @type {ISRAProjectContext}
   */
   set israProjectContext(israProjectContext) {
     if (israProjectContext instanceof ISRAProjectContext) {
@@ -187,6 +207,7 @@ class ISRAProject {
     * @property {function} getBusinessAsset - get BusinessAsset
     * based on businessAssetId for updating
     * @param {integer|null} businessAssetId - id of Business Asset
+    * @returns {BusinessAsset}
   */
   getBusinessAsset(businessAssetId) {
     if (this.#businessAssetsMap.has(businessAssetId)) {
@@ -200,6 +221,10 @@ class ISRAProject {
   set supportingAssetsDesc(supportingAssetsDesc) {
     if (isValidHtml(supportingAssetsDesc)) this.#supportingAssetsDesc = supportingAssetsDesc;
     else throw new Error('Supporting asset desc is invalid html string');
+  }
+
+  get supportingAssetsDesc() {
+    return this.#supportingAssetsDesc;
   }
 
   /**
@@ -232,6 +257,7 @@ class ISRAProject {
     * @property {function} getSupportingAsset - get SupportingAsset
     * based on supportingAssetId for updating
     * @param {integer|null} supportingAssetId - id of Supporting Asset
+    * @returns {SupportingAsset}
   */
   getSupportingAsset(supportingAssetId) {
     if (this.#supportingAssetsMap.has(supportingAssetId)) {
@@ -266,6 +292,7 @@ class ISRAProject {
     * @property {function} getRisk - get Risk
     * based on riskId for updating
     * @param {integer|null} riskId - id of Risk
+    * @returns {Risk}
   */
   getRisk(riskId) {
     if (this.#risksMap.has(riskId)) {
@@ -303,6 +330,7 @@ class ISRAProject {
     * @property {function} getVulnerability - get Vulnerability
     * based on vulnerabilityId for updating
     * @param {integer|null} vulnerabilityId - id of Vulnerability
+    * @returns {Vulnerability}
   */
   getVulnerability(vulnerabilityId) {
     if (this.#vulnerabilitiesMap.has(vulnerabilityId)) {
@@ -356,6 +384,7 @@ class ISRAProject {
     * @property {function} getMetaTracking - get ISRAMetaTracking
     * based on trackingIteration for updating
     * @param {integer|null} trackingIteration -  trackingIteration
+    * @returns {ISRAMetaTracking}
   */
   getMetaTracking(trackingIteration) {
     if (this.#metaTrackingMap.has(trackingIteration)) {
@@ -400,13 +429,13 @@ module.exports = ISRAProject;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-XML2JSON.html">XML2JSON</a></li></ul><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-XML2JSON.html">XML2JSON</a></li></ul><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alterBusinessAssets">alterBusinessAssets</a></li><li><a href="global.html#alterISRA">alterISRA</a></li><li><a href="global.html#alterISRAmeta">alterISRAmeta</a></li><li><a href="global.html#alterProjectContext">alterProjectContext</a></li><li><a href="global.html#alterRisks">alterRisks</a></li><li><a href="global.html#alterSupportingAssets">alterSupportingAssets</a></li><li><a href="global.html#alterVulnerability">alterVulnerability</a></li><li><a href="global.html#populateClass">populateClass</a></li><li><a href="global.html#validateJsonSchema">validateJsonSchema</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 18 2022 18:26:49 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 19 2022 17:46:52 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

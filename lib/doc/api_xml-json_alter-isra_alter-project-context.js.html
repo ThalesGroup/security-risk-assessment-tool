@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: model/classes/ISRAProject/isra-meta-tracking.js</title>
+    <title>JSDoc: Source: api/xml-json/alter-isra/alter-project-context.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: model/classes/ISRAProject/isra-meta-tracking.js</h1>
+    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-project-context.js</h1>
 
     
 
@@ -50,75 +50,26 @@
 * -----------------------------------------------------------------------------
 */
 
-// gets current operating system user as a string
-const user = require('os').userInfo().username;
-// uses user's time zone and displays current date as a string
-const currentDate = new Date();
-const { isValidDate, isValidId } = require('../../schema/validation-pattern/validation');
+const { getHTMLString } = require('../utility');
 
-/**
-* Create a ISRA Meta Tracking instance with private members
-* @throws Tracking iteration (trackingIteration) is not null/integer
-* @throws Meta tracking (trackingIteration): tracking officer is not a string
-* @throws Meta tracking (trackingIteration): tracking date is invalid date string
-* @throws Meta tracking (trackingIteration): tracking comment is invalid date string
-*/
-class ISRAMetaTracking {
-  #trackingIteration;
+/** modify parsed ISRA JSON to fit schema
+       * @function alterProjectContext
+       * @param {object} projectContext - projectContext JSON that has been parsed
+       * @param {string} xmlDAta - content of xml file
+       * @returns {object} edited projectContext JSON data
+       * */
+const alterProjectContext = (xmlData, projectContext) => ((xmlDataCopy, projectContextCopy) => {
+  const pc = projectContextCopy;
+  Object.keys(pc[0]).forEach((key) => {
+    if (key !== 'projectDescriptionAttachment'
+      &amp;&amp; key !== 'projectURL') {
+      pc[0][key] = getHTMLString(xmlDataCopy, key);
+    }
+  });
+  return projectContextCopy;
+})(xmlData, projectContext);
 
-  #trackingSecurityOfficer = user;
-
-  #trackingDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-
-  #trackingComment;
-
-  /** value of selected iteration row
-    * @type {integer|null}
-  */
-  set trackingIteration(trackingIteration) {
-    if (isValidId(trackingIteration)) {
-      this.#trackingIteration = trackingIteration;
-    } else throw new Error(`Tracking iteration ${trackingIteration} is not null/integer`);
-  }
-
-  /** assigns current operating system user to trackingSecurityOfficer
-    * @type {string}
-  */
-  set trackingSecurityOfficer(trackingSecurityOfficer) {
-    if (typeof trackingSecurityOfficer === 'string') this.#trackingSecurityOfficer = trackingSecurityOfficer;
-    else throw new Error(`Meta tracking ${this.#trackingIteration}: tracking officer is not a string`);
-  }
-
-  /** assigns current date in YYYY-MM-DD to trackingDate
-    * @type {string}
-  */
-  set trackingDate(trackingDate) {
-    if (isValidDate(trackingDate)) this.#trackingDate = trackingDate;
-    else throw new Error(`Meta tracking ${this.#trackingIteration}: tracking date is invalid date string`);
-  }
-
-  /** text input of description of iteration
-    * @type {string}
-  */
-  set trackingComment(trackingComment) {
-    if (typeof trackingComment === 'string') this.#trackingComment = trackingComment;
-    else throw new Error(`Meta tracking ${this.#trackingIteration}: tracking comment is not a string`);
-  }
-
-  /** get object of each value of ISRAMetaTracking member property
-    * @type {object}
-  */
-  get properties() {
-    return {
-      trackingIteration: this.#trackingIteration,
-      trackingSecurityOfficer: this.#trackingSecurityOfficer,
-      trackingDate: this.#trackingDate,
-      trackingComment: this.#trackingComment,
-    };
-  }
-}
-
-module.exports = ISRAMetaTracking;
+module.exports = alterProjectContext;
 </code></pre>
         </article>
     </section>
