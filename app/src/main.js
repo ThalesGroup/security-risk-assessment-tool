@@ -55,7 +55,7 @@ function createWindow() {
 
   ipcMain.handle('parse:xml', (event, filePath) => {
     const xmlData = fs.readFileSync(filePath, 'utf8');
-    return xml2JSON(xmlData).properties;
+    return xml2JSON(xmlData);
   });
 }
 
