@@ -27,9 +27,11 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { xml2JSON } = require('../../lib/src/api/index');
+const { XML2JSON } = require('../../lib/src/api/index');
+const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 
 function createWindow() {
+  const israProject = new ISRAProject();
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -55,7 +57,7 @@ function createWindow() {
 
   ipcMain.handle('parse:xml', (event, filePath) => {
     const xmlData = fs.readFileSync(filePath, 'utf8');
-    return xml2JSON(xmlData);
+    XML2JSON(xmlData, israProject);
   });
 }
 
