@@ -35,5 +35,5 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
 document.getElementById('file-selector').addEventListener('change', async (event) => {
   const file = event.target.files[0].path;
   const result = await window.parse.xml(file);
-  console.log(result);
+  console.log(JSON.parse(result));
 });
