@@ -26,7 +26,9 @@ const {
   app, BrowserWindow,
 } = require('electron');
 const path = require('path');
-require('./requestHandler');
+require('./requestHandlers');
+
+app.disableHardwareAcceleration();
 
 function createWindow() {
   const win = new BrowserWindow({
