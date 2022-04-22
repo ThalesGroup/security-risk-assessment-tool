@@ -35,9 +35,21 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
 document.getElementById('file-selector').addEventListener('change', async (event) => {
   const file = event.target.files[0].path;
   const result = await window.parse.xml(file);
-  console.log(JSON.parse(result));
+  console.log(result);
 });
 
 document.getElementById('save').addEventListener('click', async () => {
-  await window.save.project();
+  await window.project.save();
 });
+
+// document.getElementById('load').addEventListener('click', async () => {
+(async () => {
+  const result = await window.project.load();
+  if (result === 'Error in uploading file') document.getElementById('load-result').textContent = result;
+  else {
+    document.getElementById('load-result').textContent = 'Saved file successfully loaded';
+    console.log(JSON.parse(result));
+  }
+})();
+
+// });
