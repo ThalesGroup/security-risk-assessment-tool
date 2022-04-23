@@ -48,16 +48,25 @@ ipcMain.handle('dark-mode:system', () => {
   nativeTheme.themeSource = 'system';
 });
 
-ipcMain.handle('parse:xml', (event, filePath) => {
+/**
+  * Save current project
+  * @param {string} filePath location of file path
+  * @return {string} Saved message
+*/
+ipcMain.handle('parse:xml', async (event, filePath) => {
   try {
     israProject = new ISRAProject();
-    XML2JSON(filePath, israProject);
+    await XML2JSON(filePath, israProject);
     return israProject.toJSON();
   } catch (err) {
     return 'Invalid File';
   }
 });
 
+/**
+  * Save current project
+  * @return {string} Saved message
+*/
 ipcMain.handle('project:save', async () => {
   try {
     if (israProject === undefined) israProject = new ISRAProject();
@@ -68,6 +77,10 @@ ipcMain.handle('project:save', async () => {
   }
 });
 
+/**
+  * Save current project
+  * @return {string} JSON string of project values or error message
+*/
 ipcMain.handle('project:load', async () => {
   try {
     israProject = new ISRAProject();
