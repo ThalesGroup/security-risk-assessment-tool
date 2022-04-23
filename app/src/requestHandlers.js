@@ -25,7 +25,7 @@
 const {
   ipcMain, nativeTheme,
 } = require('electron');
-const fs = require('fs');
+
 const {
   DataStore,
   XML2JSON,
@@ -49,15 +49,23 @@ ipcMain.handle('dark-mode:system', () => {
 });
 
 ipcMain.handle('parse:xml', (event, filePath) => {
-  israProject = new ISRAProject();
-  const xmlData = fs.readFileSync(filePath, 'utf8');
-  XML2JSON(xmlData, israProject);
-  return israProject.toJSON();
+  try {
+    israProject = new ISRAProject();
+    XML2JSON(filePath, israProject);
+    return israProject.toJSON();
+  } catch (err) {
+    return 'Invalid File';
+  }
 });
 
-ipcMain.handle('project:save', () => {
-  if (israProject === undefined) israProject = new ISRAProject();
-  DataStore(israProject);
+ipcMain.handle('project:save', async () => {
+  try {
+    if (israProject === undefined) israProject = new ISRAProject();
+    await DataStore(israProject);
+    return 'Successfully saved form';
+  } catch (err) {
+    return 'Error in saving form';
+  }
 });
 
 ipcMain.handle('project:load', async () => {
@@ -66,7 +74,6 @@ ipcMain.handle('project:load', async () => {
     await DataLoad(israProject);
     return israProject.toJSON();
   } catch (err) {
-    console.log(err);
-    return 'Error in uploading file';
+    return 'Error in loading file';
   }
 });

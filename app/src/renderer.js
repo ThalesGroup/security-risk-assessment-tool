@@ -22,6 +22,14 @@
 * -----------------------------------------------------------------------------
 */
 
+(async () => {
+  const result = await window.project.load();
+  if (result !== 'Error in loading file') {
+    alert('Saved file successfully loaded');
+    console.log(JSON.parse(result));
+  }
+})();
+
 document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
   const isDarkMode = await window.darkMode.toggle();
   document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light';
@@ -35,21 +43,10 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
 document.getElementById('file-selector').addEventListener('change', async (event) => {
   const file = event.target.files[0].path;
   const result = await window.parse.xml(file);
-  console.log(result);
+  if (result === 'Invalid File') alert(result);
+  else console.log(JSON.parse(result));
 });
 
 document.getElementById('save').addEventListener('click', async () => {
   await window.project.save();
 });
-
-// document.getElementById('load').addEventListener('click', async () => {
-(async () => {
-  const result = await window.project.load();
-  if (result === 'Error in uploading file') document.getElementById('load-result').textContent = result;
-  else {
-    document.getElementById('load-result').textContent = 'Saved file successfully loaded';
-    console.log(JSON.parse(result));
-  }
-})();
-
-// });
