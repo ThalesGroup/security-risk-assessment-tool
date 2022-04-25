@@ -21,7 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-
+// if (!navigator.onLine) {
 (async () => {
   const result = await window.project.load();
   if (result !== 'Error in loading file') {
@@ -29,6 +29,7 @@
     console.log(JSON.parse(result));
   }
 })();
+// }
 
 document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
   const isDarkMode = await window.darkMode.toggle();
@@ -48,5 +49,6 @@ document.getElementById('file-selector').addEventListener('change', async (event
 });
 
 document.getElementById('save').addEventListener('click', async () => {
-  await window.project.save();
+  const result = await window.project.save();
+  alert(result);
 });

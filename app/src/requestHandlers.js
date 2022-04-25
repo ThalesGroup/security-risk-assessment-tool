@@ -59,6 +59,7 @@ ipcMain.handle('parse:xml', async (event, filePath) => {
     await XML2JSON(filePath, israProject);
     return israProject.toJSON();
   } catch (err) {
+    console.log(err);
     return 'Invalid File';
   }
 });
@@ -73,6 +74,7 @@ ipcMain.handle('project:save', async () => {
     await DataStore(israProject);
     return 'Successfully saved form';
   } catch (err) {
+    console.log(err);
     return 'Error in saving form';
   }
 });
@@ -87,6 +89,7 @@ ipcMain.handle('project:load', async () => {
     await DataLoad(israProject);
     return israProject.toJSON();
   } catch (err) {
+    console.log(err);
     return 'Error in loading file';
   }
 });
