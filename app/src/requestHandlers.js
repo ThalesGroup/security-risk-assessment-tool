@@ -53,10 +53,10 @@ ipcMain.handle('dark-mode:system', () => {
   * @param {string} filePath location of file path
   * @return {string} Saved message
 */
-ipcMain.handle('parse:xml', (event, filePath) => {
+ipcMain.handle('parse:xml', async (event, filePath) => {
   try {
     israProject = new ISRAProject();
-    XML2JSON(filePath, israProject);
+    await XML2JSON(filePath, israProject);
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
