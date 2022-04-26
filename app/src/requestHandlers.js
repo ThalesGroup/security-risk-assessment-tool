@@ -50,8 +50,9 @@ ipcMain.handle('dark-mode:system', () => {
 
 /**
   * Save current project
+  * @param {event} event Electron.IpcMainInvokeEvent
   * @param {string} filePath location of file path
-  * @return {string} Saved message
+  * @return {string} Saved message or error message
 */
 ipcMain.handle('parse:xml', async (event, filePath) => {
   try {
@@ -66,7 +67,7 @@ ipcMain.handle('parse:xml', async (event, filePath) => {
 
 /**
   * Save current project
-  * @return {string} Saved message
+  * @return {string} Saved message or error message
 */
 ipcMain.handle('project:save', async () => {
   try {

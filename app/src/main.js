@@ -28,7 +28,7 @@ const {
 const path = require('path');
 require('./requestHandlers');
 
-// app.disableHardwareAcceleration();
+app.disableHardwareAcceleration();
 
 function createWindow() {
   const win = new BrowserWindow({

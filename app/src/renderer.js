@@ -42,10 +42,12 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
 });
 
 document.getElementById('file-selector').addEventListener('change', async (event) => {
-  const file = event.target.files[0].path;
-  const result = await window.parse.xml(file);
-  if (result === 'Invalid File') alert(result);
-  else console.log(JSON.parse(result));
+  if (event.target.files.length === 1) {
+    const file = event.target.files[0].path;
+    const result = await window.parse.xml(file);
+    if (result === 'Invalid File') alert(result);
+    else console.log(JSON.parse(result));
+  }
 });
 
 document.getElementById('save').addEventListener('click', async () => {
