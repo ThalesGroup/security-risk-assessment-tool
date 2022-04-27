@@ -9,15 +9,22 @@
 <body>
     <p>Current theme source: <strong id="theme-source">System</strong></p>
 
-    <button id="toggle-dark-mode">Toggle Dark Mode</button>
+    <!-- <button id="toggle-dark-mode">Toggle Dark Mode</button>
     <button id="reset-to-system">Reset to System Theme</button>
-    <br></br>
+    <br></br> -->
 
-    <input type="file" id="file-selector" accept=".xml">
+    <label for="load-json">Select a file:</label>
+    <input type="file" id="load-json" accept=".json">
+
     <br></br>
+    
+    <label for="load-xml">XML to parse:</label>
+    <input type="file" id="load-xml" accept=".xml">
+    <br></br>
+   
     <button id="save">Save</button>
     
-    <script src="renderer.js"></script>
+    <script src="renderer.js" type="module"></script>
   </body>
 </body>
 </html>

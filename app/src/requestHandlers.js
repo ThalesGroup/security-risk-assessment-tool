@@ -23,29 +23,34 @@
 */
 
 const {
-  ipcMain, nativeTheme,
+  ipcMain,
+  // nativeTheme,
 } = require('electron');
 
 const {
   DataStore,
   XML2JSON,
   DataLoad,
+  DataNew,
 } = require('../../lib/src/api/index');
 const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 
 let israProject;
+const name = null;
 
-ipcMain.handle('dark-mode:toggle', () => {
-  if (nativeTheme.shouldUseDarkColors) {
-    nativeTheme.themeSource = 'light';
-  } else {
-    nativeTheme.themeSource = 'dark';
+/**
+  * Create new project
+  * @return {string} JSON string of new project values
+*/
+ipcMain.handle('project:new', () => {
+  try {
+    israProject = new ISRAProject();
+    DataNew(israProject);
+    return israProject.toJSON();
+  } catch (err) {
+    console.log(err);
+    return 'Failed to initialise new project';
   }
-  return nativeTheme.shouldUseDarkColors;
-});
-
-ipcMain.handle('dark-mode:system', () => {
-  nativeTheme.themeSource = 'system';
 });
 
 /**
@@ -54,10 +59,10 @@ ipcMain.handle('dark-mode:system', () => {
   * @param {string} filePath location of file path
   * @return {string} Saved message or error message
 */
-ipcMain.handle('parse:xml', async (event, filePath) => {
+ipcMain.handle('parse:xml', (event, filePath) => {
   try {
     israProject = new ISRAProject();
-    await XML2JSON(filePath, israProject);
+    XML2JSON(filePath, israProject);
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
@@ -69,10 +74,11 @@ ipcMain.handle('parse:xml', async (event, filePath) => {
   * Save current project
   * @return {string} Saved message or error message
 */
+
 ipcMain.handle('project:save', async () => {
   try {
     if (israProject === undefined) israProject = new ISRAProject();
-    await DataStore(israProject);
+    await DataStore(israProject, name);
     return 'Successfully saved form';
   } catch (err) {
     console.log(err);
@@ -84,13 +90,26 @@ ipcMain.handle('project:save', async () => {
   * Save current project
   * @return {string} JSON string of project values or error message
 */
-ipcMain.handle('project:load', async () => {
+ipcMain.handle('project:load', async (event, filePath) => {
   try {
     israProject = new ISRAProject();
-    await DataLoad(israProject);
+    await DataLoad(israProject, filePath);
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
     return 'Error in loading file';
   }
 });
+
+// ipcMain.handle('dark-mode:toggle', () => {
+//   if (nativeTheme.shouldUseDarkColors) {
+//     nativeTheme.themeSource = 'light';
+//   } else {
+//     nativeTheme.themeSource = 'dark';
+//   }
+//   return nativeTheme.shouldUseDarkColors;
+// });
+
+// ipcMain.handle('dark-mode:system', () => {
+//   nativeTheme.themeSource = 'system';
+// });

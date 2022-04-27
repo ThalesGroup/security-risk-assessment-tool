@@ -1,0 +1,540 @@
+{
+    "ISRA": {
+        "$": {
+            "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            "xhtml": "http://www.w3.org/1999/xhtml",
+            "pc": "http://schemas.microsoft.com/office/infopath/2007/PartnerControls",
+            "my": "http://schemas.microsoft.com/office/infopath/2003/myXSD/2015-02-04T09:20:12",
+            "xd": "http://schemas.microsoft.com/office/infopath/2003",
+            "lang": "en-us"
+        },
+        "ISRAmeta": [
+            {
+                "templateVersion": [
+                    "49"
+                ],
+                "projectName": [
+                    ""
+                ],
+                "projectOrganization": [
+                    ""
+                ],
+                "projectVersion": [
+                    ""
+                ],
+                "ISRAtracking": [
+                    {
+                        "trackingIteration": [
+                            "1"
+                        ],
+                        "trackingSecurityOfficer": [
+                            "t0263774"
+                        ],
+                        "trackingDate": [
+                            "2022-03-28"
+                        ],
+                        "trackingComment": [
+                            ""
+                        ]
+                    }
+                ],
+                "businessAssetsCount": [
+                    "2"
+                ],
+                "supportingAssetsCount": [
+                    "2"
+                ],
+                "risksCount": [
+                    "2"
+                ],
+                "vulnerabilitiesCount": [
+                    "2"
+                ]
+            }
+        ],
+        "ProjectContext": [
+            {
+                "projectDescription": [
+                    ""
+                ],
+                "projectURL": [
+                    ""
+                ],
+                "projectDescriptionAttachment": [
+                    ""
+                ]
+            }
+        ],
+        "BusinessAssetsDesc": [
+            {
+                "Criticity": [
+                    {
+                        "char": "4",
+                        "$": {
+                            "label": "Critical"
+                        }
+                    },
+                    {
+                        "char": "3",
+                        "$": {
+                            "label": "High"
+                        }
+                    },
+                    {
+                        "char": "2",
+                        "$": {
+                            "label": "Medium"
+                        }
+                    },
+                    {
+                        "char": "1",
+                        "$": {
+                            "label": "Low"
+                        }
+                    },
+                    {
+                        "char": "0",
+                        "$": {
+                            "label": "Not Applicable"
+                        }
+                    }
+                ]
+            }
+        ],
+        "BusinessAsset": [
+            {
+                "businessAssetId": [
+                    "1"
+                ],
+                "businessAssetName": [
+                    ""
+                ],
+                "businessAssetType": [
+                    "Data"
+                ],
+                "businessAssetDescription": [
+                    ""
+                ],
+                "businessAssetConfidentiality": [
+                    "3"
+                ],
+                "businessAssetIntegrity": [
+                    "3"
+                ],
+                "businessAssetAvailability": [
+                    "3"
+                ],
+                "businessAssetAuthenticity": [
+                    "3"
+                ],
+                "businessAssetAuthorization": [
+                    "3"
+                ],
+                "businessAssetNonRepudiation": [
+                    "3"
+                ]
+            }
+        ],
+        "SupportingAssetsDesc": [
+            {
+                "supportingAssetDiagram": [
+                    ""
+                ]
+            }
+        ],
+        "SupportingAsset": [
+            {
+                "supportingAssetId": [
+                    "1"
+                ],
+                "supportingAssetHLDId": [
+                    ""
+                ],
+                "supportingAssetName": [
+                    ""
+                ],
+                "supportingAssetType": [
+                    ""
+                ],
+                "supportingAssetSecurityLevel": [
+                    "-1"
+                ],
+                "supportingAndBusinessAssetLink": [
+                    {
+                        "$": {
+                            "businessAssetRef": ""
+                        }
+                    }
+                ]
+            }
+        ],
+        "Risk": [
+            {
+                "projectName": [
+                    ""
+                ],
+                "projectVersion": [
+                    ""
+                ],
+                "riskId": [
+                    "1"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            }
+        ],
+        "Vulnerability": [
+            {
+                "projectName": [
+                    ""
+                ],
+                "projectVersion": [
+                    ""
+                ],
+                "vulnerabilityId": [
+                    "1"
+                ],
+                "vulnerabilityName": [
+                    ""
+                ],
+                "vulnerabilityFamily": [
+                    ""
+                ],
+                "vulnerabilityTrackingID": [
+                    ""
+                ],
+                "vulnerabilityTrackingURI": [
+                    ""
+                ],
+                "vulnerabilityCVE": [
+                    ""
+                ],
+                "vulnerabilityDescription": [
+                    ""
+                ],
+                "vulnerabilityDescriptionAttachment": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "vulnerabilityCVSS": [
+                    {
+                        "vulnerabilityBaseScoreMetrics": [
+                            {
+                                "vulnerabilityExploitabilityMetrics": [
+                                    {
+                                        "accessVector": [
+                                            "0.395"
+                                        ],
+                                        "accessComplexity": [
+                                            "0.61"
+                                        ],
+                                        "authentication": [
+                                            "0.704"
+                                        ]
+                                    }
+                                ],
+                                "vulnerabilityImpactMetrics": [
+                                    {
+                                        "confidentialityImpact": [
+                                            "0.275"
+                                        ],
+                                        "integrityImpact": [
+                                            "0.275"
+                                        ],
+                                        "availabilityImpact": [
+                                            "0.275"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "vulnerabilityTemporalScoreMetrics": [
+                            {
+                                "exploitability": [
+                                    "1"
+                                ],
+                                "remediationLevel": [
+                                    "1"
+                                ],
+                                "reportConfidence": [
+                                    "1"
+                                ]
+                            }
+                        ],
+                        "impactScore": [
+                            "6.442976718750001"
+                        ],
+                        "exploitabilityScore": [
+                            "3.3925759999999996"
+                        ],
+                        "baseScore": [
+                            "4.37803212315"
+                        ],
+                        "temporalScore": [
+                            "4.37803212315"
+                        ]
+                    }
+                ],
+                "vulnerabilityCVEScoring": [
+                    {
+                        "cveScore": [
+                            "0"
+                        ]
+                    }
+                ],
+                "overallScore": [
+                    "4"
+                ],
+                "overallLevel": [
+                    "Medium"
+                ]
+            }
+        ],
+        "Filter": [
+            {
+                "riskFilter": [
+                    ""
+                ],
+                "vulnerabilityFilter": [
+                    ""
+                ]
+            }
+        ],
+        "group": [
+            {
+                "BDCAssociatedEntity": [
+                    {
+                        "$": {
+                            "EntityNamespace": "",
+                            "EntityName": "",
+                            "SystemInstanceName": "",
+                            "AssociationName": ""
+                        },
+                        "BDCEntity": [
+                            {
+                                "EntityDisplayName": [
+                                    ""
+                                ],
+                                "EntityInstanceReference": [
+                                    ""
+                                ],
+                                "EntityId1": [
+                                    ""
+                                ],
+                                "EntityId2": [
+                                    ""
+                                ],
+                                "EntityId3": [
+                                    ""
+                                ],
+                                "EntityId4": [
+                                    ""
+                                ],
+                                "EntityId5": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "signatures3": [
+            {
+                "signatures4": [
+                    ""
+                ]
+            }
+        ]
+    }
+}

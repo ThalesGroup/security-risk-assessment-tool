@@ -21,36 +21,44 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-// if (!navigator.onLine) {
+
 (async () => {
-  const result = await window.project.load();
-  if (result !== 'Error in loading file') {
-    alert('Saved file successfully loaded');
-    console.log(JSON.parse(result));
-  }
+  const result = await window.project.new();
+  if (result !== 'Failed to initialise new project') console.log(JSON.parse(result));
 })();
-// }
 
-document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
-  const isDarkMode = await window.darkMode.toggle();
-  document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light';
-});
-
-document.getElementById('reset-to-system').addEventListener('click', async () => {
-  await window.darkMode.system();
-  document.getElementById('theme-source').innerHTML = 'System';
-});
-
-document.getElementById('file-selector').addEventListener('change', async (event) => {
+document.getElementById('load-json').addEventListener('change', async (event) => {
   if (event.target.files.length === 1) {
-    const file = event.target.files[0].path;
-    const result = await window.parse.xml(file);
-    if (result === 'Invalid File') alert(result);
+    const filePath = event.target.files[0].path;
+    const result = await window.project.load(filePath);
+    if (result === 'Invalid JSON File') alert(result);
+    else console.log(JSON.parse(result));
+  }
+});
+
+document.getElementById('load-xml').addEventListener('change', async (event) => {
+  if (event.target.files.length === 1) {
+    const filePath = event.target.files[0].path;
+    const result = await window.parse.xml(filePath);
+    if (result === 'Invalid XML File') alert(result);
     else console.log(JSON.parse(result));
   }
 });
 
 document.getElementById('save').addEventListener('click', async () => {
-  const result = await window.project.save();
-  alert(result);
+  const msg = await window.project.save();
+  alert(msg);
 });
+
+// document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
+//   const isDarkMode = await window.darkMode.toggle();
+//   document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light';
+// });
+
+// document.getElementById('reset-to-system').addEventListener('click', async () => {
+//   await window.darkMode.system();
+//   document.getElementById('theme-source').innerHTML = 'System';
+// });
+
+// check if user is connected to internet
+// if (!navigator.onLine)
