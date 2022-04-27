@@ -74,7 +74,6 @@ ipcMain.handle('parse:xml', (event, filePath) => {
   * Save current project
   * @return {string} Saved message or error message
 */
-
 ipcMain.handle('project:save', async () => {
   try {
     if (israProject === undefined) israProject = new ISRAProject();
