@@ -23,32 +23,60 @@
 */
 
 (async () => {
-  const result = await window.project.new();
-  if (result !== 'Failed to initialise new project') console.log(JSON.parse(result));
+  try {
+    const result = await window.project.new();
+    console.log(JSON.parse(result));
+  } catch (err) {
+    const errMsg = err.toString().split('Error: ')[2];
+    alert(errMsg);
+  }
 })();
 
 document.getElementById('load-json').addEventListener('change', async (event) => {
   if (event.target.files.length === 1) {
-    const filePath = event.target.files[0].path;
-    const result = await window.project.load(filePath);
-    if (result === 'Invalid JSON File') alert(result);
-    else console.log(JSON.parse(result));
-  }
+    try {
+      document.getElementById('load-xml').value = '';
+      const filePath = event.target.files[0].path;
+      const result = await window.project.load(filePath);
+      console.log(JSON.parse(result));
+    } catch (err) {
+      await window.clear.file();
+      document.getElementById('load-json').value = '';
+      const errMsg = err.toString().split('Error: ')[2];
+      alert(errMsg);
+    }
+  } else await window.clear.file();
 });
 
 document.getElementById('load-xml').addEventListener('change', async (event) => {
   if (event.target.files.length === 1) {
-    const filePath = event.target.files[0].path;
-    const result = await window.parse.xml(filePath);
-    if (result === 'Invalid XML File') alert(result);
-    else console.log(JSON.parse(result));
+    try {
+      document.getElementById('load-json').value = '';
+      const filePath = event.target.files[0].path;
+      const result = await window.parse.xml(filePath);
+      console.log(JSON.parse(result));
+    } catch (err) {
+      document.getElementById('load-xml').value = '';
+      const errMsg = err.toString().split('Error: ')[2];
+      alert(errMsg);
+    }
   }
 });
 
 document.getElementById('save').addEventListener('click', async () => {
-  const msg = await window.project.save();
-  alert(msg);
+  try {
+    const msg = await window.project.save();
+    if (msg !== 'No file saved') alert(msg);
+  } catch (err) {
+    const errMsg = err.toString().split('Error: ')[2];
+    alert(errMsg);
+  }
 });
+
+// document.getElementById('save-as').addEventListener('click', async () => {
+//   const msg = await window.project.saveAs();
+//   alert(msg);
+// });
 
 // document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
 //   const isDarkMode = await window.darkMode.toggle();

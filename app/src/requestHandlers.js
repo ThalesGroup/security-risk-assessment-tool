@@ -23,7 +23,7 @@
 */
 
 const {
-  ipcMain,
+  ipcMain, dialog,
   // nativeTheme,
 } = require('electron');
 
@@ -36,11 +36,19 @@ const {
 const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 
 let israProject;
-const name = null;
+let jsonFilePath = '';
+
+/**
+  * No JSON file selected, clear path
+*/
+ipcMain.on('clear:file', async () => {
+  jsonFilePath = '';
+});
 
 /**
   * Create new project
   * @return {string} JSON string of new project values
+  * @throws Failed to create new project
 */
 ipcMain.handle('project:new', () => {
   try {
@@ -49,7 +57,7 @@ ipcMain.handle('project:new', () => {
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
-    return 'Failed to initialise new project';
+    throw new Error('Failed to create new project');
   }
 });
 
@@ -58,47 +66,98 @@ ipcMain.handle('project:new', () => {
   * @param {event} event Electron.IpcMainInvokeEvent
   * @param {string} filePath location of file path
   * @return {string} Saved message or error message
+  * @throws Invalid XML File
 */
 ipcMain.handle('parse:xml', (event, filePath) => {
   try {
-    israProject = new ISRAProject();
-    XML2JSON(filePath, israProject);
+    jsonFilePath = '';
+    israProject = XML2JSON(filePath, israProject);
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
-    return 'Invalid File';
+    throw new Error('Invalid XML File');
   }
 });
 
 /**
   * Save current project
-  * @return {string} Saved message or error message
+  * @return {string} Successfully saved form
+  * @return {string} Successfully saved form to ${filePath}
+  * @return {string} No XML file uploaded
+  * @throws Error in saving form
+  * @throws Error in saving form to ${filePath}
 */
 ipcMain.handle('project:save', async () => {
-  try {
-    if (israProject === undefined) israProject = new ISRAProject();
-    await DataStore(israProject, name);
-    return 'Successfully saved form';
-  } catch (err) {
-    console.log(err);
-    return 'Error in saving form';
+  if (jsonFilePath !== '') {
+    // override data in existing json file
+    try {
+      if (israProject === undefined) israProject = new ISRAProject();
+      await DataStore(israProject, jsonFilePath);
+      return 'Successfully saved form';
+    } catch (err) {
+      console.log(err);
+      throw new Error('Error in saving form');
+    }
+  } else {
+    // save as new project in selected directory
+    const options = {
+      // Placeholders
+      title: 'Save file - Electron ISRA Project',
+      defaultPath: 'C:\\Users\\ISRAProject.json',
+      buttonLabel: 'Save JSON File',
+      filters: [
+        { name: 'JSON', extensions: ['json'] },
+      ],
+    };
+    const fileName = await dialog.showSaveDialog(options);
+    if (!fileName.canceled) {
+      try {
+        await DataStore(israProject, fileName.filePath);
+        return `Successfully saved form to ${fileName.filePath}`;
+      } catch (err) {
+        throw new Error(`Error in saving form to ${fileName.filePath}`);
+      }
+    }
+    return 'No file saved';
   }
 });
 
 /**
   * Save current project
   * @return {string} JSON string of project values or error message
+  * @return {string} No JSON file uploaded
+  * @throws Invalid JSON File
 */
 ipcMain.handle('project:load', async (event, filePath) => {
   try {
+    jsonFilePath = filePath;
     israProject = new ISRAProject();
     await DataLoad(israProject, filePath);
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
-    return 'Error in loading file';
+    throw new Error('Invalid JSON File');
   }
 });
+
+// ipcMain.handle('project:saveAs', async () => {
+//   const options = {
+//     // Placeholders
+//     title: 'Save file - Electron ISRA Project',
+//     defaultPath: 'C:\\Users\\ISRAProject.json',
+//     buttonLabel: 'Save JSON File',
+//     filters: [
+//       { name: 'JSON', extensions: ['json'] },
+//     ],
+//   };
+//   const fileName = await dialog.showSaveDialog(options);
+//   try {
+//     await DataStore(israProject, fileName.filePath);
+//     return 'Successfully saved form to location';
+//   } catch (err) {
+//     return 'Error in saving form to location';
+//   }
+// });
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
