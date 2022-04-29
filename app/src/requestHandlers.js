@@ -23,7 +23,8 @@
 */
 
 const {
-  ipcMain, dialog,
+  dialog,
+  // ipcMain,
   // nativeTheme,
 } = require('electron');
 
@@ -39,106 +40,131 @@ let israProject;
 let jsonFilePath = '';
 
 /**
-  * No JSON file selected, clear path
-*/
-ipcMain.on('clear:file', async () => {
-  jsonFilePath = '';
-});
-
-/**
   * Create new project
-  * @return {string} JSON string of new project values
-  * @throws Failed to create new project
+  * @param win Browser Window
 */
-ipcMain.handle('project:new', () => {
+const newISRAProject = (win, app) => {
   try {
     israProject = new ISRAProject();
     DataNew(israProject);
-    return israProject.toJSON();
+    win.webContents.send('project:load', israProject.toJSON());
   } catch (err) {
     console.log(err);
-    throw new Error('Failed to create new project');
+    dialog.showMessageBoxSync(null, { message: 'Failed to create new project' });
+    app.quit();
   }
-});
+};
 
 /**
-  * Save current project
-  * @param {event} event Electron.IpcMainInvokeEvent
-  * @param {string} filePath location of file path
-  * @return {string} Saved message or error message
-  * @throws Invalid XML File
+ * @module saveAs
+  * save as new project in selected directory
 */
-ipcMain.handle('parse:xml', (event, filePath) => {
-  try {
-    jsonFilePath = '';
-    israProject = XML2JSON(filePath);
-    return israProject.toJSON();
-  } catch (err) {
-    console.log(err);
-    throw new Error('Invalid XML File');
-  }
-});
-
-/**
-  * Save current project
-  * @return {string} Successfully saved form
-  * @return {string} Successfully saved form to ${filePath}
-  * @return {string} No XML file uploaded
-  * @throws Error in saving form
-  * @throws Error in saving form to ${filePath}
-*/
-ipcMain.handle('project:save', async () => {
-  if (jsonFilePath !== '') {
-    // override data in existing json file
+const saveAs = async () => {
+  const options = {
+  // Placeholders
+    title: 'Save file - Electron ISRA Project',
+    defaultPath: 'C:\\Users\\ISRAProject.json',
+    buttonLabel: 'Save JSON File',
+    filters: [
+      { name: 'JSON', extensions: ['json'] },
+    ],
+  };
+  const fileName = await dialog.showSaveDialog(options);
+  if (!fileName.canceled) {
     try {
-      if (israProject === undefined) israProject = new ISRAProject();
-      await DataStore(israProject, jsonFilePath);
-      return 'Successfully saved form';
+      await DataStore(israProject, fileName.filePath);
+      dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${fileName.filePath}` });
     } catch (err) {
       console.log(err);
-      throw new Error('Error in saving form');
+      dialog.showMessageBoxSync(null, { message: `Error in saving form to ${fileName.filePath}` });
     }
-  } else {
-    // save as new project in selected directory
-    const options = {
-      // Placeholders
-      title: 'Save file - Electron ISRA Project',
-      defaultPath: 'C:\\Users\\ISRAProject.json',
-      buttonLabel: 'Save JSON File',
-      filters: [
-        { name: 'JSON', extensions: ['json'] },
-      ],
-    };
-    const fileName = await dialog.showSaveDialog(options);
-    if (!fileName.canceled) {
-      try {
-        await DataStore(israProject, fileName.filePath);
-        return `Successfully saved form to ${fileName.filePath}`;
-      } catch (err) {
-        throw new Error(`Error in saving form to ${fileName.filePath}`);
-      }
-    }
-    return 'No file saved';
   }
-});
+};
+
+/**
+  * override data in existing json file
+*/
+const save = async () => {
+  try {
+    if (israProject === undefined) israProject = new ISRAProject();
+    await DataStore(israProject, jsonFilePath);
+    dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
+  } catch (err) {
+    console.log(err);
+    dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
+  }
+};
 
 /**
   * Save current project
-  * @return {string} JSON string of project values or error message
-  * @return {string} No JSON file uploaded
-  * @throws Invalid JSON File
+  * @module saveForm
 */
-ipcMain.handle('project:load', async (event, filePath) => {
+const saveProject = async () => {
+  if (jsonFilePath !== '') save();
+  else saveAs();
+};
+
+/**
+  * Load JSON file
+  * @param {string} win Browser window
+  * @param {string} filePath path of selected json file
+*/
+const loadJSONFile = async (win, filePath) => {
   try {
-    jsonFilePath = filePath;
     israProject = new ISRAProject();
     await DataLoad(israProject, filePath);
-    return israProject.toJSON();
+    win.webContents.send('project:load', israProject.toJSON());
+    jsonFilePath = filePath;
   } catch (err) {
     console.log(err);
-    throw new Error('Invalid JSON File');
+    dialog.showMessageBoxSync(null, { message: 'Invalid JSON File' });
   }
-});
+};
+
+/**
+  * Load XML file
+  * @param {string} win Browser window
+  * @param {string} filePath path of selected xml file
+*/
+const loadXMLFile = (win, filePath) => {
+  try {
+    israProject = XML2JSON(filePath);
+    win.webContents.send('project:load', israProject.toJSON());
+    jsonFilePath = '';
+  } catch (err) {
+    console.log(err);
+    dialog.showMessageBoxSync(null, { message: 'Invalid XML File' });
+  }
+};
+
+/**
+  * Load either JSON or XML file
+  * @module loadFile
+  * @param {string} win Browser window
+*/
+const loadFile = (win) => {
+  const options = {
+    title: 'Open file - Electron ISRA Project',
+    buttonLabel: 'Open File',
+    filters: [
+      { name: 'JSON/XML', extensions: ['json', 'xml'] },
+    ],
+  };
+  const filePathArr = dialog.showOpenDialogSync(options);
+
+  if (filePathArr !== undefined) {
+    const filePath = filePathArr[0];
+    if (filePath.split('.').pop() === 'json') loadJSONFile(win, filePath);
+    else loadXMLFile(win, filePath);
+  }
+};
+
+module.exports = {
+  saveAs,
+  saveProject,
+  loadFile,
+  newISRAProject,
+};
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

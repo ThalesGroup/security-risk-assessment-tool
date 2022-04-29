@@ -22,55 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
-(async () => {
-  try {
-    const result = await window.project.new();
-    console.log(JSON.parse(result));
-  } catch (err) {
-    const errMsg = err.toString().split('Error: ')[2];
-    alert(errMsg);
-  }
-})();
-
-document.getElementById('load-json').addEventListener('change', async (event) => {
-  if (event.target.files.length === 1) {
-    try {
-      document.getElementById('load-xml').value = '';
-      const filePath = event.target.files[0].path;
-      const result = await window.project.load(filePath);
-      console.log(JSON.parse(result));
-    } catch (err) {
-      await window.clear.file();
-      document.getElementById('load-json').value = '';
-      const errMsg = err.toString().split('Error: ')[2];
-      alert(errMsg);
-    }
-  } else await window.clear.file();
-});
-
-document.getElementById('load-xml').addEventListener('change', async (event) => {
-  if (event.target.files.length === 1) {
-    try {
-      document.getElementById('load-json').value = '';
-      const filePath = event.target.files[0].path;
-      const result = await window.parse.xml(filePath);
-      console.log(JSON.parse(result));
-    } catch (err) {
-      document.getElementById('load-xml').value = '';
-      const errMsg = err.toString().split('Error: ')[2];
-      alert(errMsg);
-    }
-  }
-});
-
-document.getElementById('save').addEventListener('click', async () => {
-  try {
-    const msg = await window.project.save();
-    if (msg !== 'No file saved') alert(msg);
-  } catch (err) {
-    const errMsg = err.toString().split('Error: ')[2];
-    alert(errMsg);
-  }
+// check if user is connected to internet
+// if (!navigator.onLine)
+window.project.load((event, data) => {
+  console.log(JSON.parse(data));
 });
 
 // document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
@@ -82,6 +37,3 @@ document.getElementById('save').addEventListener('click', async () => {
 //   await window.darkMode.system();
 //   document.getElementById('theme-source').innerHTML = 'System';
 // });
-
-// check if user is connected to internet
-// if (!navigator.onLine)

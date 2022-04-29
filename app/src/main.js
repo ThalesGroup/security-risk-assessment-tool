@@ -23,10 +23,15 @@
 */
 
 const {
-  app, BrowserWindow,
+  app, BrowserWindow, Menu,
 } = require('electron');
 const path = require('path');
-require('./requestHandlers');
+const {
+  saveAs,
+  saveProject,
+  loadFile,
+  newISRAProject,
+} = require('./requestHandlers');
 
 app.disableHardwareAcceleration();
 
@@ -40,6 +45,50 @@ function createWindow() {
   });
 
   win.loadFile(path.join(__dirname, 'index.html'));
+  win.webContents.on('dom-ready', () => {
+    newISRAProject(win, app);
+  });
+
+  const mainMenuTemplate = [
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'Save',
+          click: () => saveProject(),
+        },
+        {
+          label: 'Save As',
+          click: () => saveAs(),
+        },
+        {
+          label: 'Open File',
+          click: () => loadFile(win),
+        },
+        { role: 'quit' },
+      ],
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+      ],
+    },
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'toggleDevTools' },
+        { role: 'togglefullscreen' },
+      ],
+    },
+  ];
+
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(mainMenu);
 }
 
 app.whenReady().then(() => {
