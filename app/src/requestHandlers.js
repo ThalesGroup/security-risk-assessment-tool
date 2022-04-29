@@ -71,7 +71,7 @@ ipcMain.handle('project:new', () => {
 ipcMain.handle('parse:xml', (event, filePath) => {
   try {
     jsonFilePath = '';
-    israProject = XML2JSON(filePath, israProject);
+    israProject = XML2JSON(filePath);
     return israProject.toJSON();
   } catch (err) {
     console.log(err);
@@ -139,25 +139,6 @@ ipcMain.handle('project:load', async (event, filePath) => {
     throw new Error('Invalid JSON File');
   }
 });
-
-// ipcMain.handle('project:saveAs', async () => {
-//   const options = {
-//     // Placeholders
-//     title: 'Save file - Electron ISRA Project',
-//     defaultPath: 'C:\\Users\\ISRAProject.json',
-//     buttonLabel: 'Save JSON File',
-//     filters: [
-//       { name: 'JSON', extensions: ['json'] },
-//     ],
-//   };
-//   const fileName = await dialog.showSaveDialog(options);
-//   try {
-//     await DataStore(israProject, fileName.filePath);
-//     return 'Successfully saved form to location';
-//   } catch (err) {
-//     return 'Error in saving form to location';
-//   }
-// });
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
