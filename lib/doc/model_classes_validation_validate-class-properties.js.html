@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: api/xml-json/alter-isra/alter-vulnerability.js</title>
+    <title>JSDoc: Source: model/classes/validation/validate-class-properties.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-vulnerability.js</h1>
+    <h1 class="page-title">Source: model/classes/validation/validate-class-properties.js</h1>
 
     
 
@@ -49,66 +49,19 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+const ajvInstance = require('./ajv-instance');
 
-const { counter } = require('../../../utility-global');
-const { getHTMLString, getVectorCVSSV2 } = require('../utility');
-
-/** modify parsed ISRA JSON to fit schema
-       * @function alterVulnerability
-       * @param {object} vulnerabilities - vulnerabilities JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited vulnerabilities JSON data
-       * */
-const alterVulnerability = (xmlDataCopy, vulnerabilitiesCopy) => {
-  if (Array.isArray(vulnerabilitiesCopy)) {
-    const vulnerabilityCounter = counter();
-
-    vulnerabilitiesCopy.forEach((vulnerability) => {
-      vulnerabilityCounter.increment();
-
-      const v = vulnerability;
-      const {
-        projectName,
-        projectVersion,
-        vulnerabilityCVE,
-        supportingAssetRef,
-        vulnerabilityCVSS,
-      } = v;
-
-      v.projectNameRef = projectName;
-      v.projectVersionRef = projectVersion;
-      v.vulnerabilityFamily = v.vulnerabilityFamily[0].replace(/\u200e/g, '');
-      v.vulnerabilityDescription = getHTMLString(xmlDataCopy, 'vulnerabilityDescription', vulnerabilityCounter.getCount());
-      supportingAssetRef.shift();
-      v.cveScore = v.vulnerabilityCVEScoring[0].cveScore;
-
-      // alter vulnerability CVSSV2
-      if (vulnerabilityCVE[0] === '') {
-        const {
-          vulnerabilityBaseScoreMetrics,
-          vulnerabilityTemporalScoreMetrics,
-          ...rest
-        } = vulnerabilityCVSS[0];
-
-        vulnerabilityCVE[0] = getVectorCVSSV2({
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityExploitabilityMetrics[0],
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityImpactMetrics[0],
-          ...vulnerabilityTemporalScoreMetrics[0],
-        });
-
-        const obj = {
-          vulnerabilityCVE,
-          ...rest,
-        };
-        v.cveScore = rest.temporalScore;
-        Object.assign(v, obj);
-      } else vulnerabilityCVE[0] = '';
-      // remove vulnerabilityCVE link CVSSV3
-    });
-  }
+/** validate each class property value based on json schema
+    * @param val value intended to be populated into class property
+    * @param {object} subschema json schema of class property
+    * @returns {boolean}
+  */
+const validateClassProperties = (val, subSchema) => {
+  const validate = ajvInstance.compile(subSchema);
+  return validate(val);
 };
 
-module.exports = alterVulnerability;
+module.exports = validateClassProperties;
 </code></pre>
         </article>
     </section>

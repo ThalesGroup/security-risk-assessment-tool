@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: api/xml-json/alter-isra/alter-vulnerability.js</title>
+    <title>JSDoc: Source: api/data-store/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-vulnerability.js</h1>
+    <h1 class="page-title">Source: api/data-store/index.js</h1>
 
     
 
@@ -49,66 +49,27 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+const fs = require('fs');
+const ISRAProject = require('../../model/classes/ISRAProject/isra-project');
 
-const { counter } = require('../../../utility-global');
-const { getHTMLString, getVectorCVSSV2 } = require('../utility');
-
-/** modify parsed ISRA JSON to fit schema
-       * @function alterVulnerability
-       * @param {object} vulnerabilities - vulnerabilities JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited vulnerabilities JSON data
-       * */
-const alterVulnerability = (xmlDataCopy, vulnerabilitiesCopy) => {
-  if (Array.isArray(vulnerabilitiesCopy)) {
-    const vulnerabilityCounter = counter();
-
-    vulnerabilitiesCopy.forEach((vulnerability) => {
-      vulnerabilityCounter.increment();
-
-      const v = vulnerability;
-      const {
-        projectName,
-        projectVersion,
-        vulnerabilityCVE,
-        supportingAssetRef,
-        vulnerabilityCVSS,
-      } = v;
-
-      v.projectNameRef = projectName;
-      v.projectVersionRef = projectVersion;
-      v.vulnerabilityFamily = v.vulnerabilityFamily[0].replace(/\u200e/g, '');
-      v.vulnerabilityDescription = getHTMLString(xmlDataCopy, 'vulnerabilityDescription', vulnerabilityCounter.getCount());
-      supportingAssetRef.shift();
-      v.cveScore = v.vulnerabilityCVEScoring[0].cveScore;
-
-      // alter vulnerability CVSSV2
-      if (vulnerabilityCVE[0] === '') {
-        const {
-          vulnerabilityBaseScoreMetrics,
-          vulnerabilityTemporalScoreMetrics,
-          ...rest
-        } = vulnerabilityCVSS[0];
-
-        vulnerabilityCVE[0] = getVectorCVSSV2({
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityExploitabilityMetrics[0],
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityImpactMetrics[0],
-          ...vulnerabilityTemporalScoreMetrics[0],
-        });
-
-        const obj = {
-          vulnerabilityCVE,
-          ...rest,
-        };
-        v.cveScore = rest.temporalScore;
-        Object.assign(v, obj);
-      } else vulnerabilityCVE[0] = '';
-      // remove vulnerabilityCVE link CVSSV3
+/**
+  * Save project to existing json file
+  * @function DataStore
+  * @param {ISRAProject} israProject - current instance of israProject
+  * @param {string} filePath - path of file
+  * @return {Promise}
+  * @throws reject the promise in case of error
+*/
+const DataStore = (israProject, filePath) => new Promise((resolve, reject) => {
+  if (israProject instanceof ISRAProject &amp;&amp; typeof filePath === 'string') {
+    fs.writeFile(filePath, israProject.toJSON(), (err) => {
+      if (err) reject(new Error('Failed to save file'));
+      resolve('Done save');
     });
-  }
-};
+  } else reject(new Error('Invalid project or filepath'));
+});
 
-module.exports = alterVulnerability;
+module.exports = DataStore;
 </code></pre>
         </article>
     </section>

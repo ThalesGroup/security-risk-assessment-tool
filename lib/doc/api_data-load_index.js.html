@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: api/xml-json/alter-isra/alter-vulnerability.js</title>
+    <title>JSDoc: Source: api/data-load/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-vulnerability.js</h1>
+    <h1 class="page-title">Source: api/data-load/index.js</h1>
 
     
 
@@ -49,66 +49,39 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+const fs = require('fs');
+const ISRAProject = require('../../model/classes/ISRAProject/isra-project');
 
-const { counter } = require('../../../utility-global');
-const { getHTMLString, getVectorCVSSV2 } = require('../utility');
+const validateJSONschema = require('../xml-json/validate-json-schema');
+const populateClass = require('../xml-json/populate-class');
 
-/** modify parsed ISRA JSON to fit schema
-       * @function alterVulnerability
-       * @param {object} vulnerabilities - vulnerabilities JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited vulnerabilities JSON data
-       * */
-const alterVulnerability = (xmlDataCopy, vulnerabilitiesCopy) => {
-  if (Array.isArray(vulnerabilitiesCopy)) {
-    const vulnerabilityCounter = counter();
+/**
+  * Load existing json file if any
+  * @function DataLoad
+  * @param {ISRAProject} israProject ISRA Project instance
+  * @return {Promise}
+  * @throws reject the promise in case of error
+*/
+const DataLoad = (israProject, filePath) => new Promise((resolve, reject) => {
+  // read contents of file
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      // reject the promise in case of error
+      reject(new Error('Failed to open file'));
+    }
 
-    vulnerabilitiesCopy.forEach((vulnerability) => {
-      vulnerabilityCounter.increment();
+    try {
+      const jsonData = JSON.parse(data);
+      const validJSONData = validateJSONschema(jsonData);
+      populateClass(validJSONData, israProject);
+      resolve('Done load');
+    } catch (error) {
+      reject(error);
+    }
+  });
+});
 
-      const v = vulnerability;
-      const {
-        projectName,
-        projectVersion,
-        vulnerabilityCVE,
-        supportingAssetRef,
-        vulnerabilityCVSS,
-      } = v;
-
-      v.projectNameRef = projectName;
-      v.projectVersionRef = projectVersion;
-      v.vulnerabilityFamily = v.vulnerabilityFamily[0].replace(/\u200e/g, '');
-      v.vulnerabilityDescription = getHTMLString(xmlDataCopy, 'vulnerabilityDescription', vulnerabilityCounter.getCount());
-      supportingAssetRef.shift();
-      v.cveScore = v.vulnerabilityCVEScoring[0].cveScore;
-
-      // alter vulnerability CVSSV2
-      if (vulnerabilityCVE[0] === '') {
-        const {
-          vulnerabilityBaseScoreMetrics,
-          vulnerabilityTemporalScoreMetrics,
-          ...rest
-        } = vulnerabilityCVSS[0];
-
-        vulnerabilityCVE[0] = getVectorCVSSV2({
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityExploitabilityMetrics[0],
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityImpactMetrics[0],
-          ...vulnerabilityTemporalScoreMetrics[0],
-        });
-
-        const obj = {
-          vulnerabilityCVE,
-          ...rest,
-        };
-        v.cveScore = rest.temporalScore;
-        Object.assign(v, obj);
-      } else vulnerabilityCVE[0] = '';
-      // remove vulnerabilityCVE link CVSSV3
-    });
-  }
-};
-
-module.exports = alterVulnerability;
+module.exports = DataLoad;
 </code></pre>
         </article>
     </section>

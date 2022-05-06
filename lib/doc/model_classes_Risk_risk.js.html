@@ -49,10 +49,25 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+const {
+  isProjectVersion,
+  isProjectName,
+} = require('../ISRAProject/validation');
+
+const {
+  isRiskId,
+  isAllAttackPathsName,
+  isAllAttackPathsScore,
+  isInherentRiskScore,
+  isMitigatedRiskScore,
+  isRiskManagementDecision,
+  isRiskManagementDetail,
+  isResidualRiskScore,
+  isResidualRiskLevel,
+} = require('./validation');
+
 const { counter } = require('../../../utility-global');
-const { isRiskManagementDecision, isResidualRiskLevel } = require('./validation');
-const { isValidHtml, isValidId } = require('../../schema/validation-pattern/validation');
-const { map2Array } = require('../../../api/data-store/data-store');
+const { map2Array } = require('../utility');
 
 const RiskName = require('./risk-name');
 const RiskLikelihood = require('./risk-likelihood');
@@ -127,7 +142,7 @@ class Risk {
     * @type {integer|null}
   */
   set riskId(riskId) {
-    if (isValidId(riskId)) this.#riskId = riskId;
+    if (isRiskId(riskId)) this.#riskId = riskId;
     else throw new Error(`Risk id ${riskId} is invalid null/integer`);
   }
 
@@ -139,7 +154,7 @@ class Risk {
     * @type {string}
   */
   set projectNameRef(projectname) {
-    if (typeof projectname === 'string') this.#projectNameRef = projectname;
+    if (isProjectName(projectname)) this.#projectNameRef = projectname;
     else throw new Error('Project name is not a string');
   }
 
@@ -151,7 +166,7 @@ class Risk {
     * @type {string}
   */
   set projectVersionRef(projectVersion) {
-    if (typeof projectVersion === 'string') this.#projectVersionRef = projectVersion;
+    if (isProjectVersion(projectVersion)) this.#projectVersionRef = projectVersion;
     else throw new Error('Project version is not a string');
   }
 
@@ -163,8 +178,10 @@ class Risk {
     * @type {RiskName}
   */
   set riskName(riskName) {
-    if (riskName instanceof RiskName) this.#riskName = riskName;
-    else throw new Error(`Risk ${this.#riskId}: name is not an instance of RiskName`);
+    if (riskName instanceof RiskName) {
+      this.#riskName = riskName;
+      this.#riskName.riskIdRef = this.#riskId;
+    } else throw new Error(`Risk ${this.#riskId}: name is not an instance of RiskName`);
   }
 
   get riskName() {
@@ -175,8 +192,10 @@ class Risk {
     * @type {RiskLikelihood}
   */
   set riskLikelihood(riskLikelihood) {
-    if (riskLikelihood instanceof RiskLikelihood) this.#riskLikelihood = riskLikelihood;
-    else throw new Error(`Risk ${this.#riskId}: likelihood is not an instance of RiskLikelihood`);
+    if (riskLikelihood instanceof RiskLikelihood) {
+      this.#riskLikelihood = riskLikelihood;
+      this.#riskLikelihood.riskIdRef = this.#riskId;
+    } else throw new Error(`Risk ${this.#riskId}: likelihood is not an instance of RiskLikelihood`);
   }
 
   get riskLikelihood() {
@@ -187,8 +206,10 @@ class Risk {
     * @type {RiskImpact}
   */
   set riskImpact(riskImpact) {
-    if (riskImpact instanceof RiskImpact) this.#riskImpact = riskImpact;
-    else throw new Error(`Risk ${this.#riskId}: impact is not an instance of RiskImpact`);
+    if (riskImpact instanceof RiskImpact) {
+      this.#riskImpact = riskImpact;
+      this.#riskImpact.riskIdRef = this.#riskId;
+    } else throw new Error(`Risk ${this.#riskId}: impact is not an instance of RiskImpact`);
   }
 
   get riskImpact() {
@@ -196,19 +217,20 @@ class Risk {
   }
 
   /**
-    * @property {function} addRiskAttackPath - add RiskAttackPath to map
+    * add RiskAttackPath to map
     * @param {RiskAttackPath} riskAttackPath - instance of RiskAttackPath
   */
   addRiskAttackPath(riskAttackPath) {
     if (riskAttackPath instanceof RiskAttackPath) {
       const attackPath = riskAttackPath;
       attackPath.riskAttackPathId = this.#riskAttackPathMap.size + 1;
+      attackPath.riskIdRef = this.#riskId;
       this.#riskAttackPathMap.set(riskAttackPath.properties.riskAttackPathId, riskAttackPath);
     } else throw Error(`Risk ${this.#riskId}: added risk attack path is not an instance of Risk Attack Path`);
   }
 
   /**
-    * @property {function} deleteRiskAttackPath - delete RiskAttackPath
+    * deleteRiskAttackPath - delete RiskAttackPath
     * from riskAttackPathMap based on riskAttackPathId
     * @param {integer|null} riskAttackPathId - id of RiskAttackPath
   */
@@ -238,7 +260,7 @@ class Risk {
   }
 
   /**
-    * @property {function} getRiskAttackPath - get RiskAttackPath
+    * get RiskAttackPath
     * based on riskAttackPathId for updating
     * @param {integer|null} businessAssetId - id of RiskAttackPath
     * @returns {RiskAttackPath}
@@ -253,7 +275,7 @@ class Risk {
     * @type {string}
   */
   set allAttackPathsName(allAttackPathsName) {
-    if (typeof allAttackPathsName === 'string') this.#allAttackPathsName = allAttackPathsName;
+    if (isAllAttackPathsName(allAttackPathsName)) this.#allAttackPathsName = allAttackPathsName;
     else throw new Error(`Risk ${this.#riskId}: all attack paths name is not a string`);
   }
 
@@ -265,11 +287,7 @@ class Risk {
     * @type {number|null}
   */
   set allAttackPathsScore(allAttackPathsScore) {
-    if ((!Number.isNaN(allAttackPathsScore)
-    &amp;&amp; typeof allAttackPathsScore === 'number'
-    &amp;&amp; allAttackPathsScore >= 0
-    &amp;&amp; allAttackPathsScore &lt;= 10)
-    || allAttackPathsScore === null) {
+    if (isAllAttackPathsScore(allAttackPathsScore)) {
       this.#allAttackPathsScore = allAttackPathsScore;
     } else throw new Error(`Risk ${this.#riskId}: all attack paths score is invalid`);
   }
@@ -282,9 +300,7 @@ class Risk {
     * @type {number|null}
   */
   set inherentRiskScore(inherentRiskScore) {
-    if ((Number.isSafeInteger(inherentRiskScore)
-    &amp;&amp; inherentRiskScore >= 0)
-    || inherentRiskScore === null) {
+    if (isInherentRiskScore(inherentRiskScore)) {
       this.#inherentRiskScore = inherentRiskScore;
     } else throw new Error(`Risk ${this.#riskId}: inherent risk score is invalid`);
   }
@@ -294,19 +310,20 @@ class Risk {
   }
 
   /**
-    * @property {function} addRiskMitigation - add RiskMitigation to map
+    * add RiskMitigation to map
     * @param {RiskMitigation} riskMitigation - instance of RiskMitigation
   */
   addRiskMitigation(riskMitigation) {
     if (riskMitigation instanceof RiskMitigation) {
       const mitigation = riskMitigation;
       mitigation.riskMitigationId = this.#riskMitigationMap.size + 1;
-      this.#riskMitigationMap.set(riskMitigation.properties.riskMitigationId, riskMitigation);
+      mitigation.riskIdRef = this.#riskId;
+      this.#riskMitigationMap.set(riskMitigation.riskMitigationId, riskMitigation);
     } else throw Error(`Risk ${this.#riskId}: added risk mitigation is not an instance of Risk Mitigation`);
   }
 
   /**
-    * @property {function} deleteRiskAttackPath - delete RiskMitigation
+    * delete RiskMitigation
     * from riskMitigationMap based on riskMitigationId
     * @param {integer|null} riskMitigationId - id of RiskMitigation
   */
@@ -336,7 +353,7 @@ class Risk {
   }
 
   /**
-    * @property {function} getRiskMitigation - get RiskMitigation
+    * get RiskMitigation
     * based on riskMitigationId for updating
     * @param {integer|null} businessAssetId - id of RiskMitigation
     * @returns {RiskMitigation}
@@ -344,16 +361,14 @@ class Risk {
   getRiskMitigation(riskMitigationId) {
     if (this.#riskMitigationMap.has(riskMitigationId)) {
       return this.#riskMitigationMap.get(riskMitigationId);
-    } throw Error(`Risk ${this.#riskId}: risk attack path ${riskMitigationId}: doesn't exist`);
+    } throw Error(`Risk ${this.#riskId}: risk mitigation ${riskMitigationId}: doesn't exist`);
   }
 
   /** calculated value of mitigated risk score
     * @type {number|null}
   */
   set mitigatedRiskScore(mitigatedRiskScore) {
-    if ((Number.isSafeInteger(mitigatedRiskScore)
-    &amp;&amp; mitigatedRiskScore >= 0)
-    || mitigatedRiskScore === null) {
+    if (isMitigatedRiskScore(mitigatedRiskScore)) {
       this.#mitigatedRiskScore = mitigatedRiskScore;
     } else throw new Error(`Risk ${this.#riskId}: mitigated risk score is not an integer`);
   }
@@ -379,8 +394,9 @@ class Risk {
     * @type {string}
   */
   set riskManagementDetail(riskManagementDetail) {
-    if (isValidHtml(riskManagementDetail)) this.#riskManagementDetail = riskManagementDetail;
-    else throw new Error(`Risk ${this.#riskId}: management detail is invalid html string`);
+    if (isRiskManagementDetail(riskManagementDetail)) {
+      this.#riskManagementDetail = riskManagementDetail;
+    } else throw new Error(`Risk ${this.#riskId}: management detail is invalid html string`);
   }
 
   get riskManagementDetail() {
@@ -391,7 +407,7 @@ class Risk {
     * @type {number|null}
   */
   set residualRiskScore(residualRiskScore) {
-    if (Number.isSafeInteger(residualRiskScore) || residualRiskScore === null) {
+    if (isResidualRiskScore(residualRiskScore)) {
       this.#residualRiskScore = residualRiskScore;
     } else throw new Error(`Risk ${this.#riskId}: residual risk score is not an integer`);
   }
@@ -463,13 +479,13 @@ module.exports = Risk;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alterBusinessAssets">alterBusinessAssets</a></li><li><a href="global.html#alterISRA">alterISRA</a></li><li><a href="global.html#alterISRAmeta">alterISRAmeta</a></li><li><a href="global.html#alterProjectContext">alterProjectContext</a></li><li><a href="global.html#alterRisks">alterRisks</a></li><li><a href="global.html#alterSupportingAssets">alterSupportingAssets</a></li><li><a href="global.html#alterVulnerability">alterVulnerability</a></li><li><a href="global.html#editName">editName</a></li><li><a href="global.html#parser">parser</a></li><li><a href="global.html#parseString">parseString</a></li><li><a href="global.html#populateClass">populateClass</a></li><li><a href="global.html#removeNameSpacePreifx">removeNameSpacePreifx</a></li><li><a href="global.html#removeNaN">removeNaN</a></li><li><a href="global.html#validateJsonSchema">validateJsonSchema</a></li><li><a href="global.html#XML2JSON">XML2JSON</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alterBusinessAssets">alterBusinessAssets</a></li><li><a href="global.html#alterISRA">alterISRA</a></li><li><a href="global.html#alterISRAmeta">alterISRAmeta</a></li><li><a href="global.html#alterProjectContext">alterProjectContext</a></li><li><a href="global.html#alterRisks">alterRisks</a></li><li><a href="global.html#alterSupportingAssets">alterSupportingAssets</a></li><li><a href="global.html#alterVulnerability">alterVulnerability</a></li><li><a href="global.html#DataLoad">DataLoad</a></li><li><a href="global.html#DataNew">DataNew</a></li><li><a href="global.html#DataStore">DataStore</a></li><li><a href="global.html#editName">editName</a></li><li><a href="global.html#isAccessResources">isAccessResources</a></li><li><a href="global.html#isAllAttackPathsName">isAllAttackPathsName</a></li><li><a href="global.html#isAllAttackPathsScore">isAllAttackPathsScore</a></li><li><a href="global.html#isAppVersion">isAppVersion</a></li><li><a href="global.html#isAttackPathName">isAttackPathName</a></li><li><a href="global.html#isAttackPathScore">isAttackPathScore</a></li><li><a href="global.html#isBenefits">isBenefits</a></li><li><a href="global.html#isBusinessAssetDescription">isBusinessAssetDescription</a></li><li><a href="global.html#isBusinessAssetFlag">isBusinessAssetFlag</a></li><li><a href="global.html#isBusinessAssetId">isBusinessAssetId</a></li><li><a href="global.html#isBusinessAssetName">isBusinessAssetName</a></li><li><a href="global.html#isBusinessAssetProperties">isBusinessAssetProperties</a></li><li><a href="global.html#isBusinessAssetType">isBusinessAssetType</a></li><li><a href="global.html#isCost">isCost</a></li><li><a href="global.html#isCVEScore">isCVEScore</a></li><li><a href="global.html#isDecision">isDecision</a></li><li><a href="global.html#isDecisionDetail">isDecisionDetail</a></li><li><a href="global.html#isDescription">isDescription</a></li><li><a href="global.html#isInherentRiskScore">isInherentRiskScore</a></li><li><a href="global.html#isIntrusionDetection">isIntrusionDetection</a></li><li><a href="global.html#isMitigatedRiskScore">isMitigatedRiskScore</a></li><li><a href="global.html#isMitigationsBenefits">isMitigationsBenefits</a></li><li><a href="global.html#isMitigationsDoneBenefits">isMitigationsDoneBenefits</a></li><li><a href="global.html#isMotivation">isMotivation</a></li><li><a href="global.html#isMotivationDetail">isMotivationDetail</a></li><li><a href="global.html#isOccurrence">isOccurrence</a></li><li><a href="global.html#isOccurrenceLevel">isOccurrenceLevel</a></li><li><a href="global.html#isOverallLevel">isOverallLevel</a></li><li><a href="global.html#isOverallScore">isOverallScore</a></li><li><a href="global.html#isProjectDescription">isProjectDescription</a></li><li><a href="global.html#isProjectDescriptionAttachment">isProjectDescriptionAttachment</a></li><li><a href="global.html#isProjectName">isProjectName</a></li><li><a href="global.html#isProjectOrganization">isProjectOrganization</a></li><li><a href="global.html#isProjectURL">isProjectURL</a></li><li><a href="global.html#isProjectVersion">isProjectVersion</a></li><li><a href="global.html#isResidualRiskLevel">isResidualRiskLevel</a></li><li><a href="global.html#isResidualRiskScore">isResidualRiskScore</a></li><li><a href="global.html#isReward">isReward</a></li><li><a href="global.html#isRiskAttackPathId">isRiskAttackPathId</a></li><li><a href="global.html#isRiskId">isRiskId</a></li><li><a href="global.html#isRiskImpact">isRiskImpact</a></li><li><a href="global.html#isRiskLikelihood">isRiskLikelihood</a></li><li><a href="global.html#isRiskLikelihoodDetail">isRiskLikelihoodDetail</a></li><li><a href="global.html#isRiskManagementDecision">isRiskManagementDecision</a></li><li><a href="global.html#isRiskManagementDetail">isRiskManagementDetail</a></li><li><a href="global.html#isRiskMitigationId">isRiskMitigationId</a></li><li><a href="global.html#isRiskName">isRiskName</a></li><li><a href="global.html#isSecurityAssumptions">isSecurityAssumptions</a></li><li><a href="global.html#isSecurityOfficerObjectives">isSecurityOfficerObjectives</a></li><li><a href="global.html#isSecurityProjectObjectives">isSecurityProjectObjectives</a></li><li><a href="global.html#isSize">isSize</a></li><li><a href="global.html#isSkillLevel">isSkillLevel</a></li><li><a href="global.html#isSupportingAssetDesc">isSupportingAssetDesc</a></li><li><a href="global.html#isSupportingAssetHLDId">isSupportingAssetHLDId</a></li><li><a href="global.html#isSupportingAssetId">isSupportingAssetId</a></li><li><a href="global.html#isSupportingAssetName">isSupportingAssetName</a></li><li><a href="global.html#isSupportingAssetSecurityLevel">isSupportingAssetSecurityLevel</a></li><li><a href="global.html#isSupportingAssetType">isSupportingAssetType</a></li><li><a href="global.html#isThreatAgent">isThreatAgent</a></li><li><a href="global.html#isThreatAgentDetail">isThreatAgentDetail</a></li><li><a href="global.html#isThreatFactorLevel">isThreatFactorLevel</a></li><li><a href="global.html#isThreatFactorScore">isThreatFactorScore</a></li><li><a href="global.html#isThreatVerb">isThreatVerb</a></li><li><a href="global.html#isThreatVerbDetail">isThreatVerbDetail</a></li><li><a href="global.html#isTrackingComment">isTrackingComment</a></li><li><a href="global.html#isTrackingDate">isTrackingDate</a></li><li><a href="global.html#isTrackingIteration">isTrackingIteration</a></li><li><a href="global.html#isTrackingSecurityOfficer">isTrackingSecurityOfficer</a></li><li><a href="global.html#isVulnerabilityCVE">isVulnerabilityCVE</a></li><li><a href="global.html#isVulnerabilityDescription">isVulnerabilityDescription</a></li><li><a href="global.html#isVulnerabilityDescriptionAttachment">isVulnerabilityDescriptionAttachment</a></li><li><a href="global.html#isVulnerabilityFamily">isVulnerabilityFamily</a></li><li><a href="global.html#isVulnerabilityId">isVulnerabilityId</a></li><li><a href="global.html#isVulnerabilityName">isVulnerabilityName</a></li><li><a href="global.html#isVulnerabilityRef">isVulnerabilityRef</a></li><li><a href="global.html#isVulnerabilityTrackingId">isVulnerabilityTrackingId</a></li><li><a href="global.html#isVulnerabilityTrackingURI">isVulnerabilityTrackingURI</a></li><li><a href="global.html#parser">parser</a></li><li><a href="global.html#parseString">parseString</a></li><li><a href="global.html#populateClass">populateClass</a></li><li><a href="global.html#removeNameSpacePreifx">removeNameSpacePreifx</a></li><li><a href="global.html#removeNaN">removeNaN</a></li><li><a href="global.html#validateClassProperties">validateClassProperties</a></li><li><a href="global.html#validateJsonSchema">validateJsonSchema</a></li><li><a href="global.html#writeFile">writeFile</a></li><li><a href="global.html#XML2JSON">XML2JSON</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Apr 21 2022 13:08:00 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri May 06 2022 13:53:46 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

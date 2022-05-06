@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: api/xml-json/alter-isra/alter-vulnerability.js</title>
+    <title>JSDoc: Source: model/classes/SupportingAsset/validation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-vulnerability.js</h1>
+    <h1 class="page-title">Source: model/classes/SupportingAsset/validation.js</h1>
 
     
 
@@ -50,65 +50,66 @@
 * -----------------------------------------------------------------------------
 */
 
-const { counter } = require('../../../utility-global');
-const { getHTMLString, getVectorCVSSV2 } = require('../utility');
+const jsonSchemaSA = require('../../schema/json-schema').properties.SupportingAsset.items.properties;
+const validateClassProperties = require('../validation/validate-class-properties');
 
-/** modify parsed ISRA JSON to fit schema
-       * @function alterVulnerability
-       * @param {object} vulnerabilities - vulnerabilities JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited vulnerabilities JSON data
-       * */
-const alterVulnerability = (xmlDataCopy, vulnerabilitiesCopy) => {
-  if (Array.isArray(vulnerabilitiesCopy)) {
-    const vulnerabilityCounter = counter();
-
-    vulnerabilitiesCopy.forEach((vulnerability) => {
-      vulnerabilityCounter.increment();
-
-      const v = vulnerability;
-      const {
-        projectName,
-        projectVersion,
-        vulnerabilityCVE,
-        supportingAssetRef,
-        vulnerabilityCVSS,
-      } = v;
-
-      v.projectNameRef = projectName;
-      v.projectVersionRef = projectVersion;
-      v.vulnerabilityFamily = v.vulnerabilityFamily[0].replace(/\u200e/g, '');
-      v.vulnerabilityDescription = getHTMLString(xmlDataCopy, 'vulnerabilityDescription', vulnerabilityCounter.getCount());
-      supportingAssetRef.shift();
-      v.cveScore = v.vulnerabilityCVEScoring[0].cveScore;
-
-      // alter vulnerability CVSSV2
-      if (vulnerabilityCVE[0] === '') {
-        const {
-          vulnerabilityBaseScoreMetrics,
-          vulnerabilityTemporalScoreMetrics,
-          ...rest
-        } = vulnerabilityCVSS[0];
-
-        vulnerabilityCVE[0] = getVectorCVSSV2({
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityExploitabilityMetrics[0],
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityImpactMetrics[0],
-          ...vulnerabilityTemporalScoreMetrics[0],
-        });
-
-        const obj = {
-          vulnerabilityCVE,
-          ...rest,
-        };
-        v.cveScore = rest.temporalScore;
-        Object.assign(v, obj);
-      } else vulnerabilityCVE[0] = '';
-      // remove vulnerabilityCVE link CVSSV3
-    });
-  }
+/** validate supporting asset id in SupportingAsset
+    * @param {integer|null} val value intended to be populated into
+    * supportingAssetId class property
+    * @returns {boolean}
+  */
+const isSupportingAssetId = (val) => {
+  const subSchema = jsonSchemaSA.supportingAssetId;
+  return validateClassProperties(val, subSchema);
 };
 
-module.exports = alterVulnerability;
+/** validate supporting asset HLD id in SupportingAsset
+    * @param {string} val value intended to be populated into
+    * supportingAssetHLDId class property
+    * @returns {boolean}
+  */
+const isSupportingAssetHLDId = (val) => {
+  const subSchema = jsonSchemaSA.supportingAssetHLDId;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate supporting asset name in SupportingAsset
+    * @param {string} val value intended to be populated into
+    * supportingAssetName class property
+    * @returns {boolean}
+  */
+const isSupportingAssetName = (val) => {
+  const subSchema = jsonSchemaSA.supportingAssetName;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate supporting asset type in SupportingAsset
+    * @param {string} val value intended to be populated into
+    * supportingAssetType class property
+    * @returns {boolean}
+  */
+const isSupportingAssetType = (val) => {
+  const subSchema = jsonSchemaSA.supportingAssetType;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate supporting asset security level in SupportingAsset
+    * @param {integer|null} val value intended to be populated into
+    * supportingAssetSecurityLevel class property
+    * @returns {boolean}
+  */
+const isSupportingAssetSecurityLevel = (val) => {
+  const subSchema = jsonSchemaSA.supportingAssetSecurityLevel;
+  return validateClassProperties(val, subSchema);
+};
+
+module.exports = {
+  isSupportingAssetId,
+  isSupportingAssetHLDId,
+  isSupportingAssetName,
+  isSupportingAssetType,
+  isSupportingAssetSecurityLevel,
+};
 </code></pre>
         </article>
     </section>

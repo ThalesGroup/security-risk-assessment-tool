@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: api/xml-json/alter-isra/alter-vulnerability.js</title>
+    <title>JSDoc: Source: model/classes/ISRAProjectContext/validation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-vulnerability.js</h1>
+    <h1 class="page-title">Source: model/classes/ISRAProjectContext/validation.js</h1>
 
     
 
@@ -49,66 +49,75 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+const jsonSchema = require('../../schema/json-schema').properties.ProjectContext.properties;
+const validateClassProperties = require('../validation/validate-class-properties');
 
-const { counter } = require('../../../utility-global');
-const { getHTMLString, getVectorCVSSV2 } = require('../utility');
-
-/** modify parsed ISRA JSON to fit schema
-       * @function alterVulnerability
-       * @param {object} vulnerabilities - vulnerabilities JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited vulnerabilities JSON data
-       * */
-const alterVulnerability = (xmlDataCopy, vulnerabilitiesCopy) => {
-  if (Array.isArray(vulnerabilitiesCopy)) {
-    const vulnerabilityCounter = counter();
-
-    vulnerabilitiesCopy.forEach((vulnerability) => {
-      vulnerabilityCounter.increment();
-
-      const v = vulnerability;
-      const {
-        projectName,
-        projectVersion,
-        vulnerabilityCVE,
-        supportingAssetRef,
-        vulnerabilityCVSS,
-      } = v;
-
-      v.projectNameRef = projectName;
-      v.projectVersionRef = projectVersion;
-      v.vulnerabilityFamily = v.vulnerabilityFamily[0].replace(/\u200e/g, '');
-      v.vulnerabilityDescription = getHTMLString(xmlDataCopy, 'vulnerabilityDescription', vulnerabilityCounter.getCount());
-      supportingAssetRef.shift();
-      v.cveScore = v.vulnerabilityCVEScoring[0].cveScore;
-
-      // alter vulnerability CVSSV2
-      if (vulnerabilityCVE[0] === '') {
-        const {
-          vulnerabilityBaseScoreMetrics,
-          vulnerabilityTemporalScoreMetrics,
-          ...rest
-        } = vulnerabilityCVSS[0];
-
-        vulnerabilityCVE[0] = getVectorCVSSV2({
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityExploitabilityMetrics[0],
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityImpactMetrics[0],
-          ...vulnerabilityTemporalScoreMetrics[0],
-        });
-
-        const obj = {
-          vulnerabilityCVE,
-          ...rest,
-        };
-        v.cveScore = rest.temporalScore;
-        Object.assign(v, obj);
-      } else vulnerabilityCVE[0] = '';
-      // remove vulnerabilityCVE link CVSSV3
-    });
-  }
+/** validate project description in ISRAProjectContext
+    * @param {string} val value intended to be populated into projectDescription class property
+    * @return {boolean}
+  */
+const isProjectDescription = (val) => {
+  const subSchema = jsonSchema.projectDescription;
+  return validateClassProperties(val, subSchema);
 };
 
-module.exports = alterVulnerability;
+/** validate project URL in ISRAProjectContext
+    * @param {string} val value intended to be populated into projectURL class property
+    * @return {boolean}
+  */
+const isProjectURL = (val) => {
+  const subSchema = jsonSchema.projectURL;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate project description attachment in ISRAProjectContext
+    * @param {string} val value intended to be populated into
+    * projectDescriptionAttachment class property
+    * @return {boolean}
+  */
+const isProjectDescriptionAttachment = (val) => {
+  const subSchema = jsonSchema.projectDescriptionAttachment;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate security project objectives in ISRAProjectContext
+    * @param {string} val value intended to be populated into
+    * securityProjectObjectives class property
+    * @return {boolean}
+  */
+const isSecurityProjectObjectives = (val) => {
+  const subSchema = jsonSchema.securityProjectObjectives;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate security officer objectives in ISRAProjectContext
+    * @param {string} val value intended to be populated into
+    * securityOfficerObjectives class property
+    * @return {boolean}
+  */
+const isSecurityOfficerObjectives = (val) => {
+  const subSchema = jsonSchema.securityOfficerObjectives;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate security assumptions in ISRAProjectContext
+    * @param {string} val value intended to be populated into
+    * securityAssumptions class property
+    * @return {boolean}
+  */
+const isSecurityAssumptions = (val) => {
+  const subSchema = jsonSchema.securityAssumptions;
+  return validateClassProperties(val, subSchema);
+};
+
+module.exports = {
+  isProjectDescription,
+  isProjectURL,
+  isProjectDescriptionAttachment,
+  isSecurityProjectObjectives,
+  isSecurityOfficerObjectives,
+  isSecurityAssumptions,
+};
 </code></pre>
         </article>
     </section>

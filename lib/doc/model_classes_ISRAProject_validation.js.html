@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: api/xml-json/alter-isra/alter-vulnerability.js</title>
+    <title>JSDoc: Source: model/classes/ISRAProject/validation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-vulnerability.js</h1>
+    <h1 class="page-title">Source: model/classes/ISRAProject/validation.js</h1>
 
     
 
@@ -50,65 +50,105 @@
 * -----------------------------------------------------------------------------
 */
 
-const { counter } = require('../../../utility-global');
-const { getHTMLString, getVectorCVSSV2 } = require('../utility');
+const jsonSchema = require('../../schema/json-schema').properties;
+const validateClassProperties = require('../validation/validate-class-properties');
 
-/** modify parsed ISRA JSON to fit schema
-       * @function alterVulnerability
-       * @param {object} vulnerabilities - vulnerabilities JSON that has been parsed
-       * @param {string} xmlDAta - content of xml file
-       * @returns {object} edited vulnerabilities JSON data
-       * */
-const alterVulnerability = (xmlDataCopy, vulnerabilitiesCopy) => {
-  if (Array.isArray(vulnerabilitiesCopy)) {
-    const vulnerabilityCounter = counter();
+const jsonSchemaISRAmeta = jsonSchema.ISRAmeta.properties;
 
-    vulnerabilitiesCopy.forEach((vulnerability) => {
-      vulnerabilityCounter.increment();
-
-      const v = vulnerability;
-      const {
-        projectName,
-        projectVersion,
-        vulnerabilityCVE,
-        supportingAssetRef,
-        vulnerabilityCVSS,
-      } = v;
-
-      v.projectNameRef = projectName;
-      v.projectVersionRef = projectVersion;
-      v.vulnerabilityFamily = v.vulnerabilityFamily[0].replace(/\u200e/g, '');
-      v.vulnerabilityDescription = getHTMLString(xmlDataCopy, 'vulnerabilityDescription', vulnerabilityCounter.getCount());
-      supportingAssetRef.shift();
-      v.cveScore = v.vulnerabilityCVEScoring[0].cveScore;
-
-      // alter vulnerability CVSSV2
-      if (vulnerabilityCVE[0] === '') {
-        const {
-          vulnerabilityBaseScoreMetrics,
-          vulnerabilityTemporalScoreMetrics,
-          ...rest
-        } = vulnerabilityCVSS[0];
-
-        vulnerabilityCVE[0] = getVectorCVSSV2({
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityExploitabilityMetrics[0],
-          ...vulnerabilityBaseScoreMetrics[0].vulnerabilityImpactMetrics[0],
-          ...vulnerabilityTemporalScoreMetrics[0],
-        });
-
-        const obj = {
-          vulnerabilityCVE,
-          ...rest,
-        };
-        v.cveScore = rest.temporalScore;
-        Object.assign(v, obj);
-      } else vulnerabilityCVE[0] = '';
-      // remove vulnerabilityCVE link CVSSV3
-    });
-  }
+/** validate app version in ISRAProject
+    * @param {integer|null} val value intended to be populated into appVersion class property
+    * @return {boolean}
+  */
+const isAppVersion = (val) => {
+  const subSchema = jsonSchemaISRAmeta.appVersion;
+  return validateClassProperties(val, subSchema);
 };
 
-module.exports = alterVulnerability;
+/** validate project name in ISRAProject
+    * @param {string} val value intended to be populated into projectName class property
+    * @return {boolean}
+  */
+const isProjectName = (val) => {
+  const subSchema = jsonSchemaISRAmeta.projectName;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate project organization in ISRAProject
+    * @param {string} val value intended to be populated into projectOrganization class property
+    * @return {boolean}
+  */
+const isProjectOrganization = (val) => {
+  const subSchema = jsonSchemaISRAmeta.projectOrganization;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate project version in ISRAProject
+    * @param {string} val value intended to be populated into projectVersion class property
+    * @return {boolean}
+  */
+const isProjectVersion = (val) => {
+  const subSchema = jsonSchemaISRAmeta.projectVersion;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate supporting asset description in ISRAProject
+    * @param {string} val value intended to be populated into SupportingAssetsDesc class property
+    * @return {boolean}
+  */
+const isSupportingAssetDesc = (val) => {
+  const subSchema = jsonSchema.SupportingAssetsDesc;
+  return validateClassProperties(val, subSchema);
+};
+
+const jsonSchemaISRATracking = jsonSchemaISRAmeta.ISRAtracking.items.properties;
+
+/** validate tracking iteration in ISRAProject
+    * @param {integer|null} val value intended to be populated into trackingIteration class property
+    * @return {boolean}
+  */
+const isTrackingIteration = (val) => {
+  const subSchema = jsonSchemaISRATracking.trackingIteration;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate tracking security officer in ISRAProject
+    * @param {string} val value intended to be populated into trackingSecurityOfficer class property
+    * @return {boolean}
+  */
+const isTrackingSecurityOfficer = (val) => {
+  const subSchema = jsonSchemaISRATracking.trackingSecurityOfficer;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate tracking date in ISRAProject
+    * @param {string} val value intended to be populated into trackingDate class property
+    * @return {boolean}
+  */
+const isTrackingDate = (val) => {
+  const subSchema = jsonSchemaISRATracking.trackingDate;
+  return validateClassProperties(val, subSchema);
+};
+
+/** validate tracking comment in ISRAProject
+    * @param {string} val value intended to be populated into trackingComment class property
+    * @return {boolean}
+  */
+const isTrackingComment = (val) => {
+  const subSchema = jsonSchemaISRATracking.trackingComment;
+  return validateClassProperties(val, subSchema);
+};
+
+module.exports = {
+  isAppVersion,
+  isProjectName,
+  isProjectOrganization,
+  isProjectVersion,
+  isSupportingAssetDesc,
+  isTrackingIteration,
+  isTrackingSecurityOfficer,
+  isTrackingDate,
+  isTrackingComment,
+};
 </code></pre>
         </article>
     </section>
