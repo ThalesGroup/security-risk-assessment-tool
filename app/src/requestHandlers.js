@@ -42,6 +42,7 @@ let jsonFilePath = '';
 /**
   * Create new project
   * @param win Browser Window
+  * @param app
 */
 const newISRAProject = (win, app) => {
   try {

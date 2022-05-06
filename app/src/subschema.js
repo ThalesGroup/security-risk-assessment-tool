@@ -21,39 +21,3 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-
-const jsonSchemaSA = require('../../schema/json-schema').properties.SupportingAsset.items.properties;
-const validateClassProperties = require('../validation/validate-class-properties');
-
-const isSupportingAssetId = (val) => {
-  const subSchema = jsonSchemaSA.supportingAssetId;
-  return validateClassProperties(val, subSchema);
-};
-
-const isSupportingAssetHLDId = (val) => {
-  const subSchema = jsonSchemaSA.supportingAssetHLDId;
-  return validateClassProperties(val, subSchema);
-};
-
-const isSupportingAssetName = (val) => {
-  const subSchema = jsonSchemaSA.supportingAssetName;
-  return validateClassProperties(val, subSchema);
-};
-
-const isSupportingAssetType = (val) => {
-  const subSchema = jsonSchemaSA.supportingAssetType;
-  return validateClassProperties(val, subSchema);
-};
-
-const isSupportingAssetSecurityLevel = (val) => {
-  const subSchema = jsonSchemaSA.supportingAssetSecurityLevel;
-  return validateClassProperties(val, subSchema);
-};
-
-module.exports = {
-  isSupportingAssetId,
-  isSupportingAssetHLDId,
-  isSupportingAssetName,
-  isSupportingAssetType,
-  isSupportingAssetSecurityLevel,
-};

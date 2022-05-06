@@ -37,3 +37,8 @@ window.project.load((event, data) => {
 //   await window.darkMode.system();
 //   document.getElementById('theme-source').innerHTML = 'System';
 // });
+
+// document.getElementById('project-name').addEventListener('change', () => {
+//   const text = document.getElementById('project-name').value;
+//   console.log(window.validate.businessAssetType(text));
+// });
