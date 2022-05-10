@@ -37,13 +37,16 @@ app.disableHardwareAcceleration();
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1024,
-    height: 600,
+    // width: 850,
+    // height: 600,
+    minWidth: 850,
+    title: 'ISRA Risk Assessment',
     webPreferences: {
       preload: path.join(__dirname, '../../lib/src/preload'),
     },
   });
 
+  win.maximize();
   win.loadFile(path.join(__dirname, 'index.html'));
   win.webContents.on('dom-ready', () => {
     newISRAProject(win, app);
@@ -83,6 +86,7 @@ function createWindow() {
       submenu: [
         { role: 'toggleDevTools' },
         { role: 'togglefullscreen' },
+        { role: 'reload' },
       ],
     },
   ];

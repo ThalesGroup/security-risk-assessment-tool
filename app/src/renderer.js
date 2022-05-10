@@ -22,11 +22,37 @@
 * -----------------------------------------------------------------------------
 */
 
-// check if user is connected to internet
-// if (!navigator.onLine)
 window.project.load((event, data) => {
   console.log(JSON.parse(data));
+  const fetchedData = JSON.parse(data);
+
+  const paragraph = document.getElementById('app-version');
+  const text = document.createTextNode(fetchedData.ISRAmeta.appVersion);
+  paragraph.appendChild(text);
 });
+
+const tabs = document.querySelector('.wrapper');
+const tabButton = document.querySelectorAll('.tab-button');
+const contents = document.querySelectorAll('.content');
+
+tabs.onclick = (e) => {
+  const { id } = e.target.dataset;
+  if (id) {
+    tabButton.forEach((btn) => {
+      btn.classList.remove('active');
+    });
+    e.target.classList.add('active');
+
+    contents.forEach((content) => {
+      content.classList.remove('active');
+    });
+    const element = document.getElementById(id);
+    element.classList.add('active');
+  }
+};
+
+// check if user is connected to internet
+// if (!navigator.onLine)
 
 // document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
 //   const isDarkMode = await window.darkMode.toggle();
@@ -36,9 +62,4 @@ window.project.load((event, data) => {
 // document.getElementById('reset-to-system').addEventListener('click', async () => {
 //   await window.darkMode.system();
 //   document.getElementById('theme-source').innerHTML = 'System';
-// });
-
-// document.getElementById('project-name').addEventListener('change', () => {
-//   const text = document.getElementById('project-name').value;
-//   console.log(window.validate.businessAssetType(text));
 // });

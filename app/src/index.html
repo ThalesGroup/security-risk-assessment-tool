@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head>  
     <meta charset="UTF-8">
-    <title>Hello World!</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <link rel="stylesheet" type="text/css" href="./styles.css">
 </head>
@@ -12,11 +11,48 @@
     <!-- <button id="toggle-dark-mode">Toggle Dark Mode</button>
     <button id="reset-to-system">Reset to System Theme</button>
     <br></br> -->
-    
-    <!-- <label for="project-name">Project Name:</label>
-    <input type="text" id="project-name"><br><br> -->
- 
-    <script src="renderer.js" type="module"></script>
+
+    <div class="wrapper">
+      <div class="buttonWrapper">
+        <button class="tab-button active" data-id="welcome">Welcome</button>
+        <button class="tab-button" data-id="project-context">Project Context</button>
+        <button class="tab-button" data-id="business-assets">Business Assets</button>
+        <button class="tab-button" data-id="supporting-assets">Supporting Assets</button>
+        <button class="tab-button" data-id="risks">Risks</button>
+        <button class="tab-button" data-id="vulnerabilities">Vulnerabilities</button>
+        <button class="tab-button" data-id="isra-report">ISRA Report</button>
+      </div>
+      <div class="contentWrapper">
+        <div class="content active" id="welcome">
+          <p class="heading" style="margin: 20px;">Welcome to the Information Security Risk Assessment (ISRA)</p>
+          <p id="app-version" style="text-align: center; font-size: small;">App Version: </p>
+          <label for="project-name">Project Name:</label>
+          <input type="text" id="project-name" name="project-name" style="width: 600px; height: 20px;"><br><br>
+          <label for="project-version">Project Version:</label>
+          <input type="text" id="project-version" name="project-version" style="width: 600px; height: 20px;"><br><br>
+        </div>
+        <div class="content" id="project-context">
+          <p class="heading">Project Context</p>
+        </div>
+        <div class="content" id="business-assets">
+          <p class="heading">Business Assets</p>
+        </div>
+        <div class="content" id="supporting-assets">
+          <p class="heading">Supporting Assets</p>
+        </div>
+        <div class="content" id="risks">
+          <p class="heading">Risks</p>
+        </div>
+        <div class="content" id="vulnerabilities">
+          <p class="heading">Vulnerabilities</p>
+        </div>
+        <div class="content" id="isra-report">
+          <p class="heading">ISRA Report</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
   </body>
 </body>
 </html>
