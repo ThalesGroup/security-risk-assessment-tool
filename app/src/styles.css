@@ -22,10 +22,6 @@
 * -----------------------------------------------------------------------------
 */
 
-body {
-  text-align: center;
-}
-
 .wrapper {
   width: 800px;
   margin: auto;
@@ -63,13 +59,6 @@ button.active {
 
 .content.active {
   display: block;
-  text-align: left;
-}
-
-.heading {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
 }
 
 /* @media (prefers-color-scheme: dark) {

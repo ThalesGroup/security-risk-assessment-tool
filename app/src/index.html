@@ -3,7 +3,20 @@
 <head>  
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" type="text/css" href="./global styles/global-styles.css">
     <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="./tabs/Welcome/styles.css">
+
+    <!-- npm module for rich text editor -->
+    <script src="../../node_modules/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: '.rich-text',
+        height: 300,
+        min_height: 300,
+      });
+    </script>
 </head>
 <body>
     <!-- <p>Current theme source: <strong id="theme-source">System</strong></p> -->
@@ -22,17 +35,41 @@
         <button class="tab-button" data-id="vulnerabilities">Vulnerabilities</button>
         <button class="tab-button" data-id="isra-report">ISRA Report</button>
       </div>
-      <div class="contentWrapper">
+
+      <form class="contentWrapper">
         <div class="content active" id="welcome">
-          <p class="heading" style="margin: 20px;">Welcome to the Information Security Risk Assessment (ISRA)</p>
-          <p id="app-version" style="text-align: center; font-size: small;">App Version: </p>
-          <label for="project-name">Project Name:</label>
-          <input type="text" id="project-name" name="project-name" style="width: 600px; height: 20px;"><br><br>
-          <label for="project-version">Project Version:</label>
-          <input type="text" id="project-version" name="project-version" style="width: 600px; height: 20px;"><br><br>
+          <form id="welcome-form">
+            <div class="details">
+              <p class="heading">Welcome to the Information Security Risk Assessment (ISRA)</p>
+              <p id="app-version">App Version: </p>
+            </div>
+            
+            <div id="isra-meta">
+              <label for="project-name">Project Name</label>
+              <input type="text" id="project-name" name="project-name">
+              
+              <label for="project-version">Project Version</label>
+              <input type="text" id="project-version" name="project-version">
+            
+              <label for="organization">Organization</label>
+              <select name="organization" id="organization"></select>
+            </div>
+  
+            <div id="isra-meta-tracking">
+              <p class="heading">Iterations History</p>
+            </div>
+  
+            <div id="isra-meta-info">
+              <p class="heading">Purpose and scope</p>
+            </div>
+          </form>
         </div>
+
         <div class="content" id="project-context">
-          <p class="heading">Project Context</p>
+          <form id="project-context-form">
+            <p class="heading">Project Context</p>
+            <textarea class="rich-text"></textarea>
+          </form>
         </div>
         <div class="content" id="business-assets">
           <p class="heading">Business Assets</p>
@@ -49,10 +86,11 @@
         <div class="content" id="isra-report">
           <p class="heading">ISRA Report</p>
         </div>
-      </div>
+      </form>
     </div>
 
     <script src="renderer.js"></script>
+    <script src="./tabs/Welcome/welcome.js"></script>
   </body>
 </body>
 </html>

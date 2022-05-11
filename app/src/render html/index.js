@@ -22,18 +22,17 @@
 * -----------------------------------------------------------------------------
 */
 
-const { contextBridge, ipcRenderer } = require('electron');
-const { renderWelcome } = require('../../app/src/render html');
+const ISRAmetaSchema = require('../../../lib/src/model/schema/json-schema').properties.ISRAmeta.properties;
 
-// contextBridge.exposeInMainWorld('darkMode', {
-//   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-//   system: () => ipcRenderer.invoke('dark-mode:system'),
-// });
+const renderWelcome = () => {
+  const subSchema = ISRAmetaSchema.projectOrganization.anyOf;
+  let html = '';
+  subSchema.forEach((e) => {
+    html += `<option value="${e.const}">${e.title}</option>`;
+  });
+  return html;
+};
 
-contextBridge.exposeInMainWorld('project', {
-  load: (data) => ipcRenderer.on('project:load', data),
-});
-
-contextBridge.exposeInMainWorld('render', {
-  welcome: () => renderWelcome(),
-});
+module.exports = {
+  renderWelcome,
+};

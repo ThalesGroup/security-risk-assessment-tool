@@ -22,18 +22,19 @@
 * -----------------------------------------------------------------------------
 */
 
-const { contextBridge, ipcRenderer } = require('electron');
-const { renderWelcome } = require('../../app/src/render html');
+.heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 100px;
+}
 
-// contextBridge.exposeInMainWorld('darkMode', {
-//   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-//   system: () => ipcRenderer.invoke('dark-mode:system'),
-// });
+.details {
+    text-align: center;
+}
 
-contextBridge.exposeInMainWorld('project', {
-  load: (data) => ipcRenderer.on('project:load', data),
-});
-
-contextBridge.exposeInMainWorld('render', {
-  welcome: () => renderWelcome(),
-});
+label {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+}

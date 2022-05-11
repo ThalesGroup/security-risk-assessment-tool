@@ -21,38 +21,48 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+(async () => {
+  const result = await window.render.welcome();
+  const organization = document.getElementById('organization');
+  organization.innerHTML += result;
+})();
 
-window.project.load((event, data) => {
-  console.log(JSON.parse(data));
-});
-
-const tabs = document.querySelector('.wrapper');
-const tabButton = document.querySelectorAll('.tab-button');
-const contents = document.querySelectorAll('.content');
-
-tabs.onclick = (e) => {
-  const { id } = e.target.dataset;
-  if (id) {
-    tabButton.forEach((btn) => {
-      btn.classList.remove('active');
-    });
-    e.target.classList.add('active');
-
-    contents.forEach((content) => {
-      content.classList.remove('active');
-    });
-    const element = document.getElementById(id);
-    element.classList.add('active');
-  }
+const appVersion = (value) => {
+  const paragraph = document.getElementById('app-version');
+  const text = document.createTextNode(value);
+  paragraph.appendChild(text);
 };
 
+const projectName = (value) => {
+  document.getElementById('project-name').value = value;
+};
+
+const projectVersion = (value) => {
+  document.getElementById('project-version').value = value;
+};
+
+const organization = (value) => {
+  document.getElementById('organization').value = value;
+};
+
+const updateFields = (fetchedData) => {
+  appVersion(fetchedData.appVersion);
+  projectName(fetchedData.projectName);
+  projectVersion(fetchedData.projectVersion);
+  organization(fetchedData.projectOrganization);
+};
+
+window.project.load((event, data) => {
+  updateFields(JSON.parse(data).ISRAmeta);
+});
+
 /**
- * Creates a json object including fields in the form during save/save as
+ * Creates a json object including fields when current tab is no longer active
  * @param {HTMLElement} form The form element to convert
  * @return {Object} The form data
  */
 const getFormJSON = () => {
-  const formElement = document.querySelector('form');
+  const formElement = document.querySelector('welcome-form');
   const data = new FormData(formElement);
   return Array.from(data.keys()).reduce((result, key) => {
     const element = result;
@@ -60,16 +70,3 @@ const getFormJSON = () => {
     return result;
   }, {});
 };
-
-// check if user is connected to internet
-// if (!navigator.onLine)
-
-// document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
-//   const isDarkMode = await window.darkMode.toggle();
-//   document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light';
-// });
-
-// document.getElementById('reset-to-system').addEventListener('click', async () => {
-//   await window.darkMode.system();
-//   document.getElementById('theme-source').innerHTML = 'System';
-// });

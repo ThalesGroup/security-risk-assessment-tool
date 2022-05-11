@@ -22,18 +22,12 @@
 * -----------------------------------------------------------------------------
 */
 
-const { contextBridge, ipcRenderer } = require('electron');
-const { renderWelcome } = require('../../app/src/render html');
+#app-version {
+    font-size: 12px;
+}
 
-// contextBridge.exposeInMainWorld('darkMode', {
-//   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-//   system: () => ipcRenderer.invoke('dark-mode:system'),
-// });
-
-contextBridge.exposeInMainWorld('project', {
-  load: (data) => ipcRenderer.on('project:load', data),
-});
-
-contextBridge.exposeInMainWorld('render', {
-  welcome: () => renderWelcome(),
-});
+#isra-meta {
+    display: grid;
+    grid-template-columns: 130px auto;
+    grid-gap: 10px;
+}
