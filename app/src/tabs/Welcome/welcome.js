@@ -21,31 +21,35 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
 (async () => {
-  const result = await window.render.welcome();
-  const organization = document.getElementById('organization');
-  organization.innerHTML += result;
+  try {
+    const result = await window.render.welcome();
+    const welcomeForm = document.forms[0];
+    welcomeForm.innerHTML += result;
+  } catch (err) {
+    alert('Failed to load html');
+  }
 })();
 
 const appVersion = (value) => {
-  const paragraph = document.getElementById('app-version');
-  const text = document.createTextNode(value);
-  paragraph.appendChild(text);
+  const paragraph = document.getElementById('details__app-version');
+  paragraph.innerText = `App Version: ${value}`;
 };
 
 const projectName = (value) => {
-  document.getElementById('project-name').value = value;
+  $('#welcome__isra-meta__project-name').val(value);
 };
 
 const projectVersion = (value) => {
-  document.getElementById('project-version').value = value;
+  document.getElementById('welcome__isra-meta__project-version').value = value;
 };
 
 const organization = (value) => {
-  document.getElementById('organization').value = value;
+  document.getElementById('welcome__isra-meta__organization').value = value;
 };
 
-const updateFields = (fetchedData) => {
+const updateWelcomeFields = (fetchedData) => {
   appVersion(fetchedData.appVersion);
   projectName(fetchedData.projectName);
   projectVersion(fetchedData.projectVersion);
@@ -53,7 +57,7 @@ const updateFields = (fetchedData) => {
 };
 
 window.project.load((event, data) => {
-  updateFields(JSON.parse(data).ISRAmeta);
+  updateWelcomeFields(JSON.parse(data).ISRAmeta);
 });
 
 /**
@@ -61,8 +65,8 @@ window.project.load((event, data) => {
  * @param {HTMLElement} form The form element to convert
  * @return {Object} The form data
  */
-const getFormJSON = () => {
-  const formElement = document.querySelector('welcome-form');
+const getWelcomeJSON = () => {
+  const formElement = document.forms[0];
   const data = new FormData(formElement);
   return Array.from(data.keys()).reduce((result, key) => {
     const element = result;

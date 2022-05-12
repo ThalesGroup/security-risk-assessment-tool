@@ -22,11 +22,11 @@
 * -----------------------------------------------------------------------------
 */
 
-#app-version {
+#details__app-version {
     font-size: 12px;
 }
 
-#isra-meta {
+#welcome__isra-meta {
     display: grid;
     grid-template-columns: 130px auto;
     grid-gap: 10px;

@@ -22,14 +22,29 @@
 * -----------------------------------------------------------------------------
 */
 
-window.project.load((event, data) => {
-  console.log(JSON.parse(data));
+/**
+ * loads ISRA Project Data (new project/xml/json)
+ */
+window.project.load(async (event, data) => {
+  console.log(await JSON.parse(data));
+});
+
+/**
+ * Intialise an instance of rich text editor textarea box
+ */
+window.parent.tinymce.init({
+  selector: '.rich-text',
+  height: 300,
+  min_height: 300,
 });
 
 const tabs = document.querySelector('.wrapper');
 const tabButton = document.querySelectorAll('.tab-button');
 const contents = document.querySelectorAll('.content');
 
+/**
+ * create tabs
+ */
 tabs.onclick = (e) => {
   const { id } = e.target.dataset;
   if (id) {
@@ -48,17 +63,9 @@ tabs.onclick = (e) => {
 
 /**
  * Creates a json object including fields in the form during save/save as
- * @param {HTMLElement} form The form element to convert
- * @return {Object} The form data
  */
 const getFormJSON = () => {
-  const formElement = document.querySelector('form');
-  const data = new FormData(formElement);
-  return Array.from(data.keys()).reduce((result, key) => {
-    const element = result;
-    element[key] = data.get(key);
-    return result;
-  }, {});
+  // getWelcomeJSON();
 };
 
 // check if user is connected to internet

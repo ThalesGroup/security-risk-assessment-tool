@@ -21,19 +21,3 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-
-const { contextBridge, ipcRenderer } = require('electron');
-const { renderWelcome } = require('../../app/src/tabs/Welcome/render-welcome');
-
-// contextBridge.exposeInMainWorld('darkMode', {
-//   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-//   system: () => ipcRenderer.invoke('dark-mode:system'),
-// });
-
-contextBridge.exposeInMainWorld('project', {
-  load: (data) => ipcRenderer.on('project:load', data),
-});
-
-contextBridge.exposeInMainWorld('render', {
-  welcome: () => renderWelcome(),
-});

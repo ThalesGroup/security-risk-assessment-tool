@@ -38,3 +38,19 @@ label {
     font-weight: bold;
     font-style: italic;
 }
+
+input:invalid {
+    border: 1px red;
+}
+
+input:valid {
+    border: 1px solid black;
+}
+
+select:invalid {
+    border: 1px solid red;
+}
+
+select option {
+    border: 1px solid black;
+}

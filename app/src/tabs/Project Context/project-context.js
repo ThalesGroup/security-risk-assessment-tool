@@ -22,17 +22,16 @@
 * -----------------------------------------------------------------------------
 */
 
-const ISRAmetaSchema = require('../../../lib/src/model/schema/json-schema').properties.ISRAmeta.properties;
+// console.log(window.parent.tinymce.get('project-description-text').getContent());
 
-const renderWelcome = () => {
-  const subSchema = ISRAmetaSchema.projectOrganization.anyOf;
-  let html = '';
-  subSchema.forEach((e) => {
-    html += `<option value="${e.const}">${e.title}</option>`;
-  });
-  return html;
-};
+// const projectDescription = (value) => {
+//   window.parent.tinymce.get('project-description_text').setContent((value));
+// };
 
-module.exports = {
-  renderWelcome,
-};
+// const updateProjectContextFields = (fetchedData) => {
+//   projectDescription(fetchedData.projectDescription);
+// };
+
+// window.project.load(async (event, data) => {
+//   updateProjectContextFields(await JSON.parse(data).ProjectContext);
+// });
