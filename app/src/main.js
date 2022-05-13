@@ -31,7 +31,7 @@ const {
   saveProject,
   loadFile,
   newISRAProject,
-} = require('./requestHandlers');
+} = require('./request-handlers');
 
 app.disableHardwareAcceleration();
 

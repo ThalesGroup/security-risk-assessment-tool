@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+const tabs = document.querySelector('.wrapper');
+const tabButton = document.querySelectorAll('.tab-button');
+const contents = document.querySelectorAll('.content');
+
 /**
  * loads ISRA Project Data (new project/xml/json)
  */
@@ -38,15 +42,58 @@ window.parent.tinymce.init({
   min_height: 300,
 });
 
-const tabs = document.querySelector('.wrapper');
-const tabButton = document.querySelectorAll('.tab-button');
-const contents = document.querySelectorAll('.content');
+/**
+ * Creates a json object including fields of Project Context
+ * @return {Object} The form data
+ */
+const getProjectContextJSON = () => {
+  const formElement = document.forms[1];
+  const data = new FormData(formElement);
+  return Array.from(data.keys()).reduce((result, key) => {
+    const element = result;
+    element[key] = data.get(key);
+    return result;
+  }, {});
+};
+
+/**
+ * Creates a json object including fields of Welcome
+ * @return {Object} The form data
+ */
+const getWelcomeJSON = () => {
+  const formElement = document.forms[0];
+  const data = new FormData(formElement);
+  return Array.from(data.keys()).reduce((result, key) => {
+    const element = result;
+    element[key] = data.get(key);
+    return result;
+  }, {});
+};
+
+/**
+ * Validate previous active tab in backend and populate corresponding class
+ * @param {String} tab name of previous active tab
+ */
+const getTabJSON = (tab) => {
+  switch (tab) {
+    case 'welcome':
+      console.log(getWelcomeJSON());
+      break;
+    case 'project-context':
+      console.log(getProjectContextJSON());
+      break;
+    default:
+      break;
+  }
+};
 
 /**
  * create tabs
  */
 tabs.onclick = (e) => {
   const { id } = e.target.dataset;
+  const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+
   if (id) {
     tabButton.forEach((btn) => {
       btn.classList.remove('active');
@@ -58,14 +105,9 @@ tabs.onclick = (e) => {
     });
     const element = document.getElementById(id);
     element.classList.add('active');
-  }
-};
 
-/**
- * Creates a json object including fields in the form during save/save as
- */
-const getFormJSON = () => {
-  // getWelcomeJSON();
+    getTabJSON(previousActiveTab);
+  }
 };
 
 // check if user is connected to internet

@@ -21,38 +21,30 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-/* global $ */
+#project-description{
+    background-color: rgb(185, 185, 185);
+    padding: 10px;
+}
 
-const projectDescription = (value) => {
-  window.parent.tinymce.get('project-description_text').setContent(value);
-};
+#project-description__upload {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+    text-align: center;
+}
 
-const projectURL = (value) => {
-  $('#project-description__url__insert').val(value);
-};
+#assumptions{
+    background-color: rgb(185, 185, 185);
+    padding: 10px;
+}
+#officer-objectives{
+    background-color: rgb(185, 185, 185);
+    padding: 10px;
+    margin-bottom: 10px;
+}
 
-const projectObjectives = (value) => {
-  window.parent.tinymce.get('project-objectives_text').setContent(value);
-};
-
-const officerObjectives = (value) => {
-  window.parent.tinymce.get('officer-objectives_text').setContent(value);
-};
-
-const assumptions = (value) => {
-  window.parent.tinymce.get('assumptions_text').setContent(value);
-};
-
-const updateProjectContextFields = (fetchedData) => {
-  projectDescription(fetchedData.projectDescription);
-  projectURL(fetchedData.projectURL);
-  projectObjectives(fetchedData.securityProjectObjectives);
-  officerObjectives(fetchedData.securityOfficerObjectives);
-  assumptions(fetchedData.securityAssumptions);
-};
-
-window.project.load(async (event, data) => {
-  updateProjectContextFields(await JSON.parse(data).ProjectContext);
-});
-
-// console.log(window.parent.tinymce.get('project-description-text').getContent());
+#project-objectives{
+    background-color: rgb(185, 185, 185);
+    padding: 10px;
+    margin: 10px 0px;
+}

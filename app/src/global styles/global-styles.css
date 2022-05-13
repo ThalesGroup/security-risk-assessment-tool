@@ -54,3 +54,43 @@ select:invalid {
 select option {
     border: 1px solid black;
 }
+
+.subheading {
+    text-align: center;
+    font-size: 18px;
+}
+
+.summary {
+    font-size: 14px;
+}
+
+.url:invalid {
+    border: 1px solid red;
+}
+
+.url:valid {
+    border: 1px solid black;
+}
+
+.addDelete{
+   background-color: #dedede;
+}
+
+.addDelete:hover{
+    color: rgb(63, 63, 63);
+}
+
+/* input[type='file']:focus{
+  
+} */
+
+.table{
+    display: grid;
+    grid-template-columns: 15px auto;
+    grid-gap: 5px;
+}
+
+.checkbox{
+    padding-top:30px;
+    margin-bottom: 10px;
+}

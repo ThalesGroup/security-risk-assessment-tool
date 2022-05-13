@@ -23,9 +23,9 @@
 */
 
 const {
-  dialog,
+  dialog, ipcMain,
   // ipcMain,
-  // nativeTheme,
+  nativeTheme,
 } = require('electron');
 
 const {
@@ -34,6 +34,8 @@ const {
   DataLoad,
   DataNew,
 } = require('../../lib/src/api/index');
+const ISRAMetaTracking = require('../../lib/src/model/classes/ISRAProject/isra-meta-tracking');
+
 const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 
 let israProject;
@@ -179,3 +181,22 @@ module.exports = {
 // ipcMain.handle('dark-mode:system', () => {
 //   nativeTheme.themeSource = 'system';
 // });
+
+ipcMain.handle('welcome:addTrackingRow', () => {
+  const israTracking = new ISRAMetaTracking();
+  israProject.addMetaTracking(israTracking);
+  return israTracking.properties;
+});
+
+ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => {
+  const sortedIterations = iterations.sort((a, b) => Number(b) - Number(a));
+  sortedIterations.forEach((iteration) => {
+    israProject.deleteMetaTracking(Number(iteration));
+  });
+  return israProject.properties.ISRAmeta.ISRAtracking;
+});
+
+ipcMain.handle('welcome:updateTrackingRow', (event, rowData) => {
+  const tracking = israProject.getMetaTracking(rowData.trackingIteration);
+  Object.assign(tracking, rowData);
+});

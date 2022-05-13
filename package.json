@@ -23,6 +23,7 @@
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^2.1.1",
     "jquery": "^3.6.0",
+    "tabulator-tables": "^5.2.4",
     "tinymce": "^6.0.2",
     "xml2js": "^0.4.23"
   }

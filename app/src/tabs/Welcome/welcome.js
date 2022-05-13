@@ -22,9 +22,11 @@
 * -----------------------------------------------------------------------------
 */
 
-(async () => {
+/* global $ Tabulator */
+
+(() => {
   try {
-    const result = await window.render.welcome();
+    const result = window.render.welcome();
     const welcomeForm = document.forms[0];
     welcomeForm.innerHTML += result;
   } catch (err) {
@@ -32,9 +34,32 @@
   }
 })();
 
+// create Tabulator on DOM element with id "example-table"
+const trackingtable = new Tabulator('#welcome__isra-meta-tracking__table', {
+  layout: 'fitColumns',
+  height: '100%',
+  columns: [ // Define Table Columns
+    {
+      title: 'Iteration', field: 'trackingIteration', width: 100, headerSort: false, validator: ['integer'], tooltip: 'Identifies the',
+    },
+    {
+      title: 'Security Officer', field: 'trackingSecurityOfficer', editor: 'input', headerSort: false, validator: ['string'], tooltip: true,
+    },
+    {
+      title: 'Date',
+      field: 'trackingDate',
+      editor: 'input',
+      headerSort: false,
+      validator: ['string', 'regex:(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)'],
+    },
+    {
+      title: 'Description', field: 'trackingComment', editor: 'input', headerSort: false, validator: ['string'], tooltip: true,
+    },
+  ],
+});
+
 const appVersion = (value) => {
-  const paragraph = document.getElementById('details__app-version');
-  paragraph.innerText = `App Version: ${value}`;
+  $('#details__app-version').val(`App Version: ${value}`);
 };
 
 const projectName = (value) => {
@@ -42,11 +67,30 @@ const projectName = (value) => {
 };
 
 const projectVersion = (value) => {
-  document.getElementById('welcome__isra-meta__project-version').value = value;
+  $('#welcome__isra-meta__project-version').val(value);
 };
 
 const organization = (value) => {
-  document.getElementById('welcome__isra-meta__organization').value = value;
+  $('#welcome__isra-meta__organization').val(value);
+};
+
+const addTrackingRow = (tracking) => {
+  trackingtable.addData([tracking]);
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.value = `${tracking.trackingIteration}`;
+  checkbox.id = `welcome__isra-meta-tracking__checkbox${tracking.trackingIteration}`;
+  checkbox.name = 'welcome__isra-meta-tracking__checkbox';
+  $('#welcome__isra-meta-tracking__checkboxes').append(checkbox);
+};
+
+const iterationsHistory = (arr) => {
+  trackingtable.clearData();
+  $('#welcome__isra-meta-tracking__checkboxes').empty();
+
+  arr.forEach((tracking) => {
+    addTrackingRow(tracking);
+  });
 };
 
 const updateWelcomeFields = (fetchedData) => {
@@ -54,23 +98,51 @@ const updateWelcomeFields = (fetchedData) => {
   projectName(fetchedData.projectName);
   projectVersion(fetchedData.projectVersion);
   organization(fetchedData.projectOrganization);
+  iterationsHistory(fetchedData.ISRAtracking);
 };
 
-window.project.load((event, data) => {
-  updateWelcomeFields(JSON.parse(data).ISRAmeta);
+window.project.load(async (event, data) => {
+  updateWelcomeFields(await JSON.parse(data).ISRAmeta);
 });
 
-/**
- * Creates a json object including fields when current tab is no longer active
- * @param {HTMLElement} form The form element to convert
- * @return {Object} The form data
- */
-const getWelcomeJSON = () => {
-  const formElement = document.forms[0];
-  const data = new FormData(formElement);
-  return Array.from(data.keys()).reduce((result, key) => {
-    const element = result;
-    element[key] = data.get(key);
-    return result;
-  }, {});
+// events
+
+document.getElementById('welcome__isra-meta-tracking__add').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const rowData = await window.welcome.addTrackingRow();
+  addTrackingRow(rowData);
+});
+
+const deleteTrackingRow = async (checkboxes) => {
+  const checkedRows = [];
+  checkboxes.forEach((box) => {
+    if (box.checked) {
+      checkedRows.push(box.value);
+    }
+  });
+  if (checkedRows.length > 0) {
+    trackingtable.getRows().forEach((row) => {
+      // console.log(row.getData());
+      window.welcome.updateTrackingRow(row.getData());
+    });
+
+    $('#welcome__isra-meta-tracking__checkboxes').empty();
+    trackingtable.clearData();
+
+    const data = await window.welcome.deleteTrackingRow(checkedRows);
+    data.forEach((row) => {
+      addTrackingRow(row);
+    });
+  }
 };
+
+document.getElementById('welcome__isra-meta-tracking__delete').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const checkboxes = document.getElementsByName('welcome__isra-meta-tracking__checkbox');
+  deleteTrackingRow(checkboxes);
+});
+
+// // get data from each row
+// trackingtable.getRows().forEach((row) => {
+//   console.log(row.getData());
+// });

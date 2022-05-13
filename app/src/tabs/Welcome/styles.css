@@ -31,3 +31,9 @@
     grid-template-columns: 130px auto;
     grid-gap: 10px;
 }
+
+.add-delete-container{
+    text-align: right;
+}
+
+

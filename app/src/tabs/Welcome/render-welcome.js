@@ -35,7 +35,7 @@ const renderWelcome = () => {
 
   const html = '<div class="details">'
   + `<p class="heading">${jsonSchema.title}</p>`
-  + `<p id="details__app-version">${ISRAmetaSchema.appVersion.title}:</p>`
+  + `<p id="details__app-version">${ISRAmetaSchema.appVersion.title}: ${ISRAmetaSchema.appVersion.default}</p>`
   + '</div>'
   + '<div id="welcome__isra-meta">'
   + `<label for="welcome__isra-meta__project-name">${ISRAmetaSchema.projectName.title}</label>`
@@ -49,6 +49,13 @@ const renderWelcome = () => {
   + '</div>'
   + '<div id="welcome__isra-meta-tracking">'
   + `<p class="heading">${ISRAmetaSchema.ISRAtracking.title}</p>`
+  + '<div class="add-delete-container">'
+  + '<button class="addDelete" id="welcome__isra-meta-tracking__add">Add</button> | <button  class="addDelete" id="welcome__isra-meta-tracking__delete">Delete</button>'
+  + '</div>'
+  + '<div class="table">'
+  + '<div class="checkbox" id="welcome__isra-meta-tracking__checkboxes"></div>'
+  + '<div id="welcome__isra-meta-tracking__table"></div>'
+  + '</div>'
   + '</div>'
   + '<div id="welcome__isra-meta-info">'
   + '<p class="heading">Purpose and scope</p>'
