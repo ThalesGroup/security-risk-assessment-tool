@@ -28,15 +28,24 @@ const projectDescription = (value) => {
 };
 
 const projectURL = (value) => {
-  if (value !== '') {
+  if (value !== '' && value !== 'cancelled') {
+    $('#project-description__url__hyperlink').show();
     $('#project-description__url__insert').hide();
     $('#project-description__url__hyperlink').attr('href').replace(' ', value);
     $('#project-description__url__hyperlink').text(value);
+  } else if (value === '') {
+    $('#project-description__url__insert').show();
+    $('#project-description__url__hyperlink').hide();
   }
 };
 
 $('#project-description__url__hyperlink').on('click', (e) => {
   e.preventDefault();
+});
+
+$('#project-description__url__image').on('click', async () => {
+  const url = await window.projectContext.urlPrompt();
+  projectURL(url);
 });
 
 $('#project-description__url__insert').on('click', async () => {

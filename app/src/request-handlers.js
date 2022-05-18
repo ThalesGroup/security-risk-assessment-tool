@@ -193,39 +193,55 @@ const {
   saveAsFile,
   decodeFile,
   urlPrompt,
-} = require('../../lib/src/model/classes/utility');
+} = require('../../lib/src/model/classes/ISRAProjectContext/handler-event');
 
-ipcMain.handle('projectContext:urlPrompt', () => urlPrompt());
+ipcMain.handle('projectContext:urlPrompt', async () => {
+  const url = await urlPrompt();
+  if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
+  return url;
+});
 
-ipcMain.on('projectContext:attachment', () => {
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Attach',
-      click: () => {
-        try {
-          const [fileName, base64data] = attachFile();
-          israProject.israProjectContext.projectDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('projectContext:fileName', fileName);
-        } catch (err) {
-          console.log(err);
-          dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
-          getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
-        }
-      },
-    },
-    {
-      label: 'Save as',
-      click: () => saveAsFile(israProject.israProjectContext.projectDescriptionAttachment),
-    },
-    {
-      label: 'Remove',
-      click: () => {
-        const [fileName, base64data] = removeFile();
+const attachmentOptions = () => {
+  const attachLabel = {
+    label: 'Attach',
+    click: () => {
+      try {
+        const [fileName, base64data] = attachFile();
         israProject.israProjectContext.projectDescriptionAttachment = base64data;
         getMainWindow().webContents.send('projectContext:fileName', fileName);
-      },
+      } catch (err) {
+        console.log(err);
+        dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
+        getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
+      }
     },
-  ]);
+  };
+
+  if (israProject.israProjectContext.projectDescriptionAttachment !== ''
+  && israProject.israProjectContext.projectDescriptionAttachment !== undefined) {
+    return [
+      attachLabel,
+      {
+        label: 'Save as',
+        click: () => saveAsFile(israProject.israProjectContext.projectDescriptionAttachment),
+      },
+      {
+        label: 'Remove',
+        click: () => {
+          const [fileName, base64data] = removeFile();
+          israProject.israProjectContext.projectDescriptionAttachment = base64data;
+          getMainWindow().webContents.send('projectContext:fileName', fileName);
+        },
+      },
+    ];
+  }
+  return [
+    attachLabel,
+  ];
+};
+
+ipcMain.on('projectContext:attachment', () => {
+  const contextMenu = Menu.buildFromTemplate(attachmentOptions());
   contextMenu.popup();
 });
 

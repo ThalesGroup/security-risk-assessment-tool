@@ -96,3 +96,15 @@ select option {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.hyperlink-attachment-image{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.hyperlink-attachment-align{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
