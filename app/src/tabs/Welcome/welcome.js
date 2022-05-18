@@ -24,39 +24,19 @@
 
 /* global $ Tabulator */
 
+let trackingtable;
+
 (() => {
   try {
     const result = window.render.welcome();
     const welcomeForm = document.forms[0];
-    welcomeForm.innerHTML += result;
+    welcomeForm.innerHTML += result[0];
+    // create Tabulator on DOM element with id "example-table"
+    trackingtable = new Tabulator('#welcome__isra-meta-tracking__table', result[1]);
   } catch (err) {
-    alert('Failed to load html');
+    alert('Failed to load welcome tab');
   }
 })();
-
-// create Tabulator on DOM element with id "example-table"
-const trackingtable = new Tabulator('#welcome__isra-meta-tracking__table', {
-  layout: 'fitColumns',
-  height: '100%',
-  columns: [ // Define Table Columns
-    {
-      title: 'Iteration', field: 'trackingIteration', width: 100, headerSort: false, validator: ['integer'], tooltip: 'Identifies the',
-    },
-    {
-      title: 'Security Officer', field: 'trackingSecurityOfficer', editor: 'input', headerSort: false, validator: ['string'], tooltip: true,
-    },
-    {
-      title: 'Date',
-      field: 'trackingDate',
-      editor: 'input',
-      headerSort: false,
-      validator: ['string', 'regex:(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)'],
-    },
-    {
-      title: 'Description', field: 'trackingComment', editor: 'input', headerSort: false, validator: ['string'], tooltip: true,
-    },
-  ],
-});
 
 const appVersion = (value) => {
   $('#details__app-version').val(`App Version: ${value}`);
@@ -122,7 +102,6 @@ const deleteTrackingRow = async (checkboxes) => {
   });
   if (checkedRows.length > 0) {
     trackingtable.getRows().forEach((row) => {
-      // console.log(row.getData());
       window.welcome.updateTrackingRow(row.getData());
     });
 
@@ -141,8 +120,3 @@ document.getElementById('welcome__isra-meta-tracking__delete').addEventListener(
   const checkboxes = document.getElementsByName('welcome__isra-meta-tracking__checkbox');
   deleteTrackingRow(checkboxes);
 });
-
-// // get data from each row
-// trackingtable.getRows().forEach((row) => {
-//   console.log(row.getData());
-// });

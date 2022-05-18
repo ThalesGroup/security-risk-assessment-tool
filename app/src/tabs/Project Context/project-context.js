@@ -28,7 +28,32 @@ const projectDescription = (value) => {
 };
 
 const projectURL = (value) => {
-  $('#project-description__url__insert').val(value);
+  if (value !== '') {
+    $('#project-description__url__insert').hide();
+    $('#project-description__url__hyperlink').attr('href').replace(' ', value);
+    $('#project-description__url__hyperlink').text(value);
+  }
+};
+
+$('#project-description__url__hyperlink').on('click', (e) => {
+  e.preventDefault();
+});
+
+$('#project-description__url__insert').on('click', async () => {
+  const url = await window.projectContext.urlPrompt();
+  projectURL(url);
+});
+
+$('#project-description__attachment').on('click', () => {
+  window.projectContext.attachment();
+  window.projectContext.fileName(async (event, fileName) => {
+    $('#project-description__file__insert').text(fileName);
+  });
+});
+
+const projectDescriptiveAttachment = async (value) => {
+  const result = await window.projectContext.decodeAttachment(value);
+  $('#project-description__file__insert').text(result);
 };
 
 const projectObjectives = (value) => {
@@ -46,6 +71,7 @@ const assumptions = (value) => {
 const updateProjectContextFields = (fetchedData) => {
   projectDescription(fetchedData.projectDescription);
   projectURL(fetchedData.projectURL);
+  projectDescriptiveAttachment(fetchedData.projectDescriptionAttachment);
   projectObjectives(fetchedData.securityProjectObjectives);
   officerObjectives(fetchedData.securityOfficerObjectives);
   assumptions(fetchedData.securityAssumptions);

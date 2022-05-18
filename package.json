@@ -22,6 +22,7 @@
     "ajv": "^8.10.0",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^2.1.1",
+    "electron-prompt": "^1.7.0",
     "jquery": "^3.6.0",
     "tabulator-tables": "^5.2.4",
     "tinymce": "^6.0.2",

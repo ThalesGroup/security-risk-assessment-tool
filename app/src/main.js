@@ -51,6 +51,7 @@ function createWindow() {
   win.webContents.on('dom-ready', () => {
     newISRAProject(win, app);
   });
+  process.env.MAIN_WINDOW_ID = win.id;
 
   const mainMenuTemplate = [
     {

@@ -92,5 +92,7 @@ select option {
 
 .checkbox{
     padding-top:30px;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

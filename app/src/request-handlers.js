@@ -23,9 +23,9 @@
 */
 
 const {
-  dialog, ipcMain,
+  dialog, ipcMain, Menu, BrowserWindow,
   // ipcMain,
-  nativeTheme,
+  // nativeTheme,
 } = require('electron');
 
 const {
@@ -34,12 +34,21 @@ const {
   DataLoad,
   DataNew,
 } = require('../../lib/src/api/index');
-const ISRAMetaTracking = require('../../lib/src/model/classes/ISRAProject/isra-meta-tracking');
 
 const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 
 let israProject;
 let jsonFilePath = '';
+
+/**
+  * every time you want the main window, call this function.
+*/
+const getMainWindow = () => {
+  const ID = process.env.MAIN_WINDOW_ID * 1;
+  return BrowserWindow.fromId(ID);
+};
+
+// Header
 
 /**
   * Create new project
@@ -162,6 +171,76 @@ const loadFile = (win) => {
   }
 };
 
+// Welcome Tab
+
+const {
+  addTrackingRow,
+  deleteTrackingRow,
+  updateTrackingRow,
+} = require('../../lib/src/model/classes/ISRAProject/handler-event');
+
+ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
+ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
+ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
+  updateTrackingRow(israProject, rowData);
+});
+
+// Project Context Tab
+
+const {
+  attachFile,
+  removeFile,
+  saveAsFile,
+  decodeFile,
+  urlPrompt,
+} = require('../../lib/src/model/classes/utility');
+
+ipcMain.handle('projectContext:urlPrompt', () => urlPrompt());
+
+ipcMain.on('projectContext:attachment', () => {
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Attach',
+      click: () => {
+        try {
+          const [fileName, base64data] = attachFile();
+          israProject.israProjectContext.projectDescriptionAttachment = base64data;
+          getMainWindow().webContents.send('projectContext:fileName', fileName);
+        } catch (err) {
+          console.log(err);
+          dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
+          getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
+        }
+      },
+    },
+    {
+      label: 'Save as',
+      click: () => saveAsFile(israProject.israProjectContext.projectDescriptionAttachment),
+    },
+    {
+      label: 'Remove',
+      click: () => {
+        const [fileName, base64data] = removeFile();
+        israProject.israProjectContext.projectDescriptionAttachment = base64data;
+        getMainWindow().webContents.send('projectContext:fileName', fileName);
+      },
+    },
+  ]);
+  contextMenu.popup();
+});
+
+ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
+  try {
+    const [fileName, base64data] = decodeFile(base64);
+    israProject.israProjectContext.projectDescriptionAttachment = base64data;
+    return fileName;
+  } catch (err) {
+    console.log(err);
+    dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
+    return 'Click here to attach a file';
+  }
+});
+
 module.exports = {
   saveAs,
   saveProject,
@@ -181,22 +260,3 @@ module.exports = {
 // ipcMain.handle('dark-mode:system', () => {
 //   nativeTheme.themeSource = 'system';
 // });
-
-ipcMain.handle('welcome:addTrackingRow', () => {
-  const israTracking = new ISRAMetaTracking();
-  israProject.addMetaTracking(israTracking);
-  return israTracking.properties;
-});
-
-ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => {
-  const sortedIterations = iterations.sort((a, b) => Number(b) - Number(a));
-  sortedIterations.forEach((iteration) => {
-    israProject.deleteMetaTracking(Number(iteration));
-  });
-  return israProject.properties.ISRAmeta.ISRAtracking;
-});
-
-ipcMain.handle('welcome:updateTrackingRow', (event, rowData) => {
-  const tracking = israProject.getMetaTracking(rowData.trackingIteration);
-  Object.assign(tracking, rowData);
-});
