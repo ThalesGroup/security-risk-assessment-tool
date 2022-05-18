@@ -31,7 +31,7 @@ let trackingtable;
     const result = window.render.welcome();
     const welcomeForm = document.forms[0];
     welcomeForm.innerHTML += result[0];
-    // create Tabulator on DOM element with id "example-table"
+    // create Tabulator on DOM element
     trackingtable = new Tabulator('#welcome__isra-meta-tracking__table', result[1]);
   } catch (err) {
     alert('Failed to load welcome tab');

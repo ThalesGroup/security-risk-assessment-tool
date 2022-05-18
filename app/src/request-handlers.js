@@ -171,8 +171,14 @@ const loadFile = (win) => {
   }
 };
 
-// Welcome Tab
+module.exports = {
+  saveAs,
+  saveProject,
+  loadFile,
+  newISRAProject,
+};
 
+// Welcome Tab
 const {
   addTrackingRow,
   deleteTrackingRow,
@@ -184,9 +190,11 @@ ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackin
 ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
   updateTrackingRow(israProject, rowData);
 });
+ipcMain.on('validate:welcome', (event, object) => {
+  Object.assign(israProject, object);
+});
 
 // Project Context Tab
-
 const {
   attachFile,
   removeFile,
@@ -257,12 +265,9 @@ ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
   }
 });
 
-module.exports = {
-  saveAs,
-  saveProject,
-  loadFile,
-  newISRAProject,
-};
+ipcMain.on('validate:projectContext', (event, object) => {
+  Object.assign(israProject.israProjectContext, object);
+});
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

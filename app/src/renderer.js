@@ -22,6 +22,8 @@
 * -----------------------------------------------------------------------------
 */
 
+/* global $ Tabulator */
+
 const tabs = document.querySelector('.wrapper');
 const tabButton = document.querySelectorAll('.tab-button');
 const contents = document.querySelectorAll('.content');
@@ -46,28 +48,30 @@ window.parent.tinymce.init({
  * Creates a json object including fields of Project Context
  * @return {Object} The form data
  */
-const getProjectContextJSON = () => {
-  const formElement = document.forms[1];
-  const data = new FormData(formElement);
-  return Array.from(data.keys()).reduce((result, key) => {
-    const element = result;
-    element[key] = data.get(key);
-    return result;
-  }, {});
+const setProjectContext = () => {
+  const { tinymce } = window.parent;
+  window.validate.projectContext({
+    projectDescription: tinymce.get('project-description__text').getContent(),
+    securityProjectObjectives: tinymce.get('project-objectives__text').getContent(),
+    securityOfficerObjectives: tinymce.get('officer-objectives__text').getContent(),
+    securityAssumptions: tinymce.get('assumptions__text').getContent(),
+  });
 };
 
 /**
  * Creates a json object including fields of Welcome
  * @return {Object} The form data
  */
-const getWelcomeJSON = () => {
-  const formElement = document.forms[0];
-  const data = new FormData(formElement);
-  return Array.from(data.keys()).reduce((result, key) => {
-    const element = result;
-    element[key] = data.get(key);
-    return result;
-  }, {});
+const setWelcomeJSON = () => {
+  Tabulator.findTable('#welcome__isra-meta-tracking__table')[0].getRows().forEach((row) => {
+    window.welcome.updateTrackingRow(row.getData());
+  });
+
+  window.validate.welcome({
+    projectName: $('#welcome__isra-meta__project-name').val(),
+    projectOrganization: $('#welcome__isra-meta__organization').val(),
+    projectVersion: $('#welcome__isra-meta__project-version').val(),
+  });
 };
 
 /**
@@ -77,10 +81,10 @@ const getWelcomeJSON = () => {
 const getTabJSON = (tab) => {
   switch (tab) {
     case 'welcome':
-      console.log(getWelcomeJSON());
+      setWelcomeJSON();
       break;
     case 'project-context':
-      console.log(getProjectContextJSON());
+      setProjectContext();
       break;
     default:
       break;
@@ -122,3 +126,12 @@ tabs.onclick = (e) => {
 //   await window.darkMode.system();
 //   document.getElementById('theme-source').innerHTML = 'System';
 // });
+
+// Form Data api
+// const formElement = document.forms[0];
+// const data = new FormData(formElement);
+// return Array.from(data.keys()).reduce((result, key) => {
+//   const element = result;
+//   element[key] = data.get(key);
+//   return result;
+// }, {});

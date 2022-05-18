@@ -24,7 +24,7 @@
 /* global $ */
 
 const projectDescription = (value) => {
-  window.parent.tinymce.get('project-description_text').setContent(value);
+  window.parent.tinymce.get('project-description__text').setContent(value);
 };
 
 const projectURL = (value) => {
@@ -66,15 +66,15 @@ const projectDescriptiveAttachment = async (value) => {
 };
 
 const projectObjectives = (value) => {
-  window.parent.tinymce.get('project-objectives_text').setContent(value);
+  window.parent.tinymce.get('project-objectives__text').setContent(value);
 };
 
 const officerObjectives = (value) => {
-  window.parent.tinymce.get('officer-objectives_text').setContent(value);
+  window.parent.tinymce.get('officer-objectives__text').setContent(value);
 };
 
 const assumptions = (value) => {
-  window.parent.tinymce.get('assumptions_text').setContent(value);
+  window.parent.tinymce.get('assumptions__text').setContent(value);
 };
 
 const updateProjectContextFields = (fetchedData) => {
@@ -89,5 +89,3 @@ const updateProjectContextFields = (fetchedData) => {
 window.project.load(async (event, data) => {
   updateProjectContextFields(await JSON.parse(data).ProjectContext);
 });
-
-// console.log(window.parent.tinymce.get('project-description-text').getContent());
