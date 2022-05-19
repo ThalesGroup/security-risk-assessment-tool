@@ -91,6 +91,12 @@ const getTabJSON = (tab) => {
   }
 };
 
+window.validate.allTabs((event, filePath) => {
+  setWelcomeJSON();
+  setProjectContext();
+  event.sender.send('validate:allTabs', filePath);
+});
+
 /**
  * create tabs
  */

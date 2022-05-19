@@ -24,7 +24,6 @@
 
 const {
   dialog, ipcMain, Menu, BrowserWindow,
-  // ipcMain,
   // nativeTheme,
 } = require('electron');
 
@@ -69,7 +68,7 @@ const newISRAProject = (win, app) => {
 
 /**
  * @module saveAs
-  * save as new project in selected directory
+  * save as new project in selected directory (save as)
 */
 const saveAs = async () => {
   const options = {
@@ -84,6 +83,27 @@ const saveAs = async () => {
   const fileName = await dialog.showSaveDialog(options);
   if (!fileName.canceled) {
     const { filePath } = fileName;
+    getMainWindow().webContents.send('validate:allTabs', filePath);
+  }
+};
+
+/**
+  * override data in existing json file (save)
+*/
+const save = async () => {
+  getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
+};
+
+/**
+  * Save current project (save/save as)
+*/
+const saveProject = async () => {
+  if (jsonFilePath !== '') save();
+  else saveAs();
+};
+
+ipcMain.on('validate:allTabs', async (event, filePath) => {
+  if (jsonFilePath === '') {
     try {
       await DataStore(israProject, filePath);
       jsonFilePath = filePath;
@@ -93,31 +113,16 @@ const saveAs = async () => {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
     }
+  } else {
+    try {
+      await DataStore(israProject, jsonFilePath);
+      dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
+    } catch (err) {
+      console.log(err);
+      dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
+    }
   }
-};
-
-/**
-  * override data in existing json file
-*/
-const save = async () => {
-  try {
-    if (israProject === undefined) israProject = new ISRAProject();
-    await DataStore(israProject, jsonFilePath);
-    dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
-  } catch (err) {
-    console.log(err);
-    dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
-  }
-};
-
-/**
-  * Save current project
-  * @module saveForm
-*/
-const saveProject = async () => {
-  if (jsonFilePath !== '') save();
-  else saveAs();
-};
+});
 
 /**
   * Load JSON file
@@ -259,9 +264,16 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
   try {
-    const [fileName, base64data] = decodeFile(base64);
-    israProject.israProjectContext.projectDescriptionAttachment = base64data;
-    return fileName;
+    if (jsonFilePath === '') {
+      const [fileName, base64data] = decodeFile(base64);
+      israProject.israProjectContext.projectDescriptionAttachment = base64data;
+      return fileName;
+    }
+    // israProject.israProjectContext.projectDescriptionAttachment = base64;
+    // const buffer = Buffer.from(base64, 'base64');
+    // const content = buffer.toString();
+    // console.log(content);
+    return 'JSON file opened';
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
