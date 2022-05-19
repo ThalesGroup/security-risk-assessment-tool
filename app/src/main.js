@@ -60,6 +60,7 @@ function createWindow() {
         {
           label: 'Save',
           click: () => saveProject(),
+          accelerator: 'CmdOrCtrl+S',
         },
         {
           label: 'Save As',
@@ -69,7 +70,10 @@ function createWindow() {
           label: 'Open File',
           click: () => loadFile(win),
         },
-        { role: 'quit' },
+        {
+          role: 'quit',
+          accelerator: 'CmdOrCtrl+Q',
+        },
       ],
     },
     {
