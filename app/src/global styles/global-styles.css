@@ -123,7 +123,6 @@ select option {
     background-color:#FFFFFF;
     font-weight:normal;
     font-size:10px;
-    border-radius:8px;
     position:absolute;
     z-index:99999999;
     box-sizing:border-box;

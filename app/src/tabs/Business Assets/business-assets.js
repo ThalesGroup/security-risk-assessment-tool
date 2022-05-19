@@ -24,10 +24,12 @@
 
 /* global $ Tabulator */
 
+let businessAssetsTable;
+
 const addBusinessAssetRow = (businessAssets) => {
   businessAssets.forEach((asset) => {
     const result = window.render.businessAssets();
-    const businessAssetsTable = new Tabulator('#business-assets__section__table', result[1]);
+    businessAssetsTable = new Tabulator('#business-assets__section__table', result[1]);
     businessAssetsTable.on('tableBuilt', () => {
       const { businessAssetName, businessAssetType, businessAssetProperties } = asset;
       businessAssetsTable.addData([{

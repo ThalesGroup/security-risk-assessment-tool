@@ -21,39 +21,97 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+/* eslint-disable */ 
+
 const jsonSchema = require('../../../../lib/src/model/schema/json-schema');
 
 const BusinessAssetSchema = jsonSchema.properties.BusinessAsset.items.properties;
 
 const renderBusinessAssets = () => {
   const html = '';
+
+  const composeSelectFormatter = (dictionary) => (cell) => {
+    const value = cell.getValue();
+    if (!value) return value;
+
+    return dictionary[value];
+  };
+
   const tableOptions = {
     layout: 'fitColumns',
     height: '100%',
     columns: [ // Define Table Columns
       {
-        title: 'Name', field: 'businessAssetName', width: 100, headerSort: false, editor: 'input',
+        title: 'Name',
+        field: 'businessAssetName',
+        width: 100,
+        headerSort: false,
+        editor: 'input',
       },
       {
-        title: 'Type',
-        field: 'businessAssetType',
-        headerSort: false,
-        editor: 'list',
-        editorParams: {
-          values: ['', 'Data', 'Service'],
-        },
-        validator: ['string'],
+        title: 'Asset Values',
+        columns:[
+          {
+            title: 'Type',
+            field: 'businessAssetType',
+            headerSort: false,
+            editor: 'list',
+            editorParams: {
+              values: ['', 'Data', 'Service'],
+            },
+            validator: ['string', 'required'],
+          },
+          {
+            title: 'Confidentiality',
+            field: 'businessAssetConfidentiality',
+            headerSort: false,
+            editor: 'list',
+            editorParams: {
+              values: {
+                0: 'N/A',
+                1: 'Low',
+                2: 'Medium',
+                3: 'High',
+                4: 'Critical',
+              },
+            },
+            formatter:"lookup", 
+            formatterParams:{
+                0: 'N/A',
+                1: 'Low',
+                2: 'Medium',
+                3: 'High',
+                4: 'Critical',
+            },
+            validator: ['integer', 'required'],
+          },
+          {
+            title: 'Integrity',
+            field: 'businessAssetIntegrity',
+            headerSort: false,
+            editor: 'list',
+            editorParams: {
+              values: {
+                0: 'N/A',
+                1: 'Low',
+                2: 'Medium',
+                3: 'High',
+                4: 'Critical',
+              },
+            },
+            formatter:"lookup", 
+            formatterParams:{
+                0: 'N/A',
+                1: 'Low',
+                2: 'Medium',
+                3: 'High',
+                4: 'Critical',
+            },
+            validator: ['integer', 'required'],
+          },
+        ]
       },
-      {
-        title: 'Confidentiality',
-        field: 'businessAssetConfidentiality',
-        headerSort: false,
-        editor: 'list',
-        editorParams: {
-          values: ['N/A', 'Low', 'Medium', 'High', 'Critical'],
-        },
-        validator: ['string'],
-      },
+     
     ],
   };
 
