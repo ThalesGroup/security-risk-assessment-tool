@@ -83,12 +83,15 @@ const saveAs = async () => {
   };
   const fileName = await dialog.showSaveDialog(options);
   if (!fileName.canceled) {
+    const { filePath } = fileName;
     try {
-      await DataStore(israProject, fileName.filePath);
-      dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${fileName.filePath}` });
+      await DataStore(israProject, filePath);
+      jsonFilePath = filePath;
+      getMainWindow().title = filePath;
+      dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${filePath}` });
     } catch (err) {
       console.log(err);
-      dialog.showMessageBoxSync(null, { message: `Error in saving form to ${fileName.filePath}` });
+      dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
     }
   }
 };
@@ -127,6 +130,7 @@ const loadJSONFile = async (win, filePath) => {
     await DataLoad(israProject, filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
+    getMainWindow().title = filePath;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { message: 'Invalid JSON File' });
