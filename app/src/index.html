@@ -47,7 +47,13 @@
               <p class="subheading">Project Description</p>
               <p class="summary">Figures out the environment the solution deals with. It is done by specifying the scope of the risk assessment, who are the enemies and what are the threats.
               Project Description:</p>
-              <textarea class="rich-text" id="project-description__text" name="project-description__text"></textarea>
+              <div class="btn btn-primary tooltip">
+                <textarea class="rich-text" id="project-description__text" name="project-description__text"></textarea>
+                <div class="top">
+                    <p>Add your formatted rich text and your pictures. Figures out the environment the solution deals with. It is done by specifying the scope of the risk assessment, who are the enemies and what are the threats. Project Description:</p>
+                    <i></i>
+                </div>
+              </div>
               <div id="project-description__upload">
                 <div id="project-description__url">
                   <p>Project URL</p>
@@ -70,27 +76,64 @@
             <div id="project-objectives">
               <p class="subheading">Security Project Objectives</p>
               <p class="summary">Describes the security objectives on this project from the project / product manager perspective</p>
-              <textarea class="rich-text" id="project-objectives__text" name="project-objectives__text"></textarea>
+              <div class="btn btn-primary tooltip">
+                <textarea class="rich-text" id="project-objectives__text" name="project-objectives__text"></textarea>
+                <div class="top">
+                    <p>Add your formatted rich text and your pictures. Describes the security objectives on this project from the project / product manager perspective</p>
+                    <i></i>
+                </div> 
+              </div>
             </div>
 
             <div id="officer-objectives">
               <p class="subheading">Security Officer Objectives</p>
               <p class="summary">Describes the security objectives on this project from the security officer perspective</p>
-              <textarea class="rich-text" id="officer-objectives__text" name="officer-objectives__text"></textarea>
+              <div class="btn btn-primary tooltip">
+                <textarea class="rich-text" id="officer-objectives__text" name="officer-objectives__text"></textarea>
+                <div class="top">
+                    <p>Add your formatted rich text and your pictures. Describes the security objectives on this project from the security officer perspective</p>
+                    <i></i>
+                </div>
+              </div>
             </div>
 
             <div id="assumptions">
               <p class="subheading">Assumptions</p>
               <p class="summary">Describes the assumptions made on this project e.g what policies, regulations or standards applies in the context of this project</p>
-              <textarea class="rich-text" id="assumptions__text" name="assumptions__text"></textarea>
+              <div class="btn btn-primary tooltip">
+                <textarea class="rich-text" id="assumptions__text" name="assumptions__text"></textarea>
+                <div class="top">
+                    <p>Add your formatted rich text and your pictures. Describes the assumptions made on this project e.g what policies, regulations or standards applies in the context of this project</p>
+                    <i></i>
+                </div>
+              </div>
             </div>
           </form>
         </div>
         <div class="content" id="business-assets">
           <p class="heading">Business Assets</p>
+          <p class="subheading">List of Business Assets</p>
+          <p class="summary" style="text-align: center;">Describe the Business Assets managed or delivered in your product.</p>
+          <div id="business-assets__section">
+            <div class="add-delete-container">
+              <button class="addDelete" id="business-assets__section__add">Add</button> | <button  class="addDelete" id="business-assets__section__delete">Delete</button>
+              <div class="table">
+                <div class="checkbox" id="business-assets__section__checkboxes"></div>
+                <div id="business-assets__section__table"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="content" id="supporting-assets">
           <p class="heading">Supporting Assets</p>
+
+          <div id="product-architecture-diagram">
+            <p class="subheading">Product architecture diagram</p>
+            <p class="summary">Because pictures are better than a long speech, you can submit here the architecture / infrastructure diagrams used to identify the supporting assets.</p>
+            <p class="summary">It is a rich text section. You can copy/paste/insert images, resize it and add formatted text to explain your schemas.</p>
+              <textarea class="rich-text" id="product-architecture-diagram__text" name="product-architecture-diagram__text"></textarea>
+          </div>
+
         </div>
         <div class="content" id="risks">
           <p class="heading">Risks</p>
@@ -108,6 +151,7 @@
     <script src="renderer.js"></script>
     <script src="./tabs/Welcome/welcome.js"></script>
     <script src="./tabs/Project Context/project-context.js"></script>
+    <script src="./tabs/Business Assets/business-assets.js"></script>
   </body>
 </body>
 </html>

@@ -26,6 +26,7 @@ const {
   dialog, ipcMain, Menu, BrowserWindow,
   // nativeTheme,
 } = require('electron');
+const path = require('path');
 
 const {
   DataStore,
@@ -212,6 +213,16 @@ const {
   urlPrompt,
 } = require('../../lib/src/model/classes/ISRAProjectContext/handler-event');
 
+ipcMain.on('projectContext:openURL', (event, url, status) => {
+  if (status) {
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+    });
+    win.loadURL(url);
+  } else dialog.showMessageBoxSync(null, { message: 'You are offline' });
+});
+
 ipcMain.handle('projectContext:urlPrompt', async () => {
   const url = await urlPrompt();
   if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
@@ -264,16 +275,14 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
   try {
-    if (jsonFilePath === '') {
-      const [fileName, base64data] = decodeFile(base64);
-      israProject.israProjectContext.projectDescriptionAttachment = base64data;
-      return fileName;
-    }
+    const fileName = decodeFile(base64);
+    return fileName;
+
     // israProject.israProjectContext.projectDescriptionAttachment = base64;
     // const buffer = Buffer.from(base64, 'base64');
     // const content = buffer.toString();
     // console.log(content);
-    return 'JSON file opened';
+    // return 'JSON file opened';
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });

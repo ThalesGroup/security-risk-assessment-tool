@@ -31,7 +31,7 @@ const projectURL = (value) => {
   if (value !== '' && value !== 'cancelled') {
     $('#project-description__url__hyperlink').show();
     $('#project-description__url__insert').hide();
-    $('#project-description__url__hyperlink').attr('href').replace(' ', value);
+    $('#project-description__url__hyperlink').attr('href', value);
     $('#project-description__url__hyperlink').text(value);
   } else if (value === '') {
     $('#project-description__url__insert').show();
@@ -41,6 +41,7 @@ const projectURL = (value) => {
 
 $('#project-description__url__hyperlink').on('click', (e) => {
   e.preventDefault();
+  window.projectContext.openURL($('#project-description__url__hyperlink').attr('href'), navigator.onLine);
 });
 
 $('#project-description__url__image').on('click', async () => {

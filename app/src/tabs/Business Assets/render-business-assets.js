@@ -21,44 +21,44 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-#project-description{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-}
+const jsonSchema = require('../../../../lib/src/model/schema/json-schema');
 
-#project-description__upload {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: 10px;
-    text-align: center;
-}
+const BusinessAssetSchema = jsonSchema.properties.BusinessAsset.items.properties;
 
-#assumptions{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-}
-#officer-objectives{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-    margin-bottom: 10px;
-}
+const renderBusinessAssets = () => {
+  const html = '';
+  const tableOptions = {
+    layout: 'fitColumns',
+    height: '100%',
+    columns: [ // Define Table Columns
+      {
+        title: 'Name', field: 'businessAssetName', width: 100, headerSort: false, editor: 'input',
+      },
+      {
+        title: 'Type',
+        field: 'businessAssetType',
+        headerSort: false,
+        editor: 'list',
+        editorParams: {
+          values: ['', 'Data', 'Service'],
+        },
+        validator: ['string'],
+      },
+      {
+        title: 'Confidentiality',
+        field: 'businessAssetConfidentiality',
+        headerSort: false,
+        editor: 'list',
+        editorParams: {
+          values: ['N/A', 'Low', 'Medium', 'High', 'Critical'],
+        },
+        validator: ['string'],
+      },
+    ],
+  };
 
-#project-objectives{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-    margin: 10px 0px;
-}
-
-#project-description__file__insert{
-    font-size: small;
-    cursor:pointer
-}
-
-#project-description__url__insert{
-    font-size: small;
-    cursor:pointer
-}
-
-#project-description__url__hyperlink{
-    font-size: small;
-}
+  return [html, tableOptions];
+};
+module.exports = {
+  renderBusinessAssets,
+};

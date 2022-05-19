@@ -21,44 +21,24 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-#project-description{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-}
 
-#project-description__upload {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: 10px;
-    text-align: center;
-}
+/* global $ Tabulator */
 
-#assumptions{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-}
-#officer-objectives{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-    margin-bottom: 10px;
-}
+const addBusinessAssetRow = (businessAssets) => {
+  businessAssets.forEach((asset) => {
+    const result = window.render.businessAssets();
+    const businessAssetsTable = new Tabulator('#business-assets__section__table', result[1]);
+    businessAssetsTable.on('tableBuilt', () => {
+      const { businessAssetName, businessAssetType, businessAssetProperties } = asset;
+      businessAssetsTable.addData([{
+        businessAssetName,
+        businessAssetType,
+        ...businessAssetProperties,
+      }]);
+    });
+  });
+};
 
-#project-objectives{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-    margin: 10px 0px;
-}
-
-#project-description__file__insert{
-    font-size: small;
-    cursor:pointer
-}
-
-#project-description__url__insert{
-    font-size: small;
-    cursor:pointer
-}
-
-#project-description__url__hyperlink{
-    font-size: small;
-}
+window.project.load(async (event, data) => {
+  addBusinessAssetRow(await JSON.parse(data).BusinessAsset);
+});
