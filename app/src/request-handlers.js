@@ -26,7 +26,6 @@ const {
   dialog, ipcMain, Menu, BrowserWindow,
   // nativeTheme,
 } = require('electron');
-const path = require('path');
 
 const {
   DataStore,
@@ -293,6 +292,12 @@ ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
 ipcMain.on('validate:projectContext', (event, object) => {
   Object.assign(israProject.israProjectContext, object);
 });
+
+// Business Asset Tab
+
+const { addBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
+
+ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject));
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

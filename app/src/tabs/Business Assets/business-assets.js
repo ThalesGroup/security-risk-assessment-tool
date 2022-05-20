@@ -35,7 +35,7 @@ const addSection = (id) => {
   checkbox.type = 'checkbox';
   checkbox.value = `${id}`;
   checkbox.id = `business-assets__sections__section__checkbox${id}`;
-  checkbox.name = `business-assets__sections__section__checkboxes${id}`;
+  checkbox.name = 'business-assets__sections__section__checkboxes';
   $(`#business-assets__sections__section__${id}`).append(checkbox);
 
   // add table
@@ -48,9 +48,7 @@ const addSection = (id) => {
   $(`#business-assets__sections__section__${id}`).append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
 };
 
-const reInitialise = (businessAssets) => {
-  tinymce.remove('.business-assets-rich-text');
-  $('#business-assets__sections').empty();
+const initialiseBusinessAssets = (businessAssets) => {
   businessAssets.forEach((asset) => {
     addSection(asset.businessAssetId);
 
@@ -69,9 +67,7 @@ const reInitialise = (businessAssets) => {
   });
 };
 
-const addBusinessAssetSection = (businessAssets) => {
-  reInitialise(businessAssets);
-
+const addBusinessAssetData = (businessAssets) => {
   businessAssets.forEach((asset) => {
     businessAssetsTables.forEach((businessAssetsTable) => {
       businessAssetsTable.on('tableBuilt', () => {
@@ -92,6 +88,19 @@ const addBusinessAssetSection = (businessAssets) => {
   });
 };
 
+const addBusinessAssetSection = (businessAssets) => {
+  initialiseBusinessAssets(businessAssets);
+  addBusinessAssetData(businessAssets);
+};
+
 window.project.load(async (event, data) => {
+  tinymce.remove('.business-assets-rich-text');
+  $('#business-assets__sections').empty();
   addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
+});
+
+$('#business-assets__section__add').on('click', async (e) => {
+  e.preventDefault();
+  const businessAsset = await window.businessAssets.addBusinessAsset();
+  addBusinessAssetSection([businessAsset]);
 });
