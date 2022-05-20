@@ -23,70 +23,84 @@
 */
 /* global $ tinymce */
 
-const projectDescription = (value) => {
-  tinymce.get('project-description__text').setContent(value);
-};
+(async () => {
+  try {
+    const result = await window.render.projectContext();
+    $('#project-context').append(result[0]);
 
-const projectURL = (value) => {
-  if (value !== '' && value !== 'cancelled') {
-    $('#project-description__url__hyperlink').show();
-    $('#project-description__url__insert').hide();
-    $('#project-description__url__hyperlink').attr('href', value);
-    $('#project-description__url__hyperlink').text(value);
-  } else if (value === '') {
-    $('#project-description__url__insert').show();
-    $('#project-description__url__hyperlink').hide();
+    const projectDescription = (value) => {
+      tinymce.get('project-description__text').setContent(value);
+    };
+
+    const projectURL = (value) => {
+      if (value !== '' && value !== 'cancelled') {
+        $('#project-description__url__hyperlink').show();
+        $('#project-description__url__insert').hide();
+        $('#project-description__url__hyperlink').attr('href', value);
+        $('#project-description__url__hyperlink').text(value);
+      } else if (value === '') {
+        $('#project-description__url__insert').show();
+        $('#project-description__url__hyperlink').hide();
+      }
+    };
+
+    $('#project-description__url__hyperlink').on('click', (e) => {
+      e.preventDefault();
+      window.projectContext.openURL($('#project-description__url__hyperlink').attr('href'), navigator.onLine);
+    });
+
+    $('#project-description__url__image').on('click', async () => {
+      const url = await window.projectContext.urlPrompt();
+      projectURL(url);
+    });
+
+    $('#project-description__url__insert').on('click', async () => {
+      const url = await window.projectContext.urlPrompt();
+      projectURL(url);
+    });
+
+    $('#project-description__attachment').on('click', () => {
+      window.projectContext.attachment();
+      window.projectContext.fileName(async (event, fileName) => {
+        $('#project-description__file__insert').text(fileName);
+      });
+    });
+
+    const projectDescriptiveAttachment = async (value) => {
+      const attachmentResult = await window.projectContext.decodeAttachment(value);
+      $('#project-description__file__insert').text(attachmentResult);
+    };
+
+    const projectObjectives = (value) => {
+      tinymce.get('project-objectives__text').setContent(value);
+    };
+
+    const officerObjectives = (value) => {
+      tinymce.get('officer-objectives__text').setContent(value);
+    };
+
+    const assumptions = (value) => {
+      tinymce.get('assumptions__text').setContent(value);
+    };
+
+    const updateProjectContextFields = (fetchedData) => {
+      projectDescription(fetchedData.projectDescription);
+      projectURL(fetchedData.projectURL);
+      projectDescriptiveAttachment(fetchedData.projectDescriptionAttachment);
+      projectObjectives(fetchedData.securityProjectObjectives);
+      officerObjectives(fetchedData.securityOfficerObjectives);
+      assumptions(fetchedData.securityAssumptions);
+    };
+
+    window.project.load(async (event, data) => {
+      tinymce.init({
+        selector: '.rich-text',
+        height: 300,
+        min_height: 300,
+      });
+      updateProjectContextFields(await JSON.parse(data).ProjectContext);
+    });
+  } catch (err) {
+    alert('Failed to load project context tab');
   }
-};
-
-$('#project-description__url__hyperlink').on('click', (e) => {
-  e.preventDefault();
-  window.projectContext.openURL($('#project-description__url__hyperlink').attr('href'), navigator.onLine);
-});
-
-$('#project-description__url__image').on('click', async () => {
-  const url = await window.projectContext.urlPrompt();
-  projectURL(url);
-});
-
-$('#project-description__url__insert').on('click', async () => {
-  const url = await window.projectContext.urlPrompt();
-  projectURL(url);
-});
-
-$('#project-description__attachment').on('click', () => {
-  window.projectContext.attachment();
-  window.projectContext.fileName(async (event, fileName) => {
-    $('#project-description__file__insert').text(fileName);
-  });
-});
-
-const projectDescriptiveAttachment = async (value) => {
-  const result = await window.projectContext.decodeAttachment(value);
-  $('#project-description__file__insert').text(result);
-};
-
-const projectObjectives = (value) => {
-  tinymce.get('project-objectives__text').setContent(value);
-};
-
-const officerObjectives = (value) => {
-  tinymce.get('officer-objectives__text').setContent(value);
-};
-
-const assumptions = (value) => {
-  tinymce.get('assumptions__text').setContent(value);
-};
-
-const updateProjectContextFields = (fetchedData) => {
-  projectDescription(fetchedData.projectDescription);
-  projectURL(fetchedData.projectURL);
-  projectDescriptiveAttachment(fetchedData.projectDescriptionAttachment);
-  projectObjectives(fetchedData.securityProjectObjectives);
-  officerObjectives(fetchedData.securityOfficerObjectives);
-  assumptions(fetchedData.securityAssumptions);
-};
-
-window.project.load(async (event, data) => {
-  updateProjectContextFields(await JSON.parse(data).ProjectContext);
-});
+})();

@@ -194,7 +194,9 @@ const {
   updateTrackingRow,
   validateISRAmeta,
 } = require('../../lib/src/model/classes/ISRAProject/handler-event');
+const { renderWelcome } = require('./tabs/Welcome/render-welcome');
 
+ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
 ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
 ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
@@ -213,7 +215,9 @@ const {
   urlPrompt,
   validateProjectContext,
 } = require('../../lib/src/model/classes/ISRAProjectContext/handler-event');
+const { renderProjectContext } = require('./tabs/Project Context/render-project-context');
 
+ipcMain.handle('render:projectContext', () => renderProjectContext());
 ipcMain.on('projectContext:openURL', (event, url, status) => {
   if (status) {
     const win = new BrowserWindow({
@@ -298,7 +302,9 @@ ipcMain.on('validate:projectContext', (event, arr) => {
 // Business Asset Tab
 
 const { addBusinessAsset, deleteBusinessAsset, validateBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
+const { renderBusinessAssets } = require('./tabs/Business Assets/render-business-assets');
 
+ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
 ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject));
 ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
   deleteBusinessAsset(israProject, ids);

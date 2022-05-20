@@ -24,103 +24,112 @@
 
 /* global $ Tabulator tinymce */
 
-const businessAssetsTables = [];
+(async () => {
+  try {
+    const result = await window.render.businessAssets();
+    $('#business-assets').append(result[0]);
 
-const addSection = (id) => {
-  // add section div
-  $('#business-assets__sections').append(`<div id="business-assets__sections__section__${id}">`);
+    const businessAssetsTables = [];
 
-  // add checkbox
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.value = id;
-  checkbox.id = `business-assets__sections__section__checkbox${id}`;
-  checkbox.name = 'business-assets__sections__section__checkboxes';
-  $(`#business-assets__sections__section__${id}`).append(checkbox);
+    const addSection = (id) => {
+      // add section inside sections div
+      $('#business-assets__sections').append(`<div id="business-assets__sections__section__${id}">`);
+      const section = $(`#business-assets__sections__section__${id}`);
 
-  // add table
-  const result = window.render.businessAssets();
-  result[1].columns[0].title = `${id} Name`;
-  $(`#business-assets__sections__section__${id}`).append(`<div id="business-assets__sections__section__table__${id}"></div>`);
-  const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, result[1]);
-  businessAssetsTables.push(businessAssetsTable);
+      // add checkbox
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = id;
+      checkbox.id = `business-assets__sections__section__checkbox${id}`;
+      checkbox.name = 'business-assets__sections__section__checkboxes';
+      section.append(checkbox);
 
-  // add rich text box
-  $(`#business-assets__sections__section__${id}`).append('<p class="business-assets__sections__description">Description</p>');
-  $(`#business-assets__sections__section__${id}`).append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
-};
+      // add table
+      result[1].columns[0].title = `${id} Name`;
+      section.append(`<div id="business-assets__sections__section__table__${id}"></div>`);
+      const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, result[1]);
+      businessAssetsTables.push(businessAssetsTable);
 
-const initialiseBusinessAssets = (businessAssets) => {
-  businessAssets.forEach((asset) => {
-    addSection(asset.businessAssetId);
+      // add rich text box
+      section.append('<p class="business-assets__sections__description">Description</p>');
+      section.append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
+    };
 
-    tinymce.init({
-      selector: `#business-assets__sections__section__text__${asset.businessAssetId}`,
-      height: 200,
-      min_height: 200,
+    const initialiseBusinessAssets = (businessAssets) => {
+      businessAssets.forEach((asset) => {
+        addSection(asset.businessAssetId);
 
-      setup: (editor) => {
-        editor.on('init', () => {
-          const content = asset.businessAssetDescription;
-          editor.setContent(content);
+        tinymce.init({
+          selector: `#business-assets__sections__section__text__${asset.businessAssetId}`,
+          height: 200,
+          min_height: 200,
+
+          setup: (editor) => {
+            editor.on('init', () => {
+              const content = asset.businessAssetDescription;
+              editor.setContent(content);
+            });
+          },
         });
-      },
-    });
-  });
-};
-
-const addBusinessAssetData = (businessAssets) => {
-  businessAssets.forEach((asset) => {
-    businessAssetsTables.forEach((businessAssetsTable) => {
-      businessAssetsTable.on('tableBuilt', () => {
-        const {
-          businessAssetId,
-          businessAssetName,
-          businessAssetType,
-          businessAssetProperties,
-        } = asset;
-        businessAssetsTable.addData([{
-          businessAssetId,
-          businessAssetName,
-          businessAssetType,
-          ...businessAssetProperties,
-        }]);
       });
+    };
+
+    const addBusinessAssetData = (businessAssets) => {
+      businessAssets.forEach((asset) => {
+        businessAssetsTables.forEach((businessAssetsTable) => {
+          businessAssetsTable.on('tableBuilt', () => {
+            const {
+              businessAssetId,
+              businessAssetName,
+              businessAssetType,
+              businessAssetProperties,
+            } = asset;
+            businessAssetsTable.addData([{
+              businessAssetId,
+              businessAssetName,
+              businessAssetType,
+              ...businessAssetProperties,
+            }]);
+          });
+        });
+      });
+    };
+
+    const addBusinessAssetSection = (businessAssets) => {
+      initialiseBusinessAssets(businessAssets);
+      addBusinessAssetData(businessAssets);
+    };
+
+    window.project.load(async (event, data) => {
+      tinymce.remove('.business-assets-rich-text');
+      $('#business-assets__sections').empty();
+      addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
     });
-  });
-};
 
-const addBusinessAssetSection = (businessAssets) => {
-  initialiseBusinessAssets(businessAssets);
-  addBusinessAssetData(businessAssets);
-};
+    $('#business-assets__section__add').on('click', async (e) => {
+      e.preventDefault();
+      const businessAsset = await window.businessAssets.addBusinessAsset();
+      addBusinessAssetSection([businessAsset]);
+    });
 
-window.project.load(async (event, data) => {
-  tinymce.remove('.business-assets-rich-text');
-  $('#business-assets__sections').empty();
-  addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
-});
+    const deleteBusinessAsset = async (checkboxIds) => {
+      const checkedSections = [];
+      checkboxIds.forEach((box) => {
+        if (box.checked) checkedSections.push(box.value);
+      });
+      await window.businessAssets.deleteBusinessAsset(checkedSections);
+      checkedSections.forEach((id) => {
+        tinymce.remove(`#business-assets__sections__section__text__${id}`);
+        $(`#business-assets__sections__section__${id}`).remove();
+      });
+    };
 
-$('#business-assets__section__add').on('click', async (e) => {
-  e.preventDefault();
-  const businessAsset = await window.businessAssets.addBusinessAsset();
-  addBusinessAssetSection([businessAsset]);
-});
-
-const deleteBusinessAsset = async (checkboxIds) => {
-  const checkedSections = [];
-  checkboxIds.forEach((box) => {
-    if (box.checked) checkedSections.push(box.value);
-  });
-  await window.businessAssets.deleteBusinessAsset(checkedSections);
-  checkedSections.forEach((id) => {
-    tinymce.remove(`#business-assets__sections__section__text__${id}`);
-    $(`#business-assets__sections__section__${id}`).remove();
-  });
-};
-
-$('#business-assets__section__delete').on('click', async (e) => {
-  e.preventDefault();
-  const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
-  deleteBusinessAsset(checkboxIds);
-});
+    $('#business-assets__section__delete').on('click', async (e) => {
+      e.preventDefault();
+      const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
+      deleteBusinessAsset(checkboxIds);
+    });
+  } catch (err) {
+    alert('Failed to load business assets tab');
+  }
+})();

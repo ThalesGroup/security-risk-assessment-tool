@@ -36,15 +36,6 @@ window.project.load(async (event, data) => {
 });
 
 /**
- * Intialise an instance of rich text editor textarea box
- */
-window.parent.tinymce.init({
-  selector: '.rich-text',
-  height: 300,
-  min_height: 300,
-});
-
-/**
  * Creates a json object including fields of Welcome
  * @return {Object} The form data
  */

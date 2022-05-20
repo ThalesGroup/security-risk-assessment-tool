@@ -22,13 +22,20 @@
 * -----------------------------------------------------------------------------
 */
 
-const jsonSchema = require('../../../../lib/src/model/schema/json-schema');
+const jsonSchema = require('../../../../lib/src/model/schema/json-schema').properties.BusinessAsset;
 
-const businessAssetSchema = jsonSchema.properties.BusinessAsset.items.properties;
+const businessAssetSchema = jsonSchema.items.properties;
 const businessAssetPropertiesSchema = businessAssetSchema.businessAssetProperties.properties;
 
 const renderBusinessAssets = () => {
-  const html = '';
+  const html = '<p class="heading">Business Assets</p>'
+  + `<p class="subheading">${jsonSchema.title}</p>`
+  + `<p class="summary">${jsonSchema.description}</p>`
+  + '<div class="add-delete-container">'
+  + '<button class="addDelete" id="business-assets__section__add">Add</button> | <button  class="addDelete" id="business-assets__section__delete">Delete</button>'
+  + '</div>'
+  + '<div id="business-assets__sections"></div>';
+
   const dropDownOptions = businessAssetPropertiesSchema.businessAssetConfidentiality.anyOf;
   const formatValues = {};
   dropDownOptions.forEach((option) => {
