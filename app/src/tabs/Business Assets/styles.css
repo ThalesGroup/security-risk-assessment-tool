@@ -21,3 +21,14 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
+.business-assets__sections__description{
+    font-size:small; 
+    font-weight:bold
+}
+
+#business-assets__sections > div{
+    margin-bottom: 10px;
+    background-color: rgb(185, 185, 185);
+    padding: 10px;
+}

@@ -46,7 +46,7 @@ const addSection = (id) => {
   businessAssetsTables.push(businessAssetsTable);
 
   // add rich text box
-  $(`#business-assets__sections__section__${id}`).append('<p>Description</p>');
+  $(`#business-assets__sections__section__${id}`).append('<p class="business-assets__sections__description">Description</p>');
   $(`#business-assets__sections__section__${id}`).append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
 };
 

@@ -21,7 +21,6 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-/* eslint-disable */ 
 
 const jsonSchema = require('../../../../lib/src/model/schema/json-schema');
 
@@ -30,14 +29,11 @@ const businessAssetPropertiesSchema = businessAssetSchema.businessAssetPropertie
 
 const renderBusinessAssets = () => {
   const html = '';
-
-  const formatValues = {
-    0: 'N/A',
-    1: 'Low',
-    2: 'Medium',
-    3: 'High',
-    4: 'Critical',
-  };
+  const dropDownOptions = businessAssetPropertiesSchema.businessAssetConfidentiality.anyOf;
+  const formatValues = {};
+  dropDownOptions.forEach((option) => {
+    if ('title' in option) formatValues[option.const] = option.title;
+  });
 
   const propertiesOptions = {
     headerHozAlign: 'center',
@@ -46,27 +42,27 @@ const renderBusinessAssets = () => {
     editorParams: {
       values: formatValues,
     },
-    formatter:"lookup", 
+    formatter: 'lookup',
     formatterParams: formatValues,
     validator: ['integer', 'required'],
-  }
+  };
 
   const tableOptions = {
     layout: 'fitColumns',
     height: '100%',
-    columns: [ 
+    columns: [
       {
         title: `${businessAssetSchema.businessAssetName.title}`,
         field: 'businessAssetName',
         editor: 'input',
         headerSort: false,
-        width: 70,
-        tooltip: `${businessAssetSchema.businessAssetName.description}`
+        width: 60,
+        tooltip: `${businessAssetSchema.businessAssetName.description}`,
       },
       {
         title: 'Asset Values',
         headerHozAlign: 'center',
-        columns:[
+        columns: [
           {
             title: `${businessAssetSchema.businessAssetType.title}`,
             headerHozAlign: 'center',
@@ -78,53 +74,55 @@ const renderBusinessAssets = () => {
               values: ['', 'Data', 'Service'],
             },
             validator: ['string', 'required'],
-            tooltip: `${businessAssetSchema.businessAssetType.description}`
+            tooltip: `${businessAssetSchema.businessAssetType.description}`,
           },
           {
             title: `${businessAssetPropertiesSchema.businessAssetConfidentiality.title}`,
             field: 'businessAssetConfidentiality',
             ...propertiesOptions,
-            tooltip: `${businessAssetPropertiesSchema.businessAssetConfidentiality.description}`
+            tooltip: `${businessAssetPropertiesSchema.businessAssetConfidentiality.description}`,
           },
           {
             title: `${businessAssetPropertiesSchema.businessAssetIntegrity.title}`,
             field: 'businessAssetIntegrity',
             ...propertiesOptions,
-            width: 80,
-            tooltip: `${businessAssetPropertiesSchema.businessAssetIntegrity.description}`
+            width: 65,
+            tooltip: `${businessAssetPropertiesSchema.businessAssetIntegrity.description}`,
           },
           {
             title: `${businessAssetPropertiesSchema.businessAssetAvailability.title}`,
             field: 'businessAssetAvailability',
             ...propertiesOptions,
-            tooltip: `${businessAssetPropertiesSchema.businessAssetAvailability.description}`
+            width: 85,
+            tooltip: `${businessAssetPropertiesSchema.businessAssetAvailability.description}`,
           },
           {
             title: `${businessAssetPropertiesSchema.businessAssetAuthenticity.title}`,
             field: 'businessAssetAuthenticity',
             ...propertiesOptions,
-            tooltip: `${businessAssetPropertiesSchema.businessAssetAuthenticity.description}`
+            tooltip: `${businessAssetPropertiesSchema.businessAssetAuthenticity.description}`,
           },
           {
             title: `${businessAssetPropertiesSchema.businessAssetAuthorization.title}`,
             field: 'businessAssetAuthorization',
             ...propertiesOptions,
-            tooltip: `${businessAssetPropertiesSchema.businessAssetAuthorization.description}`
+            tooltip: `${businessAssetPropertiesSchema.businessAssetAuthorization.description}`,
           },
           {
             title: `${businessAssetPropertiesSchema.businessAssetNonRepudiation.title}`,
             field: 'businessAssetNonRepudiation',
             ...propertiesOptions,
-            tooltip: `${businessAssetPropertiesSchema.businessAssetNonRepudiation.description}`
+            tooltip: `${businessAssetPropertiesSchema.businessAssetNonRepudiation.description}`,
           },
-        ]
+        ],
       },
-     
+
     ],
   };
 
   return [html, tableOptions];
 };
+
 module.exports = {
   renderBusinessAssets,
 };
