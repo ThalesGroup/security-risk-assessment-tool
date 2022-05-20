@@ -46,6 +46,7 @@ const addSection = (id) => {
   businessAssetsTables.push(businessAssetsTable);
 
   // add rich text box
+  $(`#business-assets__sections__section__${id}`).append('<p>Description</p>');
   $(`#business-assets__sections__section__${id}`).append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
 };
 
@@ -106,9 +107,9 @@ $('#business-assets__section__add').on('click', async (e) => {
   addBusinessAssetSection([businessAsset]);
 });
 
-const deleteBusinessAsset = async (checkboxes) => {
+const deleteBusinessAsset = async (checkboxIds) => {
   const checkedSections = [];
-  checkboxes.forEach((box) => {
+  checkboxIds.forEach((box) => {
     if (box.checked) checkedSections.push(box.value);
   });
   await window.businessAssets.deleteBusinessAsset(checkedSections);
@@ -120,6 +121,6 @@ const deleteBusinessAsset = async (checkboxes) => {
 
 $('#business-assets__section__delete').on('click', async (e) => {
   e.preventDefault();
-  const checkboxes = document.getElementsByName('business-assets__sections__section__checkboxes');
-  deleteBusinessAsset(checkboxes);
+  const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
+  deleteBusinessAsset(checkboxIds);
 });

@@ -192,6 +192,7 @@ const {
   addTrackingRow,
   deleteTrackingRow,
   updateTrackingRow,
+  validateISRAmeta,
 } = require('../../lib/src/model/classes/ISRAProject/handler-event');
 
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
@@ -199,8 +200,8 @@ ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackin
 ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
   updateTrackingRow(israProject, rowData);
 });
-ipcMain.on('validate:welcome', (event, object) => {
-  Object.assign(israProject, object);
+ipcMain.on('validate:welcome', (event, arr) => {
+  validateISRAmeta(israProject, arr);
 });
 
 // Project Context Tab
@@ -210,6 +211,7 @@ const {
   saveAsFile,
   decodeFile,
   urlPrompt,
+  validateProjectContext,
 } = require('../../lib/src/model/classes/ISRAProjectContext/handler-event');
 
 ipcMain.on('projectContext:openURL', (event, url, status) => {
@@ -289,17 +291,20 @@ ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
   }
 });
 
-ipcMain.on('validate:projectContext', (event, object) => {
-  Object.assign(israProject.israProjectContext, object);
+ipcMain.on('validate:projectContext', (event, arr) => {
+  validateProjectContext(israProject, arr);
 });
 
 // Business Asset Tab
 
-const { addBusinessAsset, deleteBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
+const { addBusinessAsset, deleteBusinessAsset, validateBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
 
 ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject));
 ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
   deleteBusinessAsset(israProject, ids);
+});
+ipcMain.on('validate:businessAssets', (event, arr) => {
+  validateBusinessAsset(israProject, arr);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {

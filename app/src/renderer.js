@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ Tabulator */
+/* global $ Tabulator tinymce */
 
 const tabs = document.querySelector('.wrapper');
 const tabButton = document.querySelectorAll('.tab-button');
@@ -45,32 +45,40 @@ window.parent.tinymce.init({
 });
 
 /**
- * Creates a json object including fields of Project Context
- * @return {Object} The form data
- */
-const setProjectContext = () => {
-  const { tinymce } = window.parent;
-  window.validate.projectContext({
-    projectDescription: tinymce.get('project-description__text').getContent(),
-    securityProjectObjectives: tinymce.get('project-objectives__text').getContent(),
-    securityOfficerObjectives: tinymce.get('officer-objectives__text').getContent(),
-    securityAssumptions: tinymce.get('assumptions__text').getContent(),
-  });
-};
-
-/**
  * Creates a json object including fields of Welcome
  * @return {Object} The form data
  */
-const setWelcomeJSON = () => {
+const validateWelcome = () => {
   Tabulator.findTable('#welcome__isra-meta-tracking__table')[0].getRows().forEach((row) => {
     window.welcome.updateTrackingRow(row.getData());
   });
 
-  window.validate.welcome({
-    projectName: $('#welcome__isra-meta__project-name').val(),
-    projectOrganization: $('#welcome__isra-meta__organization').val(),
-    projectVersion: $('#welcome__isra-meta__project-version').val(),
+  window.validate.welcome([
+    $('#welcome__isra-meta__project-name').val(),
+    $('#welcome__isra-meta__organization').val(),
+    $('#welcome__isra-meta__project-version').val(),
+  ]);
+};
+
+/**
+ * Creates a json object including fields of Project Context
+ * @return {Object} The form data
+ */
+const validateProjectContext = () => {
+  window.validate.projectContext([
+    tinymce.get('project-description__text').getContent(),
+    tinymce.get('project-objectives__text').getContent(),
+    tinymce.get('officer-objectives__text').getContent(),
+    tinymce.get('assumptions__text').getContent(),
+  ]);
+};
+
+const validateBusinessAsset = () => {
+  const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
+  checkboxIds.forEach((id) => {
+    const tableData = Tabulator.findTable(`#business-assets__sections__section__table__${id.value}`)[0].getData()[0];
+    tableData.businessAssetDescription = tinymce.get(`business-assets__sections__section__text__${id.value}`).getContent();
+    window.validate.businessAssets(tableData);
   });
 };
 
@@ -81,10 +89,13 @@ const setWelcomeJSON = () => {
 const getTabJSON = (tab) => {
   switch (tab) {
     case 'welcome':
-      setWelcomeJSON();
+      validateWelcome();
       break;
     case 'project-context':
-      setProjectContext();
+      validateProjectContext();
+      break;
+    case 'business-assets':
+      validateBusinessAsset();
       break;
     default:
       break;
@@ -92,8 +103,9 @@ const getTabJSON = (tab) => {
 };
 
 window.validate.allTabs((event, filePath) => {
-  setWelcomeJSON();
-  setProjectContext();
+  validateWelcome();
+  validateProjectContext();
+  validateBusinessAsset();
   event.sender.send('validate:allTabs', filePath);
 });
 
