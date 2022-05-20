@@ -295,9 +295,12 @@ ipcMain.on('validate:projectContext', (event, object) => {
 
 // Business Asset Tab
 
-const { addBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
+const { addBusinessAsset, deleteBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
 
 ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject));
+ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
+  deleteBusinessAsset(israProject, ids);
+});
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

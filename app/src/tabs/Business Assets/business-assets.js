@@ -33,13 +33,14 @@ const addSection = (id) => {
   // add checkbox
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
-  checkbox.value = `${id}`;
+  checkbox.value = id;
   checkbox.id = `business-assets__sections__section__checkbox${id}`;
   checkbox.name = 'business-assets__sections__section__checkboxes';
   $(`#business-assets__sections__section__${id}`).append(checkbox);
 
   // add table
   const result = window.render.businessAssets();
+  result[1].columns[0].title = `${id} Name`;
   $(`#business-assets__sections__section__${id}`).append(`<div id="business-assets__sections__section__table__${id}"></div>`);
   const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, result[1]);
   businessAssetsTables.push(businessAssetsTable);
@@ -103,4 +104,22 @@ $('#business-assets__section__add').on('click', async (e) => {
   e.preventDefault();
   const businessAsset = await window.businessAssets.addBusinessAsset();
   addBusinessAssetSection([businessAsset]);
+});
+
+const deleteBusinessAsset = async (checkboxes) => {
+  const checkedSections = [];
+  checkboxes.forEach((box) => {
+    if (box.checked) checkedSections.push(box.value);
+  });
+  await window.businessAssets.deleteBusinessAsset(checkedSections);
+  checkedSections.forEach((id) => {
+    tinymce.remove(`#business-assets__sections__section__text__${id}`);
+    $(`#business-assets__sections__section__${id}`).remove();
+  });
+};
+
+$('#business-assets__section__delete').on('click', async (e) => {
+  e.preventDefault();
+  const checkboxes = document.getElementsByName('business-assets__sections__section__checkboxes');
+  deleteBusinessAsset(checkboxes);
 });

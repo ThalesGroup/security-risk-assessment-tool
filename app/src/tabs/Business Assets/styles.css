@@ -21,22 +21,6 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+/* #business-assets__sections{
 
-const BusinessAsset = require('./business-asset');
-
-const addBusinessAsset = (israProject) => {
-  const businessAsset = new BusinessAsset();
-  israProject.addBusinessAsset(businessAsset);
-  return businessAsset.properties;
-};
-
-const deleteBusinessAsset = (israProject, ids) => {
-  ids.forEach((id) => {
-    israProject.deleteBusinessAsset(Number(id));
-  });
-};
-
-module.exports = {
-  addBusinessAsset,
-  deleteBusinessAsset,
-};
+} */
