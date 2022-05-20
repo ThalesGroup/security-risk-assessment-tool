@@ -21,10 +21,10 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-/* global $ */
+/* global $ tinymce */
 
 const projectDescription = (value) => {
-  window.parent.tinymce.get('project-description__text').setContent(value);
+  tinymce.get('project-description__text').setContent(value);
 };
 
 const projectURL = (value) => {
@@ -67,15 +67,15 @@ const projectDescriptiveAttachment = async (value) => {
 };
 
 const projectObjectives = (value) => {
-  window.parent.tinymce.get('project-objectives__text').setContent(value);
+  tinymce.get('project-objectives__text').setContent(value);
 };
 
 const officerObjectives = (value) => {
-  window.parent.tinymce.get('officer-objectives__text').setContent(value);
+  tinymce.get('officer-objectives__text').setContent(value);
 };
 
 const assumptions = (value) => {
-  window.parent.tinymce.get('assumptions__text').setContent(value);
+  tinymce.get('assumptions__text').setContent(value);
 };
 
 const updateProjectContextFields = (fetchedData) => {

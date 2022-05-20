@@ -67,10 +67,10 @@ const renderWelcome = () => {
     height: '100%',
     columns: [ // Define Table Columns
       {
-        title: `${ISRATrackingSchema.trackingIteration.title}`, field: 'trackingIteration', width: 100, headerSort: false, validator: ['integer'], tooltip: `${ISRATrackingSchema.trackingIteration.description}`,
+        title: `${ISRATrackingSchema.trackingIteration.title}`, field: 'trackingIteration', width: 100, headerSort: false, validator: ['integer'], tooltip: `${ISRATrackingSchema.trackingIteration.description}`, headerHozAlign: 'center',
       },
       {
-        title: `${ISRATrackingSchema.trackingSecurityOfficer.title}`, field: 'trackingSecurityOfficer', editor: 'input', headerSort: false, validator: ['string'], tooltip: `${ISRATrackingSchema.trackingSecurityOfficer.description}`,
+        title: `${ISRATrackingSchema.trackingSecurityOfficer.title}`, field: 'trackingSecurityOfficer', editor: 'input', headerSort: false, validator: ['string'], tooltip: `${ISRATrackingSchema.trackingSecurityOfficer.description}`, headerHozAlign: 'center',
       },
       {
         title: `${ISRATrackingSchema.trackingDate.title}`,
@@ -78,9 +78,10 @@ const renderWelcome = () => {
         editor: 'input',
         headerSort: false,
         validator: ['string', 'regex:(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)'],
+        headerHozAlign: 'center',
       },
       {
-        title: `${ISRATrackingSchema.trackingComment.title}`, field: 'trackingComment', editor: 'input', headerSort: false, tooltip: `${ISRATrackingSchema.trackingComment.description}`,
+        title: `${ISRATrackingSchema.trackingComment.title}`, field: 'trackingComment', editor: 'input', headerSort: false, tooltip: `${ISRATrackingSchema.trackingComment.description}`, headerHozAlign: 'center',
       },
     ],
   };

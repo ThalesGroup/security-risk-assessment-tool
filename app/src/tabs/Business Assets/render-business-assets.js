@@ -30,29 +30,45 @@ const BusinessAssetSchema = jsonSchema.properties.BusinessAsset.items.properties
 const renderBusinessAssets = () => {
   const html = '';
 
-  const composeSelectFormatter = (dictionary) => (cell) => {
-    const value = cell.getValue();
-    if (!value) return value;
-
-    return dictionary[value];
+  const formatValues = {
+    0: 'N/A',
+    1: 'Low',
+    2: 'Medium',
+    3: 'High',
+    4: 'Critical',
   };
+
+  const propertiesOptions = {
+    headerHozAlign: 'center',
+    headerSort: false,
+    editor: 'list',
+    editorParams: {
+      values: formatValues,
+    },
+    formatter:"lookup", 
+    formatterParams: formatValues,
+    validator: ['integer', 'required'],
+  }
 
   const tableOptions = {
     layout: 'fitColumns',
     height: '100%',
-    columns: [ // Define Table Columns
+    columns: [ 
       {
         title: 'Name',
         field: 'businessAssetName',
-        width: 100,
-        headerSort: false,
         editor: 'input',
+        headerSort: false,
+        width: 50
       },
       {
         title: 'Asset Values',
+        headerHozAlign: 'center',
         columns:[
           {
             title: 'Type',
+            headerHozAlign: 'center',
+            width: 50,
             field: 'businessAssetType',
             headerSort: false,
             editor: 'list',
@@ -64,50 +80,33 @@ const renderBusinessAssets = () => {
           {
             title: 'Confidentiality',
             field: 'businessAssetConfidentiality',
-            headerSort: false,
-            editor: 'list',
-            editorParams: {
-              values: {
-                0: 'N/A',
-                1: 'Low',
-                2: 'Medium',
-                3: 'High',
-                4: 'Critical',
-              },
-            },
-            formatter:"lookup", 
-            formatterParams:{
-                0: 'N/A',
-                1: 'Low',
-                2: 'Medium',
-                3: 'High',
-                4: 'Critical',
-            },
-            validator: ['integer', 'required'],
+            ...propertiesOptions
           },
           {
             title: 'Integrity',
             field: 'businessAssetIntegrity',
-            headerSort: false,
-            editor: 'list',
-            editorParams: {
-              values: {
-                0: 'N/A',
-                1: 'Low',
-                2: 'Medium',
-                3: 'High',
-                4: 'Critical',
-              },
-            },
-            formatter:"lookup", 
-            formatterParams:{
-                0: 'N/A',
-                1: 'Low',
-                2: 'Medium',
-                3: 'High',
-                4: 'Critical',
-            },
-            validator: ['integer', 'required'],
+            ...propertiesOptions,
+            width: 80,
+          },
+          {
+            title: 'Availability',
+            field: 'businessAssetAvailability',
+            ...propertiesOptions
+          },
+          {
+            title: 'Authenticity',
+            field: 'businessAssetAuthenticity',
+            ...propertiesOptions
+          },
+          {
+            title: 'Authorization',
+            field: 'businessAssetAuthorization',
+            ...propertiesOptions
+          },
+          {
+            title: 'Nonrepudiation',
+            field: 'businessAssetNonRepudiation',
+            ...propertiesOptions
           },
         ]
       },
