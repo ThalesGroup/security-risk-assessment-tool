@@ -26,7 +26,7 @@ const projCxtJsonSchema = require('../../../../lib/src/model/schema/json-schema'
 
 const renderProjectContext = () => {
   const html = `<p class="heading">Project Context</p>
-  <div id="project-description">
+  <div class="section" id="project-description">
     <p class="subheading">${projCxtJsonSchema.projectDescription.title}</p>
     <p class="summary">${projCxtJsonSchema.projectDescription.description}</p>
     <div class="btn btn-primary tooltip">
@@ -55,7 +55,7 @@ const renderProjectContext = () => {
     </div>
   </div>
 
-  <div id="project-objectives">
+  <div class="section" id="project-objectives">
     <p class="subheading">${projCxtJsonSchema.securityProjectObjectives.title}</p>
     <p class="summary">${projCxtJsonSchema.securityProjectObjectives.description}</p>
     <div class="btn btn-primary tooltip">
@@ -67,7 +67,7 @@ const renderProjectContext = () => {
     </div>
   </div>
 
-  <div id="officer-objectives">
+  <div class="section" id="officer-objectives">
     <p class="subheading">${projCxtJsonSchema.securityOfficerObjectives.title}</p>
     <p class="summary">${projCxtJsonSchema.securityOfficerObjectives.description}</p>
     <div class="btn btn-primary tooltip">
@@ -79,7 +79,7 @@ const renderProjectContext = () => {
     </div>
   </div>
 
-  <div id="assumptions">
+  <div class="section" id="assumptions">
     <p class="subheading">${projCxtJsonSchema.securityAssumptions.title}</p>
     <p class="summary">${projCxtJsonSchema.securityAssumptions.description}</p>
     <div class="btn btn-primary tooltip">

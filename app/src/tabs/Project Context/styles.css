@@ -21,32 +21,12 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-#project-description{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-}
 
 #project-description__upload {
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 10px;
     text-align: center;
-}
-
-#assumptions{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-}
-#officer-objectives{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-#project-objectives{
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-    margin: 10px 0px;
 }
 
 #project-description__file__insert{

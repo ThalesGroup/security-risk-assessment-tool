@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="./tabs/Welcome/styles.css">
     <link rel="stylesheet" type="text/css" href="./tabs/Project Context/styles.css">
     <link rel="stylesheet" type="text/css" href="./tabs/Business Assets/styles.css">
+    <link rel="stylesheet" type="text/css" href="./tabs/Supporting Assets/styles.css">
     <link href="../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 
     <!-- npm modules (minified) -->
@@ -49,23 +50,40 @@
         <div class="content" id="supporting-assets">
           <p class="heading">Supporting Assets</p>
 
-          <div id="product-architecture-diagram">
+          <div class=section id="product-architecture-diagram">
             <p class="subheading">Product architecture diagram</p>
             <p class="summary">Because pictures are better than a long speech, you can submit here the architecture / infrastructure diagrams used to identify the supporting assets.</p>
             <p class="summary">It is a rich text section. You can copy/paste/insert images, resize it and add formatted text to explain your schemas.</p>
+            <div class="btn btn-primary tooltip">
               <textarea class="rich-text" id="product-architecture-diagram__text" name="product-architecture-diagram__text"></textarea>
+                <div class="top">
+                  <p>Add your formatted rich text and your pictures.</p>
+                  <i></i>
+                </div>
+            </div>
           </div>
 
+            <div class=section id="supporting-assets__section">
+              <p class="subheading">List of Supporting Assets</p>
+              <p class="summary">Describe the Supporting Assets shown in the architecture diagram.</p>
+              <p class="summary">All the Supporting Assets should appear in the diagram.</p>  
+  
+            </div>
+
         </div>
+
         <div class="content" id="risks">
           <p class="heading">Risks</p>
         </div>
+
         <div class="content" id="vulnerabilities">
           <p class="heading">Vulnerabilities</p>
         </div>
+
         <div class="content" id="isra-report">
           <p class="heading">ISRA Report</p>
         </div>
+        
       </div>
       
     </div>
