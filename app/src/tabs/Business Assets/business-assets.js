@@ -29,9 +29,39 @@
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
-    const businessAssetsTables = [];
+    const addTableData = (businessAssetsTable, asset) => {
+      businessAssetsTable.on('tableBuilt', () => {
+        const {
+          businessAssetId,
+          businessAssetName,
+          businessAssetType,
+          businessAssetProperties,
+        } = asset;
+        businessAssetsTable.addData([{
+          businessAssetId,
+          businessAssetName,
+          businessAssetType,
+          ...businessAssetProperties,
+        }]);
+      });
+    };
 
-    const addSection = (id) => {
+    const addDesc = (id, desc) => {
+      tinymce.init({
+        selector: `#business-assets__sections__section__text__${id}`,
+        height: 200,
+        min_height: 200,
+
+        setup: (editor) => {
+          editor.on('init', () => {
+            const content = desc;
+            editor.setContent(content);
+          });
+        },
+      });
+    };
+
+    const addSection = (id, asset) => {
       // add section inside sections div
       $('#business-assets__sections').append(`<div class="section" id="business-assets__sections__section__${id}">`);
       const section = $(`#business-assets__sections__section__${id}`);
@@ -45,59 +75,22 @@
       section.append(checkbox);
 
       // add table
-      result[1].columns[0].title = `${id} Name`;
       section.append(`<div id="business-assets__sections__section__table__${id}"></div>`);
-      const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, result[1]);
-      businessAssetsTables.push(businessAssetsTable);
+      result[1].columns[0].title = `${id} Name`;
+      const options = JSON.parse(JSON.stringify(result[1]));
+      const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, options);
+      addTableData(businessAssetsTable, asset);
 
       // add rich text box
       section.append('<p class="business-assets__sections__description">Description</p>');
       section.append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
-    };
-
-    const initialiseBusinessAssets = (businessAssets) => {
-      businessAssets.forEach((asset) => {
-        addSection(asset.businessAssetId);
-
-        tinymce.init({
-          selector: `#business-assets__sections__section__text__${asset.businessAssetId}`,
-          height: 200,
-          min_height: 200,
-
-          setup: (editor) => {
-            editor.on('init', () => {
-              const content = asset.businessAssetDescription;
-              editor.setContent(content);
-            });
-          },
-        });
-      });
-    };
-
-    const addBusinessAssetData = (businessAssets) => {
-      businessAssets.forEach((asset) => {
-        businessAssetsTables.forEach((businessAssetsTable) => {
-          businessAssetsTable.on('tableBuilt', () => {
-            const {
-              businessAssetId,
-              businessAssetName,
-              businessAssetType,
-              businessAssetProperties,
-            } = asset;
-            businessAssetsTable.addData([{
-              businessAssetId,
-              businessAssetName,
-              businessAssetType,
-              ...businessAssetProperties,
-            }]);
-          });
-        });
-      });
+      addDesc(id, asset.businessAssetDescription);
     };
 
     const addBusinessAssetSection = (businessAssets) => {
-      initialiseBusinessAssets(businessAssets);
-      addBusinessAssetData(businessAssets);
+      businessAssets.forEach((asset) => {
+        addSection(asset.businessAssetId, asset);
+      });
     };
 
     window.project.load(async (event, data) => {

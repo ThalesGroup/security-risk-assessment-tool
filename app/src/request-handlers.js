@@ -299,7 +299,7 @@ ipcMain.on('validate:projectContext', (event, arr) => {
   validateProjectContext(israProject, arr);
 });
 
-// Business Asset Tab
+// Business Assets Tab
 
 const { addBusinessAsset, deleteBusinessAsset, validateBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
 const { renderBusinessAssets } = require('./tabs/Business Assets/render-business-assets');
@@ -312,6 +312,11 @@ ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
 ipcMain.on('validate:businessAssets', (event, arr) => {
   validateBusinessAsset(israProject, arr);
 });
+
+// Supporting Assets Tab
+const { renderSupportingAssets } = require('./tabs/Supporting Assets/render-supporting-assets');
+
+ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
