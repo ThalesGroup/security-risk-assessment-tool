@@ -73,6 +73,11 @@ const validateBusinessAsset = () => {
   });
 };
 
+const validateSupportingAsset = () => {
+  const tableData = Tabulator.findTable('#supporting-assets__section__table')[0].getData()[0];
+  const desc = tinymce.get('product-architecture-diagram__text').getContent();
+};
+
 /**
  * Validate previous active tab in backend and populate corresponding class
  * @param {String} tab name of previous active tab
@@ -88,6 +93,9 @@ const getTabJSON = (tab) => {
     case 'business-assets':
       validateBusinessAsset();
       break;
+    // case 'supporting-assets':
+    //   validateSupportingAsset();
+    //   break;
     default:
       break;
   }

@@ -312,11 +312,19 @@ ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
 ipcMain.on('validate:businessAssets', (event, arr) => {
   validateBusinessAsset(israProject, arr);
 });
+ipcMain.on('businessAssets:updateOtherTabsCallbacks', (event, label, value) => {
+  getMainWindow().webContents.send('supportingAssets:getBusinessAssets', label, value);
+});
 
 // Supporting Assets Tab
+const { addSupportingAsset, deleteSupportingAsset } = require('../../lib/src/model/classes/SupportingAsset/handler-event');
 const { renderSupportingAssets } = require('./tabs/Supporting Assets/render-supporting-assets');
 
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
+ipcMain.handle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
+ipcMain.on('supportingAssets:deleteSupportingAsset', (event, ids) => {
+  deleteSupportingAsset(israProject, ids);
+});
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

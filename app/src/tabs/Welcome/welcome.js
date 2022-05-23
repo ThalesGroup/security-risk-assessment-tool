@@ -79,8 +79,7 @@
 
     // events
 
-    document.getElementById('welcome__isra-meta-tracking__add').addEventListener('click', async (e) => {
-      e.preventDefault();
+    document.getElementById('welcome__isra-meta-tracking__add').addEventListener('click', async () => {
       const rowData = await window.welcome.addTrackingRow();
       addTrackingRow(rowData);
     });
@@ -107,8 +106,7 @@
       }
     };
 
-    document.getElementById('welcome__isra-meta-tracking__delete').addEventListener('click', async (e) => {
-      e.preventDefault();
+    document.getElementById('welcome__isra-meta-tracking__delete').addEventListener('click', async () => {
       const checkboxes = document.getElementsByName('welcome__isra-meta-tracking__checkbox');
       deleteTrackingRow(checkboxes);
     });

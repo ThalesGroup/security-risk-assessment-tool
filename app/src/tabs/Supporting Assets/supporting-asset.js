@@ -27,29 +27,100 @@
 (async () => {
   try {
     const result = await window.render.supportingAssets();
+
+    // cell edited callback function
+    result[1].columns[2].cellEdited = (cell) => {
+      const id = cell.getRow().getData().supportingAssetId;
+      $(`#supporting-asset__business-assets__table__${id} td`).first().html(cell.getValue());
+    };
     const supportingAssetsTable = new Tabulator('#supporting-assets__section__table', result[1]);
+
+    const updateMatrix = (id, name) => {
+      const row = `
+      <tr id="supporting-asset__business-assets__table__${id}">
+        <td>${name}</td>
+        <td>
+          <div>
+           <div class="add-delete-container">
+              <button class="addDelete" id=supporting-asset__business-assets__table__add${id}>Add</button> | <button class="addDelete" supporting-asset__business-assets__table__delete${id}>Delete</button>
+           </div>
+           <div style="display:flex; flex-direction:row;">
+              <input type="checkbox"></input>
+              <select style="width: 100%"></select>
+           </div>
+          </div>
+        </td>
+      </tr>`;
+      $('#supporting-asset__business-assets__table tbody').append(row);
+    };
+
+    const addSupportingAsset = (assets) => {
+      supportingAssetsTable.addData(assets);
+      assets.forEach((asset) => {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `${asset.supportingAssetId}`;
+        checkbox.id = `supporting-assets__section__checkbox${asset.supportingAssetId}`;
+        checkbox.name = 'supporting-assets__section__checkbox';
+        $('#supporting-assets__section__checkboxes').append(checkbox);
+        updateMatrix(asset.supportingAssetId, asset.supportingAssetName);
+      });
+    };
+
+    const supportingAssetTable = (assets) => {
+      supportingAssetsTable.clearData();
+      $('#supporting-assets__section__checkboxes').empty();
+      $('#supporting-asset__business-assets__table__body').empty();
+      addSupportingAsset(assets);
+    };
 
     const supportingAssetsDesc = (desc) => {
       tinymce.get('product-architecture-diagram__text').setContent(desc);
     };
 
-    const supportingAssetTable = (data) => {
-      supportingAssetsTable.addData(data.SupportingAsset);
-    };
-
     const updateSupportingAssetFields = (fetchedData) => {
       supportingAssetsDesc(fetchedData.SupportingAssetsDesc);
-      supportingAssetTable(fetchedData);
+      supportingAssetTable(fetchedData.SupportingAsset);
     };
 
     window.project.load(async (event, data) => {
-      supportingAssetsTable.clearData();
-      updateSupportingAssetFields(await JSON.parse(data));
+      const fetchedData = await JSON.parse(data);
+      updateSupportingAssetFields(fetchedData);
     });
 
-    // $('#supporting-assets__section__add').on('click', () => {
+    $('#supporting-assets__section__add').on('click', async () => {
+      const asset = await window.supportingAssets.addSupportingAsset();
+      addSupportingAsset(asset);
+    });
 
-    // });
+    const deleteSupportingAsset = async (checkboxes) => {
+      const checkedAssets = [];
+      checkboxes.forEach((box) => {
+        if (box.checked) checkedAssets.push(box.value);
+      });
+
+      await window.supportingAssets.deleteSupportingAsset(checkedAssets);
+      checkedAssets.forEach((id) => {
+        $(`#supporting-assets__section__checkbox${id}`).remove();
+
+        supportingAssetsTable.getRows().forEach((row) => {
+          const rowId = Number(row.getData().supportingAssetId);
+          if (rowId === Number(id)) {
+            row.delete();
+            $(`#supporting-asset__business-assets__table__${rowId}`).remove();
+          }
+        });
+      });
+    };
+
+    $('#supporting-assets__section__delete').on('click', () => {
+      const checkboxes = document.getElementsByName('supporting-assets__section__checkbox');
+      deleteSupportingAsset(checkboxes);
+    });
+
+    window.supportingAssets.getBusinessAssets((e, label, value) => {
+      $('#supporting-asset__business-assets__table select').append(`<option value="${value}">${label}</option>`);
+    });
   } catch (err) {
     alert('Failed to load Supporting Assets tab');
   }

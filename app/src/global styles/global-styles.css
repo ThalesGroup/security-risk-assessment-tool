@@ -88,7 +88,7 @@ select option {
 }
 
 .checkbox{
-    padding-top:30px;
+    padding-top:32px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -162,3 +162,24 @@ select option {
     padding: 10px;
     margin-bottom: 10px;
 }
+
+table{
+    width:100%;
+}
+
+th{
+    font-size: small;
+    background-color: #ffffffca;
+    color: #4f4f4f;
+    height: 26px;
+}
+
+td{
+    font-size: small;
+    padding: 10px;
+}
+
+table, th, td {
+    border: 1px solid #4f4f4f;
+    border-collapse: collapse;
+  }

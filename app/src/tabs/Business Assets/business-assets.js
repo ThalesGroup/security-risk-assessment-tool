@@ -29,6 +29,14 @@
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
+    const updateOtherTabsCallbacks = (tableOptions) => {
+      const options = tableOptions;
+      options.columns[0].cellEdited = (cell) => {
+        const rowId = cell.getRow().getData().businessAssetId;
+        window.businessAssets.updateOtherTabsCallbacks(cell.getValue(), rowId);
+      };
+    };
+
     const addTableData = (businessAssetsTable, asset) => {
       businessAssetsTable.on('tableBuilt', () => {
         const {
@@ -76,10 +84,13 @@
 
       // add table
       section.append(`<div id="business-assets__sections__section__table__${id}"></div>`);
+      // custom title
       result[1].columns[0].title = `${id} Name`;
+      // cell edited callback function
       const options = JSON.parse(JSON.stringify(result[1]));
       const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, options);
       addTableData(businessAssetsTable, asset);
+      updateOtherTabsCallbacks(options);
 
       // add rich text box
       section.append('<p class="business-assets__sections__description">Description</p>');
@@ -99,10 +110,9 @@
       addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
     });
 
-    $('#business-assets__section__add').on('click', async (e) => {
-      e.preventDefault();
+    $('#business-assets__section__add').on('click', async () => {
       const businessAsset = await window.businessAssets.addBusinessAsset();
-      addBusinessAssetSection([businessAsset]);
+      addBusinessAssetSection(businessAsset);
     });
 
     const deleteBusinessAsset = async (checkboxIds) => {
@@ -117,8 +127,7 @@
       });
     };
 
-    $('#business-assets__section__delete').on('click', async (e) => {
-      e.preventDefault();
+    $('#business-assets__section__delete').on('click', async () => {
       const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
       deleteBusinessAsset(checkboxIds);
     });

@@ -40,7 +40,12 @@ const renderSupportingAssets = () => {
         title: supportingAssetJsonSchema.supportingAssetHLDId.title, field: 'supportingAssetHLDId', editor: 'input', headerSort: false, headerHozAlign: 'center',
       },
       {
-        title: supportingAssetJsonSchema.supportingAssetName.title, field: 'supportingAssetName', editor: 'input', headerSort: false, tooltip: supportingAssetJsonSchema.supportingAssetName.description, headerHozAlign: 'center',
+        title: supportingAssetJsonSchema.supportingAssetName.title,
+        field: 'supportingAssetName',
+        editor: 'input',
+        headerSort: false,
+        tooltip: supportingAssetJsonSchema.supportingAssetName.description,
+        headerHozAlign: 'center',
       },
       {
         title: supportingAssetJsonSchema.supportingAssetType.title,
