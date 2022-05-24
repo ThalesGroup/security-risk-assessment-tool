@@ -40,16 +40,16 @@ const renderProjectContext = () => {
       <div id="project-description__url">
         <p>${projCxtJsonSchema.projectURL.title}</p>
         <div class = 'hyperlink-attachment-align'>
-          <img class='hyperlink-attachment-image' id= "project-description__url__image" src="./asset/link.png" alt="Hyperlink:" >
-          <p id="project-description__url__insert" style="margin-top: 0px;" >${projCxtJsonSchema.projectURL.description}</p>
-          <a id="project-description__url__hyperlink" href=" " hidden></a>
+          <img class='hyperlink-attachment-image' id= "project-description__url-image" src="./asset/link.png" alt="Hyperlink:" >
+          <p id="project-description__url--insert" style="margin-top: 0px;" >${projCxtJsonSchema.projectURL.description}</p>
+          <a id="project-description__url--hyperlink" href=" " hidden></a>
         </div>
       </div>
       <div id="project-description__attachment">
         <p>${projCxtJsonSchema.projectDescriptionAttachment.title}</p>
         <div class = 'hyperlink-attachment-align'>
-          <img class= 'hyperlink-attachment-image' id= "project-description__file__image" src="./asset/link.png" alt="File:">
-          <p id="project-description__file__insert" style="margin-top: 0px;">${projCxtJsonSchema.projectDescriptionAttachment.description}</p>
+          <img class= 'hyperlink-attachment-image' id= "project-description__file-image" src="./asset/link.png" alt="File:">
+          <p id="project-description__file--insert" style="margin-top: 0px;">${projCxtJsonSchema.projectDescriptionAttachment.description}</p>
         </div>
       </div>
     </div>

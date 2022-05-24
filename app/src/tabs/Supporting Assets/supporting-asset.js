@@ -31,18 +31,18 @@
     // cell edited callback function
     result[1].columns[2].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
-      $(`#supporting-asset__business-assets__table__${id} td`).first().html(cell.getValue());
+      $(`#supporting-asset-business-assets__table-${id} td`).first().html(cell.getValue());
     };
-    const supportingAssetsTable = new Tabulator('#supporting-assets__section__table', result[1]);
+    const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
     const updateMatrix = (id, name) => {
       const row = `
-      <tr id="supporting-asset__business-assets__table__${id}">
+      <tr id="supporting-asset-business-assets__table-${id}">
         <td>${name}</td>
         <td>
           <div>
            <div class="add-delete-container">
-              <button class="addDelete" id=supporting-asset__business-assets__table__add${id}>Add</button> | <button class="addDelete" supporting-asset__business-assets__table__delete${id}>Delete</button>
+              <button class="addDelete" id=supporting-asset-business-assets__table--add${id}>Add</button> | <button class="addDelete" supporting-asset-business-assets__table--delete${id}>Delete</button>
            </div>
            <div style="display:flex; flex-direction:row;">
               <input type="checkbox"></input>
@@ -51,7 +51,7 @@
           </div>
         </td>
       </tr>`;
-      $('#supporting-asset__business-assets__table tbody').append(row);
+      $('#supporting-asset-business-assets__table tbody').append(row);
     };
 
     const addSupportingAsset = (assets) => {
@@ -60,17 +60,17 @@
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = `${asset.supportingAssetId}`;
-        checkbox.id = `supporting-assets__section__checkbox${asset.supportingAssetId}`;
-        checkbox.name = 'supporting-assets__section__checkbox';
-        $('#supporting-assets__section__checkboxes').append(checkbox);
+        checkbox.id = `supporting-assets__section-checkbox${asset.supportingAssetId}`;
+        checkbox.name = 'supporting-assets__section-checkbox';
+        $('#supporting-assets__section-checkboxes').append(checkbox);
         updateMatrix(asset.supportingAssetId, asset.supportingAssetName);
       });
     };
 
     const supportingAssetTable = (assets) => {
       supportingAssetsTable.clearData();
-      $('#supporting-assets__section__checkboxes').empty();
-      $('#supporting-asset__business-assets__table__body').empty();
+      $('#supporting-assets__section-checkboxes').empty();
+      $('#supporting-asset-business-assets__table tbody').empty();
       addSupportingAsset(assets);
     };
 
@@ -88,7 +88,7 @@
       updateSupportingAssetFields(fetchedData);
     });
 
-    $('#supporting-assets__section__add').on('click', async () => {
+    $('#supporting-assets__section--add').on('click', async () => {
       const asset = await window.supportingAssets.addSupportingAsset();
       addSupportingAsset(asset);
     });
@@ -101,26 +101,26 @@
 
       await window.supportingAssets.deleteSupportingAsset(checkedAssets);
       checkedAssets.forEach((id) => {
-        $(`#supporting-assets__section__checkbox${id}`).remove();
+        $(`#supporting-assets__section-checkbox${id}`).remove();
 
         supportingAssetsTable.getRows().forEach((row) => {
           const rowId = Number(row.getData().supportingAssetId);
           if (rowId === Number(id)) {
             row.delete();
-            $(`#supporting-asset__business-assets__table__${rowId}`).remove();
+            $(`#supporting-asset-business-assets__table-${rowId}`).remove();
           }
         });
       });
     };
 
-    $('#supporting-assets__section__delete').on('click', () => {
-      const checkboxes = document.getElementsByName('supporting-assets__section__checkbox');
+    $('#supporting-assets__section--delete').on('click', () => {
+      const checkboxes = document.getElementsByName('supporting-assets__section-checkbox');
       deleteSupportingAsset(checkboxes);
     });
 
-    window.supportingAssets.getBusinessAssets((e, label, value) => {
-      $('#supporting-asset__business-assets__table select').append(`<option value="${value}">${label}</option>`);
-    });
+    // window.supportingAssets.getBusinessAssets((e, label, value) => {
+    //   $('#supporting-asset-business-assets__table select').append(`<option value="${value}">${label}</option>`);
+    // });
   } catch (err) {
     alert('Failed to load Supporting Assets tab');
   }

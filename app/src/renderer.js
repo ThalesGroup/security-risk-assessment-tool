@@ -40,14 +40,14 @@ window.project.load(async (event, data) => {
  * @return {Object} The form data
  */
 const validateWelcome = () => {
-  Tabulator.findTable('#welcome__isra-meta-tracking__table')[0].getRows().forEach((row) => {
+  Tabulator.findTable('#welcome__isra-meta-tracking-table')[0].getRows().forEach((row) => {
     window.welcome.updateTrackingRow(row.getData());
   });
 
   window.validate.welcome([
-    $('#welcome__isra-meta__project-name').val(),
-    $('#welcome__isra-meta__organization').val(),
-    $('#welcome__isra-meta__project-version').val(),
+    $('#welcome__isra-meta--project-name').val(),
+    $('#welcome__isra-meta--organization').val(),
+    $('#welcome__isra-meta--project-version').val(),
   ]);
 };
 
@@ -65,10 +65,10 @@ const validateProjectContext = () => {
 };
 
 const validateBusinessAsset = () => {
-  const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
+  const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
   checkboxIds.forEach((id) => {
-    const tableData = Tabulator.findTable(`#business-assets__sections__section__table__${id.value}`)[0].getData()[0];
-    tableData.businessAssetDescription = tinymce.get(`business-assets__sections__section__text__${id.value}`).getContent();
+    const tableData = Tabulator.findTable(`#business-assets__section__table__${id.value}`)[0].getData()[0];
+    tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
     window.validate.businessAssets(tableData);
   });
 };

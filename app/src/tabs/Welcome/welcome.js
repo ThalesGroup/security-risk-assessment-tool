@@ -28,22 +28,22 @@
   try {
     const result = await window.render.welcome();
     $('#welcome').append(result[0]);
-    const trackingtable = new Tabulator('#welcome__isra-meta-tracking__table', result[1]);
+    const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
 
     const appVersion = (value) => {
       $('#details__app-version').val(`App Version: ${value}`);
     };
 
     const projectName = (value) => {
-      $('#welcome__isra-meta__project-name').val(value);
+      $('#welcome__isra-meta--project-name').val(value);
     };
 
     const projectVersion = (value) => {
-      $('#welcome__isra-meta__project-version').val(value);
+      $('#welcome__isra-meta--project-version').val(value);
     };
 
     const organization = (value) => {
-      $('#welcome__isra-meta__organization').val(value);
+      $('#welcome__isra-meta--organization').val(value);
     };
 
     const addTrackingRow = (tracking) => {
@@ -51,14 +51,14 @@
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.value = `${tracking.trackingIteration}`;
-      checkbox.id = `welcome__isra-meta-tracking__checkbox${tracking.trackingIteration}`;
-      checkbox.name = 'welcome__isra-meta-tracking__checkbox';
-      $('#welcome__isra-meta-tracking__checkboxes').append(checkbox);
+      checkbox.id = `welcome__isra-meta-tracking-checkbox${tracking.trackingIteration}`;
+      checkbox.name = 'welcome__isra-meta-tracking-checkbox';
+      $('#welcome__isra-meta-tracking-checkboxes').append(checkbox);
     };
 
     const iterationsHistory = (arr) => {
       trackingtable.clearData();
-      $('#welcome__isra-meta-tracking__checkboxes').empty();
+      $('#welcome__isra-meta-tracking-checkboxes').empty();
 
       arr.forEach((tracking) => {
         addTrackingRow(tracking);
@@ -79,7 +79,7 @@
 
     // events
 
-    document.getElementById('welcome__isra-meta-tracking__add').addEventListener('click', async () => {
+    document.getElementById('welcome__isra-meta-tracking--add').addEventListener('click', async () => {
       const rowData = await window.welcome.addTrackingRow();
       addTrackingRow(rowData);
     });
@@ -96,7 +96,7 @@
           window.welcome.updateTrackingRow(row.getData());
         });
 
-        $('#welcome__isra-meta-tracking__checkboxes').empty();
+        $('#welcome__isra-meta-tracking-checkboxes').empty();
         trackingtable.clearData();
 
         const data = await window.welcome.deleteTrackingRow(checkedRows);
@@ -106,8 +106,8 @@
       }
     };
 
-    document.getElementById('welcome__isra-meta-tracking__delete').addEventListener('click', async () => {
-      const checkboxes = document.getElementsByName('welcome__isra-meta-tracking__checkbox');
+    document.getElementById('welcome__isra-meta-tracking--delete').addEventListener('click', async () => {
+      const checkboxes = document.getElementsByName('welcome__isra-meta-tracking-checkbox');
       deleteTrackingRow(checkboxes);
     });
   } catch (err) {

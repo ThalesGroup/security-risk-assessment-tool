@@ -56,7 +56,7 @@
 
     const addDesc = (id, desc) => {
       tinymce.init({
-        selector: `#business-assets__sections__section__text__${id}`,
+        selector: `#business-assets__section-text-${id}`,
         height: 200,
         min_height: 200,
 
@@ -71,30 +71,30 @@
 
     const addSection = (id, asset) => {
       // add section inside sections div
-      $('#business-assets__sections').append(`<div class="section" id="business-assets__sections__section__${id}">`);
-      const section = $(`#business-assets__sections__section__${id}`);
+      $('#business-assets__sections').append(`<div class="section" id="business-assets__section__${id}">`);
+      const section = $(`#business-assets__section__${id}`);
 
       // add checkbox
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.value = id;
-      checkbox.id = `business-assets__sections__section__checkbox${id}`;
-      checkbox.name = 'business-assets__sections__section__checkboxes';
+      checkbox.id = `business-assets__section__checkbox-${id}`;
+      checkbox.name = 'business-assets__section-checkboxes';
       section.append(checkbox);
 
       // add table
-      section.append(`<div id="business-assets__sections__section__table__${id}"></div>`);
+      section.append(`<div id="business-assets__section__table__${id}"></div>`);
       // custom title
       result[1].columns[0].title = `${id} Name`;
       // cell edited callback function
       const options = JSON.parse(JSON.stringify(result[1]));
-      const businessAssetsTable = new Tabulator(`#business-assets__sections__section__table__${id}`, options);
+      const businessAssetsTable = new Tabulator(`#business-assets__section__table__${id}`, options);
       addTableData(businessAssetsTable, asset);
       updateOtherTabsCallbacks(options);
 
       // add rich text box
-      section.append('<p class="business-assets__sections__description">Description</p>');
-      section.append(`<textarea class="business-assets-rich-text" id="business-assets__sections__section__text__${id}" name="business-assets__sections__section__text__${id}"></textarea>`);
+      section.append('<p class="business-assets__sections-description">Description</p>');
+      section.append(`<textarea class="business-assets-rich-text" id="business-assets__section-text-${id}" name="business-assets__section-text-${id}"></textarea>`);
       addDesc(id, asset.businessAssetDescription);
     };
 
@@ -110,7 +110,7 @@
       addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
     });
 
-    $('#business-assets__section__add').on('click', async () => {
+    $('#business-assets__section--add').on('click', async () => {
       const businessAsset = await window.businessAssets.addBusinessAsset();
       addBusinessAssetSection(businessAsset);
     });
@@ -122,13 +122,13 @@
       });
       await window.businessAssets.deleteBusinessAsset(checkedSections);
       checkedSections.forEach((id) => {
-        tinymce.remove(`#business-assets__sections__section__text__${id}`);
-        $(`#business-assets__sections__section__${id}`).remove();
+        tinymce.remove(`#business-assets__section-text-${id}`);
+        $(`#business-assets__section__${id}`).remove();
       });
     };
 
-    $('#business-assets__section__delete').on('click', async () => {
-      const checkboxIds = document.getElementsByName('business-assets__sections__section__checkboxes');
+    $('#business-assets__section--delete').on('click', async () => {
+      const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
       deleteBusinessAsset(checkboxIds);
     });
   } catch (err) {

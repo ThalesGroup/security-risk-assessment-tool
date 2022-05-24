@@ -29,16 +29,16 @@
     text-align: center;
 }
 
-#project-description__file__insert{
+#project-description__file--insert{
     font-size: small;
     cursor:pointer
 }
 
-#project-description__url__insert{
+#project-description__url--insert{
     font-size: small;
     cursor:pointer
 }
 
-#project-description__url__hyperlink{
+#project-description__url--hyperlink{
     font-size: small;
 }

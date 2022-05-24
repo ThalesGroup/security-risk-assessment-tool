@@ -34,27 +34,27 @@
 
     const projectURL = (value) => {
       if (value !== '' && value !== 'cancelled') {
-        $('#project-description__url__hyperlink').show();
-        $('#project-description__url__insert').hide();
-        $('#project-description__url__hyperlink').attr('href', value);
-        $('#project-description__url__hyperlink').text(value);
+        $('#project-description__url--hyperlink').show();
+        $('#project-description__url--insert').hide();
+        $('#project-description__url--hyperlink').attr('href', value);
+        $('#project-description__url--hyperlink').text(value);
       } else if (value === '') {
-        $('#project-description__url__insert').show();
-        $('#project-description__url__hyperlink').hide();
+        $('#project-description__url--insert').show();
+        $('#project-description__url--hyperlink').hide();
       }
     };
 
-    $('#project-description__url__hyperlink').on('click', (e) => {
+    $('#project-description__url--hyperlink').on('click', (e) => {
       e.preventDefault();
-      window.projectContext.openURL($('#project-description__url__hyperlink').attr('href'), navigator.onLine);
+      window.projectContext.openURL($('#project-description__url--hyperlink').attr('href'), navigator.onLine);
     });
 
-    $('#project-description__url__image').on('click', async () => {
+    $('#project-description__url-image').on('click', async () => {
       const url = await window.projectContext.urlPrompt();
       projectURL(url);
     });
 
-    $('#project-description__url__insert').on('click', async () => {
+    $('#project-description__url--insert').on('click', async () => {
       const url = await window.projectContext.urlPrompt();
       projectURL(url);
     });
@@ -62,13 +62,13 @@
     $('#project-description__attachment').on('click', () => {
       window.projectContext.attachment();
       window.projectContext.fileName(async (event, fileName) => {
-        $('#project-description__file__insert').text(fileName);
+        $('#project-description__file--insert').text(fileName);
       });
     });
 
     const projectDescriptiveAttachment = async (value) => {
       const attachmentResult = await window.projectContext.decodeAttachment(value);
-      $('#project-description__file__insert').text(attachmentResult);
+      $('#project-description__file--insert').text(attachmentResult);
     };
 
     const projectObjectives = (value) => {

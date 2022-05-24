@@ -32,7 +32,7 @@ const renderBusinessAssets = () => {
   + `<p class="subheading">${jsonSchema.title}</p>`
   + `<p class="summary">${jsonSchema.description}</p>`
   + '<div class="add-delete-container">'
-  + '<button class="addDelete" id="business-assets__section__add">Add</button> | <button  class="addDelete" id="business-assets__section__delete">Delete</button>'
+  + '<button class="addDelete" id="business-assets__section--add">Add</button> | <button  class="addDelete" id="business-assets__section--delete">Delete</button>'
   + '</div>'
   + '<div id="business-assets__sections"></div>';
 
