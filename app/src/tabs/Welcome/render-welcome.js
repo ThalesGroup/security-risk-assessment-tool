@@ -33,33 +33,34 @@ const renderWelcome = () => {
     projectOrganizationOptions += `<option value="${e.const}">${e.title}</option>`;
   });
 
-  const html = '<div class="details">'
-  + `<p class="heading">${jsonSchema.title}</p>`
-  + `<p id="details__app-version">${ISRAmetaSchema.appVersion.title}: ${ISRAmetaSchema.appVersion.default}</p>`
-  + '</div>'
-  + '<div id="welcome__isra-meta">'
-  + `<label for="welcome__isra-meta--project-name">${ISRAmetaSchema.projectName.title}</label>`
-  + '<input type="text" id="welcome__isra-meta--project-name" name="welcome__isra-meta--project-name">'
-  + `<label for="welcome__isra-meta--project-version">${ISRAmetaSchema.projectVersion.title}</label>`
-  + '<input type="text" id="welcome__isra-meta--project-version" name="welcome__isra-meta--project-version">'
-  + `<label for="welcome__isra-meta--organization">${ISRAmetaSchema.projectOrganization.title}</label>`
-  + `<select name="welcome__isra-meta--organization" id="welcome__isra-meta--organization" required title="(Mandatory) ${ISRAmetaSchema.projectOrganization.description}">`
-  + `${projectOrganizationOptions}`
-  + '</select>'
-  + '</div>'
-  + '<div id="welcome__isra-meta-tracking">'
-  + `<p class="heading">${ISRAmetaSchema.ISRAtracking.title}</p>`
-  + '<div class="add-delete-container">'
-  + '<button class="addDelete" id="welcome__isra-meta-tracking--add">Add</button> | <button  class="addDelete" id="welcome__isra-meta-tracking--delete">Delete</button>'
-  + '</div>'
-  + '<div class="table">'
-  + '<div class="checkbox" id="welcome__isra-meta-tracking-checkboxes"></div>'
-  + '<div id="welcome__isra-meta-tracking-table"></div>'
-  + '</div>'
-  + '</div>'
-  + '<div id="welcome__isra-meta-info">'
-  + '<p class="heading">Purpose and scope</p>'
-  + '</div>';
+  const html = `
+  <div class="details">
+    <p class="heading">${jsonSchema.title}</p>
+    <p id="details__app-version">${ISRAmetaSchema.appVersion.title}: ${ISRAmetaSchema.appVersion.default}</p>
+  </div>
+  <div id="welcome__isra-meta">
+    <label for="welcome__isra-meta--project-name">${ISRAmetaSchema.projectName.title}</label>
+    <input type="text" id="welcome__isra-meta--project-name" name="welcome__isra-meta--project-name">
+    <label for="welcome__isra-meta--project-version">${ISRAmetaSchema.projectVersion.title}</label>
+    <input type="text" id="welcome__isra-meta--project-version" name="welcome__isra-meta--project-version">
+    <label for="welcome__isra-meta--organization">${ISRAmetaSchema.projectOrganization.title}</label>
+    <select name="welcome__isra-meta--organization" id="welcome__isra-meta--organization" required title="(Mandatory) ${ISRAmetaSchema.projectOrganization.description}">
+      ${projectOrganizationOptions}
+    </select>
+  </div>
+  <div id="welcome__isra-meta-tracking">
+    <p class="heading">${ISRAmetaSchema.ISRAtracking.title}</p>
+    <div class="add-delete-container">
+      <button class="addDelete" id="welcome__isra-meta-tracking--add">Add</button> | <button  class="addDelete" id="welcome__isra-meta-tracking--delete">Delete</button>
+    </div>
+    <div class="table">
+      <div class="checkbox" id="welcome__isra-meta-tracking-checkboxes"></div>
+      <div id="welcome__isra-meta-tracking-table"></div>
+    </div>
+  </div>
+  <div id="welcome__isra-meta-info">
+    <p class="heading">Purpose and scope</p>
+  </div>`;
 
   const ISRATrackingSchema = ISRAmetaSchema.ISRAtracking.items.properties;
   const tableOptions = {

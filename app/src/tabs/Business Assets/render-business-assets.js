@@ -28,13 +28,14 @@ const businessAssetSchema = jsonSchema.items.properties;
 const businessAssetPropertiesSchema = businessAssetSchema.businessAssetProperties.properties;
 
 const renderBusinessAssets = () => {
-  const html = '<p class="heading">Business Assets</p>'
-  + `<p class="subheading">${jsonSchema.title}</p>`
-  + `<p class="summary">${jsonSchema.description}</p>`
-  + '<div class="add-delete-container">'
-  + '<button class="addDelete" id="business-assets__section--add">Add</button> | <button  class="addDelete" id="business-assets__section--delete">Delete</button>'
-  + '</div>'
-  + '<div id="business-assets__sections"></div>';
+  const html = `
+  <p class="heading">Business Assets</p>
+  <p class="subheading">${jsonSchema.title}</p>
+  <p class="summary">${jsonSchema.description}</p>
+  <div class="add-delete-container">
+    <button class="addDelete" id="business-assets__section--add">Add</button> | <button  class="addDelete" id="business-assets__section--delete">Delete</button>
+  </div>
+  <div id="business-assets__sections"></div>`;
 
   const dropDownOptions = businessAssetPropertiesSchema.businessAssetConfidentiality.anyOf;
   const formatValues = {};
