@@ -89,7 +89,11 @@ const renderProjectContext = () => {
           <i></i>
       </div>
     </div>
-  </div>`;
+  </div>
+  
+  <footer>
+      <p>THALES GROUP CONFIDENTIAL PROJECT</p>
+  </footer>`;
 
   return [html];
 };

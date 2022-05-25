@@ -60,7 +60,10 @@ const renderWelcome = () => {
   </div>
   <div id="welcome__isra-meta-info">
     <p class="heading">Purpose and scope</p>
-  </div>`;
+  </div>
+  <footer>
+    <p>THALES GROUP CONFIDENTIAL PROJECT</p>
+  </footer>`;
 
   const ISRATrackingSchema = ISRAmetaSchema.ISRAtracking.items.properties;
   const tableOptions = {
