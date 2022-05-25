@@ -27,51 +27,86 @@
 (async () => {
   try {
     const result = await window.render.supportingAssets();
+    const matrixTable = '#supporting-asset-business-assets__table';
 
     // cell edited callback function
     result[1].columns[2].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
-      $(`#supporting-asset-business-assets__table-${id} td`).first().html(cell.getValue());
+      $(`${matrixTable}-${id} td`).first().html(cell.getValue());
     };
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
-    const updateMatrix = (id, name) => {
+    let selectOptions = {};
+
+    const addBusinessAsset = (id, ref) => {
+      const matrixRow = $(`${matrixTable}-${id} td:nth-child(2)`);
+      let options = '';
+      Object.entries(selectOptions).forEach(([value, label]) => {
+        if (Number(ref) === Number(value)) options += `<option value="${value}" selected>${label}</option>`;
+        else options += `<option value="${value}">${label}</option>`;
+      });
+
+      const input = `
+        <div>
+          <input type="checkbox"></input>
+          <select>${options}</select>
+        </div>`;
+      matrixRow.append(input);
+    };
+
+    const addMatrixRow = (id, name) => {
       const row = `
       <tr id="supporting-asset-business-assets__table-${id}">
         <td>${name}</td>
         <td>
-          <div>
            <div class="add-delete-container">
-              <button class="addDelete" id=supporting-asset-business-assets__table--add${id}>Add</button> | <button class="addDelete" supporting-asset-business-assets__table--delete${id}>Delete</button>
+              <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
            </div>
-           <div style="display:flex; flex-direction:row;">
-              <input type="checkbox"></input>
-              <select style="width: 100%"></select>
-           </div>
-          </div>
         </td>
       </tr>`;
-      $('#supporting-asset-business-assets__table tbody').append(row);
+      $(`${matrixTable} tbody`).append(row);
+
+      // add business asset ref
+      $(`${matrixTable}-${id} button`).first().on('click', () => {
+        addBusinessAsset(id);
+      });
+
+      // delete business asset ref
+      $(`${matrixTable}-${id} button:nth-child(2)`).on('click', () => {
+        console.log('Delete business asset!');
+      });
     };
 
     const addSupportingAsset = (assets) => {
       supportingAssetsTable.addData(assets);
       assets.forEach((asset) => {
+        const id = asset.supportingAssetId;
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.value = `${asset.supportingAssetId}`;
-        checkbox.id = `supporting-assets__section-checkbox${asset.supportingAssetId}`;
+        checkbox.value = `${id}`;
+        checkbox.id = `supporting-assets__section-checkbox${id}`;
         checkbox.name = 'supporting-assets__section-checkbox';
         $('#supporting-assets__section-checkboxes').append(checkbox);
-        updateMatrix(asset.supportingAssetId, asset.supportingAssetName);
+        addMatrixRow(id, asset.supportingAssetName);
+        asset.businessAssetRef.forEach((ref) => {
+          addBusinessAsset(id, ref);
+        });
       });
     };
 
-    const supportingAssetTable = (assets) => {
+    const supportingAssetTable = (supportingAssets, businessAssets) => {
+      // clear list of supporting assets table
       supportingAssetsTable.clearData();
       $('#supporting-assets__section-checkboxes').empty();
-      $('#supporting-asset-business-assets__table tbody').empty();
-      addSupportingAsset(assets);
+
+      // clear relationship matrix
+      $(`${matrixTable} tbody`).empty();
+      selectOptions = {};
+      businessAssets.forEach((asset) => {
+        selectOptions[asset.businessAssetId] = asset.businessAssetName;
+      });
+
+      addSupportingAsset(supportingAssets, businessAssets);
     };
 
     const supportingAssetsDesc = (desc) => {
@@ -80,7 +115,7 @@
 
     const updateSupportingAssetFields = (fetchedData) => {
       supportingAssetsDesc(fetchedData.SupportingAssetsDesc);
-      supportingAssetTable(fetchedData.SupportingAsset);
+      supportingAssetTable(fetchedData.SupportingAsset, fetchedData.BusinessAsset);
     };
 
     window.project.load(async (event, data) => {
@@ -88,6 +123,7 @@
       updateSupportingAssetFields(fetchedData);
     });
 
+    // add supporting asset
     $('#supporting-assets__section--add').on('click', async () => {
       const asset = await window.supportingAssets.addSupportingAsset();
       addSupportingAsset(asset);
@@ -107,20 +143,37 @@
           const rowId = Number(row.getData().supportingAssetId);
           if (rowId === Number(id)) {
             row.delete();
-            $(`#supporting-asset-business-assets__table-${rowId}`).remove();
+            $(`${matrixTable}-${rowId}`).remove();
           }
         });
       });
     };
 
+    // delete supporting asset
     $('#supporting-assets__section--delete').on('click', () => {
       const checkboxes = document.getElementsByName('supporting-assets__section-checkbox');
       deleteSupportingAsset(checkboxes);
     });
 
-    // window.supportingAssets.getBusinessAssets((e, label, value) => {
-    //   $('#supporting-asset-business-assets__table select').append(`<option value="${value}">${label}</option>`);
-    // });
+    window.supportingAssets.getBusinessAssets((e, label, value) => {
+      const options = $(`${matrixTable} option[value=${value}]`);
+      if (options.length) {
+        // option exists
+        if (label === null) {
+          // delete option
+          $(`${matrixTable} option[value=${value}]`).remove();
+          delete selectOptions[value];
+        } else {
+          // update label
+          options.text(label);
+          selectOptions[value] = label;
+        }
+      } else {
+        // add option
+        $(`${matrixTable} select`).append(`<option value="${value}">${label}</option>`);
+        selectOptions[value] = label;
+      }
+    });
   } catch (err) {
     alert('Failed to load Supporting Assets tab');
   }

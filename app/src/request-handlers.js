@@ -305,14 +305,14 @@ const { addBusinessAsset, deleteBusinessAsset, validateBusinessAsset } = require
 const { renderBusinessAssets } = require('./tabs/Business Assets/render-business-assets');
 
 ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
-ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject));
+ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject, getMainWindow()));
 ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
-  deleteBusinessAsset(israProject, ids);
+  deleteBusinessAsset(israProject, ids, getMainWindow());
 });
 ipcMain.on('validate:businessAssets', (event, arr) => {
   validateBusinessAsset(israProject, arr);
 });
-ipcMain.on('businessAssets:updateOtherTabsCallbacks', (event, label, value) => {
+ipcMain.on('businessAssets:updateOtherTabs', (event, label, value) => {
   getMainWindow().webContents.send('supportingAssets:getBusinessAssets', label, value);
 });
 

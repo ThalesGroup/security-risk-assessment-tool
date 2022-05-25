@@ -182,4 +182,8 @@ td{
 table, th, td {
     border: 1px solid #4f4f4f;
     border-collapse: collapse;
-  }
+}
+
+select{
+    width: 100%;
+}

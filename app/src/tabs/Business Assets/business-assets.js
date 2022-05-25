@@ -29,11 +29,11 @@
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
-    const updateOtherTabsCallbacks = (tableOptions) => {
+    const updateOtherTabs = (tableOptions) => {
       const options = tableOptions;
       options.columns[0].cellEdited = (cell) => {
         const rowId = cell.getRow().getData().businessAssetId;
-        window.businessAssets.updateOtherTabsCallbacks(cell.getValue(), rowId);
+        window.businessAssets.updateOtherTabs(cell.getValue(), rowId);
       };
     };
 
@@ -90,7 +90,7 @@
       const options = JSON.parse(JSON.stringify(result[1]));
       const businessAssetsTable = new Tabulator(`#business-assets__section__table__${id}`, options);
       addTableData(businessAssetsTable, asset);
-      updateOtherTabsCallbacks(options);
+      updateOtherTabs(options);
 
       // add rich text box
       section.append('<p class="business-assets__sections-description">Description</p>');
@@ -100,7 +100,8 @@
 
     const addBusinessAssetSection = (businessAssets) => {
       businessAssets.forEach((asset) => {
-        addSection(asset.businessAssetId, asset);
+        const id = asset.businessAssetId;
+        addSection(id, asset);
       });
     };
 
@@ -120,6 +121,7 @@
       checkboxIds.forEach((box) => {
         if (box.checked) checkedSections.push(box.value);
       });
+
       await window.businessAssets.deleteBusinessAsset(checkedSections);
       checkedSections.forEach((id) => {
         tinymce.remove(`#business-assets__section-text-${id}`);
