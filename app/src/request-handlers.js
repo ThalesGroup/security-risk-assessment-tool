@@ -319,7 +319,9 @@ ipcMain.on('validate:businessAssets', (event, arr) => {
 });
 
 // Supporting Assets Tab
-const { addSupportingAsset, deleteSupportingAsset, updateSupportingAsset } = require('../../lib/src/model/classes/SupportingAsset/handler-event');
+const {
+  addSupportingAsset, deleteSupportingAsset, updateSupportingAsset, validateSupportingAssets,
+} = require('../../lib/src/model/classes/SupportingAsset/handler-event');
 const { renderSupportingAssets } = require('./tabs/Supporting Assets/render-supporting-assets');
 
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
@@ -329,6 +331,9 @@ ipcMain.on('supportingAssets:deleteSupportingAsset', (event, ids) => {
 });
 ipcMain.on('supportingAssets:updateSupportingAsset', (event, id, field, value) => {
   updateSupportingAsset(israProject, getMainWindow(), id, field, value);
+});
+ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
+  validateSupportingAssets(israProject, arr, desc);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {

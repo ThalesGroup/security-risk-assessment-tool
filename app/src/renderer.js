@@ -30,59 +30,53 @@ const contents = document.querySelectorAll('.content');
 
 /**
  * loads ISRA Project Data (new project/xml/json)
+ * for reference in developer's tool
  */
 window.project.load(async (event, data) => {
   console.log(await JSON.parse(data));
 });
 
 /**
- * Creates a json object including fields of Welcome
- * @return {Object} The form data
- */
-const validateWelcome = () => {
-  Tabulator.findTable('#welcome__isra-meta-tracking-table')[0].getRows().forEach((row) => {
-    window.welcome.updateTrackingRow(row.getData());
-  });
-
-  window.validate.welcome([
-    $('#welcome__isra-meta--project-name').val(),
-    $('#welcome__isra-meta--organization').val(),
-    $('#welcome__isra-meta--project-version').val(),
-  ]);
-};
-
-/**
- * Creates a json object including fields of Project Context
- * @return {Object} The form data
- */
-const validateProjectContext = () => {
-  window.validate.projectContext([
-    tinymce.get('project-description__text').getContent(),
-    tinymce.get('project-objectives__text').getContent(),
-    tinymce.get('officer-objectives__text').getContent(),
-    tinymce.get('assumptions__text').getContent(),
-  ]);
-};
-
-const validateBusinessAsset = () => {
-  const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
-  checkboxIds.forEach((id) => {
-    const tableData = Tabulator.findTable(`#business-assets__section__table__${id.value}`)[0].getData()[0];
-    tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
-    window.validate.businessAssets(tableData);
-  });
-};
-
-const validateSupportingAsset = () => {
-  const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
-  const desc = tinymce.get('product-architecture-diagram__text').getContent();
-};
-
-/**
  * Validate previous active tab in backend and populate corresponding class
  * @param {String} tab name of previous active tab
  */
 const getTabJSON = (tab) => {
+  const validateWelcome = () => {
+    Tabulator.findTable('#welcome__isra-meta-tracking-table')[0].getRows().forEach((row) => {
+      window.welcome.updateTrackingRow(row.getData());
+    });
+
+    window.validate.welcome([
+      $('#welcome__isra-meta--project-name').val(),
+      $('#welcome__isra-meta--organization').val(),
+      $('#welcome__isra-meta--project-version').val(),
+    ]);
+  };
+
+  const validateProjectContext = () => {
+    window.validate.projectContext([
+      tinymce.get('project-description__text').getContent(),
+      tinymce.get('project-objectives__text').getContent(),
+      tinymce.get('officer-objectives__text').getContent(),
+      tinymce.get('assumptions__text').getContent(),
+    ]);
+  };
+
+  const validateBusinessAsset = () => {
+    const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
+    checkboxIds.forEach((id) => {
+      const tableData = Tabulator.findTable(`#business-assets__section__table__${id.value}`)[0].getData()[0];
+      tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
+      window.validate.businessAssets(tableData);
+    });
+  };
+
+  const validateSupportingAsset = () => {
+    const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
+    const desc = tinymce.get('product-architecture-diagram__text').getContent();
+    window.validate.supportingAssets(tableData, desc);
+  };
+
   switch (tab) {
     case 'welcome':
       validateWelcome();
@@ -102,9 +96,10 @@ const getTabJSON = (tab) => {
 };
 
 window.validate.allTabs((event, filePath) => {
-  validateWelcome();
-  validateProjectContext();
-  validateBusinessAsset();
+  getTabJSON('welcome');
+  getTabJSON('project-context');
+  getTabJSON('business-assets');
+  getTabJSON('supporting-assets');
   event.sender.send('validate:allTabs', filePath);
 });
 
