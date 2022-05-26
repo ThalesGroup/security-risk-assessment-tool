@@ -25,9 +25,57 @@
 const jsonSchema = require('../../../../lib/src/model/schema/json-schema').properties.SupportingAsset;
 
 const supportingAssetJsonSchema = jsonSchema.items.properties;
+const supportingAssetDescJsonSchema = require('../../../../lib/src/model/schema/json-schema').properties.SupportingAssetsDesc;
 
 const renderSupportingAssets = () => {
-  const html = '';
+  const html = `
+          <p class="heading">Supporting Assets</p>
+
+          <div class=section id="product-architecture-diagram">
+            <p class="subheading">${supportingAssetDescJsonSchema.title}</p>
+            <p class="summary">${supportingAssetDescJsonSchema.description.split('.')[0]}.</p>
+            <p class="summary">${supportingAssetDescJsonSchema.description.split('.')[1]}.${supportingAssetDescJsonSchema.description.split('.')[2]}.</p>
+            <div class="btn btn-primary tooltip">
+              <textarea class="rich-text" id="product-architecture-diagram__text" name="product-architecture-diagram__text"></textarea>
+                <div class="top">
+                  <p>Add your formatted rich text and your pictures.</p>
+                  <i></i>
+                </div>
+            </div>
+          </div>
+
+          <div class=section id="supporting-assets__section">
+            <p class="subheading">${jsonSchema.title}</p>
+            <p class="summary">${jsonSchema.description.split('.')[0]}.</p>
+            <p class="summary">${jsonSchema.description.split('.')[1]}.</p>
+
+            <div class="add-delete-container">
+              <button class="addDelete" id="supporting-assets__section--add">Add</button> | <button  class="addDelete" id="supporting-assets__section--delete">Delete</button>
+            </div>
+            <div class="table">
+              <div class="checkbox" id="supporting-assets__section-checkboxes"></div>
+              <div id="supporting-assets__section-table"></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <p class="subheading">${supportingAssetJsonSchema.businessAssetRef.title.split('.')[0]}</p>
+            <p class="subheading" style="font-weight: bold">${supportingAssetJsonSchema.businessAssetRef.title.split('.')[1]}</p>
+            <p class="summary">${supportingAssetJsonSchema.businessAssetRef.description}</p>
+
+            <table id="supporting-asset-business-assets__table">
+              <thead>
+                <tr>
+                    <th>Supporting Asset</th><th>Business Asset</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+            
+          <footer>
+            <p>THALES GROUP CONFIDENTIAL PROJECT</p>
+          </footer>`;
 
   const tableOptions = {
     layout: 'fitColumns',

@@ -27,6 +27,8 @@
 (async () => {
   try {
     const result = await window.render.supportingAssets();
+    $('#supporting-assets').append(result[0]);
+
     const matrixTable = '#supporting-asset-business-assets__table';
     let selectOptions = {};
 
