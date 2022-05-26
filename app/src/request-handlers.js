@@ -301,7 +301,9 @@ ipcMain.on('validate:projectContext', (event, arr) => {
 
 // Business Assets Tab
 
-const { addBusinessAsset, deleteBusinessAsset, validateBusinessAsset } = require('../../lib/src/model/classes/BusinessAsset/handler-event');
+const {
+  addBusinessAsset, deleteBusinessAsset, validateBusinessAsset, updateBusinessAsset,
+} = require('../../lib/src/model/classes/BusinessAsset/handler-event');
 const { renderBusinessAssets } = require('./tabs/Business Assets/render-business-assets');
 
 ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
@@ -309,21 +311,24 @@ ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israPro
 ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
   deleteBusinessAsset(israProject, ids, getMainWindow());
 });
+ipcMain.on('businessAssets:updateBusinessAsset', (event, id, field, value) => {
+  updateBusinessAsset(israProject, getMainWindow(), id, field, value);
+});
 ipcMain.on('validate:businessAssets', (event, arr) => {
   validateBusinessAsset(israProject, arr);
 });
-ipcMain.on('businessAssets:updateOtherTabs', (event, label, value) => {
-  getMainWindow().webContents.send('supportingAssets:getBusinessAssets', label, value);
-});
 
 // Supporting Assets Tab
-const { addSupportingAsset, deleteSupportingAsset } = require('../../lib/src/model/classes/SupportingAsset/handler-event');
+const { addSupportingAsset, deleteSupportingAsset, updateSupportingAsset } = require('../../lib/src/model/classes/SupportingAsset/handler-event');
 const { renderSupportingAssets } = require('./tabs/Supporting Assets/render-supporting-assets');
 
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
 ipcMain.handle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
 ipcMain.on('supportingAssets:deleteSupportingAsset', (event, ids) => {
   deleteSupportingAsset(israProject, ids);
+});
+ipcMain.on('supportingAssets:updateSupportingAsset', (event, id, field, value) => {
+  updateSupportingAsset(israProject, getMainWindow(), id, field, value);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {

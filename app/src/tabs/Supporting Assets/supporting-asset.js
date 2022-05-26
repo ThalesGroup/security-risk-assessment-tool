@@ -28,30 +28,69 @@
   try {
     const result = await window.render.supportingAssets();
     const matrixTable = '#supporting-asset-business-assets__table';
+    let selectOptions = {};
+
+    const updateSupportingAsset = (id, field, value) => {
+      window.supportingAssets.updateSupportingAsset(id, field, value);
+      if (field === 'businessAssetRef') {
+        if ((value.length === 0 && $(`${matrixTable}-${id} select`).length)
+        || value.length !== new Set(value).size) {
+          $(`${matrixTable}-${id} td`).first().css('color', 'red');
+        } else {
+          $(`${matrixTable}-${id} td`).first().css('color', 'black');
+        }
+      }
+    };
 
     // cell edited callback function
     result[1].columns[2].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
+      updateSupportingAsset(id, cell.getField(), cell.getValue());
       $(`${matrixTable}-${id} td`).first().html(cell.getValue());
     };
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
-    let selectOptions = {};
-
     const addBusinessAsset = (id, ref) => {
       const matrixRow = $(`${matrixTable}-${id} td:nth-child(2)`);
-      let options = '';
+
+      const newDiv = document.createElement('div');
+      const newInput = document.createElement('input');
+      const newSelect = document.createElement('select');
+      newInput.setAttribute('type', 'checkbox');
+
       Object.entries(selectOptions).forEach(([value, label]) => {
-        if (Number(ref) === Number(value)) options += `<option value="${value}" selected>${label}</option>`;
-        else options += `<option value="${value}">${label}</option>`;
+        const newOption = document.createElement('option');
+        newOption.text = label;
+        newOption.value = value;
+        newSelect.add(newOption);
       });
 
-      const input = `
-        <div>
-          <input type="checkbox"></input>
-          <select>${options}</select>
-        </div>`;
-      matrixRow.append(input);
+      // keep track of prev selected option for each select element
+      const prevOption = () => {
+        $(newSelect).data('prevOption', $(newSelect).val());
+      };
+      if (ref) newSelect.value = ref;
+      prevOption();
+
+      // change in selected option due to user input
+      $(newSelect).on('change', () => {
+        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
+        prevOption();
+        updateSupportingAsset(id, 'businessAssetRef', selected);
+      });
+
+      // possible change in selected option due to add/delete BusinessAssets
+      $(newSelect).on('check:options', () => {
+        const currentOption = $(newSelect).val();
+        if (currentOption !== $(newSelect).data('prevOption')) {
+          $(newSelect).trigger('change');
+          prevOption();
+        }
+      });
+
+      newDiv.appendChild(newInput);
+      newDiv.appendChild(newSelect);
+      matrixRow.append(newDiv);
     };
 
     const addMatrixRow = (id, name) => {
@@ -69,11 +108,15 @@
       // add business asset ref
       $(`${matrixTable}-${id} button`).first().on('click', () => {
         addBusinessAsset(id);
+        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
+        updateSupportingAsset(id, 'businessAssetRef', selected);
       });
 
       // delete business asset ref
       $(`${matrixTable}-${id} button:nth-child(2)`).on('click', () => {
-        console.log('Delete business asset!');
+        $(`${matrixTable}-${id} input:checked`).parent().remove();
+        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
+        updateSupportingAsset(id, 'businessAssetRef', selected);
       });
     };
 
@@ -87,6 +130,7 @@
         checkbox.id = `supporting-assets__section-checkbox${id}`;
         checkbox.name = 'supporting-assets__section-checkbox';
         $('#supporting-assets__section-checkboxes').append(checkbox);
+
         addMatrixRow(id, asset.supportingAssetName);
         asset.businessAssetRef.forEach((ref) => {
           addBusinessAsset(id, ref);
@@ -155,23 +199,23 @@
       deleteSupportingAsset(checkboxes);
     });
 
-    window.supportingAssets.getBusinessAssets((e, label, value) => {
+    window.supportingAssets.getBusinessAssets((event, label, value) => {
       const options = $(`${matrixTable} option[value=${value}]`);
-      if (options.length) {
-        // option exists
-        if (label === null) {
-          // delete option
-          $(`${matrixTable} option[value=${value}]`).remove();
-          delete selectOptions[value];
-        } else {
-          // update label
-          options.text(label);
-          selectOptions[value] = label;
-        }
+
+      if (label === null) {
+        // delete option
+        $(`${matrixTable} option[value=${value}]`).remove();
+        delete selectOptions[value];
+        $(`${matrixTable} select`).trigger('check:options');
+      } else if (options.length) {
+        // update label
+        options.text(label);
+        selectOptions[value] = label;
       } else {
         // add option
-        $(`${matrixTable} select`).append(`<option value="${value}">${label}</option>`);
+        $(`${matrixTable} select`).append(new Option(label, value));
         selectOptions[value] = label;
+        $(`${matrixTable} select`).trigger('check:options');
       }
     });
   } catch (err) {

@@ -29,12 +29,26 @@
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
+    // update businessAssets & risk
     const updateOtherTabs = (tableOptions) => {
       const options = tableOptions;
-      options.columns[0].cellEdited = (cell) => {
+
+      const update = (cell) => {
         const rowId = cell.getRow().getData().businessAssetId;
-        window.businessAssets.updateOtherTabs(cell.getValue(), rowId);
+        window.businessAssets.updateBusinessAsset(rowId, cell.getField(), cell.getValue());
       };
+
+      // name
+      options.columns[0].cellEdited = (cell) => {
+        update(cell);
+      };
+      // asset values
+      options.columns[1].columns.forEach((column) => {
+        const c = column;
+        c.cellEdited = (cell) => {
+          update(cell);
+        };
+      });
     };
 
     const addTableData = (businessAssetsTable, asset) => {

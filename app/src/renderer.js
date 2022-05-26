@@ -74,7 +74,7 @@ const validateBusinessAsset = () => {
 };
 
 const validateSupportingAsset = () => {
-  const tableData = Tabulator.findTable('#supporting-assets__section__table')[0].getData()[0];
+  const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
   const desc = tinymce.get('product-architecture-diagram__text').getContent();
 };
 
@@ -93,9 +93,9 @@ const getTabJSON = (tab) => {
     case 'business-assets':
       validateBusinessAsset();
       break;
-    // case 'supporting-assets':
-    //   validateSupportingAsset();
-    //   break;
+    case 'supporting-assets':
+      validateSupportingAsset();
+      break;
     default:
       break;
   }
