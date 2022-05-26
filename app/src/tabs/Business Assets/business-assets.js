@@ -73,6 +73,8 @@
         selector: `#business-assets__section-text-${id}`,
         height: 200,
         min_height: 200,
+        plugins: 'link lists',
+        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
 
         setup: (editor) => {
           editor.on('init', () => {

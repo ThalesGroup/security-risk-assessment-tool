@@ -97,6 +97,8 @@
         selector: '.rich-text',
         height: 300,
         min_height: 300,
+        plugins: 'link lists',
+        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
       });
       updateProjectContextFields(await JSON.parse(data).ProjectContext);
     });

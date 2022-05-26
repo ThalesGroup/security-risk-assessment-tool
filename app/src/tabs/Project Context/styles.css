@@ -42,3 +42,10 @@
 #project-description__url--hyperlink{
     font-size: small;
 }
+
+#assumptions > p:nth-child(2),
+#officer-objectives > p:nth-child(2),
+#project-objectives > p:nth-child(2),
+#project-description > p:nth-child(2){
+    text-align: left;
+}
