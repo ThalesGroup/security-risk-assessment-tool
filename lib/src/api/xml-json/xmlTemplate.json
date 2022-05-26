@@ -22,33 +22,17 @@
                 "projectVersion": [
                     ""
                 ],
-                "ISRAtracking": [
-                    {
-                        "trackingIteration": [
-                            "1"
-                        ],
-                        "trackingSecurityOfficer": [
-                            "t0263774"
-                        ],
-                        "trackingDate": [
-                            "2022-03-28"
-                        ],
-                        "trackingComment": [
-                            ""
-                        ]
-                    }
-                ],
                 "businessAssetsCount": [
-                    "2"
+                    "3"
                 ],
                 "supportingAssetsCount": [
-                    "2"
+                    "6"
                 ],
                 "risksCount": [
-                    "2"
+                    "8"
                 ],
                 "vulnerabilitiesCount": [
-                    "2"
+                    "7"
                 ]
             }
         ],
@@ -101,40 +85,6 @@
                 ]
             }
         ],
-        "BusinessAsset": [
-            {
-                "businessAssetId": [
-                    "1"
-                ],
-                "businessAssetName": [
-                    ""
-                ],
-                "businessAssetType": [
-                    "Data"
-                ],
-                "businessAssetDescription": [
-                    ""
-                ],
-                "businessAssetConfidentiality": [
-                    "3"
-                ],
-                "businessAssetIntegrity": [
-                    "3"
-                ],
-                "businessAssetAvailability": [
-                    "3"
-                ],
-                "businessAssetAuthenticity": [
-                    "3"
-                ],
-                "businessAssetAuthorization": [
-                    "3"
-                ],
-                "businessAssetNonRepudiation": [
-                    "3"
-                ]
-            }
-        ],
         "SupportingAssetsDesc": [
             {
                 "supportingAssetDiagram": [
@@ -142,18 +92,64 @@
                 ]
             }
         ],
-        "SupportingAsset": [
+        "Filter": [
             {
-                "supportingAssetId": [
-                    "1"
-                ],
-                "supportingAssetHLDId": [
+                "riskFilter": [
                     ""
                 ],
-                "supportingAssetName": [
+                "vulnerabilityFilter": [
                     ""
-                ],
-                "supportingAssetType": [
+                ]
+            }
+        ],
+        "group": [
+            {
+                "BDCAssociatedEntity": [
+                    {
+                        "$": {
+                            "EntityNamespace": "",
+                            "EntityName": "",
+                            "SystemInstanceName": "",
+                            "AssociationName": ""
+                        },
+                        "BDCEntity": [
+                            {
+                                "EntityDisplayName": [
+                                    ""
+                                ],
+                                "EntityInstanceReference": [
+                                    ""
+                                ],
+                                "EntityId1": [
+                                    ""
+                                ],
+                                "EntityId2": [
+                                    ""
+                                ],
+                                "EntityId3": [
+                                    ""
+                                ],
+                                "EntityId4": [
+                                    ""
+                                ],
+                                "EntityId5": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "signatures3": [
+            {
+                "signatures4": [
+                    ""
+                ]
+            }
+        ]
+    }
+}            "supportingAssetType": [
                     ""
                 ],
                 "supportingAssetSecurityLevel": [
