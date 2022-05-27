@@ -234,12 +234,14 @@ ipcMain.handle('projectContext:urlPrompt', async () => {
   return url;
 });
 
+let projectContextFileName = '';
 const attachmentOptions = () => {
   const attachLabel = {
     label: 'Attach',
     click: () => {
       try {
         const [fileName, base64data] = attachFile();
+        projectContextFileName = fileName;
         israProject.israProjectContext.projectDescriptionAttachment = base64data;
         getMainWindow().webContents.send('projectContext:fileName', fileName);
       } catch (err) {
@@ -256,12 +258,16 @@ const attachmentOptions = () => {
       attachLabel,
       {
         label: 'Save as',
-        click: () => saveAsFile(israProject.israProjectContext.projectDescriptionAttachment),
+        click: () => saveAsFile(
+          israProject.israProjectContext.projectDescriptionAttachment,
+          projectContextFileName,
+        ),
       },
       {
         label: 'Remove',
         click: () => {
           const [fileName, base64data] = removeFile();
+          projectContextFileName = fileName;
           israProject.israProjectContext.projectDescriptionAttachment = base64data;
           getMainWindow().webContents.send('projectContext:fileName', fileName);
         },
@@ -280,14 +286,10 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
   try {
-    const fileName = decodeFile(base64);
+    const [fileName, base64data] = decodeFile(base64);
+    projectContextFileName = fileName;
+    israProject.israProjectContext.projectDescriptionAttachment = base64data;
     return fileName;
-
-    // israProject.israProjectContext.projectDescriptionAttachment = base64;
-    // const buffer = Buffer.from(base64, 'base64');
-    // const content = buffer.toString();
-    // console.log(content);
-    // return 'JSON file opened';
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });

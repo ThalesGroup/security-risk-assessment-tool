@@ -67,8 +67,10 @@
     });
 
     const projectDescriptiveAttachment = async (value) => {
-      const attachmentResult = await window.projectContext.decodeAttachment(value);
-      $('#project-description__file--insert').text(attachmentResult);
+      if (value !== '') {
+        const attachmentResult = await window.projectContext.decodeAttachment(value);
+        $('#project-description__file--insert').text(attachmentResult);
+      }
     };
 
     const projectObjectives = (value) => {
