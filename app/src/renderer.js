@@ -38,9 +38,10 @@ window.project.load(async (event, data) => {
 
 /**
  * Validate previous active tab in backend and populate corresponding class
+ * Validates fields with no dynamic computation on current page/other pages
  * @param {String} tab name of previous active tab
  */
-const getTabJSON = (tab) => {
+const validateTabs = (tab) => {
   const validateWelcome = () => {
     Tabulator.findTable('#welcome__isra-meta-tracking-table')[0].getRows().forEach((row) => {
       window.welcome.updateTrackingRow(row.getData());
@@ -51,6 +52,8 @@ const getTabJSON = (tab) => {
       $('#welcome__isra-meta--organization').val(),
       $('#welcome__isra-meta--project-version').val(),
     ]);
+
+    return document.getElementById('welcome__isra-meta--organization').checkValidity();
   };
 
   const validateProjectContext = () => {
@@ -96,10 +99,10 @@ const getTabJSON = (tab) => {
 };
 
 window.validate.allTabs((event, filePath) => {
-  getTabJSON('welcome');
-  getTabJSON('project-context');
-  getTabJSON('business-assets');
-  getTabJSON('supporting-assets');
+  validateTabs('welcome');
+  validateTabs('project-context');
+  validateTabs('business-assets');
+  validateTabs('supporting-assets');
   event.sender.send('validate:allTabs', filePath);
 });
 
@@ -122,7 +125,7 @@ tabs.onclick = (e) => {
     const element = document.getElementById(id);
     element.classList.add('active');
 
-    getTabJSON(previousActiveTab);
+    validateTabs(previousActiveTab);
   }
 };
 

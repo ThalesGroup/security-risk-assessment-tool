@@ -36,4 +36,13 @@
     text-align: right;
 }
 
+#welcome__isra-meta-info div{
+    padding:0px 20px;
+    border: 1px solid black;
+    font-size: 14px;
+}
+
+#welcome__isra-meta-info span{
+    font-weight: bold;
+}
 

@@ -26,6 +26,7 @@ const {
   dialog, ipcMain, Menu, BrowserWindow,
   // nativeTheme,
 } = require('electron');
+const fs = require('fs');
 
 const {
   DataStore,
@@ -67,7 +68,6 @@ const newISRAProject = (win, app) => {
 };
 
 /**
- * @module saveAs
   * save as new project in selected directory (save as)
 */
 const saveAs = async () => {
@@ -241,9 +241,11 @@ const attachmentOptions = () => {
     click: () => {
       try {
         const [fileName, base64data] = attachFile();
-        projectContextFileName = fileName;
-        israProject.israProjectContext.projectDescriptionAttachment = base64data;
-        getMainWindow().webContents.send('projectContext:fileName', fileName);
+        if (fileName !== '') {
+          projectContextFileName = fileName;
+          israProject.israProjectContext.projectDescriptionAttachment = base64data;
+          getMainWindow().webContents.send('projectContext:fileName', fileName);
+        }
       } catch (err) {
         console.log(err);
         dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
