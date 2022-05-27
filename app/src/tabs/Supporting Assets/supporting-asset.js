@@ -156,6 +156,7 @@
     };
 
     const supportingAssetsDesc = (desc) => {
+      // initialised in project-context.js
       tinymce.get('product-architecture-diagram__text').setContent(desc);
     };
 

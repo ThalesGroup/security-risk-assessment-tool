@@ -33,19 +33,21 @@
     };
 
     const projectURL = (value) => {
+      const hyperlink = $('#project-description__url--hyperlink');
+      const insert = $('#project-description__url--insert');
+
       if (value !== '' && value !== 'cancelled') {
-        $('#project-description__url--hyperlink').show();
-        $('#project-description__url--insert').hide();
-        $('#project-description__url--hyperlink').attr('href', value);
-        $('#project-description__url--hyperlink').text(value);
+        hyperlink.show();
+        insert.hide();
+        hyperlink.attr('href', value);
+        hyperlink.text(value);
       } else if (value === '') {
-        $('#project-description__url--insert').show();
-        $('#project-description__url--hyperlink').hide();
+        insert.show();
+        hyperlink.hide();
       }
     };
 
-    $('#project-description__url--hyperlink').on('click', (e) => {
-      e.preventDefault();
+    $('#project-description__url--hyperlink').on('click', () => {
       window.projectContext.openURL($('#project-description__url--hyperlink').attr('href'), navigator.onLine);
     });
 
@@ -67,10 +69,8 @@
     });
 
     const projectDescriptiveAttachment = async (value) => {
-      if (value !== '') {
-        const attachmentResult = await window.projectContext.decodeAttachment(value);
-        $('#project-description__file--insert').text(attachmentResult);
-      }
+      const attachmentResult = await window.projectContext.decodeAttachment(value);
+      $('#project-description__file--insert').text(attachmentResult);
     };
 
     const projectObjectives = (value) => {
@@ -99,6 +99,8 @@
         selector: '.rich-text',
         height: 300,
         min_height: 300,
+        verify_html: true,
+        statusbar: false,
         plugins: 'link lists',
         toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
       });
