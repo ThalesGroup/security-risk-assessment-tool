@@ -37,9 +37,9 @@ window.project.load(async (event, data) => {
 });
 
 /**
- * Validate previous active tab in backend and populate corresponding class
+ * Validate selected tab in backend and populate data to corresponding class
  * Validates fields with no dynamic computation on current page/other pages
- * @param {String} tab name of previous active tab
+ * @param {String} tab name of selected tab
  */
 const validateTabs = (tab) => {
   const validateWelcome = () => {
@@ -66,7 +66,7 @@ const validateTabs = (tab) => {
   const validateBusinessAsset = () => {
     const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
     checkboxIds.forEach((id) => {
-      const tableData = Tabulator.findTable(`#business-assets__section__table__${id.value}`)[0].getData()[0];
+      const tableData = Tabulator.findTable(`#business-assets__section-table__${id.value}`)[0].getData()[0];
       tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
       window.validate.businessAssets(tableData);
     });

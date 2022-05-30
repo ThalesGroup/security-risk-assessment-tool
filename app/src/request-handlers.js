@@ -153,6 +153,7 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
 
 /**
   * check for validation errors in dom (save/save as)
+  * @param {string} label keeps track if either 'Save' or 'Save As' menu item is selected
 */
 const validationErrors = (label) => {
   labelSelected = label;
@@ -282,33 +283,31 @@ ipcMain.on('validate:welcome', (event, arr) => {
 
 // Project Context Tab
 const {
+  urlPrompt,
+  openUrl,
   attachFile,
   removeFile,
   saveAsFile,
   decodeFile,
-  urlPrompt,
   validateProjectContext,
 } = require('../../lib/src/model/classes/ISRAProjectContext/handler-event');
 const { renderProjectContext } = require('./tabs/Project Context/render-project-context');
 
+/**
+  * projectContextFileName: holds name of project descriptive document
+*/
+let projectContextFileName;
+
 ipcMain.handle('render:projectContext', () => renderProjectContext());
 ipcMain.on('projectContext:openURL', (event, url, userStatus) => {
-  if (userStatus) {
-    const win = new BrowserWindow({
-      width: 800,
-      height: 600,
-    });
-    win.loadURL(url);
-  } else dialog.showMessageBoxSync(null, { message: 'You are offline' });
+  openUrl(url, userStatus);
 });
-
 ipcMain.handle('projectContext:urlPrompt', async () => {
   const url = await urlPrompt();
   if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
   return url;
 });
 
-let projectContextFileName = '';
 const attachmentOptions = () => {
   const attachLabel = {
     label: 'Attach',

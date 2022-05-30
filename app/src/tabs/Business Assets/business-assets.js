@@ -101,12 +101,12 @@
       section.append(checkbox);
 
       // add table
-      section.append(`<div id="business-assets__section__table__${id}"></div>`);
+      section.append(`<div id="business-assets__section-table__${id}"></div>`);
       // custom title
       result[1].columns[0].title = `${id} Name`;
       // cell edited callback function
       const options = JSON.parse(JSON.stringify(result[1]));
-      const businessAssetsTable = new Tabulator(`#business-assets__section__table__${id}`, options);
+      const businessAssetsTable = new Tabulator(`#business-assets__section-table__${id}`, options);
       addTableData(businessAssetsTable, asset);
       updateOtherTabs(options);
 
