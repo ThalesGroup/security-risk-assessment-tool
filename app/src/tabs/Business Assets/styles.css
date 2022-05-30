@@ -27,8 +27,12 @@
     font-weight:bold
 }
 
-/* #business-assets__sections > div{
-    margin-bottom: 10px;
-    background-color: rgb(185, 185, 185);
-    padding: 10px;
-} */
+#business-assets > div:first-of-type{
+    padding:10px 20px;
+    font-size: 14px;
+    background-color: white;
+}
+
+#business-assets span{
+    font-weight: bold;
+}
