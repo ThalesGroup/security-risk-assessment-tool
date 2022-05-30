@@ -26,7 +26,6 @@ const {
   dialog, ipcMain, Menu, BrowserWindow,
   // nativeTheme,
 } = require('electron');
-const fs = require('fs');
 
 const {
   DataStore,
@@ -37,8 +36,14 @@ const {
 
 const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-project');
 
+/**
+  * israProject: holds current class for project
+  * jsonFilePath: tracks if file opened is json file type (save/saveAs)
+  * labelSelected: tracks if 'Save' or 'Save As' menu item is selected
+*/
 let israProject;
 let jsonFilePath = '';
+let labelSelected;
 
 /**
   * every time you want the main window, call this function.
@@ -90,18 +95,22 @@ const saveAs = async () => {
 /**
   * override data in existing json file (save)
 */
-const save = async () => {
+const save = () => {
   getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
 };
 
 /**
-  * Save current project (save/save as)
+  * save current project (save/save as)
 */
-const saveProject = async () => {
+const saveProject = () => {
   if (jsonFilePath !== '') save();
   else saveAs();
 };
 
+/**
+  * save as new project in selected directory (save as)
+  * override data in existing json file (save)
+*/
 ipcMain.on('validate:allTabs', async (event, filePath) => {
   if (jsonFilePath === '') {
     try {
@@ -121,6 +130,35 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
     }
+  }
+});
+
+/**
+  * check for validation errors in dom (save/save as)
+*/
+const validationErrors = (label) => {
+  labelSelected = label;
+  getMainWindow().webContents.send('project:validationErrors');
+};
+
+/** After checking for validation errors in dom,
+  * prompt validation error dialog if needed (save/save as)
+*/
+ipcMain.on('project:validationErrors', (event, state) => {
+  const saveOrSaveAs = () => {
+    if (labelSelected === 'Save As') saveAs();
+    else if (labelSelected === 'Save') saveProject();
+  };
+
+  if (state) saveOrSaveAs();
+  else {
+    const result = dialog.showMessageBoxSync(null, {
+      type: 'warning',
+      message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
+      title: 'Validation Errors',
+      buttons: ['Yes', 'No'], // Yes returns 0, No returns 1
+    });
+    if (result === 0) saveOrSaveAs();
   }
 });
 
@@ -181,8 +219,7 @@ const loadFile = (win) => {
 };
 
 module.exports = {
-  saveAs,
-  saveProject,
+  validationErrors,
   loadFile,
   newISRAProject,
 };

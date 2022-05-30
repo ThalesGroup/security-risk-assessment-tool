@@ -52,8 +52,6 @@ const validateTabs = (tab) => {
       $('#welcome__isra-meta--organization').val(),
       $('#welcome__isra-meta--project-version').val(),
     ]);
-
-    return document.getElementById('welcome__isra-meta--organization').checkValidity();
   };
 
   const validateProjectContext = () => {
@@ -98,12 +96,25 @@ const validateTabs = (tab) => {
   }
 };
 
+/**
+ * get & validate all data on tabs
+ */
 window.validate.allTabs((event, filePath) => {
   validateTabs('welcome');
   validateTabs('project-context');
   validateTabs('business-assets');
   validateTabs('supporting-assets');
   event.sender.send('validate:allTabs', filePath);
+});
+
+/**
+ * validate for errors in each tab
+ */
+window.project.validationErrors((event) => {
+  const state = document.getElementById('welcome__isra-meta--organization').checkValidity()
+    && $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)';
+
+  event.sender.send('project:validationErrors', state);
 });
 
 /**

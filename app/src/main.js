@@ -27,8 +27,7 @@ const {
 } = require('electron');
 const path = require('path');
 const {
-  saveAs,
-  saveProject,
+  validationErrors,
   loadFile,
   newISRAProject,
 } = require('./request-handlers');
@@ -48,23 +47,28 @@ function createWindow() {
 
   win.maximize();
   win.loadFile(path.join(__dirname, 'index.html'));
+
+  // send data to populate into dom fields
   win.webContents.on('dom-ready', () => {
     newISRAProject(win, app);
   });
+
+  // save current window at runtime
   process.env.MAIN_WINDOW_ID = win.id;
 
+  // header menu
   const mainMenuTemplate = [
     {
       label: 'File',
       submenu: [
         {
           label: 'Save',
-          click: () => saveProject(),
+          click: () => validationErrors('Save'),
           accelerator: 'CmdOrCtrl+S',
         },
         {
           label: 'Save As',
-          click: () => saveAs(),
+          click: () => validationErrors('Save As'),
         },
         {
           label: 'Open File',
@@ -86,6 +90,8 @@ function createWindow() {
         { role: 'paste' },
       ],
     },
+
+    // for development
     {
       label: 'Window',
       submenu: [
