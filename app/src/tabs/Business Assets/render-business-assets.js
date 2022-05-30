@@ -49,9 +49,7 @@ const renderBusinessAssets = () => {
     <button class="addDelete" id="business-assets__section--add">Add</button> | <button  class="addDelete" id="business-assets__section--delete">Delete</button>
   </div>
   <div id="business-assets__sections"></div>
-  <footer>
-    <p>THALES GROUP CONFIDENTIAL PROJECT</p>
-  </footer>`;
+  <footer></footer>`;
 
   const dropDownOptions = businessAssetPropertiesSchema.businessAssetConfidentiality.anyOf;
   const formatValues = {};

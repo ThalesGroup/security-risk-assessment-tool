@@ -218,9 +218,7 @@ const renderWelcome = () => {
     </div>
 
   </div>
-  <footer>
-    <p>THALES GROUP CONFIDENTIAL PROJECT</p>
-  </footer>`;
+  <footer></footer>`;
 
   const ISRATrackingSchema = ISRAmetaSchema.ISRAtracking.items.properties;
   const tableOptions = {

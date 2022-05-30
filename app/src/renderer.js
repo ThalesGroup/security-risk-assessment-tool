@@ -114,6 +114,7 @@ window.project.validationErrors((event) => {
   const state = document.getElementById('welcome__isra-meta--organization').checkValidity()
     && $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)';
 
+  // return boolean
   event.sender.send('project:validationErrors', state);
 });
 

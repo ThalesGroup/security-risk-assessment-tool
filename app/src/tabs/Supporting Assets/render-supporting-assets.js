@@ -73,9 +73,7 @@ const renderSupportingAssets = () => {
             </table>
           </div>
             
-          <footer>
-            <p>THALES GROUP CONFIDENTIAL PROJECT</p>
-          </footer>`;
+          <footer></footer>`;
 
   const tableOptions = {
     layout: 'fitColumns',

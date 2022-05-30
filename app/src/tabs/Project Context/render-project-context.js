@@ -91,9 +91,7 @@ const renderProjectContext = () => {
     </div>
   </div>
   
-  <footer>
-      <p>THALES GROUP CONFIDENTIAL PROJECT</p>
-  </footer>`;
+  <footer></footer>`;
 
   return [html];
 };

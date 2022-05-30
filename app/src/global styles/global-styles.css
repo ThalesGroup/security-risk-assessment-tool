@@ -23,10 +23,14 @@
 */
 
 footer{
+    text-align: center;
+}
+
+footer::before{
+    content: "THALES GROUP CONFIDENTIAL PROJECT";
     font-weight: 300;
     font-size: 16px;
     color: red;
-    text-align: center;
 }
 
 .heading {
@@ -78,6 +82,10 @@ select option {
 
 .url:valid {
     border: 1px solid black;
+}
+
+.add-delete-container{
+    text-align: right;
 }
 
 .addDelete{

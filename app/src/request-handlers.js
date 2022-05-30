@@ -38,12 +38,8 @@ const ISRAProject = require('../../lib/src/model/classes/ISRAProject/isra-projec
 
 /**
   * israProject: holds current class for project
-  * jsonFilePath: tracks if file opened is json file type (save/saveAs)
-  * labelSelected: tracks if 'Save' or 'Save As' menu item is selected
 */
 let israProject;
-let jsonFilePath = '';
-let labelSelected;
 
 /**
   * every time you want the main window, call this function.
@@ -52,8 +48,6 @@ const getMainWindow = () => {
   const ID = process.env.MAIN_WINDOW_ID * 1;
   return BrowserWindow.fromId(ID);
 };
-
-// Header
 
 /**
   * Create new project
@@ -71,6 +65,29 @@ const newISRAProject = (win, app) => {
     app.quit();
   }
 };
+
+/**
+  *
+  *
+  *
+  *
+  *
+  * MENU ITEMS EVENT HANDLERS
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+*/
+
+/**
+  * jsonFilePath: tracks if file opened is json file type (save/saveAs)
+  * labelSelected: tracks if 'Save' or 'Save As' menu item is selected
+*/
+let jsonFilePath = '';
+let labelSelected;
 
 /**
   * save as new project in selected directory (save as)
@@ -108,11 +125,11 @@ const saveProject = () => {
 };
 
 /**
-  * save as new project in selected directory (save as)
-  * override data in existing json file (save)
+  *  @param {string} filePath path of current file
 */
 ipcMain.on('validate:allTabs', async (event, filePath) => {
   if (jsonFilePath === '') {
+    // save as new project in selected directory (save as)
     try {
       await DataStore(israProject, filePath);
       jsonFilePath = filePath;
@@ -123,6 +140,7 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
       dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
     }
   } else {
+    // override data in existing json file (save)
     try {
       await DataStore(israProject, jsonFilePath);
       dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
@@ -143,6 +161,7 @@ const validationErrors = (label) => {
 
 /** After checking for validation errors in dom,
   * prompt validation error dialog if needed (save/save as)
+  *  @param {boolean} state checks if dom is valid or invalid
 */
 ipcMain.on('project:validationErrors', (event, state) => {
   const saveOrSaveAs = () => {
@@ -176,7 +195,7 @@ const loadJSONFile = async (win, filePath) => {
     getMainWindow().title = filePath;
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(null, { message: 'Invalid JSON File' });
+    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
   }
 };
 
@@ -192,7 +211,7 @@ const loadXMLFile = (win, filePath) => {
     jsonFilePath = '';
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(null, { message: 'Invalid XML File' });
+    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
   }
 };
 
@@ -213,7 +232,9 @@ const loadFile = (win) => {
 
   if (filePathArr !== undefined) {
     const filePath = filePathArr[0];
-    if (filePath.split('.').pop() === 'json') loadJSONFile(win, filePath);
+    const fileType = filePath.split('.').pop();
+
+    if (fileType === 'json') loadJSONFile(win, filePath);
     else loadXMLFile(win, filePath);
   }
 };
@@ -223,6 +244,22 @@ module.exports = {
   loadFile,
   newISRAProject,
 };
+
+/**
+  *
+  *
+  *
+  *
+  *
+  * TAB EVENT HANDLERS
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+*/
 
 // Welcome Tab
 const {
@@ -255,8 +292,8 @@ const {
 const { renderProjectContext } = require('./tabs/Project Context/render-project-context');
 
 ipcMain.handle('render:projectContext', () => renderProjectContext());
-ipcMain.on('projectContext:openURL', (event, url, status) => {
-  if (status) {
+ipcMain.on('projectContext:openURL', (event, url, userStatus) => {
+  if (userStatus) {
     const win = new BrowserWindow({
       width: 800,
       height: 600,
@@ -285,14 +322,13 @@ const attachmentOptions = () => {
         }
       } catch (err) {
         console.log(err);
-        dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
+        dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
         getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
       }
     },
   };
 
-  if (israProject.israProjectContext.projectDescriptionAttachment !== ''
-  && israProject.israProjectContext.projectDescriptionAttachment !== undefined) {
+  if (israProject.israProjectContext.projectDescriptionAttachment !== '') {
     return [
       attachLabel,
       {
@@ -331,7 +367,7 @@ ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
     return fileName;
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(null, { message: 'Invalid Project Descriptive Document' });
+    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
     return 'Click here to attach a file';
   }
 });
@@ -341,7 +377,6 @@ ipcMain.on('validate:projectContext', (event, arr) => {
 });
 
 // Business Assets Tab
-
 const {
   addBusinessAsset, deleteBusinessAsset, validateBusinessAsset, updateBusinessAsset,
 } = require('../../lib/src/model/classes/BusinessAsset/handler-event');

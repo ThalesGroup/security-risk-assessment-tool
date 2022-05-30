@@ -47,7 +47,8 @@
       }
     };
 
-    $('#project-description__url--hyperlink').on('click', () => {
+    $('#project-description__url--hyperlink').on('click', (e) => {
+      e.preventDefault();
       window.projectContext.openURL($('#project-description__url--hyperlink').attr('href'), navigator.onLine);
     });
 
