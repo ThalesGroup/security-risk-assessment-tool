@@ -36,7 +36,7 @@ const renderWelcome = () => {
 
   const html = `
   <div class="details">
-    <p class="heading">${jsonSchema.title}</p>
+    <header>${jsonSchema.title}</header>
     <p id="details__app-version">${ISRAmetaSchema.appVersion.title}: ${ISRAmetaSchema.appVersion.default}</p>
   </div>
   <div id="welcome__isra-meta">
@@ -50,7 +50,7 @@ const renderWelcome = () => {
     </select>
   </div>
   <div id="welcome__isra-meta-tracking">
-    <p class="heading">${ISRAmetaSchema.ISRAtracking.title}</p>
+    <header>${ISRAmetaSchema.ISRAtracking.title}</header>
     <div class="add-delete-container">
       <button class="addDelete" id="welcome__isra-meta-tracking--add">Add</button> | <button  class="addDelete" id="welcome__isra-meta-tracking--delete">Delete</button>
     </div>
@@ -59,16 +59,16 @@ const renderWelcome = () => {
       <div id="welcome__isra-meta-tracking-table"></div>
     </div>
   </div>
-  <div id="welcome__isra-meta-info">
-    <p class="heading">Purpose and scope</p>
+  <article id="welcome__isra-meta-info">
+    <header>Purpose and scope</header>
     <p style="text-align: center; font-size: 16px;">The risk is a combination of 5 dimensions.<br>
     Computing the risk level is based on the evaluation of each dimension.<br>
     The 5 dimensions are the Business Assets, the Supporting Assets, the Vulnerabilities, the Threats, and the Threat Agent.
     </p>
     <img src="./asset/welcome_diagram.png">
 
-    <p class="heading">Terminology</p>
-    <div>
+    <header>Terminology</header>
+    <section>
         <p><span>Risk</span><br>
         The probable frequency and probable magnitude of future loss. ISO 27002 definition: Combination of the probability of an event and its consequence.
         </p>
@@ -92,10 +92,10 @@ const renderWelcome = () => {
         <p><span>Vulnerability</span><br>
         Vulnerability is any security breach or weakness (of a Supporting Asset), which can be exploited by a threat Agent (to compromise a Business Asset).
         </p>
-    </div>
+    </section>
 
-    <p class="heading">Methodology</p>
-    <div>
+    <header>Methodology</header>
+    <section>
       <p>The methodology is inspired by ISO 27005, STRIDE from Microsoft and CVSS (Common Vulnerability Scoring System).<br>
       The Security Risk Assessment is performed and owned by the Security Officer or Security Specialty Engineer with the help of Project Team and technical experts. 
       </p>
@@ -217,9 +217,9 @@ const renderWelcome = () => {
       <p><span>3. Use-case 3: Perform SRA of a Product in customer context (reassessment)</span>
         <p>Same as "Use-case 2".</p>
       </p>
-    </div>
+    </section>
 
-  </div>
+  </article>
   <footer></footer>`;
 
   const ISRATrackingSchema = ISRAmetaSchema.ISRAtracking.items.properties;

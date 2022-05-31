@@ -29,9 +29,9 @@ const supportingAssetDescJsonSchema = require('../../../../lib/src/model/schema/
 
 const renderSupportingAssets = () => {
   const html = `
-          <p class="heading">Supporting Assets</p>
+          <header>Supporting Assets</header>
 
-          <div class=section id="product-architecture-diagram">
+          <section id="product-architecture-diagram">
             <p class="subheading">${supportingAssetDescJsonSchema.title}</p>
             <p class="summary">${supportingAssetDescJsonSchema.description.split('.')[0]}.</p>
             <p class="summary">${supportingAssetDescJsonSchema.description.split('.')[1]}.${supportingAssetDescJsonSchema.description.split('.')[2]}.</p>
@@ -42,9 +42,9 @@ const renderSupportingAssets = () => {
                   <i></i>
                 </div>
             </div>
-          </div>
+          </section>
 
-          <div class=section id="supporting-assets__section">
+          <section id="supporting-assets__section">
             <p class="subheading">${jsonSchema.title}</p>
             <p class="summary">${jsonSchema.description.split('.')[0]}.</p>
             <p class="summary">${jsonSchema.description.split('.')[1]}.</p>
@@ -56,9 +56,9 @@ const renderSupportingAssets = () => {
               <div class="checkbox" id="supporting-assets__section-checkboxes"></div>
               <div id="supporting-assets__section-table"></div>
             </div>
-          </div>
+          </section>
 
-          <div class="section">
+          <section>
             <p class="subheading">${supportingAssetJsonSchema.businessAssetRef.title.split('.')[0]}</p>
             <p class="subheading" style="font-weight: bold">${supportingAssetJsonSchema.businessAssetRef.title.split('.')[1]}</p>
             <p class="summary">${supportingAssetJsonSchema.businessAssetRef.description}</p>
@@ -71,7 +71,7 @@ const renderSupportingAssets = () => {
               </thead>
               <tbody></tbody>
             </table>
-          </div>
+          </section>
             
           <footer></footer>`;
 

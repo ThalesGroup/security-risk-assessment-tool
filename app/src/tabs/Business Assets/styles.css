@@ -27,12 +27,13 @@
     font-weight:bold
 }
 
-#business-assets > div:first-of-type{
-    padding:10px 20px;
-    font-size: 14px;
+#business-assets span{
+    font-weight: bold;
+}
+#business-assets article{
     background-color: white;
 }
 
-#business-assets span{
-    font-weight: bold;
+#business-assets section{
+    background-color: rgb(199, 199, 199);
 }

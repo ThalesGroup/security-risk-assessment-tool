@@ -29,10 +29,10 @@ const businessAssetPropertiesSchema = businessAssetSchema.businessAssetPropertie
 
 const renderBusinessAssets = () => {
   const html = `
-  <p class="heading">Business Assets</p>
+  <header>Business Assets</header>
   <p class="subheading">${jsonSchema.title}</p>
   <p class="summary">${jsonSchema.description}</p>
-  <div>
+  <article>
     <p>Business Assets are anything that has economic value to the organization and that is central in the realization of its business objectives. They describe the information, services and resources essential to the business and its core mission.</p>
     <p>For example, business assets can be information (e.g. banking car number) or service (e.g. account management). </p>
     <p>Business assets have security properties that describe their security needs, which are, typically, expressed through confidentiality, integrity and availability of business assets. To match the threat classification schemas, the authenticity, authorization and non repudiation properties are also taken into account.</p>
@@ -44,7 +44,7 @@ const renderBusinessAssets = () => {
       <li><span>Authorization</span> is the property that assure that asset can be accessed only by entities with the right privileges</li>
       <li><span>Non repudiation</span> is the property that assure that authorized access to the asset cannot be denied (accountability / trace / evidence)</li>
     </ul>
-  </div>
+  </article>
   <div class="add-delete-container">
     <button class="addDelete" id="business-assets__section--add">Add</button> | <button  class="addDelete" id="business-assets__section--delete">Delete</button>
   </div>

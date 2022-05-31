@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+#supporting-assets section{
+    background-color: rgb(199, 199, 199);
+}
+
 #supporting-asset-business-assets__table > tbody > tr > td:nth-child(2) > div:nth-child(n+2){
     display:flex; 
     flex-direction:row;

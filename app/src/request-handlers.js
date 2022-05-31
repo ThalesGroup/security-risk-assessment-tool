@@ -360,10 +360,15 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
   try {
-    const [fileName, base64data] = decodeFile(base64);
-    projectContextFileName = fileName;
-    israProject.israProjectContext.projectDescriptionAttachment = base64data;
-    return fileName;
+    if (jsonFilePath === '') {
+      const [fileName, base64data] = decodeFile(base64);
+      projectContextFileName = fileName;
+      israProject.israProjectContext.projectDescriptionAttachment = base64data;
+      return fileName;
+    }
+    israProject.israProjectContext.projectDescriptionAttachment = base64;
+    projectContextFileName = 'file';
+    return 'file';
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
