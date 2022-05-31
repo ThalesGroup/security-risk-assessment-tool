@@ -366,6 +366,8 @@ ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
       israProject.israProjectContext.projectDescriptionAttachment = base64data;
       return fileName;
     }
+
+    // TO-DO
     israProject.israProjectContext.projectDescriptionAttachment = base64;
     projectContextFileName = 'file';
     return 'file';

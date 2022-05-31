@@ -44,3 +44,7 @@ If you are interested in contributing to the XXX project, start by reading the [
 
 The chosen license in accordance with legal department must be defined into an explicit [LICENSE](https://github.com/ThalesGroup/template-project/blob/master/LICENSE) file at the root of the repository
 You can also link this file in this README section.
+
+// run test
+// run app
+// npm modules

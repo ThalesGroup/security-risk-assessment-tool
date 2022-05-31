@@ -27,22 +27,22 @@
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
 
-    const addRisk = (risk) => {
-      const { riskName, riskMitigation } = risk;
-      risksTable.addData([riskName.riskName, ...riskMitigation]);
-    };
+    // const addRisk = (risk) => {
+    //   const { riskName, riskMitigation } = risk;
+    //   risksTable.addData([riskName.riskName, ...riskMitigation]);
+    // };
 
-    const updateRisksFields = (fetchedData) => {
-      risksTable.clearData();
+    // const updateRisksFields = (fetchedData) => {
+    //   risksTable.clearData();
 
-      fetchedData.forEach((risk) => {
-        addRisk(risk);
-      });
-    };
+    //   fetchedData.forEach((risk) => {
+    //     addRisk(risk);
+    //   });
+    // };
 
-    window.project.load(async (event, data) => {
-      updateRisksFields(await JSON.parse(data).Risk);
-    });
+    // window.project.load(async (event, data) => {
+    //   updateRisksFields(await JSON.parse(data).Risk);
+    // });
   } catch (err) {
     alert('Failed to load Risks Tab');
   }
