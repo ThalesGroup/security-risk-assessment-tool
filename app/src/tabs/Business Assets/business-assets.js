@@ -89,7 +89,7 @@
 
     const addSection = (id, asset) => {
       // add section inside sections div
-      $('#business-assets__sections').append(`<div class="section" id="business-assets__section__${id}">`);
+      $('#business-assets__sections').append(`<section class="section" id="business-assets__section__${id}"></section>`);
       const section = $(`#business-assets__section__${id}`);
 
       // add checkbox

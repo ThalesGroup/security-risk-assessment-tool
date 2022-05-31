@@ -92,7 +92,6 @@ const renderSupportingAssets = () => {
         headerSort: false,
         tooltip: supportingAssetJsonSchema.supportingAssetName.description,
         headerHozAlign: 'center',
-        validator: supportingAssetJsonSchema.supportingAssetName.type,
       },
       {
         title: supportingAssetJsonSchema.supportingAssetType.title,

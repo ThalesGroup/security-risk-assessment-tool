@@ -411,6 +411,11 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
   validateSupportingAssets(israProject, arr, desc);
 });
 
+// Risks Tab
+const { renderRisks } = require('./tabs/Risks/render-risks');
+
+ipcMain.handle('render:risks', () => renderRisks());
+
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
 //     nativeTheme.themeSource = 'light';

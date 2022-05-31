@@ -24,10 +24,11 @@
 
 footer{
     text-align: center;
+    margin-top: 10px;
 }
 
 footer::before{
-    content: "THALES GROUP CONFIDENTIAL PROJECT";
+    content: "THALES GROUP CONFIDENTIAL <PROJECT>";
     font-weight: 300;
     font-size: 16px;
     color: red;
@@ -172,7 +173,7 @@ select option {
 
 /*tooltip*/
 
-.section{
+section{
     background-color: rgb(185, 185, 185);
     padding: 10px;
     margin-bottom: 10px;
