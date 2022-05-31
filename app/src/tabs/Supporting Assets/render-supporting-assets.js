@@ -80,7 +80,7 @@ const renderSupportingAssets = () => {
     height: '100%',
     columns: [ // Define Table Columns
       {
-        title: supportingAssetJsonSchema.supportingAssetId.title, field: 'supportingAssetId', width: 50, headerSort: false, validator: ['integer'], headerHozAlign: 'center',
+        title: supportingAssetJsonSchema.supportingAssetId.title, field: 'supportingAssetId', width: 50, headerSort: false, validator: 'string', headerHozAlign: 'center',
       },
       {
         title: supportingAssetJsonSchema.supportingAssetHLDId.title, field: 'supportingAssetHLDId', editor: 'input', headerSort: false, headerHozAlign: 'center',
@@ -92,6 +92,7 @@ const renderSupportingAssets = () => {
         headerSort: false,
         tooltip: supportingAssetJsonSchema.supportingAssetName.description,
         headerHozAlign: 'center',
+        validator: supportingAssetJsonSchema.supportingAssetName.type,
       },
       {
         title: supportingAssetJsonSchema.supportingAssetType.title,
@@ -102,7 +103,7 @@ const renderSupportingAssets = () => {
         editorParams: {
           values: supportingAssetJsonSchema.supportingAssetType.enum,
         },
-        validator: ['string'],
+        validator: supportingAssetJsonSchema.supportingAssetType.type,
         tooltip: supportingAssetJsonSchema.supportingAssetType.description,
       },
       {
@@ -115,7 +116,7 @@ const renderSupportingAssets = () => {
           values: supportingAssetJsonSchema.supportingAssetSecurityLevel.enum
             .filter((truthy) => !!truthy),
         },
-        validator: ['integer'],
+        validator: 'integer',
         tooltip: supportingAssetJsonSchema.supportingAssetSecurityLevel.description,
       },
     ],

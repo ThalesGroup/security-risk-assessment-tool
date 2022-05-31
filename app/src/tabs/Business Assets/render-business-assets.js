@@ -95,7 +95,7 @@ const renderBusinessAssets = () => {
             editorParams: {
               values: ['', 'Data', 'Service'],
             },
-            validator: ['string', 'required'],
+            validator: [businessAssetSchema.businessAssetType.type, 'required'],
             tooltip: `${businessAssetSchema.businessAssetType.description}`,
           },
           {
