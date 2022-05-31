@@ -42,3 +42,9 @@
     font-weight: bold;
 }
 
+#welcome__isra-meta-info img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}

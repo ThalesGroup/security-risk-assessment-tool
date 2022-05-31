@@ -65,6 +65,7 @@ const renderWelcome = () => {
     Computing the risk level is based on the evaluation of each dimension.<br>
     The 5 dimensions are the Business Assets, the Supporting Assets, the Vulnerabilities, the Threats, and the Threat Agent.
     </p>
+    <img src="./asset/welcome_diagram.png">
 
     <p class="heading">Terminology</p>
     <div>
