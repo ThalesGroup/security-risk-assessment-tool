@@ -22,7 +22,7 @@ If you need assistance or have question, please contact oss@thalesgroup.com
 
 ## Get started
 
-The ISRA software-risk-assessment-tool project is a web application based on the current ISRA InfoPath tool
+The ISRA software-risk-assessment-tool project is a web application created based on the current ISRA risk assessment tool using InfoPath
 
 ### Prerequisites ###
 
@@ -30,10 +30,15 @@ To install and use the tool, the following prerequisites are required:
 
 1. Node.js (required for Electron, recommended to download the latest LTS version available)
 
-### Build ###
+### Developer installation ###
 
+1. Clone repository
 ```
 git clone git@github.com:ThalesGroup/software-risk-assessment-tool.git
+cd software-risk-assessment-tool
+```
+2. Install dependencies and run application
+```
 npm install
 npm update
 npm start
@@ -41,22 +46,37 @@ npm start
 
 ### Test ###
 
-Executes all test files within test folder in lib
+Executes all test files within test folder in lib ([Jest](https://jestjs.io/docs/getting-started))
 
 ```
 npm run test:lib
 ```
 
-
 ### API documentation ###
 
-Generate api documentation for lib
+Generate [api documentation](https://github.com/jsdoc/jsdoc) for lib
 
 ```
 npm run jsdoc
 ```
 
-**Please also add the description into the About section (Description field)**
+### Package and distribute ###
+
+[Manual distribution](https://www.electronjs.org/docs/latest/tutorial/application-distribution)
+
+[With prebuilt binaries](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-prebuilt-binaries)
+
+1. [Download](https://github.com/electron/electron/releases) Electron prebuilt binaries zip file
+* (Window) electron-vXX.X.X-win32-x64.zip
+* (MacOs) electron-vXX.X.X-darwin-x64.zip
+* (Linux) electron-vXX.X.X-linux-x64.zip
+2. Open 'resources' folder in zip file and create new 'app' folder
+3. Copy your code, including modules, into 'app' folder
+4. Execute `Electron.app` on macOS, `electron` on Linux, or `electron.exe` on Windows, and Electron will start as your app. The electron directory will then be your distribution to deliver to users.
+
+[With an app source code archive](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-an-app-source-code-archive)
+
+Rename archive to 'app.asar'
 
 ## Documentation
 
