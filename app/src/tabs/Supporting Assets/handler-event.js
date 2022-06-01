@@ -24,7 +24,7 @@
 const {
   dialog, BrowserWindow,
 } = require('electron');
-const SupportingAsset = require('./supporting-asset');
+const SupportingAsset = require('../../../../lib/src/model/classes/SupportingAsset/supporting-asset');
 
 /**
   * add default supporting asset row

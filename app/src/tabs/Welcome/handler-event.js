@@ -24,8 +24,8 @@
 const {
   dialog,
 } = require('electron');
-const ISRAMetaTracking = require('./isra-meta-tracking');
-const ISRAProject = require('./isra-project');
+const ISRAMetaTracking = require('../../../../lib/src/model/classes/ISRAProject/isra-meta-tracking');
+const ISRAProject = require('../../../../lib/src/model/classes/ISRAProject/isra-project');
 
 /**
   * add default iterations tracking row

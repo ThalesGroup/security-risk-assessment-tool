@@ -24,7 +24,7 @@
 const {
   dialog,
 } = require('electron');
-const BusinessAsset = require('./business-asset');
+const BusinessAsset = require('../../../../lib/src/model/classes/BusinessAsset/business-asset');
 
 /**
   * add default business asset section

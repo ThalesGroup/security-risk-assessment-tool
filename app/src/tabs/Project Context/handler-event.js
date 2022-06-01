@@ -26,8 +26,8 @@ const fs = require('fs');
 const prompt = require('electron-prompt');
 const path = require('path');
 const { dialog, BrowserWindow } = require('electron');
-const { URLpattern } = require('../../schema/validation-pattern/validation-pattern');
-const ISRAProject = require('../ISRAProject/isra-project');
+const { URLpattern } = require('../../../../lib/src/model/schema/validation-pattern/validation-pattern');
+const ISRAProject = require('../../../../lib/src/model/classes/ISRAProject/isra-project');
 
 let urlValue = 'http://www.contoso.com/';
 const electronPrompt = () => prompt({
@@ -106,7 +106,7 @@ const removeFile = () => ['Click here to attach a file', ''];
 const saveAsFile = async (base64data, projectContextFileName) => {
   const options = {
     title: 'Save as file - Electron ISRA Project',
-    defaultPath: `C:\\Users\\${projectContextFileName}`,
+    defaultPath: `${projectContextFileName}`,
     buttonLabel: 'Save as file',
   };
   const fileName = await dialog.showSaveDialog(options);

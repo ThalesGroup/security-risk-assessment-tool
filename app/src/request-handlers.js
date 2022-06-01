@@ -26,6 +26,7 @@ const {
   dialog, ipcMain, Menu, BrowserWindow,
   // nativeTheme,
 } = require('electron');
+const os = require('os');
 
 const {
   DataStore,
@@ -96,7 +97,7 @@ const saveAs = async () => {
   const options = {
   // Placeholders
     title: 'Save file - Electron ISRA Project',
-    defaultPath: 'C:\\Users\\ISRAProject.json',
+    defaultPath: os.homedir(),
     buttonLabel: 'Save JSON File',
     filters: [
       { name: 'JSON', extensions: ['json'] },
@@ -268,7 +269,7 @@ const {
   deleteTrackingRow,
   updateTrackingRow,
   validateISRAmeta,
-} = require('../../lib/src/model/classes/ISRAProject/handler-event');
+} = require('./tabs/Welcome/handler-event');
 const { renderWelcome } = require('./tabs/Welcome/render-welcome');
 
 ipcMain.handle('render:welcome', () => renderWelcome());
@@ -290,7 +291,7 @@ const {
   saveAsFile,
   decodeFile,
   validateProjectContext,
-} = require('../../lib/src/model/classes/ISRAProjectContext/handler-event');
+} = require('./tabs/Project Context/handler-event');
 const { renderProjectContext } = require('./tabs/Project Context/render-project-context');
 
 /**
@@ -385,7 +386,7 @@ ipcMain.on('validate:projectContext', (event, arr) => {
 // Business Assets Tab
 const {
   addBusinessAsset, deleteBusinessAsset, validateBusinessAsset, updateBusinessAsset,
-} = require('../../lib/src/model/classes/BusinessAsset/handler-event');
+} = require('./tabs/Business Assets/handler-event');
 const { renderBusinessAssets } = require('./tabs/Business Assets/render-business-assets');
 
 ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
@@ -403,7 +404,7 @@ ipcMain.on('validate:businessAssets', (event, arr) => {
 // Supporting Assets Tab
 const {
   addSupportingAsset, deleteSupportingAsset, updateSupportingAsset, validateSupportingAssets,
-} = require('../../lib/src/model/classes/SupportingAsset/handler-event');
+} = require('./tabs/Supporting Assets/handler-event');
 const { renderSupportingAssets } = require('./tabs/Supporting Assets/render-supporting-assets');
 
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
