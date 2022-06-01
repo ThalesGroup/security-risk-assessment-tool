@@ -22,7 +22,7 @@ If you need assistance or have question, please contact oss@thalesgroup.com
 
 ## Get started
 
-The ISRA software-risk-assessment-tool project is a web application created based on the current ISRA risk assessment tool using InfoPath
+The ISRA software-risk-assessment-tool project is an Electron application created based on the current ISRA risk assessment tool using InfoPath
 
 ### Prerequisites ###
 
@@ -46,7 +46,7 @@ npm start
 
 ### Test ###
 
-Executes all test files within test folder in lib ([Jest](https://jestjs.io/docs/getting-started))
+Executes all test files within test folder in lib
 
 ```
 npm run test:lib
@@ -54,7 +54,7 @@ npm run test:lib
 
 ### API documentation ###
 
-Generate [api documentation](https://github.com/jsdoc/jsdoc) for lib
+Generate api documentation for lib
 
 ```
 npm run jsdoc
@@ -62,14 +62,14 @@ npm run jsdoc
 
 ### Package and distribute ###
 
-[Manual distribution](https://www.electronjs.org/docs/latest/tutorial/application-distribution)
+#### Manual distribution ####
 
 [With prebuilt binaries](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-prebuilt-binaries)
 
 1. [Download](https://github.com/electron/electron/releases) Electron prebuilt binaries zip file
-* (Window) electron-vXX.X.X-win32-x64.zip
-* (MacOs) electron-vXX.X.X-darwin-x64.zip
-* (Linux) electron-vXX.X.X-linux-x64.zip
+    * (Window) electron-vXX.X.X-win32-x64.zip
+    * (MacOs) electron-vXX.X.X-darwin-x64.zip
+    * (Linux) electron-vXX.X.X-linux-x64.zip
 2. Open 'resources' folder in zip file and create new 'app' folder
 3. Copy your code, including modules, into 'app' folder
 4. Execute `Electron.app` on macOS, `electron` on Linux, or `electron.exe` on Windows, and Electron will start as your app. The electron directory will then be your distribution to deliver to users.
