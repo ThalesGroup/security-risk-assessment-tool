@@ -22,7 +22,7 @@ If you need assistance or have question, please contact oss@thalesgroup.com
 
 ## Get started
 
-The ISRA software-risk-assessment-tool project is a web application based on the current ISRA InfoPath too.
+The ISRA software-risk-assessment-tool project is a web application based on the current ISRA InfoPath tool
 
 ### Prerequisites ###
 
