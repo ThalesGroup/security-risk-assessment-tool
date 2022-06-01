@@ -27,7 +27,6 @@ const prompt = require('electron-prompt');
 const path = require('path');
 const { dialog, BrowserWindow } = require('electron');
 const { URLpattern } = require('../../../../lib/src/model/schema/validation-pattern/validation-pattern');
-const ISRAProject = require('../../../../lib/src/model/classes/ISRAProject/isra-project');
 
 let urlValue = 'http://www.contoso.com/';
 const electronPrompt = () => prompt({

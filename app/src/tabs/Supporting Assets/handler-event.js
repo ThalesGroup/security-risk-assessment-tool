@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 const {
-  dialog, BrowserWindow,
+  dialog,
 } = require('electron');
 const SupportingAsset = require('../../../../lib/src/model/classes/SupportingAsset/supporting-asset');
 

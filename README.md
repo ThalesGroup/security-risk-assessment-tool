@@ -22,13 +22,39 @@ If you need assistance or have question, please contact oss@thalesgroup.com
 
 ## Get started
 
-XXX project purpose it to ...
+The ISRA software-risk-assessment-tool project is a web application based on the current ISRA InfoPath too.
+
+### Prerequisites ###
+
+To install and use the tool, the following prerequisites are required:
+
+1. Node.js (required for Electron, recommended to download the latest LTS version available)
+
+### Build ###
+
+1. git clone git@github.com:ThalesGroup/software-risk-assessment-tool.git
+2. npm install
+3. npm update
+4. 
+
+### Test ###
+
+Executes all files within test folder in lib
+
+1. npm run test:lib
+
+
+### API documentation ###
+
+Generate api documentation for lib
+
+1. npm run jsdoc
 
 **Please also add the description into the About section (Description field)**
 
 ## Documentation
 
-Documentation is available at [xxx/docs](https://xxx/docs/).
+Documentation for lib is available at [lib/doc/index.html].
 
 You can use [GitHub pages](https://guides.github.com/features/pages/) to create your documentation.
 
@@ -38,13 +64,10 @@ See an example here : https://github.com/ThalesGroup/ThalesGroup.github.io
 
 ## Contributing
 
-If you are interested in contributing to the XXX project, start by reading the [Contributing guide](/CONTRIBUTING.md).
+If you are interested in contributing to the ISRA software-risk-assesssment-tool project, start by reading the [Contributing guide](/CONTRIBUTING.md).
 
 ## License
 
 The chosen license in accordance with legal department must be defined into an explicit [LICENSE](https://github.com/ThalesGroup/template-project/blob/master/LICENSE) file at the root of the repository
 You can also link this file in this README section.
 
-// run test
-// run app
-// npm modules
