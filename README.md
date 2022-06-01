@@ -32,23 +32,32 @@ To install and use the tool, the following prerequisites are required:
 
 ### Build ###
 
-1. git clone git@github.com:ThalesGroup/software-risk-assessment-tool.git
-2. npm install (dependencies)
-3. npm update (dependencies)
-4. npm start (start application)
+```
+git clone git@github.com:ThalesGroup/software-risk-assessment-tool.git
+npm install (dependencies)
+npm update (dependencies)
+npm start (start application)
+
+```
 
 ### Test ###
 
 Executes all test files within test folder in lib
 
-1. npm run test:lib
+```
+npm run test:lib
+
+```
 
 
 ### API documentation ###
 
 Generate api documentation for lib
 
-1. npm run jsdoc
+```
+npm run jsdoc
+
+```
 
 **Please also add the description into the About section (Description field)**
 
