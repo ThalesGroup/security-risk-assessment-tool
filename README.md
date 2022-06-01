@@ -28,7 +28,7 @@ The ISRA software-risk-assessment-tool project is an Electron application create
 
 To install and use the tool, the following prerequisites are required:
 
-1. Node.js (required for Electron, recommended to download the latest LTS version available)
+1. [Node.js](https://nodejs.org/en/) (required for Electron, recommended to download the latest LTS version available)
 
 ### Developer installation ###
 
