@@ -141,16 +141,27 @@ const saveAsFile = async (base64data, projectContextFileName) => {
 
 /**
   * (InfoPath) Decode file attachments
-  * @param {string} base64 base64 string of content from file attached in infopath
+  * @param {string} base64 base64 string of content from file attached in xml/json file
 */
-const decodeFile = (base64) => {
+const decodeFile = (base64, jsonFilePath) => {
   if (base64 !== '') {
-    const buffer = Buffer.from(base64, 'base64');
-    const fileName = buffer.toString('utf16le', 24).match(/.*(json|png|docx|doc|jpg|jpeg|pdf|xml|csv|xlsx|ppt)/)[0];
-    const fileNameLength = buffer.readUInt32LE(20);
-    const binary = buffer.slice(24 + fileNameLength * 2);
-    const base64data = encodeFile(fileName, binary);
-    return [fileName, base64data];
+    if (jsonFilePath === '') {
+      // if file is xml
+      const buffer = Buffer.from(base64, 'base64');
+      const fileName = buffer.toString('utf16le', 24).match(/.*(json|png|docx|doc|jpg|jpeg|pdf|xml|csv|xlsx|ppt)/)[0];
+      const fileNameLength = buffer.readUInt32LE(20);
+      const binary = buffer.slice(24 + fileNameLength * 2);
+      const base64data = encodeFile(fileName, binary);
+      return [fileName, base64data];
+    }
+    // if file is json
+    const decodedBuffer = Buffer.from(base64, 'base64');
+    const decodedFileNameSize = decodedBuffer.slice(0, 18).toString();
+    const fileName = decodedBuffer.slice(
+      18,
+      18 + parseInt(decodedFileNameSize, 10),
+    ).toString();
+    return [fileName, base64];
   }
   return ['Click here to attach a file', base64];
 };

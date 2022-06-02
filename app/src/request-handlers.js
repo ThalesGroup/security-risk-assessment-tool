@@ -362,22 +362,9 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   try {
-    if (jsonFilePath === '') {
-      const [fileName, base64data] = decodeFile(base64);
-      projectContextFileName = fileName;
-      israProject.israProjectContext.projectDescriptionAttachment = base64data;
-      return projectContextFileName;
-    }
-
-    const decodedBuffer = Buffer.from(base64, 'base64');
-    const decodedFileNameSize = decodedBuffer.slice(0, 18).toString();
-    const decodedFileName = decodedBuffer.slice(
-      18,
-      18 + parseInt(decodedFileNameSize, 10),
-    ).toString();
-
-    israProject.israProjectContext.projectDescriptionAttachment = base64;
-    projectContextFileName = `${decodedFileName}`;
+    const [fileName, base64data] = decodeFile(base64, jsonFilePath);
+    projectContextFileName = fileName;
+    israProject.israProjectContext.projectDescriptionAttachment = base64data;
     return projectContextFileName;
   } catch (err) {
     console.log(err);
