@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: api/xml-json/alter-isra/alter-risks.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: api/xml-json/alter-isra/alter-risks.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*----------------------------------------------------------------------------
+*
+*     Copyright © 2022 THALES. All Rights Reserved.
+ *
+* -----------------------------------------------------------------------------
+* THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+* THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+ * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+ * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+*
+* THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
+* CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+* PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
+* NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
+* SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
+* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+* PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
+* SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
+* HIGH RISK ACTIVITIES.
+* -----------------------------------------------------------------------------
+*/
+
+const { counter } = require('../../../utility-global');
+const { getHTMLString } = require('../utility');
+
+/** modify parsed ISRA JSON to fit schema
+       * @function alterRisks
+       * @param {object} risks - risks JSON that has been parsed
+       * @param {string} xmlDAta - content of xml file
+       * @returns {object} edited risks JSON data
+       * */
+const alterRisks = (xmlDataCopy, risksCopy) => {
+  if (Array.isArray(risksCopy)) {
+    const riskCounter = counter();
+    const riskMitigationCounter = counter();
+
+    risksCopy.forEach((risk) => {
+      riskCounter.increment();
+      const r = risk;
+      const {
+        riskId,
+        projectName,
+        projectVersion,
+        ImpactRiskEvaluation,
+        LikelihoodRiskEvaluation,
+        VulnerabilityRiskEvaluation,
+        riskName,
+        threatAgent,
+        threatVerb,
+        motivation,
+        businessAssetRef,
+        supportingAssetRef,
+        Mitigation,
+        mitigationsBenefits,
+        mitigationsDoneBenefits,
+      } = r;
+
+      const { riskLikelihood } = LikelihoodRiskEvaluation[0];
+      const { riskImpact, BusinessAssetSelectedProperties } = ImpactRiskEvaluation[0];
+
+      r.projectNameRef = projectName;
+      r.projectVersionRef = projectVersion;
+      r.riskManagementDetail = getHTMLString(xmlDataCopy, 'riskManagmentDetail', riskCounter.getCount());
+
+      // alter risk name
+      r.riskName = {
+        riskIdRef: riskId,
+        riskName,
+        threatAgent,
+        threatAgentDetail: getHTMLString(xmlDataCopy, 'threatAgentDetail', riskCounter.getCount()),
+        threatVerb,
+        threatVerbDetail: getHTMLString(xmlDataCopy, 'threatVerbDetail', riskCounter.getCount()),
+        motivation,
+        motivationDetail: getHTMLString(xmlDataCopy, 'motivationDetail', riskCounter.getCount()),
+        businessAssetRef,
+        supportingAssetRef,
+      };
+
+      // alter risk likelihood
+      if ('OWASPLikelihoodEvaluation' in LikelihoodRiskEvaluation[0].LikelihoodRiskEvaluationMethod[0]) {
+        const likelihoodEvaluation = r
+          .LikelihoodRiskEvaluation[0]
+          .LikelihoodRiskEvaluationMethod[0]
+          .OWASPLikelihoodEvaluation[0];
+        delete likelihoodEvaluation.OWASPLikelihoodScore;
+        const { ThreatFactor, ...rest } = likelihoodEvaluation;
+
+        r.riskLikelihood = {
+          riskIdRef: riskId,
+          riskLikelihood,
+          riskLikelihoodDetail: getHTMLString(xmlDataCopy, 'riskLikelihoodDetail', riskCounter.getCount()),
+          ...ThreatFactor[0],
+          ...rest,
+        };
+      } else {
+        r.riskLikelihood = {
+          riskIdRef: riskId,
+          riskLikelihood,
+          riskLikelihoodDetail: getHTMLString(xmlDataCopy, 'riskLikelihoodDetail', riskCounter.getCount()),
+        };
+      }
+
+      // alter risk impact
+      r.riskImpact = {
+        riskIdRef: riskId,
+        riskImpact,
+        businessAssetPropertiesRef: businessAssetRef,
+        ...BusinessAssetSelectedProperties[0],
+      };
+
+      // alter risk attack path
+      if (VulnerabilityRiskEvaluation !== undefined) {
+        const riskAttackPathIdCounter = counter();
+        r.riskAttackPaths = VulnerabilityRiskEvaluation.map((attackPath) => {
+          const { vulnerabilityRef, attackPathName, attackPathScore } = attackPath;
+          riskAttackPathIdCounter.increment();
+          const riskAttackPathId = riskAttackPathIdCounter.getCount();
+
+          const vulnerabilityRefs = vulnerabilityRef.map((v) => {
+            const obj = {};
+            obj.vulnerabilityIdRef = v.char !== undefined ? v.char : '';
+            obj.score = v.$.score;
+            obj.name = v.$.name;
+            return obj;
+          });
+
+          const newAttackPath = {
+            riskIdRef: riskId,
+            riskAttackPathId,
+            attackPathName,
+            attackPathScore,
+            vulnerabilityRef: vulnerabilityRefs,
+          };
+          return newAttackPath;
+        });
+      } else r.riskAttackPaths = [];
+
+      // alter risk mitigation
+      if (Mitigation !== undefined) {
+        const riskMitigationIdCounter = counter();
+        r.riskMitigation = Mitigation.map((rm) => {
+          riskMitigationCounter.increment();
+          riskMitigationIdCounter.increment();
+          const riskMitigationId = riskMitigationIdCounter.getCount();
+          const {
+            mitigationDecision, description, ...mitigation
+          } = rm;
+
+          const obj = {
+            riskIdRef: riskId,
+            riskMitigationId,
+            description: getHTMLString(xmlDataCopy, 'description', riskMitigationCounter.getCount()),
+            decisionDetail: getHTMLString(xmlDataCopy, 'decisionDetail', riskMitigationCounter.getCount()),
+            decision: mitigationDecision[0].decision,
+            ...mitigation,
+            mitigationsBenefits,
+            mitigationsDoneBenefits,
+          };
+          return obj;
+        });
+      } else r.riskMitigation = [];
+    });
+  }
+};
+
+module.exports = alterRisks;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BusinessAsset.html">BusinessAsset</a></li><li><a href="BusinessAssetProperties.html">BusinessAssetProperties</a></li><li><a href="ISRAMetaTracking.html">ISRAMetaTracking</a></li><li><a href="ISRAProject.html">ISRAProject</a></li><li><a href="ISRAProjectContext.html">ISRAProjectContext</a></li><li><a href="Risk.html">Risk</a></li><li><a href="RiskAttackPath.html">RiskAttackPath</a></li><li><a href="RiskImpact.html">RiskImpact</a></li><li><a href="RiskLikelihood.html">RiskLikelihood</a></li><li><a href="RiskMitigation.html">RiskMitigation</a></li><li><a href="RiskName.html">RiskName</a></li><li><a href="SupportingAsset.html">SupportingAsset</a></li><li><a href="Vulnerability.html">Vulnerability</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alterBusinessAssets">alterBusinessAssets</a></li><li><a href="global.html#alterISRA">alterISRA</a></li><li><a href="global.html#alterISRAmeta">alterISRAmeta</a></li><li><a href="global.html#alterProjectContext">alterProjectContext</a></li><li><a href="global.html#alterRisks">alterRisks</a></li><li><a href="global.html#alterSupportingAssets">alterSupportingAssets</a></li><li><a href="global.html#alterVulnerability">alterVulnerability</a></li><li><a href="global.html#calculateOverallScore">calculateOverallScore</a></li><li><a href="global.html#DataLoad">DataLoad</a></li><li><a href="global.html#DataNew">DataNew</a></li><li><a href="global.html#DataStore">DataStore</a></li><li><a href="global.html#editName">editName</a></li><li><a href="global.html#isAccessResources">isAccessResources</a></li><li><a href="global.html#isAllAttackPathsName">isAllAttackPathsName</a></li><li><a href="global.html#isAllAttackPathsScore">isAllAttackPathsScore</a></li><li><a href="global.html#isAttackPathName">isAttackPathName</a></li><li><a href="global.html#isAttackPathScore">isAttackPathScore</a></li><li><a href="global.html#isBenefits">isBenefits</a></li><li><a href="global.html#isBusinessAssetDescription">isBusinessAssetDescription</a></li><li><a href="global.html#isBusinessAssetFlag">isBusinessAssetFlag</a></li><li><a href="global.html#isBusinessAssetId">isBusinessAssetId</a></li><li><a href="global.html#isBusinessAssetName">isBusinessAssetName</a></li><li><a href="global.html#isBusinessAssetProperties">isBusinessAssetProperties</a></li><li><a href="global.html#isBusinessAssetType">isBusinessAssetType</a></li><li><a href="global.html#isCost">isCost</a></li><li><a href="global.html#isCVEScore">isCVEScore</a></li><li><a href="global.html#isDecision">isDecision</a></li><li><a href="global.html#isDecisionDetail">isDecisionDetail</a></li><li><a href="global.html#isDescription">isDescription</a></li><li><a href="global.html#isInherentRiskScore">isInherentRiskScore</a></li><li><a href="global.html#isIntrusionDetection">isIntrusionDetection</a></li><li><a href="global.html#isMitigatedRiskScore">isMitigatedRiskScore</a></li><li><a href="global.html#isMitigationsBenefits">isMitigationsBenefits</a></li><li><a href="global.html#isMitigationsDoneBenefits">isMitigationsDoneBenefits</a></li><li><a href="global.html#isMotivation">isMotivation</a></li><li><a href="global.html#isMotivationDetail">isMotivationDetail</a></li><li><a href="global.html#isOccurrence">isOccurrence</a></li><li><a href="global.html#isOccurrenceLevel">isOccurrenceLevel</a></li><li><a href="global.html#isOverallLevel">isOverallLevel</a></li><li><a href="global.html#isOverallScore">isOverallScore</a></li><li><a href="global.html#isProjectDescription">isProjectDescription</a></li><li><a href="global.html#isProjectDescriptionAttachment">isProjectDescriptionAttachment</a></li><li><a href="global.html#isProjectName">isProjectName</a></li><li><a href="global.html#isProjectOrganization">isProjectOrganization</a></li><li><a href="global.html#isProjectURL">isProjectURL</a></li><li><a href="global.html#isProjectVersion">isProjectVersion</a></li><li><a href="global.html#isResidualRiskLevel">isResidualRiskLevel</a></li><li><a href="global.html#isResidualRiskScore">isResidualRiskScore</a></li><li><a href="global.html#isReward">isReward</a></li><li><a href="global.html#isRiskAttackPathId">isRiskAttackPathId</a></li><li><a href="global.html#isRiskId">isRiskId</a></li><li><a href="global.html#isRiskImpact">isRiskImpact</a></li><li><a href="global.html#isRiskLikelihood">isRiskLikelihood</a></li><li><a href="global.html#isRiskLikelihoodDetail">isRiskLikelihoodDetail</a></li><li><a href="global.html#isRiskManagementDecision">isRiskManagementDecision</a></li><li><a href="global.html#isRiskManagementDetail">isRiskManagementDetail</a></li><li><a href="global.html#isRiskMitigationId">isRiskMitigationId</a></li><li><a href="global.html#isRiskName">isRiskName</a></li><li><a href="global.html#isSecurityAssumptions">isSecurityAssumptions</a></li><li><a href="global.html#isSecurityOfficerObjectives">isSecurityOfficerObjectives</a></li><li><a href="global.html#isSecurityProjectObjectives">isSecurityProjectObjectives</a></li><li><a href="global.html#isSize">isSize</a></li><li><a href="global.html#isSkillLevel">isSkillLevel</a></li><li><a href="global.html#isSupportingAssetDesc">isSupportingAssetDesc</a></li><li><a href="global.html#isSupportingAssetHLDId">isSupportingAssetHLDId</a></li><li><a href="global.html#isSupportingAssetId">isSupportingAssetId</a></li><li><a href="global.html#isSupportingAssetName">isSupportingAssetName</a></li><li><a href="global.html#isSupportingAssetSecurityLevel">isSupportingAssetSecurityLevel</a></li><li><a href="global.html#isSupportingAssetType">isSupportingAssetType</a></li><li><a href="global.html#isThreatAgent">isThreatAgent</a></li><li><a href="global.html#isThreatAgentDetail">isThreatAgentDetail</a></li><li><a href="global.html#isThreatFactorLevel">isThreatFactorLevel</a></li><li><a href="global.html#isThreatFactorScore">isThreatFactorScore</a></li><li><a href="global.html#isThreatVerb">isThreatVerb</a></li><li><a href="global.html#isThreatVerbDetail">isThreatVerbDetail</a></li><li><a href="global.html#isTrackingComment">isTrackingComment</a></li><li><a href="global.html#isTrackingDate">isTrackingDate</a></li><li><a href="global.html#isTrackingIteration">isTrackingIteration</a></li><li><a href="global.html#isTrackingSecurityOfficer">isTrackingSecurityOfficer</a></li><li><a href="global.html#isVulnerabilityCVE">isVulnerabilityCVE</a></li><li><a href="global.html#isVulnerabilityDescription">isVulnerabilityDescription</a></li><li><a href="global.html#isVulnerabilityDescriptionAttachment">isVulnerabilityDescriptionAttachment</a></li><li><a href="global.html#isVulnerabilityFamily">isVulnerabilityFamily</a></li><li><a href="global.html#isVulnerabilityId">isVulnerabilityId</a></li><li><a href="global.html#isVulnerabilityName">isVulnerabilityName</a></li><li><a href="global.html#isVulnerabilityRef">isVulnerabilityRef</a></li><li><a href="global.html#isVulnerabilityTrackingId">isVulnerabilityTrackingId</a></li><li><a href="global.html#isVulnerabilityTrackingURI">isVulnerabilityTrackingURI</a></li><li><a href="global.html#map2Array">map2Array</a></li><li><a href="global.html#parser">parser</a></li><li><a href="global.html#parseString">parseString</a></li><li><a href="global.html#populateClass">populateClass</a></li><li><a href="global.html#removeNameSpacePreifx">removeNameSpacePreifx</a></li><li><a href="global.html#removeNaN">removeNaN</a></li><li><a href="global.html#updateOverallLevel">updateOverallLevel</a></li><li><a href="global.html#validateClassProperties">validateClassProperties</a></li><li><a href="global.html#validateJsonSchema">validateJsonSchema</a></li><li><a href="global.html#writeFile">writeFile</a></li><li><a href="global.html#XML2JSON">XML2JSON</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Jun 02 2022 15:59:43 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
