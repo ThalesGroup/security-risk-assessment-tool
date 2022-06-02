@@ -194,7 +194,7 @@ const loadJSONFile = async (win, filePath) => {
     await DataLoad(israProject, filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
-    getMainWindow().title = filePath;
+    getMainWindow().title = `ISRA Risk Asessment - ${filePath}`;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
@@ -211,6 +211,7 @@ const loadXMLFile = (win, filePath) => {
     israProject = XML2JSON(filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = '';
+    getMainWindow().title = `ISRA Risk Asessment - ${filePath}`;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
@@ -318,7 +319,7 @@ const attachmentOptions = () => {
         if (fileName !== '') {
           projectContextFileName = fileName;
           israProject.israProjectContext.projectDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('projectContext:fileName', fileName);
+          getMainWindow().webContents.send('projectContext:fileName', projectContextFileName);
         }
       } catch (err) {
         console.log(err);
@@ -344,7 +345,7 @@ const attachmentOptions = () => {
           const [fileName, base64data] = removeFile();
           projectContextFileName = fileName;
           israProject.israProjectContext.projectDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('projectContext:fileName', fileName);
+          getMainWindow().webContents.send('projectContext:fileName', projectContextFileName);
         },
       },
     ];
@@ -359,19 +360,25 @@ ipcMain.on('projectContext:attachment', () => {
   contextMenu.popup();
 });
 
-ipcMain.handle('projectContext:decodeAttachment', (event, base64) => {
+ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   try {
     if (jsonFilePath === '') {
       const [fileName, base64data] = decodeFile(base64);
       projectContextFileName = fileName;
       israProject.israProjectContext.projectDescriptionAttachment = base64data;
-      return fileName;
+      return projectContextFileName;
     }
 
-    // TO-DO
+    const decodedBuffer = Buffer.from(base64, 'base64');
+    const decodedFileNameSize = decodedBuffer.slice(0, 18).toString();
+    const decodedFileName = decodedBuffer.slice(
+      18,
+      18 + parseInt(decodedFileNameSize, 10),
+    ).toString();
+
     israProject.israProjectContext.projectDescriptionAttachment = base64;
-    projectContextFileName = 'file';
-    return 'file';
+    projectContextFileName = `${decodedFileName}`;
+    return projectContextFileName;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });

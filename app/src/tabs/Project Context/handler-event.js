@@ -68,6 +68,19 @@ const openUrl = (url, userStatus) => {
   } else dialog.showMessageBoxSync(null, { type: 'info', title: 'User Status', message: 'You are offline' });
 };
 
+const encodeFile = (fileName, dataBuffer) => {
+  const fileNameSize = Buffer.byteLength(fileName);
+
+  const fileNameSizeBuffer = Buffer.alloc(18);
+  fileNameSizeBuffer.write(`${fileNameSize}`, 0, 18);
+
+  const headerBuffer = Buffer.alloc(fileNameSize);
+  headerBuffer.write(fileName, 0, fileNameSize);
+
+  const resultBuffer = Buffer.concat([fileNameSizeBuffer, headerBuffer, dataBuffer]);
+  return resultBuffer.toString('base64');
+};
+
 /**
   * Attach and encode file to base64 string
 */
@@ -81,12 +94,8 @@ const attachFile = () => {
   if (filePathArr !== undefined) {
     const filePath = filePathArr[0];
     const fileName = path.basename(filePath);
-
-    // TO-DO
-    // encode
-    const data = fs.readFileSync(filePath);
-    const buff = Buffer.from(data);
-    const base64data = buff.toString('base64');
+    const dataBuffer = fs.readFileSync(filePath);
+    const base64data = encodeFile(fileName, dataBuffer);
 
     return [fileName, base64data];
   }
@@ -112,7 +121,12 @@ const saveAsFile = async (base64data, projectContextFileName) => {
   if (!fileName.canceled) {
     try {
       // convert base64 string to buffer (raw data)
-      const data = Buffer.from(base64data, 'base64');
+      const decodedBuffer = Buffer.from(base64data, 'base64');
+      const fileNameSize = decodedBuffer.slice(0, 18).toString();
+      const data = decodedBuffer.slice(
+        18 + parseInt(fileNameSize, 10),
+        Buffer.byteLength(decodedBuffer),
+      );
 
       fs.writeFileSync(fileName.filePath, data, (err) => {
         if (err) throw new Error('Failed to save as file');
@@ -135,8 +149,7 @@ const decodeFile = (base64) => {
     const fileName = buffer.toString('utf16le', 24).match(/.*(json|png|docx|doc|jpg|jpeg|pdf|xml|csv|xlsx|ppt)/)[0];
     const fileNameLength = buffer.readUInt32LE(20);
     const binary = buffer.slice(24 + fileNameLength * 2);
-    const base64data = binary.toString('base64');
-
+    const base64data = encodeFile(fileName, binary);
     return [fileName, base64data];
   }
   return ['Click here to attach a file', base64];
