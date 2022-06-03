@@ -71,8 +71,8 @@ const openUrl = (url, userStatus) => {
 const encodeFile = (fileName, dataBuffer) => {
   const fileNameSize = Buffer.byteLength(fileName);
 
-  const fileNameSizeBuffer = Buffer.alloc(18);
-  fileNameSizeBuffer.write(`${fileNameSize}`, 0, 18);
+  const fileNameSizeBuffer = Buffer.alloc(8);
+  fileNameSizeBuffer.write(`${fileNameSize}`, 0, 8);
 
   const headerBuffer = Buffer.alloc(fileNameSize);
   headerBuffer.write(fileName, 0, fileNameSize);
@@ -122,9 +122,9 @@ const saveAsFile = async (base64data, projectContextFileName) => {
     try {
       // convert base64 string to buffer (raw data)
       const decodedBuffer = Buffer.from(base64data, 'base64');
-      const fileNameSize = decodedBuffer.slice(0, 18).toString();
+      const fileNameSize = decodedBuffer.slice(0, 8).toString();
       const data = decodedBuffer.slice(
-        18 + parseInt(fileNameSize, 10),
+        8 + parseInt(fileNameSize, 10),
         Buffer.byteLength(decodedBuffer),
       );
 
@@ -156,10 +156,10 @@ const decodeFile = (base64, jsonFilePath) => {
     }
     // if file is json
     const decodedBuffer = Buffer.from(base64, 'base64');
-    const decodedFileNameSize = decodedBuffer.slice(0, 18).toString();
+    const decodedFileNameSize = decodedBuffer.slice(0, 8).toString();
     const fileName = decodedBuffer.slice(
-      18,
-      18 + parseInt(decodedFileNameSize, 10),
+      8,
+      8 + parseInt(decodedFileNameSize, 10),
     ).toString();
     return [fileName, base64];
   }
