@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "test:lib": "jest --coverage --testPathPattern=lib/test",
-    "jsdoc": "jsdoc -c lib/doc/APIdocumentation/config/jsdoc.json"
+    "jsdoc": "jsdoc -c lib/doc/config/jsdoc.json"
   },
   "author": "ThalesDIS",
   "license": "Apache-2.0 License",

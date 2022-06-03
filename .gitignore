@@ -2,3 +2,5 @@
 node_modules
 # jest test coverage
 coverage
+#API documentation
+**/lib/doc/APIdocumentation
