@@ -29,7 +29,7 @@ const renderRisks = () => {
     height: '100%',
     columns: [ // Define Table Columns
       {
-        title: 'Risk Id', field: 'riskId', width: 100, headerSort: false, headerHozAlign: 'center', validator: 'integer',
+        title: 'Risk Id', field: 'riskId', width: 100, headerSort: false, headerHozAlign: 'center',
       },
       {
         title: 'Project Version', field: 'projectVersionRef', headerSort: false, headerHozAlign: 'center',
