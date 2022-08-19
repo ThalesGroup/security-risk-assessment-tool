@@ -31,14 +31,14 @@
       const { riskId, projectVersionRef, residualRiskLevel, riskName, riskMitigation } = risk;
       // risksTable.on('tableBuilt', () => {
         // add risk data
-        const tabelData = {
+        const tableData = {
           riskId,
           projectVersionRef,
           riskName: riskName.riskName,
           residualRiskLevel,
           decision: 'decision'
         };
-        risksTable.addData([tabelData]);
+        risksTable.addData([tableData]);
 
         // add checkbox
         const checkbox = document.createElement('input');
@@ -72,6 +72,25 @@
       };     
     };
 
+    const deleteRisks = async (checkboxes) =>{
+      const checkedRisks = [];
+      checkboxes.forEach((box) => {
+        if (box.checked) checkedRisks.push(box.value);
+      });
+
+      await window.risks.deleteRisk(checkedRisks);
+      checkedRisks.forEach((id) => {
+        $(`#risks__table__checkboxes__${id}`).remove();
+
+        risksTable.getRows().forEach((row) => {
+          const rowId = Number(row.getData().riskId);
+          if (rowId === Number(id)) {
+            row.delete();
+          };
+        });
+      });
+    };
+
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
@@ -81,6 +100,16 @@
         addDesc(risk.riskName);
       });
     };
+
+    $('#risks button').first().on('click', async () => {
+      const risk = await window.risks.addRisk();
+      addRisk(risk[0]);
+    });
+
+    $('#risks button:nth-child(2)').on('click', async () => {
+      const checkboxes = document.getElementsByName('risks__table__checkboxes');
+      deleteRisks(checkboxes);
+    });
 
     window.project.load(async (event, data) => {
       const fetchedData = await JSON.parse(data).Risk;
