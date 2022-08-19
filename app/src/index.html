@@ -57,10 +57,56 @@
             <button class="addDelete">Add</button> | <button  class="addDelete">Delete</button>
           </div>
           <div class="table">
-            <div class="checkbox"></div>
+            <div class="checkbox" id="risks__table__checkboxes"></div>
             <div id="risks__table"></div>
           </div>
+          <section>
+            <section id="risk__automatic_riskname">
+              <div style="display: flex; justify-content: space-between">
+                <h1>Risk description</h1>
+                <h1>Risk id: </h1>
+              </div>
+              <p>Risk Name: As a threat agent, I can Threat the Business Asset compromising the Supporting Asset in
+                order to Motivation, by exploiting the Vulnerability.
+              </p>
+              <button>Replace with Manual Risk Name</button>
+              <div style="display: flex;">
+                <div style="flex: 1">
+                  <label for="risk__threatAgent">As a Threat Agent</label>
+                  <select id="risk__threatAgent" name="risk__threatAgent"></select>
+                  <textarea class="risk__threatAgent__rich-text"></textarea>
+                </div>
+                <div style="flex: 1">
+                  <label for="risk__threat">I can Threat</label>
+                  <select id="risk__threat" name="risk__threat"></select>
+                  <textarea class="risk__threat__rich-text"></textarea>
+                </div>
+              </div>
 
+              <div style="display: flex;">
+                <div style="flex: 1">
+                  <label for="risk__businessAsset">The Business Asset</label>
+                  <select id="risk__businessAsset" name="risk__businessAsset"></select>
+                </div>
+                <div style="flex: 1">
+                  <label for="risk__supportingAsset">Compromising the Supporting Asset</label>
+                  <select id="risk__supportingAsset" name="risk__supportingAsset"></select>
+                </div>
+              </div>
+              
+              
+              <div>
+                <label for="risk__motivation">In order to Motivation</label>
+                <select id="risk__motivation" name="risk__motivation"></select>
+                <textarea class="risk__threat__rich-text"></textarea>
+              </div>
+            </section>
+
+            <section id="risk__manual__riskName">
+                <p>Risk Name</p>
+                <button>Replace with Automatic Risk Name</button>
+            </section>
+          </section>
           <footer></footer>
         </div>
 

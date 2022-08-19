@@ -30,22 +30,55 @@
     const addRisk = (risk) => {
       const { riskId, projectVersionRef, residualRiskLevel, riskName, riskMitigation } = risk;
       // risksTable.on('tableBuilt', () => {
+        // add risk data
         const tabelData = {
           riskId,
           projectVersionRef,
           riskName: riskName.riskName,
           residualRiskLevel,
-          decision: riskMitigation[riskId-1].decision
+          decision: 'decision'
         };
         risksTable.addData([tabelData]);
+
+        // add checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `${riskId}`;
+        checkbox.id = `risks__table__checkboxes__${riskId}`;
+        checkbox.name = 'risks__table__checkboxes';
+        $('#risks__table__checkboxes').append(checkbox);
       // });
+    };
+
+    const addDesc = (riskName) =>{
+      const {threatAgentDetail, threatDetail, motivationDetail} = riskName;
+      for(let i=0; i<3; i++){
+        tinymce.init({
+          selector: i===0 ? '.risk__threatAgent__rich-text': i===1 ? '.risk__threat__rich-text': '.risk__motivation__rich-text',
+          height: 200,
+          min_height: 200,
+          verify_html: true,
+          statusbar: false,
+          plugins: 'link lists',
+          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+  
+          setup: (editor) => {
+            editor.on('init', () => {
+              const content = i===0? threatAgentDetail : i===1 ? threatDetail : motivationDetail;
+              editor.setContent(content);
+            });
+          },
+        });
+      };     
     };
 
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
+      $('#risks__table__checkboxes').empty();
 
       fetchedData.forEach((risk) => {
         addRisk(risk);
+        addDesc(risk.riskName);
       });
     };
 
