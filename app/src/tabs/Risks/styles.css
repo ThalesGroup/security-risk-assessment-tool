@@ -21,3 +21,15 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
+#risk__automatic_riskname > div {
+    display: flex;
+}
+
+#risk__automatic_riskname > div:first-child {
+    justify-content: space-between;
+}
+
+#risk__manual__riskName {
+    display: none;
+}

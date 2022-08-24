@@ -119,10 +119,23 @@
       deleteRisks(checkboxes);
     });
 
+    // trigger automatic riskName
+    $('#risk__automatic_riskname button').on('click', async()=>{
+        $('#risk__manual__riskName').show();
+        $('#risk__automatic_riskname').hide();
+    });
+
+    // trigger manual riskName
+    $('#risk__manual__riskName button').on('click', async()=>{
+      $('#risk__manual__riskName').hide();
+      $('#risk__automatic_riskname').show();
+  });
+
     window.project.load(async (event, data) => {
       const fetchedData = await JSON.parse(data).Risk;
       updateRisksFields(fetchedData);
     });
+    
   } catch (err) {
     alert('Failed to load Risks Tab');
   }
