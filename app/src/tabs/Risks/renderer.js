@@ -74,7 +74,6 @@
       checkboxes.forEach((box) => {
         if (box.checked) checkedRisks.push(Number(box.value));
       });
-      checkedRisks.sort();
 
       await window.risks.deleteRisk(checkedRisks);
       checkedRisks.forEach((id) => {
@@ -82,22 +81,18 @@
           return object.riskId === id;
         });
 
-        if(risksTable.getSelectedData()[0].riskId === risksData[risksData.length -1].riskId){
-          // deleted last row
-          if(id === risksTable.getSelectedData()[0].riskId){
-            addSelectedRowData(risksData[index].riskId);
-          }else{
-            addSelectedRowData(risksData[index-1].riskId);
-          }
-        }else if(id === risksTable.getSelectedData()[0].riskId){
-          addSelectedRowData(risksData[index+1].riskId);
-        }
-
         $(`#risks__table__checkboxes__${id}`).remove();
         risksTable.getRow(Number(id)).delete();
 
         // update risksData`
         risksData.splice(index, 1);
+        if(risksData.length === 0)  $('#risks section').hide();
+        else {
+          risksData.forEach((risk)=>{
+            risksTable.deselectRow(risk.riskId);
+          })
+          addSelectedRowData(risksData[0].riskId);
+        }
       });
     };
 
@@ -118,8 +113,14 @@
     $('#risks button').first().on('click', async () => {
       const risk = await window.risks.addRisk();
       // update risksData
+      if(risksData.length === 0) $('#risks section').show();
       risksData.push(risk[0]);
       addRisk(risk[0]);
+      
+      risksData.forEach((risk)=>{
+        risksTable.deselectRow(risk.riskId);
+      })
+      addSelectedRowData(risk[0].riskId);
     });
 
     // delete Risk button
