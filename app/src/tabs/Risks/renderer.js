@@ -28,14 +28,18 @@
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData;
 
+    // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
       const {riskId, riskName} = risksData.find((risk) => risk.riskId === id);
+      const {threatAgentDetail, threatVerbDetail, motivationDetail} = riskName;
+
       $('.riskId').text(riskId);
       $('.riskname').text(riskName.riskName);
+      // tinymce.get()
     };
 
-    // row upon clicked
+    // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
       // alert("Row " + row.getIndex() + " Clicked!!!!")
       addSelectedRowData(row.getIndex());
@@ -62,28 +66,6 @@
         checkbox.name = 'risks__table__checkboxes';
         $('#risks__table__checkboxes').append(checkbox);
       // });
-    };
-
-    const addDetailsTables = () =>{
-      //const {threatAgentDetail, threatVerbDetail, motivationDetail} = riskName;
-      for(let i=0; i<3; i++){
-        tinymce.init({
-          selector: i===0 ? '.risk__threatAgent__rich-text': i===1 ? '.risk__threat__rich-text': '.risk__motivation__rich-text',
-          height: 200,
-          min_height: 200,
-          verify_html: true,
-          statusbar: false,
-          plugins: 'link lists',
-          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
-  
-          setup: (editor) => {
-            editor.on('init', () => {
-              const content = '';
-              editor.setContent(content);
-            });
-          },
-        });
-      };     
     };
 
     const deleteRisks = async (checkboxes) =>{
@@ -120,7 +102,6 @@
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
-      addDetailsTables();
 
       fetchedData.forEach((risk, i) => {
         addRisk(risk);
