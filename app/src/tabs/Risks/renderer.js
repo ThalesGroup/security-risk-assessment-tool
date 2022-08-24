@@ -26,13 +26,19 @@
   try {
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
+    let risksData;
+
+    const addSelectedRowData = (id) =>{
+      risksTable.selectRow(id);
+      const {riskId, riskName} = risksData.find((risk) => risk.riskId === id);
+      $('.riskId').text(riskId);
+      $('.riskname').text(riskName.riskName);
+    };
 
     // row upon clicked
     risksTable.on('rowClick', (e, row) => {
-      const {riskId, riskName} = row.getData();
-      // alert("Row " + row.getData().riskName + " Clicked!!!!")
-      $('.riskId').text(riskId);
-      $('.riskname').text(riskName);
+      // alert("Row " + row.getIndex() + " Clicked!!!!")
+      addSelectedRowData(row.getIndex());
     });
 
     const addRisk = (risk) => {
@@ -58,8 +64,8 @@
       // });
     };
 
-    const addDesc = (riskName) =>{
-      const {threatAgentDetail, threatVerbDetail, motivationDetail} = riskName;
+    const addDetailsTables = () =>{
+      //const {threatAgentDetail, threatVerbDetail, motivationDetail} = riskName;
       for(let i=0; i<3; i++){
         tinymce.init({
           selector: i===0 ? '.risk__threatAgent__rich-text': i===1 ? '.risk__threat__rich-text': '.risk__motivation__rich-text',
@@ -72,7 +78,7 @@
   
           setup: (editor) => {
             editor.on('init', () => {
-              const content = i===0 ? threatAgentDetail : i===1 ? threatVerbDetail : motivationDetail;
+              const content = '';
               editor.setContent(content);
             });
           },
@@ -88,44 +94,64 @@
 
       await window.risks.deleteRisk(checkedRisks);
       checkedRisks.forEach((id) => {
-        $(`#risks__table__checkboxes__${id}`).remove();
-
-        risksTable.getRows().forEach((row) => {
-          const rowId = Number(row.getData().riskId);
-          if (rowId === Number(id)) {
-            row.delete();
-          };
+        const index = risksData.findIndex(object => {
+          return object.riskId === Number(id);
         });
+
+        if(risksTable.getSelectedData()[0].riskId === risksData[risksData.length -1].riskId){
+          // deleted last row
+          if(Number(id) === risksTable.getSelectedData()[0].riskId){
+            addSelectedRowData(risksData[index].riskId);
+          }else{
+            addSelectedRowData(risksData[index-1].riskId);
+          }
+        }else if(Number(id) === risksTable.getSelectedData()[0].riskId){
+          addSelectedRowData(risksData[index+1].riskId);
+        }
+
+        $(`#risks__table__checkboxes__${id}`).remove();
+        risksTable.getRow(Number(id)).delete();
+
+        // update risksData
+        risksData.splice(index, 1);
       });
     };
 
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
+      addDetailsTables();
 
-      fetchedData.forEach((risk) => {
+      fetchedData.forEach((risk, i) => {
         addRisk(risk);
-        addDesc(risk.riskName);
+        if(i===0) {
+          const {riskId} = risk;
+          addSelectedRowData(riskId)
+        }
       });
     };
 
+    // add Risk button
     $('#risks button').first().on('click', async () => {
       const risk = await window.risks.addRisk();
+      // update risksData
+      risksData.push(risk[0]);
       addRisk(risk[0]);
     });
 
+    // delete Risk button
     $('#risks button:nth-child(2)').on('click', async () => {
       const checkboxes = document.getElementsByName('risks__table__checkboxes');
       deleteRisks(checkboxes);
     });
 
-    // trigger automatic riskName
+    // trigger Automatic RiskName section
     $('#risk__automatic_riskname button').on('click', async()=>{
         $('#risk__manual__riskName').show();
         $('#risk__automatic_riskname').hide();
     });
 
-    // trigger manual riskName
+    // trigger Manual RiskName section
     $('#risk__manual__riskName button').on('click', async()=>{
       $('#risk__manual__riskName').hide();
       $('#risk__automatic_riskname').show();
@@ -133,6 +159,7 @@
 
     window.project.load(async (event, data) => {
       const fetchedData = await JSON.parse(data).Risk;
+      risksData = fetchedData;
       updateRisksFields(fetchedData);
     });
     

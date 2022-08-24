@@ -28,6 +28,7 @@ const renderRisks = () => {
     selectable: 1,
     layout: 'fitColumns',
     height: '100%',
+    index: 'riskId',
     columns: [ // Define Table Columns
       {
         title: 'Risk Id', field: 'riskId', width: 100, headerSort: false, headerHozAlign: 'center',
