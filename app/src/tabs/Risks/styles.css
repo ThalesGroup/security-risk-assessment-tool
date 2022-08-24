@@ -22,11 +22,11 @@
 * -----------------------------------------------------------------------------
 */
 
-#risk__automatic_riskname > div {
+#risks > section > div {
     display: flex;
 }
 
-#risk__automatic_riskname > div:first-child {
+#risks > section > div:first-child {
     justify-content: space-between;
 }
 

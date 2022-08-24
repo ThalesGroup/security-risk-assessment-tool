@@ -62,21 +62,25 @@
             <div id="risks__table"></div>
           </div>
           <section>
+            <div>
+              <h1>Risk description</h1>
+              <h1>Risk id: <span class="riskId"></span></h1>
+            </div>
+
             <section id="risk__automatic_riskname">
-              <div>
-                <h1>Risk description</h1>
-                <h1>Risk id: <span class="riskId"></span></h1>
-              </div>
-              
               <p>Risk Name: As a threat agent, I can Threat the Business Asset compromising the Supporting Asset in
                 order to Motivation, by exploiting the Vulnerability.
               </p>
               
-              <div>
+              <div id="riskName">
                 <p class="riskname"></p>
-              </div>
-              
-              <button>Replace with Manual Risk Name</button>
+                <button>Replace with Manual Risk Name</button>
+              </div id="riskName">
+
+              <section id="risk__manual__riskName">
+                <p>Risk Name</p>
+                <button>Replace with Automatic Risk Name</button>
+              </section>
               
               <div>
                 <div style="flex: 1">
@@ -106,14 +110,9 @@
                 <div>
                   <label for="risk__motivation">In order to Motivation</label>
                   <select id="risk__motivation" name="risk__motivation"></select>
-                  <textarea class="rich-text" id="risk__threat__rich-text"></textarea>
+                  <textarea class="rich-text" id="risk__motivation__rich-text"></textarea>
                 </div>
               </div>
-            </section>
-
-            <section id="risk__manual__riskName">
-                <p>Risk Name</p>
-                <button>Replace with Automatic Risk Name</button>
             </section>
           </section>
           <footer></footer>

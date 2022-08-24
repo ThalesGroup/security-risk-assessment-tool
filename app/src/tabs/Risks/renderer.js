@@ -36,12 +36,13 @@
 
       $('.riskId').text(riskId);
       $('.riskname').text(riskName.riskName);
-      // tinymce.get()
+      tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+      tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
+      tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
     };
 
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
-      // alert("Row " + row.getIndex() + " Clicked!!!!")
       addSelectedRowData(row.getIndex());
     });
 
@@ -71,23 +72,24 @@
     const deleteRisks = async (checkboxes) =>{
       const checkedRisks = [];
       checkboxes.forEach((box) => {
-        if (box.checked) checkedRisks.push(box.value);
+        if (box.checked) checkedRisks.push(Number(box.value));
       });
+      checkedRisks.sort();
 
       await window.risks.deleteRisk(checkedRisks);
       checkedRisks.forEach((id) => {
         const index = risksData.findIndex(object => {
-          return object.riskId === Number(id);
+          return object.riskId === id;
         });
 
         if(risksTable.getSelectedData()[0].riskId === risksData[risksData.length -1].riskId){
           // deleted last row
-          if(Number(id) === risksTable.getSelectedData()[0].riskId){
+          if(id === risksTable.getSelectedData()[0].riskId){
             addSelectedRowData(risksData[index].riskId);
           }else{
             addSelectedRowData(risksData[index-1].riskId);
           }
-        }else if(Number(id) === risksTable.getSelectedData()[0].riskId){
+        }else if(id === risksTable.getSelectedData()[0].riskId){
           addSelectedRowData(risksData[index+1].riskId);
         }
 
@@ -126,16 +128,16 @@
       deleteRisks(checkboxes);
     });
 
-    // trigger Automatic RiskName section
-    $('#risk__automatic_riskname button').on('click', async()=>{
+    // trigger Manual RiskName section
+    $('#riskName button').on('click', async()=>{
         $('#risk__manual__riskName').show();
-        $('#risk__automatic_riskname').hide();
+        $('#riskName').hide();
     });
 
-    // trigger Manual RiskName section
+    // trigger Automatic RiskName section
     $('#risk__manual__riskName button').on('click', async()=>{
       $('#risk__manual__riskName').hide();
-      $('#risk__automatic_riskname').show();
+      $('#riskName').show();
   });
 
     window.project.load(async (event, data) => {
