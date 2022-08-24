@@ -29,6 +29,7 @@
     let risksData, businessAssets, supportingAssets;
     let assetsRelationship = {};
 
+    // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
       let supportingAssetOptions = '';
       $('#risk__supportingAsset').empty();
@@ -39,6 +40,19 @@
       });
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
+
+    // select supportingAssetRef
+    $('#risk__supportingAsset').on('change', ()=>{
+      const saRef = $('#risk__supportingAsset').val();
+      //alert('SA changed to id:' + saRef)
+    });
+
+    // select businessAssetRef
+    $('#risk__businessAsset').on('change', ()=>{
+      const baRef = $('#risk__businessAsset').val()
+      // alert('BA changed to id: ' + baRef)
+      addSupportingAssetOptions(Number(baRef));
+    });
 
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
@@ -191,8 +205,25 @@
       assetsRelationshipSetUp(fetchedData);
       updateRisksFields(risksData);
     });
+
+    // get updated businessAsset data
+    window.risks.getBusinessAssets((event, value, id) => {
+      const options = $(`#risk__businessAsset option[value=${id}]`);
+      console.log(id, value)
+
+      if (value === null) {
+        // delete option
+        $(`#risk__businessAsset option[value=${id}]`).remove();
+      } else if (options.length) {
+        // update businessAssetName
+        options.text(value);
+      } else {
+        // add option
+        $('#risk__businessAsset').append(new Option(value, id));
+      }
+    });
     
   } catch (err) {
-    alert('Failed to load Risks Tab');
+    alert('Failed to load Risks Tab: ' + err);
   }
 })();
