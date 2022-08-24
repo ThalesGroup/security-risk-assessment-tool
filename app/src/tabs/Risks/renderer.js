@@ -96,7 +96,7 @@
         $(`#risks__table__checkboxes__${id}`).remove();
         risksTable.getRow(Number(id)).delete();
 
-        // update risksData
+        // update risksData`
         risksData.splice(index, 1);
       });
     };

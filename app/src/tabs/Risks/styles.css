@@ -22,12 +22,17 @@
 * -----------------------------------------------------------------------------
 */
 
-#risks > section > div {
+#risks > section > div:first-child {
+    display: flex;
+    justify-content: space-between;
+}
+
+.risk__flex {
     display: flex;
 }
 
-#risks > section > div:first-child {
-    justify-content: space-between;
+.risk__flex > div{
+    flex: 1;
 }
 
 #risk__manual__riskName {
