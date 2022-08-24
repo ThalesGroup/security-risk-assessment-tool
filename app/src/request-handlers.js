@@ -404,7 +404,7 @@ const { renderSupportingAssets } = require('./tabs/Supporting Assets/render-supp
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
 ipcMain.handle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
 ipcMain.on('supportingAssets:deleteSupportingAsset', (event, ids) => {
-  deleteSupportingAsset(israProject, ids);
+  deleteSupportingAsset(israProject, ids, getMainWindow());
 });
 ipcMain.on('supportingAssets:updateSupportingAsset', (event, id, field, value) => {
   updateSupportingAsset(israProject, getMainWindow(), id, field, value);

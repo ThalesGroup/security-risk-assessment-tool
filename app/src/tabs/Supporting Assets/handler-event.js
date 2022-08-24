@@ -45,10 +45,11 @@ const addSupportingAsset = (israProject) => {
   * @param {ISRAProject} israProject current ISRA Project
   * @param {Array} ids supporting asset id(s)
 */
-const deleteSupportingAsset = (israProject, ids) => {
+const deleteSupportingAsset = (israProject, ids, win) => {
   try {
     ids.forEach((id) => {
       israProject.deleteSupportingAsset(Number(id));
+      win.webContents.send('risks:getSupportingAssets', null, Number(id));
     });
   } catch (err) {
     dialog.showMessageBoxSync(null, { message: 'Failed to delete supporting asset(s)' });
