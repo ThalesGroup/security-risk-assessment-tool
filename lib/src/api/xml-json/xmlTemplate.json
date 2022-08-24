@@ -453,16 +453,16 @@
                     "1"
                 ],
                 "riskName": [
-                    "As a Insider, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
+                    "As a Researcher, I can tamper with the Server URL compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
                 ],
                 "threatAgent": [
-                    "Insider"
+                    "Researcher"
                 ],
                 "threatAgentDetail": [
                     "ta details"
                 ],
                 "threatVerb": [
-                    "steal"
+                    "tamper with"
                 ],
                 "threatVerbDetail": [
                     "t details"
@@ -474,7 +474,7 @@
                     "motivation details"
                 ],
                 "businessAssetRef": [
-                    "1"
+                    "4"
                 ],
                 "supportingAssetRef": [
                     "2"
@@ -484,7 +484,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Insider, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
+                                    "As a Researcher, I can tamper with the Server URL compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
                                 ]
                             }
                         ]
@@ -498,10 +498,10 @@
                         "BusinessAssetSelectedProperties": [
                             {
                                 "businessAssetConfidentialityFlag": [
-                                    "1"
+                                    "0"
                                 ],
                                 "businessAssetIntegrityFlag": [
-                                    "0"
+                                    "1"
                                 ],
                                 "businessAssetAvailabilityFlag": [
                                     "0"

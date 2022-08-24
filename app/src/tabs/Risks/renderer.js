@@ -26,19 +26,47 @@
   try {
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
-    let risksData;
+    let risksData, businessAssets, supportingAssets;
+    let assetsRelationship = {};
+
+    const addSupportingAssetOptions = (businessAssetRef) =>{
+      let supportingAssetOptions = '';
+      $('#risk__supportingAsset').empty();
+      supportingAssets.forEach((sa) =>{
+        if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef)){
+          supportingAssetOptions += `<option value="${sa.supportingAssetId}">${sa.supportingAssetName}</option>`;
+        }
+      });
+      $('#risk__supportingAsset').append(supportingAssetOptions);
+    };
 
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
       const {riskId, riskName} = risksData.find((risk) => risk.riskId === id);
-      const {threatAgentDetail, threatVerbDetail, motivationDetail} = riskName;
+      const {
+        threatAgent,
+        threatAgentDetail, 
+        threatVerb,
+        threatVerbDetail,
+        motivation, 
+        motivationDetail,
+        businessAssetRef,
+        supportingAssetRef
+      } = riskName;
 
       $('.riskId').text(riskId);
+      // Set Risk Name data
       $('.riskname').text(riskName.riskName);
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
       tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
       tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+      $('select[id="risk__threatAgent"]').val(threatAgent);
+      $('select[id="risk__threat"]').val(threatVerb);
+      $('#risk__motivation').val(motivation);
+      $('select[id="risk__businessAsset"]').val(businessAssetRef);
+      addSupportingAssetOptions(businessAssetRef);
+      $('select[id="risk__supportingAsset"]').val(supportingAssetRef);
     };
 
     // row is clicked & selected
@@ -139,12 +167,29 @@
     $('#risk__manual__riskName button').on('click', async()=>{
       $('#risk__manual__riskName').hide();
       $('#riskName').show();
-  });
+    });
+
+    const assetsRelationshipSetUp = (fetchedData) =>{
+      businessAssets = fetchedData.BusinessAsset;
+      supportingAssets = fetchedData.SupportingAsset;
+      supportingAssets.forEach((sa)=>{
+        const { businessAssetRef } = sa;
+        assetsRelationship[sa.supportingAssetId] = businessAssetRef;
+      });
+
+      $('#risk__businessAsset').empty();
+      let businessAssetsOptions = '';
+      businessAssets.forEach((ba)=>{
+        businessAssetsOptions += `<option value="${ba.businessAssetId}">${ba.businessAssetName}</option>`;
+      });
+      $('#risk__businessAsset').append(businessAssetsOptions);
+    }
 
     window.project.load(async (event, data) => {
-      const fetchedData = await JSON.parse(data).Risk;
-      risksData = fetchedData;
-      updateRisksFields(fetchedData);
+      const fetchedData = await JSON.parse(data);
+      risksData = fetchedData.Risk;
+      assetsRelationshipSetUp(fetchedData);
+      updateRisksFields(risksData);
     });
     
   } catch (err) {

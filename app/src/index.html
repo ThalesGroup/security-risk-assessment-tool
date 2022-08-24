@@ -78,19 +78,45 @@
               </div id="riskName">
 
               <div id="risk__manual__riskName">
+                <input type="text" style="width: 100%;">
                 <button>Replace with Automatic Risk Name</button>
-                <input type="text">
               </div>
               
               <div class="risk__flex">
                 <div>
                   <label for="risk__threatAgent">As a Threat Agent</label>
-                  <select id="risk__threatAgent" name="risk__threatAgent"></select>
+                  <select id="risk__threatAgent" name="risk__threatAgent">
+                    <option value="" selected>Select...</option>
+                    <option value="Insider">Insider</option>
+                    <option value="Criminal">Criminal</option>
+                    <option value="Competitor">Competitor</option>
+                    <option value="Criminal organization">Criminal organization</option>
+                    <option value="Government agency">Government agency</option>
+                    <option value="Researcher">Researcher</option>
+                    <option value="Activist">Activist</option>
+                    <option value="Script Kiddy">Script Kiddy</option>
+                    <option value="User">User</option>
+                    <option value="R&D Employee">Criminal</option>
+                    <option value="Operationnal Employee">Operationnal Employee</option>
+                    <option value="Maintenance Employee">Maintenance Employee</option>
+                    <option value="IT Employee">IT Employee</option>
+                  </select>
                   <textarea class="rich-text" id="risk__threatAgent__rich-text"></textarea>
                 </div>
                 <div>
                   <label for="risk__threat">I can Threat</label>
-                  <select id="risk__threat" name="risk__threat"></select>
+                  <select id="risk__threat" name="risk__threat">
+                    <option value="" selected>Select...</option>
+                    <option value="lose">lose</option>
+                    <option value="spoof">spoof</option>
+                    <option value="tamper with">tamper with</option>
+                    <option value="repudiate">repudiate</option>
+                    <option value="disclose">disclose</option>
+                    <option value="steal">steal</option>
+                    <option value="deny access to">deny access to</option>
+                    <option value="gain an unauthorized access to">gain an unauthorized access to</option>
+                    <option value="flood">flood</option>
+                  </select>
                   <textarea class="rich-text" id="risk__threat__rich-text"></textarea>
                 </div>
               </div>
@@ -107,9 +133,9 @@
               </div>
               
               <div>
-                <div>
+                <div style="display: flex; flex-direction: column;">
                   <label for="risk__motivation">In order to Motivation</label>
-                  <select id="risk__motivation" name="risk__motivation"></select>
+                  <input type="text" name="risk__motivation" id="risk__motivation">
                   <textarea class="rich-text" id="risk__motivation__rich-text"></textarea>
                 </div>
               </div>

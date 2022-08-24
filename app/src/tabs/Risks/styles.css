@@ -33,9 +33,15 @@
 
 .risk__flex > div{
     flex: 1;
+    margin-bottom: 1em;
 }
 
 #risk__manual__riskName {
     display: none;
+    margin-bottom: 1em;
+}
+
+#riskName {
+    margin-bottom: 1em;
 }
 
