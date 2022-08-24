@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="./tabs/Project Context/styles.css">
     <link rel="stylesheet" type="text/css" href="./tabs/Business Assets/styles.css">
     <link rel="stylesheet" type="text/css" href="./tabs/Supporting Assets/styles.css">
+    <link rel="stylesheet" type="text/css" href="./tabs/Risks/styles.css">
     <link href="../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 
     <!-- npm modules (minified) -->
@@ -64,11 +65,14 @@
             <section id="risk__automatic_riskname">
               <div style="display: flex; justify-content: space-between">
                 <h1>Risk description</h1>
-                <h1>Risk id: </h1>
+                <h1>Risk id: <span class="riskId"></span></h1>
               </div>
               <p>Risk Name: As a threat agent, I can Threat the Business Asset compromising the Supporting Asset in
                 order to Motivation, by exploiting the Vulnerability.
               </p>
+              <div>
+                <p class="riskname"></p>
+              </div>
               <button>Replace with Manual Risk Name</button>
               <div style="display: flex;">
                 <div style="flex: 1">

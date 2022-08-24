@@ -27,8 +27,16 @@
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
 
+    // row upon clicked
+    risksTable.on('rowClick', (e, row) => {
+      const {riskId, riskName} = row.getData();
+      // alert("Row " + row.getData().riskName + " Clicked!!!!")
+      $('.riskId').text(riskId);
+      $('.riskname').text(riskName);
+    });
+
     const addRisk = (risk) => {
-      const { riskId, projectVersionRef, residualRiskLevel, riskName, riskMitigation } = risk;
+      const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
       // risksTable.on('tableBuilt', () => {
         // add risk data
         const tableData = {
@@ -36,7 +44,7 @@
           projectVersionRef,
           riskName: riskName.riskName,
           residualRiskLevel,
-          decision: 'decision'
+          riskManagementDecision
         };
         risksTable.addData([tableData]);
 
@@ -51,7 +59,7 @@
     };
 
     const addDesc = (riskName) =>{
-      const {threatAgentDetail, threatDetail, motivationDetail} = riskName;
+      const {threatAgentDetail, threatVerbDetail, motivationDetail} = riskName;
       for(let i=0; i<3; i++){
         tinymce.init({
           selector: i===0 ? '.risk__threatAgent__rich-text': i===1 ? '.risk__threat__rich-text': '.risk__motivation__rich-text',
@@ -64,7 +72,7 @@
   
           setup: (editor) => {
             editor.on('init', () => {
-              const content = i===0? threatAgentDetail : i===1 ? threatDetail : motivationDetail;
+              const content = i===0 ? threatAgentDetail : i===1 ? threatVerbDetail : motivationDetail;
               editor.setContent(content);
             });
           },

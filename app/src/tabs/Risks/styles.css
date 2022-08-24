@@ -21,34 +21,3 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-
-const renderRisks = () => {
-  const html = '';
-  const tableOptions = {
-    selectable: 1,
-    layout: 'fitColumns',
-    height: '100%',
-    columns: [ // Define Table Columns
-      {
-        title: 'Risk Id', field: 'riskId', width: 100, headerSort: false, headerHozAlign: 'center',
-      },
-      {
-        title: 'Project Version', field: 'projectVersionRef', headerSort: false, headerHozAlign: 'center',
-      },
-      {
-        title: 'Risk Name', field: 'riskName', headerSort: false, headerHozAlign: 'center',
-      },
-      {
-        title: 'Risk Level', field: 'residualRiskLevel', headerSort: false, headerHozAlign: 'center',
-      },
-      {
-        title: 'Management Decision', field: 'riskManagementDecision', headerSort: false, headerHozAlign: 'center',
-      },
-    ],
-  };
-  return [html, tableOptions];
-};
-
-module.exports = {
-  renderRisks,
-};
