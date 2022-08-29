@@ -36,7 +36,7 @@ const addBusinessAsset = (israProject, win) => {
     const businessAsset = new BusinessAsset();
     israProject.addBusinessAsset(businessAsset);
     win.webContents.send('supportingAssets:getBusinessAssets', businessAsset.businessAssetName, businessAsset.businessAssetId);
-    win.webContents.send('risks:getBusinessAssets', businessAsset.businessAssetName, businessAsset.businessAssetId);
+    win.webContents.send('risks:load', israProject.toJSON());
     return [businessAsset.properties];
   } catch (err) {
     return dialog.showMessageBoxSync(null, { message: 'Failed to add business asset' });
@@ -54,7 +54,7 @@ const deleteBusinessAsset = (israProject, ids, win) => {
     ids.forEach((id) => {
       israProject.deleteBusinessAsset(Number(id));
       win.webContents.send('supportingAssets:getBusinessAssets', null, id);
-      win.webContents.send('risks:getBusinessAssets', null, id);
+      win.webContents.send('risks:load', israProject.toJSON());
     });
   } catch (err) {
     dialog.showMessageBoxSync(null, { message: 'Failed to delete business asset(s)' });
@@ -93,11 +93,11 @@ const updateBusinessAsset = (ISRAproject, win, id, field, value) => {
       israProject.getBusinessAsset(id)[field] = value;
       if (field === 'businessAssetName') {
         win.webContents.send('supportingAssets:getBusinessAssets', value, id);
-        win.webContents.send('risks:getBusinessAssets', value, id);
       }
     } else {
       israProject.getBusinessAsset(id).businessAssetProperties[field] = Number(value);
     }
+    win.webContents.send('risks:load', israProject.toJSON());
   } catch (err) {
     dialog.showMessageBoxSync(null, { message: `Failed to update business asset ${id}` });
   }

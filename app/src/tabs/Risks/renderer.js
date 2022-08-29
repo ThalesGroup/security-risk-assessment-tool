@@ -206,37 +206,11 @@
       updateRisksFields(risksData);
     });
 
-    // get updated businessAsset data
-    window.risks.getBusinessAssets((event, value, id) => {
-      const options = $(`#risk__businessAsset option[value=${id}]`);
-
-      if (value === null) {
-        // delete option
-        $(`#risk__businessAsset option[value=${id}]`).remove();
-      } else if (options.length) {
-        // update businessAssetName
-        options.text(value);
-      } else {
-        // add option
-        $('#risk__businessAsset').append(new Option(value, id));
-      }
-    });
-
-    // get updated supportingAsset data
-    window.risks.getSupportingAssets((event, value, id) => {
-      const options = $(`#risk__supportingAsset option[value=${id}]`);
-      console.log(id, value);
-
-      if (value === null) {
-        // delete option
-        // $(`#risk__supportingAsset option[value=${id}]`).remove();
-      } else if (options.length) {
-        // update businessAssetName
-        // options.text(value);
-      } else {
-        // add option
-        // $('#risk__supportingAsset').append(new Option(value, id));
-      }
+    // refresh businessAsset & supportingAsset Data
+    window.risks.load(async (event, data) => {
+      const fetchedData = await JSON.parse(data);
+      assetsRelationshipSetUp(fetchedData);
+      updateRisksFields(risksData);
     });
     
   } catch (err) {

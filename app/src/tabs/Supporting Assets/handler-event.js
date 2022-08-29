@@ -49,7 +49,7 @@ const deleteSupportingAsset = (israProject, ids, win) => {
   try {
     ids.forEach((id) => {
       israProject.deleteSupportingAsset(Number(id));
-      win.webContents.send('risks:getSupportingAssets', null, Number(id));
+      win.webContents.send('risks:load', israProject.toJSON());
     });
   } catch (err) {
     dialog.showMessageBoxSync(null, { message: 'Failed to delete supporting asset(s)' });
@@ -80,6 +80,7 @@ const updateSupportingAsset = (israProject, win, id, field, value) => {
       // value is string
       supportingAsset[field] = value;
     }
+    win.webContents.send('risks:load', israProject.toJSON());
   } catch (err) {
     dialog.showMessageBoxSync(null, { message: `Failed to update supporting asset ${id}` });
   }
