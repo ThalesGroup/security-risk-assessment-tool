@@ -151,20 +151,23 @@
       });
     };
 
+    // update fields in table
+    // const updateRisksTable = (risk) =>{
+    //   const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
+    //   const tableData = {
+    //     riskId,
+    //     projectVersionRef,
+    //     riskName: riskName.riskName,
+    //     residualRiskLevel,
+    //     riskManagementDecision
+    //   };
+    //   risksTable.updateData([tableData]);
+    // }
+
     const updateRiskName = async (field, value) =>{
       const id = risksTable.getSelectedData()[0].riskId;
-      const risks = await window.risks.updateRiskName(id, field, value);
-      let tableData;
-      risksData = risks;
-      risksData.forEach((risk) =>{
-        if(risk.riskid === id){
-          tableData = {
-            riskId: risk.riskId,
-            riskName: risk.riskName.riskName,
-          };
-        }
-      });
-       risksTable.updateData([tableData]);
+      await window.risks.updateRiskName(id, field, value);
+      
     };
 
     // add Risk button
@@ -253,6 +256,7 @@
     // refresh businessAsset & supportingAsset Data
     window.risks.load(async (event, data) => {
       const fetchedData = await JSON.parse(data);
+      risksData = fetchedData.Risk;
       assetsRelationshipSetUp(fetchedData);
       updateRisksFields(risksData);
     });

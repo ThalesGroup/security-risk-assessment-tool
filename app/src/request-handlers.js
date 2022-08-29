@@ -420,8 +420,8 @@ const { renderRisks } = require('./tabs/Risks/render-risks');
 ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
 ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids))
-ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
-  return updateRiskName(israProject, id, field, value);
+ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
+  updateRiskName(israProject, getMainWindow(), id, field, value);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {
