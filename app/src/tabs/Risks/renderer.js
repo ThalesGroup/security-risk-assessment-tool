@@ -151,6 +151,22 @@
       });
     };
 
+    const updateRiskName = async (field, value) =>{
+      const id = risksTable.getSelectedData()[0].riskId;
+      const risks = await window.risks.updateRiskName(id, field, value);
+      let tableData;
+      risksData = risks;
+      risksData.forEach((risk) =>{
+        if(risk.riskid === id){
+          tableData = {
+            riskId: risk.riskId,
+            riskName: risk.riskName.riskName,
+          };
+        }
+      });
+       risksTable.updateData([tableData]);
+    };
+
     // add Risk button
     $('#risks button').first().on('click', async () => {
       const risk = await window.risks.addRisk();
@@ -175,12 +191,14 @@
     $('#riskName button').on('click', async()=>{
         $('#risk__manual__riskName').show();
         $('#riskName').hide();
+        updateRiskName('riskName', '');
     });
 
     // trigger Automatic RiskName section
     $('#risk__manual__riskName button').on('click', async()=>{
       $('#risk__manual__riskName').hide();
       $('#riskName').show();
+      updateRiskName('automatic riskName');
     });
 
     const assetsRelationshipSetUp = (fetchedData) =>{
@@ -204,6 +222,32 @@
       risksData = fetchedData.Risk;
       assetsRelationshipSetUp(fetchedData);
       updateRisksFields(risksData);
+    });
+
+    $('#risk__manual__riskName input').on('change', ()=>{
+      const input = $('#risk__manual__riskName input').val();
+      updateRiskName('riskName', input);
+    });
+
+    $('#risk__threatAgent').on('change', ()=>{   
+      const selected = $('#risk__threatAgent').find(":selected").val();
+      updateRiskName('threatAgent', selected);
+    });
+
+    $('#risk__threat').on('change', ()=>{
+      const selected = $('#risk__threat').find(":selected").val();
+      updateRiskName('threatVerb', selected);
+    });
+
+    $('#risk__businessAsset').on('change', ()=>{
+      const selected = $('#risk__businessAsset').find(":selected").val();
+      updateRiskName('businessAssetRef', selected);
+    });
+
+    $('#risk__supportingAsset').on('change', ()=>{
+      const id = risksTable.getSelectedData()[0].riskId;
+      const selected = $('#risk__supportingAsset').find(":selected").val();
+      updateRiskName('supportingAssetRef', selected);
     });
 
     // refresh businessAsset & supportingAsset Data

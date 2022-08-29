@@ -414,12 +414,15 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
 });
 
 // Risks Tab
-const { addRisk, deleteRisk } = require('./tabs/Risks/handler-event');
+const { addRisk, deleteRisk, updateRiskName } = require('./tabs/Risks/handler-event');
 const { renderRisks } = require('./tabs/Risks/render-risks');
 
 ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
 ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids))
+ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
+  return updateRiskName(israProject, id, field, value);
+});
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

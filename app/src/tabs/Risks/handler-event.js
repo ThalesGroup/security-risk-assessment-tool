@@ -55,7 +55,36 @@ const deleteRisk = (israProject, ids) => {
     }
 };
 
+/**
+  * delete selected risk row(s)
+  * @param {ISRAProject} israProject current ISRA Project
+  * @param {Array} ids of risk id(s)
+*/
+const updateRiskName = (israProject, id, field, value) => {
+    try {
+        const { riskName } = israProject.getRisk(id);
+        let businessAsset = null, supportingAsset = null;
+        if(riskName.businessAssetRef) businessAsset = israProject.getBusinessAsset(riskName.businessAssetRef);
+        if(riskName.supportingAssetRef) supportingAsset = israProject.getSupportingAsset(riskName.supportingAssetRef);
+        
+        if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
+            riskName[field] = value;
+        }else{
+            riskName[field] = parseInt(value);
+        };
+
+        if(field !== 'riskName'){
+            riskName.riskName = 'As a '+  riskName.threatAgent + ', I can ' + riskName.threatVerb + ' the ' + (businessAsset === null ? '' : businessAsset.businessAssetName) + ' compromising the ' + (supportingAsset === null ? '' : supportingAsset.supportingAssetName) + ' in order to ' + riskName.motivation;
+        }
+        return israProject.properties.Risk;
+    } catch (err) {
+        console.log(err);
+      dialog.showMessageBoxSync(null, { message: `Failed to update risk ${id}` });
+    }
+}; 
+
 module.exports = {
     addRisk,
-    deleteRisk
+    deleteRisk,
+    updateRiskName
 };
