@@ -143,15 +143,88 @@
           </section>
 
           <section id="risks__risk__evaluation">
+            <h1>Risk evaluation</h1>
+
             <div>
-              <h1>Risk evaluation</h1>
-              <h4>Vulnerability evaluation</h4>
+              <h2>Likelihood evaluation</h2>
+              <p>Chance for a threat agent to successfully attack the business asset based on resources, skills, opportunity and motivation</p>
+              <div id="risk__likehood__table">
+                <div>
+                  <p>How technically skilled is this group of threat agents?</p>
+                  <select name="risk__skillLevel" id="risk__skillLevel">
+                    <option>Select...</option>
+                    <option value="9">No technical skill</option>
+                    <option value="6">Some technical skills</option>
+                    <option value="5">Advanced computer skills</option>
+                    <option value="3">Network and programming skills</option>
+                    <option value="1">Security penetration skills</option>
+                  </select>
+                </div>
+                <div>
+                  <p>How motivated is this group of threat agents to find and exploit this vulnerability?</p>
+                  <select name="risk__reward" id="risk__reward">
+                    <option>Select...</option>
+                    <option value="9">High reward</option>
+                    <option value="4">Possible reward</option>
+                    <option value="1">Low or no reward</option>
+                  </select>
+                </div>
+                <div>
+                  <p>What resources and opportunities are required for this group of threat agents to find and exploit this vulnerability?</p>
+                  <select name="risk__accessResources" id="risk__accessResources">
+                    <option>Select...</option>
+                    <option value="9">No access or resources required</option>
+                    <option value="7">Some access or resources required</option>
+                    <option value="4">Special access or resources required</option>
+                    <option value="0">Full access or expensive resources required</option>
+                  </select>
+                </div>
+                <div>
+                  <p>How large is this group of threat agents?</p>
+                  <select name="risk__size" id="risk__size">
+                    <option>Select...</option>
+                    <option value="9">Anonymous Internet users</option>
+                    <option value="6">Authenticated users</option>
+                    <option value="5">Partners</option>
+                    <option value="4">Intranet users</option>
+                    <option value="2">Developers/system administrators</option>
+                  </select>
+                </div>
+                <div>
+                  <p>How likely is an exploit to be detected?</p>
+                  <select name="risk__intrusionDetection" id="risk__intrusionDetection">
+                    <option>Select...</option>
+                    <option value="9">Not logged</option>
+                    <option value="8">Logged without review</option>
+                    <option value="3">Logged and reviewed</option>
+                    <option value="1">Active detection in application</option>
+                  </select>
+                </div>
+                <div>
+                  <p>What is the probability of occurrence?</p>
+                  <select name="risk__occurrence" id="risk__occurrence">
+                    <option>Select...</option>
+                    <option value="9">Very high (it will happen)</option>
+                    <option value="7">High (it already happened in Thales DIS)</option>
+                    <option value="5">Medium (it already happened in similar companies)</option>
+                    <option value="3">Low (it happened)</option>
+                    <option value="1">Very low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2>Impact evaluation</h2>
+              <p>Select the Business Asset security properties you want to take into account for this risk evaluation:</p>
+            </div>
+
+            <div>
+              <h2>Vulnerability evaluation</h2>
               <p>What is the vulnerability on your supporting asset that should be taken into account for this risk?</p>
               <button name="Go to vulnerabilities view">Go to vulnerabilities view</button>
+              <section id="risks__vulnerability__evaluation"></section>
             </div>
-            <section id="risks__vulnerability__evaluation">
-
-            </section>
           </section>
           <footer></footer>
         </div>

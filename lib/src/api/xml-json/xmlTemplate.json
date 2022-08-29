@@ -1306,7 +1306,7 @@
                     "5"
                 ],
                 "riskName": [
-                    "As a Researcher, I can disclose the Server URL compromising the Internet connection (TLS) in order to gfhg"
+                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg"
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -1327,7 +1327,7 @@
                     ""
                 ],
                 "businessAssetRef": [
-                    "4"
+                    ""
                 ],
                 "supportingAssetRef": [
                     "2"
@@ -1337,7 +1337,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Researcher, I can disclose the Server URL compromising the Internet connection (TLS) in order to gfhg"
+                                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg"
                                 ]
                             }
                         ]
@@ -1346,7 +1346,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            "2"
+                            ""
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -1449,7 +1449,7 @@
                     ""
                 ],
                 "inherentRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "Mitigation": [
                     {
@@ -1481,7 +1481,7 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "riskManagementDecision": [
                     ""
@@ -1490,10 +1490,10 @@
                     ""
                 ],
                 "residualRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "residualRiskLevel": [
-                    "Medium"
+                    "Low"
                 ]
             }
         ],

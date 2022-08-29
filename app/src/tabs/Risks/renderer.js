@@ -73,7 +73,7 @@
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
-      const {riskId, riskName, allAttackPathsName, riskAttackPaths} = risksData.find((risk) => risk.riskId === id);
+      const {riskId, riskName, allAttackPathsName, riskAttackPaths, riskLikelihood} = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
         threatAgentDetail, 
@@ -84,6 +84,18 @@
         businessAssetRef,
         supportingAssetRef,
       } = riskName;
+      const {
+        riskLikelihoodDetail,
+        skillLevel,
+        reward,
+        accessResources,
+        size,
+        intrusionDetection,
+        threatFactorScore,
+        threatFactorLevel,
+        occurrence,
+        occurrenceLevel,
+      } = riskLikelihood;
 
       // Set Risk description data
       $('.riskId').text(riskId);
@@ -120,6 +132,13 @@
 
       // Set Risk evaluation data
       addVulnerabilitySection(riskAttackPaths);
+      $('select[id="risk__skillLevel"]').val(skillLevel);
+      $('select[id="risk__reward"]').val(reward);
+      $('select[id="risk__accessResources"]').val(accessResources);
+      $('select[id="risk__size"]').val(size);
+      $('select[id="risk__intrusionDetection"]').val(intrusionDetection);
+      $('select[id="risk__occurrence"]').val(occurrence);
+
     };
 
     // row is clicked & selected

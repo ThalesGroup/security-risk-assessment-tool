@@ -59,10 +59,26 @@
     margin-bottom: 0;
 }
 
-#risks h4{
+#risks h2{
     font-size: 1em;
 }
 
 .table {
     margin-bottom: 10px;
+}
+
+#risk__likehood__table div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+
+#risk__likehood__table div p {
+    margin: 0;
+    font-size: 0.8em;
+}
+
+#risk__likehood__table div select {
+    width: 10em;
+    height: 1.5em;
 }
