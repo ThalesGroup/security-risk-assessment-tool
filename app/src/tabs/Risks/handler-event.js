@@ -63,7 +63,7 @@ const deleteRisk = (israProject, ids) => {
 const updateRiskName = (israProject, win, id, field, value) => {
     try {
         const risk = israProject.getRisk(id);
-        const { riskName } = risk;
+        const { riskName, allAttackPathsName } = risk;
         
         if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
             riskName[field] = value;
@@ -77,7 +77,12 @@ const updateRiskName = (israProject, win, id, field, value) => {
 
         if(field !== 'riskName'){
             riskName.riskName = 'As a '+  riskName.threatAgent + ', I can ' + riskName.threatVerb + ' the ' + (businessAsset === null ? '' : businessAsset.businessAssetName) + ' compromising the ' + (supportingAsset === null ? '' : supportingAsset.supportingAssetName) + ' in order to ' + riskName.motivation;
-        }
+            if(allAttackPathsName.length > 0){
+                riskName.riskName += `, exploiting the ${allAttackPathsName}`;
+              };
+        };
+
+        console.log(risk.riskName.properties)
         win.webContents.send('risks:load', israProject.toJSON());
     } catch (err) {
         console.log(err);

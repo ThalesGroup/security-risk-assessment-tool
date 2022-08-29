@@ -57,7 +57,7 @@
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
-      const {riskId, riskName} = risksData.find((risk) => risk.riskId === id);
+      const {riskId, riskName, allAttackPathsName} = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
         threatAgentDetail, 
@@ -66,12 +66,11 @@
         motivation, 
         motivationDetail,
         businessAssetRef,
-        supportingAssetRef
+        supportingAssetRef,
       } = riskName;
 
       $('.riskId').text(riskId);
       // Set Risk Name data
-      $('.riskname').text(riskName.riskName);
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
       tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
       tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
@@ -81,6 +80,27 @@
       $('select[id="risk__businessAsset"]').val(businessAssetRef);
       addSupportingAssetOptions(businessAssetRef);
       $('select[id="risk__supportingAsset"]').val(supportingAssetRef);
+
+      let businessAsset = null, supportingAsset = null;
+      businessAssets.forEach((ba) => {
+        if(ba.businessAssetId === businessAssetRef) businessAsset = ba;
+      })
+      supportingAssets.forEach((sa) => {
+        if(sa.supportingAssetId === supportingAssetRef) supportingAsset = sa;
+      })
+      let concatedRiskName = 'As a '+  threatAgent + ', I can ' + threatVerb + ' the ' + (businessAsset === null ? '' : businessAsset.businessAssetName) + ' compromising the ' + (supportingAsset === null ? '' : supportingAsset.supportingAssetName) + 'in order to' + motivation;
+      if(allAttackPathsName.length > 0){
+        concatedRiskName += `, exploiting the ${allAttackPathsName}`;
+      }
+      if(riskName.riskName.replace(/\s/g, '') !== concatedRiskName.replace(/\s/g, '')){
+        $('#risk__manual__riskName').show();
+        $('#riskName').hide();
+        $('#risk__manual__riskName input').val(riskName.riskName);
+      }else{
+        $('#risk__manual__riskName').hide();
+        $('#riskName').show();
+        $('.riskname').text(riskName.riskName);
+      }
     };
 
     // row is clicked & selected
@@ -151,23 +171,9 @@
       });
     };
 
-    // update fields in table
-    // const updateRisksTable = (risk) =>{
-    //   const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
-    //   const tableData = {
-    //     riskId,
-    //     projectVersionRef,
-    //     riskName: riskName.riskName,
-    //     residualRiskLevel,
-    //     riskManagementDecision
-    //   };
-    //   risksTable.updateData([tableData]);
-    // }
-
     const updateRiskName = async (field, value) =>{
       const id = risksTable.getSelectedData()[0].riskId;
       await window.risks.updateRiskName(id, field, value);
-      
     };
 
     // add Risk button
@@ -253,12 +259,27 @@
       updateRiskName('supportingAssetRef', selected);
     });
 
+    $('#risk__motivation').on('change', ()=>{
+      const input = $('#risk__motivation').val();
+      updateRiskName('motivation', input);
+    });
+
     // refresh businessAsset & supportingAsset Data
     window.risks.load(async (event, data) => {
       const fetchedData = await JSON.parse(data);
       risksData = fetchedData.Risk;
       assetsRelationshipSetUp(fetchedData);
-      updateRisksFields(risksData);
+
+      const currentRiskId = risksTable.getSelectedData()[0].riskId;
+      risksTable.clearData();
+      $('#risks__table__checkboxes').empty();
+      risksData.forEach((risk, i) => {
+        addRisk(risk);
+        if(risk.riskId === currentRiskId) {
+          const {riskId} = risk;
+          addSelectedRowData(riskId)
+        }
+      });
     });
     
   } catch (err) {
