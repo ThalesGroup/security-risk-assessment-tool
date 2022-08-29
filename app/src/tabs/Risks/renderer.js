@@ -26,9 +26,16 @@
   try {
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
-    let risksData, businessAssets, supportingAssets;
+    let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
 
+    /**
+     * 
+     * 
+     * Risk
+     * 
+     * 
+  */
     // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
       let supportingAssetOptions = '';
@@ -41,23 +48,32 @@
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
-    // select supportingAssetRef
-    $('#risk__supportingAsset').on('change', ()=>{
-      const saRef = $('#risk__supportingAsset').val();
-      //alert('SA changed to id:' + saRef)
-    });
+    // add Vulnerabilities evaluation section
+    const addVulnerabilitySection = (riskAttackPaths) =>{
+      let vulnerabilityOptions = '';
+      vulnerabilities.forEach((v)=>{
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
+      });
 
-    // select businessAssetRef
-    $('#risk__businessAsset').on('change', ()=>{
-      const baRef = $('#risk__businessAsset').val()
-      // alert('BA changed to id: ' + baRef)
-      addSupportingAssetOptions(Number(baRef));
-    });
+      $('#risks__vulnerability__evaluation').empty();
+      riskAttackPaths.forEach((path, i) =>{
+        if(i > 0) $('#risks__vulnerability__evaluation').append('<p>OR</p>');
+        const {riskAttackPathId, vulnerabilityRef, attackPathScore} = path;
+        let div = $("<div>").append(`<p>Attack Path ${riskAttackPathId}</p><p>scoring: ${attackPathScore === null ? '' : attackPathScore}<p>`).css('background-color', 'rgb(183, 183, 183)');
+        $('#risks__vulnerability__evaluation').append(div);
+        vulnerabilityRef.forEach((ref, i)=>{
+          if(i > 0) div.append('<p>AND</p>');
+          let select = $('<select>').append(vulnerabilityOptions);
+          div.append(select);
+          select.val(ref.vulnerabilityIdRef);
+        });
+      });
+    };
 
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
-      const {riskId, riskName, allAttackPathsName} = risksData.find((risk) => risk.riskId === id);
+      const {riskId, riskName, allAttackPathsName, riskAttackPaths} = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
         threatAgentDetail, 
@@ -69,8 +85,8 @@
         supportingAssetRef,
       } = riskName;
 
+      // Set Risk description data
       $('.riskId').text(riskId);
-      // Set Risk Name data
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
       tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
       tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
@@ -101,6 +117,9 @@
         $('#riskName').show();
         $('.riskname').text(riskName.riskName);
       }
+
+      // Set Risk evaluation data
+      addVulnerabilitySection(riskAttackPaths);
     };
 
     // row is clicked & selected
@@ -171,11 +190,6 @@
       });
     };
 
-    const updateRiskName = async (field, value) =>{
-      const id = risksTable.getSelectedData()[0].riskId;
-      await window.risks.updateRiskName(id, field, value);
-    };
-
     // add Risk button
     $('#risks button').first().on('click', async () => {
       const risk = await window.risks.addRisk();
@@ -194,20 +208,6 @@
     $('#risks button:nth-child(2)').on('click', async () => {
       const checkboxes = document.getElementsByName('risks__table__checkboxes');
       deleteRisks(checkboxes);
-    });
-
-    // trigger Manual RiskName section
-    $('#riskName button').on('click', async()=>{
-        $('#risk__manual__riskName').show();
-        $('#riskName').hide();
-        updateRiskName('riskName', '');
-    });
-
-    // trigger Automatic RiskName section
-    $('#risk__manual__riskName button').on('click', async()=>{
-      $('#risk__manual__riskName').hide();
-      $('#riskName').show();
-      updateRiskName('automatic riskName');
     });
 
     const assetsRelationshipSetUp = (fetchedData) =>{
@@ -229,8 +229,35 @@
     window.project.load(async (event, data) => {
       const fetchedData = await JSON.parse(data);
       risksData = fetchedData.Risk;
+      vulnerabilities = fetchedData.Vulnerability;
       assetsRelationshipSetUp(fetchedData);
       updateRisksFields(risksData);
+    });
+
+  /**
+     * 
+     * 
+     * Risk description
+     * 
+     * 
+  */
+    const updateRiskName = async (field, value) =>{
+      const id = risksTable.getSelectedData()[0].riskId;
+      await window.risks.updateRiskName(id, field, value);
+    };
+
+    // trigger Manual RiskName section
+    $('#riskName button').on('click', async()=>{
+        $('#risk__manual__riskName').show();
+        $('#riskName').hide();
+        updateRiskName('riskName', '');
+    });
+
+    // trigger Automatic RiskName section
+    $('#risk__manual__riskName button').on('click', async()=>{
+      $('#risk__manual__riskName').hide();
+      $('#riskName').show();
+      updateRiskName('automatic riskName');
     });
 
     $('#risk__manual__riskName input').on('change', ()=>{
@@ -262,6 +289,18 @@
     $('#risk__motivation').on('change', ()=>{
       const input = $('#risk__motivation').val();
       updateRiskName('motivation', input);
+    });
+
+  /**
+     * 
+     * 
+     * Risk evaluation
+     * 
+     * 
+  */
+
+    $('[name="Go to vulnerabilities view"]').on('click', ()=>{
+      alert('Go to vulnerability tab');
     });
 
     // refresh businessAsset & supportingAsset Data

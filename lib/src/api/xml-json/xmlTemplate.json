@@ -45,7 +45,7 @@
                     "5"
                 ],
                 "risksCount": [
-                    "5"
+                    "6"
                 ],
                 "vulnerabilitiesCount": [
                     "52"
@@ -1059,10 +1059,10 @@
                     "4"
                 ],
                 "riskName": [
-                    "As a Criminal, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the () OR (Phone backup data analysis of a non-encrypted backup)"
+                    "As a Script Kiddy, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "threatAgent": [
-                    "Criminal"
+                    "Script Kiddy"
                 ],
                 "threatAgentDetail": [
                     ""
@@ -1090,7 +1090,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Criminal, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the () OR (Phone backup data analysis of a non-encrypted backup)"
+                                    "As a Script Kiddy, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                                 ]
                             }
                         ]
@@ -1181,18 +1181,25 @@
                     {
                         "vulnerabilityRef": [
                             {
-                                "char": "9",
+                                "char": "2",
                                 "$": {
-                                    "score": "",
-                                    "name": ""
+                                    "score": "5",
+                                    "name": "Dumping of the local storage from a rooted device"
+                                }
+                            },
+                            {
+                                "char": "3",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Shoulder surfing attack"
                                 }
                             }
                         ],
                         "attackPathName": [
-                            ""
+                            "Dumping of the local storage from a rooted device AND Shoulder surfing attack"
                         ],
                         "attackPathScore": [
-                            ""
+                            "5"
                         ]
                     },
                     {
@@ -1214,7 +1221,7 @@
                     }
                 ],
                 "allAttackPathsName": [
-                    "() OR (Phone backup data analysis of a non-encrypted backup)"
+                    "(Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "allAttackPathsScore": [
                     "6"
@@ -1286,6 +1293,207 @@
                 ],
                 "residualRiskLevel": [
                     "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "5"
+                ],
+                "riskName": [
+                    "As a Researcher, I can disclose the Server URL compromising the Internet connection (TLS) in order to gfhg"
+                ],
+                "threatAgent": [
+                    "Researcher"
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    "disclose"
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    "gfhg"
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    "4"
+                ],
+                "supportingAssetRef": [
+                    "2"
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a Researcher, I can disclose the Server URL compromising the Internet connection (TLS) in order to gfhg"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            "2"
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "8"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "8"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "8"
+                ],
+                "residualRiskLevel": [
+                    "Medium"
                 ]
             }
         ],

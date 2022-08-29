@@ -22,10 +22,19 @@
 * -----------------------------------------------------------------------------
 */
 
-#risks > section > div:first-child {
+#risks__risk__description > div:first-child {
     display: flex;
     justify-content: space-between;
+    padding: 5px;
 }
+
+#risks section {
+    background-color: rgb(199, 199, 199);
+}
+
+/* #risks button{
+    padding: 1em;
+} */
 
 .risk__flex {
     display: flex;
@@ -45,3 +54,15 @@
     margin-bottom: 1em;
 }
 
+#risks h1{
+    font-size: 1.5em;
+    margin-bottom: 0;
+}
+
+#risks h4{
+    font-size: 1em;
+}
+
+.table {
+    margin-bottom: 10px;
+}
