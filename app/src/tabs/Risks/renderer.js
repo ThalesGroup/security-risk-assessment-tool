@@ -70,6 +70,11 @@
       });
     };
 
+    // update riskLikelihood occurrence-threatFactor table
+    const updateOccurrenceThreatFactorTable = (threatFactorLevel, occurrenceLevel) =>{
+      console.log(threatFactorLevel, occurrenceLevel);
+    };
+
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
@@ -138,7 +143,8 @@
       $('select[id="risk__size"]').val(!size ? 'null' : size);
       $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
       $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
-
+      updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
+      tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
     };
 
     // row is clicked & selected
@@ -325,10 +331,6 @@
     $('[name="Go to vulnerabilities view"]').on('click', ()=>{
       alert('Go to vulnerability tab');
     });
-
-    const updateOccurrenceThreatFactorTable = (threatFactorLevel, occurrenceLevel) =>{
-      console.log(threatFactorLevel, occurrenceLevel);
-    };
 
     const calculateThreatFactorScore = async () =>{
       const skillLevel = $('#risk__skillLevel').find(":selected").val();
