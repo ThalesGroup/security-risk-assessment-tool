@@ -82,16 +82,89 @@ const updateRiskName = (israProject, win, id, field, value) => {
               };
         };
 
-        console.log(risk.riskName.properties)
+        // console.log(risk.riskName.properties)
         win.webContents.send('risks:load', israProject.toJSON());
     } catch (err) {
         console.log(err);
-      dialog.showMessageBoxSync(null, { message: `Failed to update risk ${id}` });
+      dialog.showMessageBoxSync(null, { message: `Failed to update risk ${id}: riskName` });
     }
 }; 
+
+const updateRiskLikelihood = (israProject, id, field, value) =>{
+    try {
+        const risk = israProject.getRisk(id);
+        const { riskLikelihood } = risk;
+
+        const updateRiskLikelihoodValue = () => {
+            const { threatFactorLevel, occurrenceLevel } = riskLikelihood;
+            if (
+                (threatFactorLevel === 'Low' && occurrenceLevel === 'Low') ||
+                (threatFactorLevel === 'Medium' && occurrenceLevel === 'Low') ||
+                (threatFactorLevel === 'Low' && occurrenceLevel === 'Medium')
+            ) riskLikelihood.riskLikelihood = 1;
+            else if (
+                (threatFactorLevel === 'Medium' && occurrenceLevel === 'Very High') ||
+                (threatFactorLevel === 'High' && occurrenceLevel === 'High') ||
+                (threatFactorLevel === 'Very High' && occurrenceLevel === 'Medium')
+            ) riskLikelihood.riskLikelihood = 3;
+            else if (
+                (threatFactorLevel === 'High' && occurrenceLevel === 'Very High') ||
+                (threatFactorLevel === 'Very High' && occurrenceLevel === 'Very High') ||
+                (threatFactorLevel === 'Very High' && occurrenceLevel === 'High')
+            ) riskLikelihood.riskLikelihood = 4;
+            else riskLikelihood.riskLikelihood = 2;
+        };
+
+        if(field === 'threatFactorScore'){
+            let sum = 0, threatFactors = 0;
+
+            const updateThreatFactorLevel = (riskLikelihood) => {
+                const { threatFactorScore } = riskLikelihood;
+                if(!threatFactorScore) riskLikelihood.threatFactorLevel = '';
+                else if(threatFactorScore < 3) riskLikelihood.threatFactorLevel = 'Low';
+                else if (threatFactorScore >= 3 && threatFactorScore <= 5) riskLikelihood.threatFactorLevel = 'Medium';
+                else if (threatFactorScore > 5 && threatFactorScore <= 7) riskLikelihood.threatFactorLevel = 'High';
+                else if (threatFactorScore > 7) riskLikelihood.threatFactorLevel = 'Very High';
+            };
+
+            for (let [key, threatFactorValue] of Object.entries(value)) {
+                if(threatFactorValue === 'null') {
+                    riskLikelihood[key] = null;
+                }else{
+                    riskLikelihood[key] = parseInt(threatFactorValue);
+                    threatFactors ++;
+                    sum += parseInt(threatFactorValue);
+                };
+            };
+
+            if(!threatFactors) riskLikelihood.threatFactorScore = null;
+            else riskLikelihood.threatFactorScore = sum/threatFactors;
+            updateThreatFactorLevel(riskLikelihood);
+        } else if (field === 'occurrence'){
+            const updateOccurrenceLevel = (occurrence) =>{
+                if(!occurrence) riskLikelihood.occurrenceLevel = '';
+                else if (occurrence < 3) riskLikelihood.occurrenceLevel = 'Low';
+                else if (occurrence >= 3 && occurrence <= 5) riskLikelihood.occurrenceLevel = 'Medium';
+                else if (occurrence > 5 && occurrence <= 7) riskLikelihood.occurrenceLevel = 'High';
+                else if (occurrence > 7) riskLikelihood.occurrenceLevel = 'Very High';
+            };
+
+            riskLikelihood[field] = parseInt(value);
+            updateOccurrenceLevel(parseInt(value));
+        };
+
+        updateRiskLikelihoodValue();
+        console.log(riskLikelihood.properties);
+        return riskLikelihood.properties;
+    } catch (err) {
+        console.log(err);
+      dialog.showMessageBoxSync(null, { message: `Failed to update risk ${id}: riskLikelihood` });
+    }
+};
 
 module.exports = {
     addRisk,
     deleteRisk,
-    updateRiskName
+    updateRiskName,
+    updateRiskLikelihood
 };

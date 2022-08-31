@@ -132,12 +132,12 @@
 
       // Set Risk evaluation data
       addVulnerabilitySection(riskAttackPaths);
-      $('select[id="risk__skillLevel"]').val(skillLevel);
-      $('select[id="risk__reward"]').val(reward);
-      $('select[id="risk__accessResources"]').val(accessResources);
-      $('select[id="risk__size"]').val(size);
-      $('select[id="risk__intrusionDetection"]').val(intrusionDetection);
-      $('select[id="risk__occurrence"]').val(occurrence);
+      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
+      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
+      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
+      $('select[id="risk__size"]').val(!size ? 'null' : size);
+      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
+      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
 
     };
 
@@ -253,6 +253,10 @@
       updateRisksFields(risksData);
     });
 
+    const getCurrentRiskId = () =>{
+      return risksTable.getSelectedData()[0].riskId;
+    };
+
   /**
      * 
      * 
@@ -261,7 +265,7 @@
      * 
   */
     const updateRiskName = async (field, value) =>{
-      const id = risksTable.getSelectedData()[0].riskId;
+      const id = getCurrentRiskId();
       await window.risks.updateRiskName(id, field, value);
     };
 
@@ -320,6 +324,55 @@
 
     $('[name="Go to vulnerabilities view"]').on('click', ()=>{
       alert('Go to vulnerability tab');
+    });
+
+    const updateOccurrenceThreatFactorTable = (threatFactorLevel, occurrenceLevel) =>{
+      console.log(threatFactorLevel, occurrenceLevel);
+    };
+
+    const calculateThreatFactorScore = async () =>{
+      const skillLevel = $('#risk__skillLevel').find(":selected").val();
+      const reward = $('#risk__reward').find(":selected").val();
+      const accessResources = $('#risk__accessResources').find(":selected").val();
+      const size = $('#risk__size').find(":selected").val();
+      const intrusionDetection = $('#risk__intrusionDetection').find(":selected").val();
+      const id = getCurrentRiskId();
+
+      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+        skillLevel: skillLevel,
+        reward: reward,
+        accessResources: accessResources,
+        size: size,
+        intrusionDetection: intrusionDetection
+      });
+      updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+    };
+
+    $('#risk__skillLevel').on('change', ()=>{
+      calculateThreatFactorScore();
+    });
+
+    $('#risk__reward').on('change', ()=>{
+      calculateThreatFactorScore();
+    });
+
+    $('#risk__accessResources').on('change', ()=>{
+      calculateThreatFactorScore();
+    });
+
+    $('#risk__size').on('change', ()=>{
+      calculateThreatFactorScore();
+    });
+
+    $('#risk__intrusionDetection').on('change', ()=>{
+      calculateThreatFactorScore();
+    });
+
+    $('#risk__occurrence').on('change', async ()=>{
+      const selected = $('#risk__occurrence').find(":selected").val();
+      const id = getCurrentRiskId();
+      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
+      updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
     });
 
     // refresh businessAsset & supportingAsset Data

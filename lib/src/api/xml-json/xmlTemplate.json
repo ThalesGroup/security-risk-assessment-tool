@@ -557,7 +557,7 @@
                                             "Very High"
                                         ],
                                         "occurrence": [
-                                            "5"
+                                            ""
                                         ],
                                         "occurrenceLevel": [
                                             "Medium"
@@ -1375,7 +1375,7 @@
                 "LikelihoodRiskEvaluation": [
                     {
                         "riskLikelihood": [
-                            "3"
+                            "2"
                         ],
                         "riskLikelihoodDetail": [
                             ""
@@ -1387,33 +1387,33 @@
                                         "ThreatFactor": [
                                             {
                                                 "skillLevel": [
-                                                    ""
+                                                    "5"
                                                 ],
                                                 "reward": [
-                                                    ""
+                                                    "1"
                                                 ],
                                                 "accessResources": [
-                                                    ""
+                                                    "0"
                                                 ],
                                                 "size": [
-                                                    ""
+                                                    "4"
                                                 ],
                                                 "intrusionDetection": [
-                                                    ""
+                                                    "3"
                                                 ]
                                             }
                                         ],
                                         "threatFactorScore": [
-                                            ""
+                                            "2.6"
                                         ],
                                         "threatFactorLevel": [
-                                            ""
+                                            "Low"
                                         ],
                                         "occurrence": [
-                                            ""
+                                            "9"
                                         ],
                                         "occurrenceLevel": [
-                                            ""
+                                            "Very High"
                                         ],
                                         "OWASPLikelihoodScore": [
                                             ""
