@@ -36,6 +36,10 @@
      * 
      * 
   */
+    const getCurrentRiskId = () =>{
+      return risksTable.getSelectedData()[0].riskId;
+    };
+
     // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
       let supportingAssetOptions = '';
@@ -75,10 +79,29 @@
       console.log(threatFactorLevel, occurrenceLevel);
     };
 
+    // update risk impact evaluation table
+    const updateEvaluationTable = (riskImpact) => {
+      console.log(riskImpact)
+      const {
+        businessAssetConfidentialityFlag,
+        businessAssetIntegrityFlag,
+        businessAssetAvailabilityFlag,
+        businessAssetAuthenticityFlag,
+        businessAssetAuthorizationFlag,
+        businessAssetNonRepudiationFlag,
+      } = riskImpact
+      const businessAssetId = $('#risk__businessAsset').find(":selected").val();
+      let businessAsset;
+      businessAssets.forEach((ba) =>{
+        if(ba.businessAssetId === businessAssetId) businessAsset = ba;
+      });
+      // $('#risk__evaluation__table')
+    };
+
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
-      const {riskId, riskName, allAttackPathsName, riskAttackPaths, riskLikelihood} = risksData.find((risk) => risk.riskId === id);
+      const {riskId, riskName, allAttackPathsName, riskAttackPaths, riskLikelihood, riskImpact} = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
         threatAgentDetail, 
@@ -136,6 +159,7 @@
       }
 
       // Set Risk evaluation data
+      // risk likelihood
       addVulnerabilitySection(riskAttackPaths);
       $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
       $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
@@ -145,6 +169,8 @@
       $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
       updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
       tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
+      // risk impact
+      updateEvaluationTable(riskImpact);
     };
 
     // row is clicked & selected
@@ -258,10 +284,6 @@
       assetsRelationshipSetUp(fetchedData);
       updateRisksFields(risksData);
     });
-
-    const getCurrentRiskId = () =>{
-      return risksTable.getSelectedData()[0].riskId;
-    };
 
   /**
      * 

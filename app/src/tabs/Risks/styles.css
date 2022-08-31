@@ -82,3 +82,7 @@
     width: 10em;
     height: 1.5em;
 }
+
+tbody {
+    text-align: center;
+}
