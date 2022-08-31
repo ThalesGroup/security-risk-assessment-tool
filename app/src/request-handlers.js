@@ -414,7 +414,7 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
 });
 
 // Risks Tab
-const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood } = require('./tabs/Risks/handler-event');
+const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact } = require('./tabs/Risks/handler-event');
 const { renderRisks } = require('./tabs/Risks/render-risks');
 
 ipcMain.handle('render:risks', () => renderRisks());
@@ -425,6 +425,9 @@ ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
 });
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => {
   return updateRiskLikelihood(israProject, id, field, value);
+});
+ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => {
+  return updateRiskImpact(israProject, id, field, value);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {

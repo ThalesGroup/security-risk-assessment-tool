@@ -89,7 +89,7 @@
         businessAssetAuthorizationFlag,
         businessAssetNonRepudiationFlag,
       } = riskImpact
-      let businessAssetValues;
+      let businessAssetValues = new Array(6).fill('');
 
       businessAssets.forEach((ba) =>{
         if(!businessAssetRef || ba.businessAssetId === businessAssetRef) {
@@ -111,7 +111,7 @@
             $('#risk__nonrepudiation').prop( "checked", businessAssetNonRepudiationFlag);
         };
       });
-      
+
       if(businessAssetRef){
         businessAssetValues.forEach((value, i) => {
           const values = {
@@ -379,6 +379,7 @@
      * 
   */
 
+  // Risk Likelihood
     $('[name="Go to vulnerabilities view"]').on('click', ()=>{
       alert('Go to vulnerability tab');
     });
@@ -426,6 +427,48 @@
       const id = getCurrentRiskId();
       const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+    });
+
+    // Risk Impact
+    const checkbox = async (field, value)=>{
+      const risk = await window.risks.updateRiskImpact(getCurrentRiskId(), field, value);
+      updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
+    };
+
+    $('#risk__confidentialty').on('change', ()=>{
+      let checked;
+      $('#risk__confidentialty').is(":checked") ? checked = 1 : checked = 0;
+      checkbox('businessAssetConfidentialityFlag', checked);
+    });
+
+    $('#risk__integrity').on('change', ()=>{
+      let checked;
+      $('#risk__integrity').is(":checked") ? checked = 1 : checked = 0;
+      checkbox('businessAssetIntegrityFlag', checked);
+    });
+
+    $('#risk__availability').on('change', ()=>{
+      let checked;
+      $('#risk__availability').is(":checked") ? checked = 1 : checked = 0;
+      checkbox('businessAssetAvailabilityFlag', checked);
+    });
+
+    $('#risk__authenticity').on('change', ()=>{
+      let checked;
+      $('#risk__authenticity').is(":checked") ? checked = 1 : checked = 0;
+      checkbox('businessAssetAuthenticityFlag', checked);
+    });
+
+    $('#risk__authorization').on('change', ()=>{
+      let checked;
+      $('#risk__authorization').is(":checked") ? checked = 1 : checked = 0;
+      checkbox('businessAssetAuthorizationFlag', checked);
+    });
+
+    $('#risk__nonrepudiation').on('change', ()=>{
+      let checked;
+      $('#risk__nonrepudiation').is(":checked") ? checked = 1 : checked = 0;
+      checkbox('businessAssetNonRepudiationFlag', checked);
     });
 
     // refresh businessAsset & supportingAsset Data

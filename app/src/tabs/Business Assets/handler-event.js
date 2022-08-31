@@ -25,6 +25,7 @@ const {
   dialog,
 } = require('electron');
 const BusinessAsset = require('../../../../lib/src/model/classes/BusinessAsset/business-asset');
+const { updateRiskImpact } = require('../Risks/handler-event');
 
 /**
   * add default business asset section
@@ -93,9 +94,13 @@ const updateBusinessAsset = (ISRAproject, win, id, field, value) => {
       israProject.getBusinessAsset(id)[field] = value;
       if (field === 'businessAssetName') {
         win.webContents.send('supportingAssets:getBusinessAssets', value, id);
-      }
+      };
     } else {
       israProject.getBusinessAsset(id).businessAssetProperties[field] = Number(value);
+      const risks = israProject.properties.Risk;
+        risks.forEach((risk) => {
+          if(risk.riskName.businessAssetRef === id) updateRiskImpact(israProject, risk.riskId);
+      });
     }
     win.webContents.send('risks:load', israProject.toJSON());
   } catch (err) {

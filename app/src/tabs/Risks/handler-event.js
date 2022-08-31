@@ -72,7 +72,10 @@ const updateRiskName = (israProject, win, id, field, value) => {
         };
 
         let businessAsset = null, supportingAsset = null;
-        if(riskName.businessAssetRef) businessAsset = israProject.getBusinessAsset(riskName.businessAssetRef);
+        if(riskName.businessAssetRef) {
+            businessAsset = israProject.getBusinessAsset(riskName.businessAssetRef);
+            updateRiskImpact(israProject, risk.riskId);
+        };
         if(riskName.supportingAssetRef) supportingAsset = israProject.getSupportingAsset(riskName.supportingAssetRef);
 
         if(field !== 'riskName'){
@@ -90,6 +93,11 @@ const updateRiskName = (israProject, win, id, field, value) => {
     }
 }; 
 
+/**
+  * update risk impact evaluation
+  * @param {ISRAProject} israProject current ISRA Project
+  * @param {Integer} risk id
+*/
 const updateRiskLikelihood = (israProject, id, field, value) =>{
     try {
         const risk = israProject.getRisk(id);
@@ -162,9 +170,60 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
     }
 };
 
+/**
+  * update risk impact evaluation
+  * @param {ISRAProject} israProject current ISRA Project
+  * @param {Integer} risk id
+*/
+const updateRiskImpact = (israProject, id, field, value) => {
+    try {
+        const risk = israProject.getRisk(id);
+        const { riskImpact } = risk;
+
+        // set businessAsset property Flags
+        if(field) riskImpact[field] = value;
+        const {
+            businessAssetConfidentialityFlag,
+            businessAssetIntegrityFlag,
+            businessAssetAvailabilityFlag,
+            businessAssetAuthenticityFlag,
+            businessAssetAuthorizationFlag,
+            businessAssetNonRepudiationFlag,
+        } = riskImpact;
+
+        if(risk.riskName.businessAssetRef){
+            const businessAsset = israProject.getBusinessAsset(risk.riskName.businessAssetRef);
+            const {
+                businessAssetConfidentiality,
+                businessAssetIntegrity,
+                businessAssetAvailability,
+                businessAssetAuthenticity,
+                businessAssetAuthorization,
+                businessAssetNonRepudiation,
+
+            } = businessAsset.businessAssetProperties;
+            riskImpact.riskImpact = Math.max(
+                businessAssetConfidentialityFlag ? businessAssetConfidentiality : 0,
+                businessAssetIntegrityFlag ? businessAssetIntegrity : 0,
+                businessAssetAvailabilityFlag ? businessAssetAvailability : 0,
+                businessAssetAuthenticityFlag ? businessAssetAuthenticity : 0,
+                businessAssetAuthorizationFlag ? businessAssetAuthorization : 0,
+                businessAssetNonRepudiationFlag ? businessAssetNonRepudiation : 0
+            );
+
+        }else riskImpact.riskImpact = null;
+ 
+        return risk.properties;
+    } catch (err) {
+        console.log(err);
+      dialog.showMessageBoxSync(null, { message: `Failed to update risk ${id}: riskLikelihood` });
+    }
+}; 
+
 module.exports = {
     addRisk,
     deleteRisk,
     updateRiskName,
-    updateRiskLikelihood
+    updateRiskLikelihood,
+    updateRiskImpact
 };
