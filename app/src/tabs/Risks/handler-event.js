@@ -56,9 +56,63 @@ const deleteRisk = (israProject, ids) => {
 };
 
 /**
+  * update riskImpact checkboxes based on threatVerb field value
+  * @param {ISRAProject} israProject current ISRA Project
+  * @param {integer} risk id
+  * @param {string} riskName enum property value
+*/
+const updateRiskImpactThreatVerb = (israProject, riskId, value) =>{
+    if(value === 'steal' || value === 'disclose' || value === 'lose'){
+        updateRiskImpact(israProject, riskId, 'businessAssetConfidentialityFlag', 1);
+        updateRiskImpact(israProject, riskId, 'businessAssetIntegrityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAvailabilityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthenticityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthorizationFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetNonRepudiationFlag', 0);
+    }else if(value === 'tamper with'){
+        updateRiskImpact(israProject, riskId, 'businessAssetConfidentialityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetIntegrityFlag', 1);
+        updateRiskImpact(israProject, riskId, 'businessAssetAvailabilityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthenticityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthorizationFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetNonRepudiationFlag', 0);
+    }else if(value === 'deny access to' || value === 'flood'){
+        updateRiskImpact(israProject, riskId, 'businessAssetConfidentialityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetIntegrityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAvailabilityFlag', 1);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthenticityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthorizationFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetNonRepudiationFlag', 0);
+    }else if(value === 'spoof'){
+        updateRiskImpact(israProject, riskId, 'businessAssetConfidentialityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetIntegrityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAvailabilityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthenticityFlag', 1);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthorizationFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetNonRepudiationFlag', 0);
+    }else if(value === 'repudiate'){
+        updateRiskImpact(israProject, riskId, 'businessAssetConfidentialityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetIntegrityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAvailabilityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthenticityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthorizationFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetNonRepudiationFlag', 1);
+    } else if(value === 'gain an unauthorized access to') {
+        updateRiskImpact(israProject, riskId, 'businessAssetConfidentialityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetIntegrityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAvailabilityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthenticityFlag', 0);
+        updateRiskImpact(israProject, riskId, 'businessAssetAuthorizationFlag', 1);
+        updateRiskImpact(israProject, riskId, 'businessAssetNonRepudiationFlag', 0);
+    };
+};
+
+/**
   * delete selected risk row(s)
   * @param {ISRAProject} israProject current ISRA Project
-  * @param {Array} ids of risk id(s)
+  * @param {integer} risk id
+  * @param {string} riskName property
+  * @param {} riskName property value
 */
 const updateRiskName = (israProject, win, id, field, value) => {
     try {
@@ -67,6 +121,7 @@ const updateRiskName = (israProject, win, id, field, value) => {
         
         if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
             riskName[field] = value;
+            if (field === 'threatVerb') updateRiskImpactThreatVerb(israProject, id, value);
         }else{
             riskName[field] = parseInt(value);
         };
@@ -97,6 +152,9 @@ const updateRiskName = (israProject, win, id, field, value) => {
   * update risk impact evaluation
   * @param {ISRAProject} israProject current ISRA Project
   * @param {Integer} risk id
+  * @param {string} riskLikelihood property
+  * @param {} riskLikelihood property value
+
 */
 const updateRiskLikelihood = (israProject, id, field, value) =>{
     try {
@@ -174,6 +232,8 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
   * update risk impact evaluation
   * @param {ISRAProject} israProject current ISRA Project
   * @param {Integer} risk id
+  * @param {string} riskImpact property
+  * @param {} riskImpact property value
 */
 const updateRiskImpact = (israProject, id, field, value) => {
     try {
@@ -213,6 +273,7 @@ const updateRiskImpact = (israProject, id, field, value) => {
 
         }else riskImpact.riskImpact = null;
  
+        console.log(riskImpact.properties);
         return risk.properties;
     } catch (err) {
         console.log(err);

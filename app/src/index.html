@@ -148,7 +148,19 @@
             <div>
               <h2>Likelihood evaluation</h2>
               <p>Chance for a threat agent to successfully attack the business asset based on resources, skills, opportunity and motivation</p>
+
+              <div id="risk__owasp__evaluation">
+                <select name="risk__likelihood" id="risk__likelihood">
+                  <option value="4">Very High</option>
+                  <option value="3">High</option>
+                  <option value="2" selected>Medium</option>
+                  <option value="1">Low</option>
+                </select>
+                <button>Replace with OWASP Likelihood Evaluation Method</button>
+              </div>
+
               <div id="risk__likehood__table">
+                <button>Replace with Simple Likelihood Evaluation Method</button>
                 <div>
                   <p>How technically skilled is this group of threat agents?</p>
                   <select name="risk__skillLevel" id="risk__skillLevel">
@@ -211,14 +223,16 @@
                     <option value="1">Very low</option>
                   </select>
                 </div>
-              </div>
-              <div id="risk__occurrence__threatFactor__table">
+                <div id="risk__occurrence__threatFactor__table">
 
+                </div>
               </div>
+
               <div>
                 <p>Justify your likelihood evaluation:</p>
                 <textarea class="rich-text" id="risk__likelihood__details" cols="30" rows="20"></textarea>
               </div>
+
             </div>
 
             <div>
