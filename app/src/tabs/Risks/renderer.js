@@ -76,12 +76,11 @@
 
     // update riskLikelihood occurrence-threatFactor table
     const updateOccurrenceThreatFactorTable = (threatFactorLevel, occurrenceLevel) =>{
-      console.log(threatFactorLevel, occurrenceLevel);
+      console.log(`threaFactorLevel:${threatFactorLevel}, occurrenceLevel:${occurrenceLevel}`);
     };
 
     // update risk impact evaluation table
-    const updateEvaluationTable = (riskImpact) => {
-      console.log(riskImpact)
+    const updateEvaluationTable = (riskImpact, businessAssetRef) => {
       const {
         businessAssetConfidentialityFlag,
         businessAssetIntegrityFlag,
@@ -90,12 +89,42 @@
         businessAssetAuthorizationFlag,
         businessAssetNonRepudiationFlag,
       } = riskImpact
-      const businessAssetId = $('#risk__businessAsset').find(":selected").val();
-      let businessAsset;
+      let businessAssetValues;
+
       businessAssets.forEach((ba) =>{
-        if(ba.businessAssetId === businessAssetId) businessAsset = ba;
+        if(!businessAssetRef || ba.businessAssetId === businessAssetRef) {
+          const {businessAssetProperties} = ba;
+            businessAssetValues = [
+              businessAssetProperties.businessAssetConfidentiality,
+              businessAssetProperties.businessAssetIntegrity,
+              businessAssetProperties.businessAssetAvailability,
+              businessAssetProperties.businessAssetAuthenticity,
+              businessAssetProperties.businessAssetAuthorization,
+              businessAssetProperties.businessAssetNonRepudiation
+            ];
+
+            $('#risk__confidentialty').prop( "checked", businessAssetConfidentialityFlag);
+            $('#risk__integrity').prop( "checked", businessAssetIntegrityFlag);
+            $('#risk__availability').prop( "checked", businessAssetAvailabilityFlag);
+            $('#risk__authenticity').prop( "checked", businessAssetAuthenticityFlag);
+            $('#risk__authorization').prop( "checked", businessAssetAuthorizationFlag);
+            $('#risk__nonrepudiation').prop( "checked", businessAssetNonRepudiationFlag);
+        };
       });
-      // $('#risk__evaluation__table')
+      
+      if(businessAssetRef){
+        businessAssetValues.forEach((value, i) => {
+          const values = {
+            0: 'Not Applicable',
+            1: 'Low',
+            2: 'Medium',
+            3: 'High',
+            4: 'Critical'
+          };
+          $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).text('');
+          $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).append(values[value]);
+      });
+      }
     };
 
     // render selected row data on page by riskId
@@ -170,7 +199,7 @@
       updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
       tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
       // risk impact
-      updateEvaluationTable(riskImpact);
+      updateEvaluationTable(riskImpact, businessAssetRef);
     };
 
     // row is clicked & selected
