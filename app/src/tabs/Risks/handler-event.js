@@ -119,11 +119,13 @@ const updateRiskName = (israProject, win, id, field, value) => {
         const risk = israProject.getRisk(id);
         const { riskName, allAttackPathsName } = risk;
         
-        if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
-            riskName[field] = value;
-            if (field === 'threatVerb') updateRiskImpactThreatVerb(israProject, id, value);
-        }else{
-            riskName[field] = parseInt(value);
+        if(field !== 'deleteRefs'){
+            if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
+                riskName[field] = value;
+                if (field === 'threatVerb') updateRiskImpactThreatVerb(israProject, id, value);
+            }else{
+                riskName[field] = parseInt(value);
+            };
         };
 
         let businessAsset = null, supportingAsset = null;
@@ -140,7 +142,7 @@ const updateRiskName = (israProject, win, id, field, value) => {
               };
         };
 
-        // console.log(risk.riskName.properties)
+        console.log(risk.riskName.properties)
         win.webContents.send('risks:load', israProject.toJSON());
     } catch (err) {
         console.log(err);
@@ -223,7 +225,7 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
             riskLikelihood[field] = parseInt(value);
         }else updateRiskLikelihoodValue();
 
-        console.log(riskLikelihood.properties);
+        // console.log(riskLikelihood.properties);
         return riskLikelihood.properties;
     } catch (err) {
         console.log(err);

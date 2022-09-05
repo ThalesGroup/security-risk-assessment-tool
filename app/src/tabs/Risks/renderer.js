@@ -124,6 +124,10 @@
           $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).text('');
           $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).append(values[value]);
       });
+      } else {
+        businessAssetValues.forEach((value, i) => {
+          $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).text('');
+        });
       }
     };
 
@@ -496,7 +500,7 @@
       const risk = await window.risks.updateRiskImpact(getCurrentRiskId(), field, value);
       const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
       riskData.riskImpact = risk.riskImpact;
-      
+
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };
 
@@ -547,6 +551,7 @@
       $('#risks__table__checkboxes').empty();
       risksData.forEach((risk, i) => {
         addRisk(risk);
+        console.log(risk.riskId, currentRiskId)
         if(risk.riskId === currentRiskId) {
           const {riskId} = risk;
           addSelectedRowData(riskId)

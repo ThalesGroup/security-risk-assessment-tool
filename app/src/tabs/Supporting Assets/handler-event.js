@@ -25,6 +25,7 @@ const {
   dialog,
 } = require('electron');
 const SupportingAsset = require('../../../../lib/src/model/classes/SupportingAsset/supporting-asset');
+const { updateRiskName } = require('../Risks/handler-event');
 
 /**
   * add default supporting asset row
@@ -47,11 +48,24 @@ const addSupportingAsset = (israProject) => {
 */
 const deleteSupportingAsset = (israProject, ids, win) => {
   try {
+    const risks = israProject.properties.Risk;
+
     ids.forEach((id) => {
       israProject.deleteSupportingAsset(Number(id));
-      win.webContents.send('risks:load', israProject.toJSON());
+
+      risks.forEach((risk)=>{
+        const { riskId, riskName } = risk;
+        if(riskName.supportingAssetRef == id) {
+          const affectedRisk = israProject.getRisk(riskId);
+          affectedRisk.riskName.supportingAssetRef = null;
+          updateRiskName(israProject, win, riskId, 'deleteBusinessAssetRef');
+        }
+      });
     });
+
+    win.webContents.send('risks:load', israProject.toJSON());
   } catch (err) {
+    console.log(err);
     dialog.showMessageBoxSync(null, { message: 'Failed to delete supporting asset(s)' });
   }
 };

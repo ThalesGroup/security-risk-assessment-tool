@@ -25,7 +25,7 @@ const {
   dialog,
 } = require('electron');
 const BusinessAsset = require('../../../../lib/src/model/classes/BusinessAsset/business-asset');
-const { updateRiskImpact } = require('../Risks/handler-event');
+const { updateRiskImpact, updateRiskName } = require('../Risks/handler-event');
 
 /**
   * add default business asset section
@@ -52,11 +52,25 @@ const addBusinessAsset = (israProject, win) => {
 */
 const deleteBusinessAsset = (israProject, ids, win) => {
   try {
+    const risks = israProject.properties.Risk;
+
     ids.forEach((id) => {
       israProject.deleteBusinessAsset(Number(id));
+
+      risks.forEach((risk)=>{
+        const { riskId, riskName } = risk;
+        if(riskName.businessAssetRef == id) {
+          const affectedRisk = israProject.getRisk(riskId);
+          affectedRisk.riskName.businessAssetRef = null;
+          affectedRisk.riskName.supportingAssetRef = null;
+          updateRiskName(israProject, win, riskId, 'deleteBusinessAssetRef');
+        }
+      });
+
       win.webContents.send('supportingAssets:getBusinessAssets', null, id);
-      win.webContents.send('risks:load', israProject.toJSON());
     });
+
+    win.webContents.send('risks:load', israProject.toJSON());
   } catch (err) {
     dialog.showMessageBoxSync(null, { message: 'Failed to delete business asset(s)' });
   }
