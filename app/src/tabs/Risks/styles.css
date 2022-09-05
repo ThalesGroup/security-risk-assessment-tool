@@ -45,12 +45,13 @@
     margin-bottom: 1em;
 }
 
-#risk__owasp__evaluation,
+#risk__simple__evaluation,
 #risk__manual__riskName {
     display: none;
     margin-bottom: 1em;
 }
 
+#risk__simple__evaluation button,
 #risk__likehood__table button:nth-of-type(1),
 #riskName {
     margin-bottom: 1em;

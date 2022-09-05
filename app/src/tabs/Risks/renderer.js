@@ -127,6 +127,25 @@
       }
     };
 
+    const setSecurityPropertyValues = (riskLikelihood) =>{
+      const {
+        skillLevel,
+        reward,
+        accessResources,
+        size,
+        intrusionDetection,
+        occurrence
+      } = riskLikelihood;
+
+      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
+      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
+      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
+      $('select[id="risk__size"]').val(!size ? 'null' : size);
+      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
+      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
+      $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+    };
+
     // render selected row data on page by riskId
     const addSelectedRowData = (id) =>{
       risksTable.selectRow(id);
@@ -143,14 +162,8 @@
       } = riskName;
       const {
         riskLikelihoodDetail,
-        skillLevel,
-        reward,
-        accessResources,
-        size,
-        intrusionDetection,
         threatFactorScore,
         threatFactorLevel,
-        occurrence,
         occurrenceLevel,
       } = riskLikelihood;
 
@@ -190,12 +203,7 @@
       // Set Risk evaluation data
       // risk likelihood
       addVulnerabilitySection(riskAttackPaths);
-      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
-      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
-      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
-      $('select[id="risk__size"]').val(!size ? 'null' : size);
-      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
-      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
+      setSecurityPropertyValues(riskLikelihood);
       updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
       tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
       // risk impact
@@ -401,6 +409,35 @@
       });
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
     };
+
+    // trigger simple likelihood evaluation section
+    $('#risk__likehood__table button:nth-of-type(1)').on('click',  async ()=>{
+      $('#risk__simple__evaluation').show();
+      $('#risk__likehood__table').hide();
+
+      const id = getCurrentRiskId();
+      await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+        skillLevel: 'null',
+        reward: 'null',
+        accessResources: 'null',
+        size: 'null',
+        intrusionDetection: 'null'
+      });
+      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
+      setSecurityPropertyValues(riskLikelihood);
+      updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+    });
+
+    $('#risk__likelihood').on('change', async ()=>{
+      const riskLikelihood = $('#risk__likelihood').find(":selected").val();
+      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood);  
+    });
+
+    // trigger owasp likelihood evaluation section
+    $('#risk__simple__evaluation button').on('click', ()=>{
+      $('#risk__simple__evaluation').hide();
+      $('#risk__likehood__table').show();
+    });
 
     $('#risk__skillLevel').on('change', ()=>{
       calculateThreatFactorScore();

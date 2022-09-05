@@ -153,7 +153,7 @@ const updateRiskName = (israProject, win, id, field, value) => {
   * @param {ISRAProject} israProject current ISRA Project
   * @param {Integer} risk id
   * @param {string} riskLikelihood property
-  * @param {} riskLikelihood property value
+  * @param {Object || string} riskLikelihood property values
 
 */
 const updateRiskLikelihood = (israProject, id, field, value) =>{
@@ -215,11 +215,14 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
                 else if (occurrence > 7) riskLikelihood.occurrenceLevel = 'Very High';
             };
 
-            riskLikelihood[field] = parseInt(value);
+            riskLikelihood[field] = value === 'null' ? null : parseInt(value);
             updateOccurrenceLevel(parseInt(value));
         };
 
-        updateRiskLikelihoodValue();
+        if(field === 'riskLikelihood'){
+            riskLikelihood[field] = parseInt(value);
+        }else updateRiskLikelihoodValue();
+
         console.log(riskLikelihood.properties);
         return riskLikelihood.properties;
     } catch (err) {
