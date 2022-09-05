@@ -27,7 +27,7 @@
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
-    let assetsRelationship = {};
+    let assetsRelationship = {}, triggeredSimpleLikelihood = {};
 
     /**
      * 
@@ -213,6 +213,15 @@
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
       addSelectedRowData(row.getIndex());
+      
+      // check if simplelikelihood button has been pressed for current risk
+      if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
+        $('#risk__simple__evaluation').show();
+        $('#risk__likehood__table').hide();
+      }else{
+        $('#risk__simple__evaluation').hide();
+        $('#risk__likehood__table').show();
+      }
     });
 
     const addRisk = (risk) => {
@@ -268,6 +277,9 @@
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
+      triggeredSimpleLikelihood = {};
+      $('#risk__simple__evaluation').hide();
+      $('#risk__likehood__table').show();
 
       fetchedData.forEach((risk, i) => {
         addRisk(risk);
@@ -413,35 +425,37 @@
     };
 
     // trigger simple likelihood evaluation section
-    $('#risk__likehood__table button:nth-of-type(1)').on('click',   ()=>{
+    $('#risk__likehood__table button:nth-of-type(1)').on('click', ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
+      triggeredSimpleLikelihood[getCurrentRiskId()] = true;
     });
 
     $('#risk__likelihood').on('change', async ()=>{
       const riskLikelihood = $('#risk__likelihood').find(":selected").val();
-      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood);  
+      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood); 
     });
 
     // trigger owasp likelihood evaluation section
     $('#risk__simple__evaluation button').on('click', async ()=>{
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
+      delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
 
-        const id = getCurrentRiskId();
-        await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
-          skillLevel: 'null',
-          reward: 'null',
-          accessResources: 'null',
-          size: 'null',
-          intrusionDetection: 'null'
-        });
-        await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
+      const id = getCurrentRiskId();
+      await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+        skillLevel: 'null',
+        reward: 'null',
+        accessResources: 'null',
+        size: 'null',
+        intrusionDetection: 'null'
+      });
+      await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
 
-        const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
-        const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);  
-        setSecurityPropertyValues(riskLikelihood);  
-        updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+      const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
+      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);  
+      setSecurityPropertyValues(riskLikelihood);  
+      updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
     });
 
     $('#risk__skillLevel').on('change', ()=>{
