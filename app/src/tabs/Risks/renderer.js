@@ -408,24 +408,14 @@
         intrusionDetection: intrusionDetection
       });
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+      
+      $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
     // trigger simple likelihood evaluation section
-    $('#risk__likehood__table button:nth-of-type(1)').on('click',  async ()=>{
+    $('#risk__likehood__table button:nth-of-type(1)').on('click',   ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
-
-      const id = getCurrentRiskId();
-      await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
-        skillLevel: 'null',
-        reward: 'null',
-        accessResources: 'null',
-        size: 'null',
-        intrusionDetection: 'null'
-      });
-      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
-      setSecurityPropertyValues(riskLikelihood);
-      updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
     });
 
     $('#risk__likelihood').on('change', async ()=>{
@@ -434,9 +424,24 @@
     });
 
     // trigger owasp likelihood evaluation section
-    $('#risk__simple__evaluation button').on('click', ()=>{
+    $('#risk__simple__evaluation button').on('click', async ()=>{
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
+
+        const id = getCurrentRiskId();
+        await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+          skillLevel: 'null',
+          reward: 'null',
+          accessResources: 'null',
+          size: 'null',
+          intrusionDetection: 'null'
+        });
+        await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
+
+        const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
+        const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);  
+        setSecurityPropertyValues(riskLikelihood);  
+        updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
     });
 
     $('#risk__skillLevel').on('change', ()=>{
@@ -464,6 +469,7 @@
       const id = getCurrentRiskId();
       const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+      $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     });
 
     // Risk Impact
