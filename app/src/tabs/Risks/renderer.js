@@ -419,28 +419,18 @@
         size: size,
         intrusionDetection: intrusionDetection
       });
+      const riskData = risksData.find((risk)=> risk.riskId === id);
+      riskData.riskLikelihood = riskLikelihood;
+
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
-      
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
     // trigger simple likelihood evaluation section
-    $('#risk__likehood__table button:nth-of-type(1)').on('click', ()=>{
+    $('#risk__likehood__table button:nth-of-type(1)').on('click', async ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
       triggeredSimpleLikelihood[getCurrentRiskId()] = true;
-    });
-
-    $('#risk__likelihood').on('change', async ()=>{
-      const riskLikelihood = $('#risk__likelihood').find(":selected").val();
-      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood); 
-    });
-
-    // trigger owasp likelihood evaluation section
-    $('#risk__simple__evaluation button').on('click', async ()=>{
-      $('#risk__simple__evaluation').hide();
-      $('#risk__likehood__table').show();
-      delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
 
       const id = getCurrentRiskId();
       await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
@@ -453,9 +443,24 @@
       await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
-      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);  
+      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
+      const riskData = risksData.find((risk)=> risk.riskId === id);
+      riskData.riskLikelihood = riskLikelihood;
+
       setSecurityPropertyValues(riskLikelihood);  
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+    });
+
+    $('#risk__likelihood').on('change', async ()=>{
+      const riskLikelihood = $('#risk__likelihood').find(":selected").val();
+      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood); 
+    });
+
+    // trigger owasp likelihood evaluation section
+    $('#risk__simple__evaluation button').on('click', ()=>{
+      $('#risk__simple__evaluation').hide();
+      $('#risk__likehood__table').show();
+      delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
     });
 
     $('#risk__skillLevel').on('change', ()=>{
@@ -489,6 +494,9 @@
     // Risk Impact
     const checkbox = async (field, value)=>{
       const risk = await window.risks.updateRiskImpact(getCurrentRiskId(), field, value);
+      const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
+      riskData.riskImpact = risk.riskImpact;
+      
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };
 
