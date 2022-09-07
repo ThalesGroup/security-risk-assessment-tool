@@ -27,7 +27,8 @@
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
-    let assetsRelationship = {}, triggeredSimpleLikelihood = {};
+    let assetsRelationship = {};
+    // let triggeredSimpleLikelihood = {};
 
     /**
      * 
@@ -114,6 +115,7 @@
 
       if(businessAssetRef){
         businessAssetValues.forEach((value, i) => {
+          // get values from schema?
           const values = {
             0: 'Not Applicable',
             1: 'Low',
@@ -193,15 +195,6 @@
         $('#riskName').hide();
         $('#risk__manual__riskName input').val(riskName.riskName);
       }
-      // if(riskName.riskName.replace(/\s/g, '') !== concatedRiskName.replace(/\s/g, '')){
-      //   $('#risk__manual__riskName').show();
-      //   $('#riskName').hide();
-      //   $('#risk__manual__riskName input').val(riskName.riskName);
-      // }else{
-      //   $('#risk__manual__riskName').hide();
-      //   $('#riskName').show();
-      //   $('.riskname').text(riskName.riskName);
-      // }
 
       // Set Risk evaluation data
       // risk likelihood
@@ -218,13 +211,13 @@
       addSelectedRowData(row.getIndex());
       
       // check if simplelikelihood button has been pressed for current risk
-      if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
-        $('#risk__simple__evaluation').show();
-        $('#risk__likehood__table').hide();
-      }else{
-        $('#risk__simple__evaluation').hide();
-        $('#risk__likehood__table').show();
-      }
+      // if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
+      //   $('#risk__simple__evaluation').show();
+      //   $('#risk__likehood__table').hide();
+      // }else{
+      //   $('#risk__simple__evaluation').hide();
+      //   $('#risk__likehood__table').show();
+      // }
     });
 
     const addRisk = (risk) => {
@@ -280,7 +273,7 @@
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
-      triggeredSimpleLikelihood = {};
+      // triggeredSimpleLikelihood = {};
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
 
@@ -433,7 +426,7 @@
     $('#risk__likehood__table button:nth-of-type(1)').on('click', async ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
-      triggeredSimpleLikelihood[getCurrentRiskId()] = true;
+      // triggeredSimpleLikelihood[getCurrentRiskId()] = true;
 
       const id = getCurrentRiskId();
       await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
@@ -463,7 +456,7 @@
     $('#risk__simple__evaluation button').on('click', ()=>{
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
-      delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
+      // delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
     });
 
     $('#risk__skillLevel').on('change', ()=>{
@@ -504,39 +497,27 @@
     };
 
     $('#risk__confidentialty').on('change', ()=>{
-      let checked;
-      $('#risk__confidentialty').is(":checked") ? checked = 1 : checked = 0;
-      checkbox('businessAssetConfidentialityFlag', checked);
+      checkbox('businessAssetConfidentialityFlag', $('#risk__confidentialty').is(":checked") ? 1 : 0);
     });
 
     $('#risk__integrity').on('change', ()=>{
-      let checked;
-      $('#risk__integrity').is(":checked") ? checked = 1 : checked = 0;
-      checkbox('businessAssetIntegrityFlag', checked);
+      checkbox('businessAssetIntegrityFlag', $('#risk__integrity').is(":checked") ? 1 : 0);
     });
 
     $('#risk__availability').on('change', ()=>{
-      let checked;
-      $('#risk__availability').is(":checked") ? checked = 1 : checked = 0;
-      checkbox('businessAssetAvailabilityFlag', checked);
+      checkbox('businessAssetAvailabilityFlag', $('#risk__availability').is(":checked") ? 1 : 0);
     });
 
     $('#risk__authenticity').on('change', ()=>{
-      let checked;
-      $('#risk__authenticity').is(":checked") ? checked = 1 : checked = 0;
-      checkbox('businessAssetAuthenticityFlag', checked);
+      checkbox('businessAssetAuthenticityFlag', $('#risk__authenticity').is(":checked") ? 1 : 0);
     });
 
     $('#risk__authorization').on('change', ()=>{
-      let checked;
-      $('#risk__authorization').is(":checked") ? checked = 1 : checked = 0;
-      checkbox('businessAssetAuthorizationFlag', checked);
+      checkbox('businessAssetAuthorizationFlag', $('#risk__authorization').is(":checked") ? 1 : 0);
     });
 
     $('#risk__nonrepudiation').on('change', ()=>{
-      let checked;
-      $('#risk__nonrepudiation').is(":checked") ? checked = 1 : checked = 0;
-      checkbox('businessAssetNonRepudiationFlag', checked);
+      checkbox('businessAssetNonRepudiationFlag', $('#risk__nonrepudiation').is(":checked") ? 1 : 0);
     });
 
     // refresh businessAsset & supportingAsset Data
