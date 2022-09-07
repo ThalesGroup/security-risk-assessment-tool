@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="./tabs/Business Assets/styles.css">
     <link rel="stylesheet" type="text/css" href="./tabs/Supporting Assets/styles.css">
     <link rel="stylesheet" type="text/css" href="./tabs/Risks/styles.css">
+    <link rel="stylesheet" type="text/css" href="./tabs/Vulnerabilities/styles.css">
     <link href="../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 
     <!-- npm modules (minified) -->
@@ -348,6 +349,31 @@
             <div class="checkbox" id="vulnerabilties__table__checkboxes"></div>
             <div id="vulnerabilties__table"></div>
           </div>
+
+          <section>
+            <div>
+              <h1>Vulnerability description</h1>
+              <h1>Vulnerability id: <span id="vulnerabilityId"></span></h1>
+            </div>
+            <div>
+              <p>Vulnerability Name:</p>
+              <input type="text" name="vulnerabilityName" id="vulnerabilityName">
+              <div class="flex">
+                <div>
+                  <label for="vulnerabilityTrackingID">GTO Defect ID:</label>
+                  <input type="text" name="vulnerabilityTrackingID" id="vulnerabilityTrackingID">
+                </div>
+                <div>
+                  <label for="vulnerabilityTrackingURI">GTO Defect URL:</label>
+                  <input type="text" name="vulnerabilityTrackingURI" id="vulnerabilityTrackingURI">
+                </div>
+                <div>
+                  <label for="vulnerabilityCVE">Vulnerability CVE:</label>
+                  <input type="text" name="vulnerabilityCVE" id="vulnerabilityCVE">
+                </div>
+              </div>
+            </div>
+          </section>
 
           <footer></footer>
         </div>

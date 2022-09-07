@@ -29,6 +29,18 @@
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     let vulnerabilitiesData;
 
+    const addSelectedVulnerabilityRowData = (id) =>{
+        vulnerabilitiesTable.selectRow(id);
+        const {vulnerabilityId} = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
+
+        $('#vulnerabilityId').text(vulnerabilityId);
+    };
+
+    // row is clicked & selected
+    vulnerabilitiesTable.on('rowClick', (e, row) => {
+        addSelectedVulnerabilityRowData(row.getIndex());
+    });
+
     const addVulnerability = (vulnerability) =>{
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
@@ -43,8 +55,12 @@
     };
 
     const updateVulnerabilityFields = (vulnerabilities) =>{
-        vulnerabilities.forEach((v)=>{
+        vulnerabilitiesTable.clearData();
+        $('#vulnerabilties__table__checkboxes').empty();
+
+        vulnerabilities.forEach((v, i)=>{
             addVulnerability(v);
+            if(i===0) addSelectedVulnerabilityRowData(v.vulnerabilityId);
         });
     };
 
