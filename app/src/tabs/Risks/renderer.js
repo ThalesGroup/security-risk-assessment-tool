@@ -27,8 +27,7 @@
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
-    let assetsRelationship = {};
-    // let triggeredSimpleLikelihood = {};
+    let assetsRelationship = {}, triggeredSimpleLikelihood = {};
 
     /**
      * 
@@ -194,7 +193,16 @@
         $('#risk__manual__riskName').show();
         $('#riskName').hide();
         $('#risk__manual__riskName input').val(riskName.riskName);
-      }
+      }; 
+
+      // let isOWASPRiskLikelihood = await window.risks.isOWASPRiskLikelihood(riskLikelihood);
+      // if(isOWASPRiskLikelihood){
+      //   $('#risk__simple__evaluation').hide();
+      //   $('#risk__likehood__table').show();
+      // }else{
+      //   $('#risk__simple__evaluation').show();
+      //   $('#risk__likehood__table').hide();
+      // };
 
       // Set Risk evaluation data
       // risk likelihood
@@ -211,13 +219,13 @@
       addSelectedRowData(row.getIndex());
       
       // check if simplelikelihood button has been pressed for current risk
-      // if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
-      //   $('#risk__simple__evaluation').show();
-      //   $('#risk__likehood__table').hide();
-      // }else{
-      //   $('#risk__simple__evaluation').hide();
-      //   $('#risk__likehood__table').show();
-      // }
+      if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
+        $('#risk__simple__evaluation').show();
+        $('#risk__likehood__table').hide();
+      }else{
+        $('#risk__simple__evaluation').hide();
+        $('#risk__likehood__table').show();
+      }
     });
 
     const addRisk = (risk) => {
@@ -273,7 +281,7 @@
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
-      // triggeredSimpleLikelihood = {};
+      triggeredSimpleLikelihood = {};
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
 
@@ -426,7 +434,7 @@
     $('#risk__likehood__table button:nth-of-type(1)').on('click', async ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
-      // triggeredSimpleLikelihood[getCurrentRiskId()] = true;
+      triggeredSimpleLikelihood[getCurrentRiskId()] = true;
 
       const id = getCurrentRiskId();
       await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
@@ -456,7 +464,7 @@
     $('#risk__simple__evaluation button').on('click', ()=>{
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
-      // delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
+      delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
     });
 
     $('#risk__skillLevel').on('change', ()=>{

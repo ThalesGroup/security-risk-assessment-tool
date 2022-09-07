@@ -87,8 +87,7 @@ const newISRAProject = (win, app) => {
   * jsonFilePath: tracks if file opened is json file type (save/saveAs)
   * labelSelected: tracks if 'Save' or 'Save As' menu item is selected
 */
-let jsonFilePath = '';
-let labelSelected;
+let jsonFilePath = '', labelSelected;
 
 /**
   * save as new project in selected directory (save as)
@@ -426,6 +425,7 @@ ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
 ipcMain.handle('risks:isAutomaticRiskName', (event, riskName, allAttackPathsName)=> isAutomaticRiskName(israProject, riskName, allAttackPathsName));
+// ipcMain.handle('risks:isOWASPRiskLikelihood', (event, riskLikelihood)=> isOWASPRiskLikelihood(riskLikelihood));
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

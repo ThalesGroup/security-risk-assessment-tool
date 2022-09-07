@@ -152,6 +152,26 @@ const updateRiskName = (israProject, win, id, field, value) => {
     }
 }; 
 
+const calculateRiskLikelihood = (riskLikelihood) =>{
+    const { threatFactorLevel, occurrenceLevel } = riskLikelihood;
+    if (
+        (threatFactorLevel === 'Low' && occurrenceLevel === 'Low') ||
+        (threatFactorLevel === 'Medium' && occurrenceLevel === 'Low') ||
+        (threatFactorLevel === 'Low' && occurrenceLevel === 'Medium')
+    ) return 1;
+    else if (
+        (threatFactorLevel === 'Medium' && occurrenceLevel === 'Very High') ||
+        (threatFactorLevel === 'High' && occurrenceLevel === 'High') ||
+        (threatFactorLevel === 'Very High' && occurrenceLevel === 'Medium')
+    ) return 3;
+    else if (
+        (threatFactorLevel === 'High' && occurrenceLevel === 'Very High') ||
+        (threatFactorLevel === 'Very High' && occurrenceLevel === 'Very High') ||
+        (threatFactorLevel === 'Very High' && occurrenceLevel === 'High')
+    ) return 4;
+    else return 2;
+};
+
 /**
   * update risk impact evaluation
   * @param {ISRAProject} israProject current ISRA Project
@@ -166,23 +186,7 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
         const { riskLikelihood } = risk;
 
         const updateRiskLikelihoodValue = () => {
-            const { threatFactorLevel, occurrenceLevel } = riskLikelihood;
-            if (
-                (threatFactorLevel === 'Low' && occurrenceLevel === 'Low') ||
-                (threatFactorLevel === 'Medium' && occurrenceLevel === 'Low') ||
-                (threatFactorLevel === 'Low' && occurrenceLevel === 'Medium')
-            ) riskLikelihood.riskLikelihood = 1;
-            else if (
-                (threatFactorLevel === 'Medium' && occurrenceLevel === 'Very High') ||
-                (threatFactorLevel === 'High' && occurrenceLevel === 'High') ||
-                (threatFactorLevel === 'Very High' && occurrenceLevel === 'Medium')
-            ) riskLikelihood.riskLikelihood = 3;
-            else if (
-                (threatFactorLevel === 'High' && occurrenceLevel === 'Very High') ||
-                (threatFactorLevel === 'Very High' && occurrenceLevel === 'Very High') ||
-                (threatFactorLevel === 'Very High' && occurrenceLevel === 'High')
-            ) riskLikelihood.riskLikelihood = 4;
-            else riskLikelihood.riskLikelihood = 2;
+            riskLikelihood.riskLikelihood = calculateRiskLikelihood(riskLikelihood);
         };
 
         if(field === 'threatFactorScore'){
@@ -309,11 +313,17 @@ const isAutomaticRiskName = (israProject, riskName, allAttackPathsName) =>{
     return riskName.riskName.replace(/\s/g, '') === concatedRiskName.replace(/\s/g, '');
 };
 
+// const isOWASPRiskLikelihood = (riskLikelihood) =>{
+//     const calculatedRiskLikelihood = calculateRiskLikelihood(riskLikelihood);
+//     return calculatedRiskLikelihood == riskLikelihood.riskLikelihood;
+// };
+
 module.exports = {
     addRisk,
     deleteRisk,
     updateRiskName,
     updateRiskLikelihood,
     updateRiskImpact,
-    isAutomaticRiskName
+    isAutomaticRiskName,
+    // isOWASPRiskLikelihood
 };

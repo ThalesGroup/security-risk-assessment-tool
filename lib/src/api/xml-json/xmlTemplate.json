@@ -926,50 +926,15 @@
                 "LikelihoodRiskEvaluation": [
                     {
                         "riskLikelihood": [
-                            "2"
+                            "3"
                         ],
                         "riskLikelihoodDetail": [
                             ""
                         ],
                         "LikelihoodRiskEvaluationMethod": [
                             {
-                                "OWASPLikelihoodEvaluation": [
-                                    {
-                                        "ThreatFactor": [
-                                            {
-                                                "skillLevel": [
-                                                    "9"
-                                                ],
-                                                "reward": [
-                                                    "4"
-                                                ],
-                                                "accessResources": [
-                                                    "4"
-                                                ],
-                                                "size": [
-                                                    "9"
-                                                ],
-                                                "intrusionDetection": [
-                                                    "9"
-                                                ]
-                                            }
-                                        ],
-                                        "threatFactorScore": [
-                                            "7"
-                                        ],
-                                        "threatFactorLevel": [
-                                            "High"
-                                        ],
-                                        "occurrence": [
-                                            "5"
-                                        ],
-                                        "occurrenceLevel": [
-                                            "Medium"
-                                        ],
-                                        "OWASPLikelihoodScore": [
-                                            ""
-                                        ]
-                                    }
+                                "SimpleLikelihoodEvaluation": [
+                                    ""
                                 ]
                             }
                         ]
@@ -1001,7 +966,7 @@
                     "6"
                 ],
                 "inherentRiskScore": [
-                    "8"
+                    "10"
                 ],
                 "Mitigation": [
                     {
@@ -1033,7 +998,7 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "8"
+                    "10"
                 ],
                 "riskManagementDecision": [
                     "Transfer"
@@ -1042,7 +1007,7 @@
                     "Risk transferred to users, with application help  indicating that displaying of sensitive information should be protected from prying eyes and users should be aware of their surroundings."
                 ],
                 "residualRiskScore": [
-                    "8"
+                    "10"
                 ],
                 "residualRiskLevel": [
                     "Medium"
