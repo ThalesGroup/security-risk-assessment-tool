@@ -89,3 +89,8 @@
 tbody {
     text-align: center;
 }
+
+#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(n+2)  td:nth-of-type(n+2) {
+    font-weight: bold;
+    visibility: hidden;
+}
