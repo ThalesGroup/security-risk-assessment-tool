@@ -67,7 +67,7 @@ const deleteBusinessAsset = (israProject, ids, win) => {
         const affectedRisk = israProject.getRisk(riskId);
         affectedRisk.riskName.businessAssetRef = null;
         affectedRisk.riskName.supportingAssetRef = null;
-        updateRiskName(israProject, win, riskId, 'deleteRefs');
+        updateRiskName(israProject, win, riskId);
       }
     });
 

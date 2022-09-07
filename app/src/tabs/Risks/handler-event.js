@@ -119,13 +119,12 @@ const updateRiskName = (israProject, win, id, field, value) => {
         const risk = israProject.getRisk(id);
         const { riskName, allAttackPathsName } = risk;
         
-        if(field !== 'deleteRefs'){
+        if(field){
             if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
                 riskName[field] = value;
                 if (field === 'threatVerb') updateRiskImpactThreatVerb(israProject, id, value);
             }else{
                 riskName[field] = parseInt(value);
-
                 if(field === 'businessAssetRef') riskName.supportingAssetRef = null;
             };
         };

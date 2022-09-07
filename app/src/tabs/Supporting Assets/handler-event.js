@@ -60,7 +60,7 @@ const deleteSupportingAsset = (israProject, ids, win) => {
       if(deletedIds.has(String(riskName.supportingAssetRef))){
         const affectedRisk = israProject.getRisk(riskId);
         affectedRisk.riskName.supportingAssetRef = null;
-        updateRiskName(israProject, win, riskId, 'deleteRefs');
+        updateRiskName(israProject, win, riskId);
       }
     });
 
