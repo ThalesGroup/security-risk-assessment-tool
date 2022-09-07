@@ -32,6 +32,14 @@
     const addVulnerability = (vulnerability) =>{
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
+
+        // add checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `${vulnerability.vulnerabilityId}`;
+        checkbox.id = `vulnerabilties__table__checkboxes__${vulnerability.vulnerabilityId}`;
+        checkbox.name = 'vulnerabilties__table__checkboxes';
+        $('#vulnerabilties__table__checkboxes').append(checkbox);
     };
 
     const updateVulnerabilityFields = (vulnerabilities) =>{
@@ -48,5 +56,5 @@
     } catch (err) {
       alert('Failed to load vulnerabilities tab');
     }
-  })();
+})();
   
