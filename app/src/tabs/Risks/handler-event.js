@@ -108,7 +108,7 @@ const updateRiskImpactThreatVerb = (israProject, riskId, value) =>{
 };
 
 /**
-  * delete selected risk row(s)
+  * update risk name evaluation
   * @param {ISRAProject} israProject current ISRA Project
   * @param {integer} risk id
   * @param {string} riskName property
@@ -125,12 +125,15 @@ const updateRiskName = (israProject, win, id, field, value) => {
                 if (field === 'threatVerb') updateRiskImpactThreatVerb(israProject, id, value);
             }else{
                 riskName[field] = parseInt(value);
+
+                if(field === 'businessAssetRef') riskName.supportingAssetRef = null;
             };
         };
 
         let businessAsset = null, supportingAsset = null;
         if(riskName.businessAssetRef) {
             businessAsset = israProject.getBusinessAsset(riskName.businessAssetRef);
+            // update riskImpact
             updateRiskImpact(israProject, risk.riskId);
         };
         if(riskName.supportingAssetRef) supportingAsset = israProject.getSupportingAsset(riskName.supportingAssetRef);

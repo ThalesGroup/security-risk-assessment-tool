@@ -94,6 +94,17 @@ const updateSupportingAsset = (israProject, win, id, field, value) => {
     } else {
       // value is string
       supportingAsset[field] = value;
+
+      // update riskName
+      if(field === 'supportingAssetName'){
+        const risks = israProject.properties.Risk;
+        risks.forEach((risk)=>{
+          const { riskId, riskName } = risk;
+          if(riskName.supportingAssetRef === id){
+            updateRiskName(israProject, win, riskId);
+          }
+        })
+      }
     }
     win.webContents.send('risks:load', israProject.toJSON());
   } catch (err) {

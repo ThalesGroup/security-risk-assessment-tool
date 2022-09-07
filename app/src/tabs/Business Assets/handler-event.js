@@ -108,8 +108,17 @@ const updateBusinessAsset = (ISRAproject, win, id, field, value) => {
 
     if (field === 'businessAssetName' || field === 'businessAssetType') {
       israProject.getBusinessAsset(id)[field] = value;
+
+      // update riskName
       if (field === 'businessAssetName') {
+        const risks = israProject.properties.Risk;
         win.webContents.send('supportingAssets:getBusinessAssets', value, id);
+        risks.forEach((risk)=>{
+          const { riskId, riskName } = risk;
+          if(riskName.businessAssetRef === id){
+            updateRiskName(israProject, win, riskId);
+          }
+        })
       };
     } else {
       israProject.getBusinessAsset(id).businessAssetProperties[field] = Number(value);

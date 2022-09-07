@@ -551,7 +551,6 @@
       $('#risks__table__checkboxes').empty();
       risksData.forEach((risk, i) => {
         addRisk(risk);
-        console.log(risk.riskId, currentRiskId)
         if(risk.riskId === currentRiskId) {
           const {riskId} = risk;
           addSelectedRowData(riskId)
