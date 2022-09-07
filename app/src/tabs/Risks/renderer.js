@@ -406,6 +406,19 @@
   // Risk Likelihood
     $('[name="Go to vulnerabilities view"]').on('click', ()=>{
       alert('Go to vulnerability tab');
+      const tabButton = document.querySelectorAll('.tab-button');
+      const contents = document.querySelectorAll('.content');
+      // const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+
+      tabButton.forEach((btn) => {
+        btn.classList.remove('active');
+      });
+      $("button[data-id='vulnerabilities']").attr('class', 'tab-button active');
+  
+      contents.forEach((content) => {
+        content.classList.remove('active');
+      });
+      $('#vulnerabilities').attr('class', 'content active');
     });
 
     const calculateThreatFactorScore = async () =>{
