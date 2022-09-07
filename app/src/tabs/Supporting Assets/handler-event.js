@@ -52,15 +52,16 @@ const deleteSupportingAsset = (israProject, ids, win) => {
 
     ids.forEach((id) => {
       israProject.deleteSupportingAsset(Number(id));
+    });
 
-      risks.forEach((risk)=>{
-        const { riskId, riskName } = risk;
-        if(riskName.supportingAssetRef == id) {
-          const affectedRisk = israProject.getRisk(riskId);
-          affectedRisk.riskName.supportingAssetRef = null;
-          updateRiskName(israProject, win, riskId, 'deleteBusinessAssetRef');
-        }
-      });
+    const deletedIds = new Set(ids);
+    risks.forEach((risk)=>{
+      const { riskId, riskName } = risk;
+      if(deletedIds.has(String(riskName.supportingAssetRef))){
+        const affectedRisk = israProject.getRisk(riskId);
+        affectedRisk.riskName.supportingAssetRef = null;
+        updateRiskName(israProject, win, riskId, 'deleteRefs');
+      }
     });
 
     win.webContents.send('risks:load', israProject.toJSON());

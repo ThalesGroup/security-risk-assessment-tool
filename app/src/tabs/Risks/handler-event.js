@@ -142,7 +142,7 @@ const updateRiskName = (israProject, win, id, field, value) => {
               };
         };
 
-        console.log(risk.riskName.properties)
+        console.log('riskName', risk.riskName.properties)
         win.webContents.send('risks:load', israProject.toJSON());
     } catch (err) {
         console.log(err);
@@ -225,7 +225,7 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
             riskLikelihood[field] = parseInt(value);
         }else updateRiskLikelihoodValue();
 
-        // console.log(riskLikelihood.properties);
+        console.log('riskLikelihood', riskLikelihood.properties);
         return riskLikelihood.properties;
     } catch (err) {
         console.log(err);
@@ -278,7 +278,7 @@ const updateRiskImpact = (israProject, id, field, value) => {
 
         }else riskImpact.riskImpact = null;
  
-        console.log(riskImpact.properties);
+        console.log('riskImpact', riskImpact.properties);
         return risk.properties;
     } catch (err) {
         console.log(err);
