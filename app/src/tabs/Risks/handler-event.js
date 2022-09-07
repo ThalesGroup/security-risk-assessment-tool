@@ -288,10 +288,25 @@ const updateRiskImpact = (israProject, id, field, value) => {
     }
 }; 
 
+const isAutomaticRiskName = (israProject, riskName, allAttackPathsName) =>{
+    const { businessAssetRef, supportingAssetRef, threatAgent, threatVerb, motivation } = riskName;
+    const { BusinessAsset, SupportingAsset }= israProject.properties;
+    let businessAsset, supportingAsset;
+  
+    businessAsset = BusinessAsset.find((ba) => ba.businessAssetId === businessAssetRef);
+    supportingAsset = SupportingAsset.find((sa) => sa.supportingAssetId === supportingAssetRef);
+  
+    let concatedRiskName = 'As a '+  threatAgent + ', I can ' + threatVerb + ' the ' + (!businessAsset ? '' : businessAsset.businessAssetName) + ' compromising the ' + (!supportingAsset ? '' : supportingAsset.supportingAssetName) + 'in order to' + motivation;
+    if(allAttackPathsName.length > 0) concatedRiskName += `, exploiting the ${allAttackPathsName}`;
+  
+    return riskName.riskName.replace(/\s/g, '') === concatedRiskName.replace(/\s/g, '');
+};
+
 module.exports = {
     addRisk,
     deleteRisk,
     updateRiskName,
     updateRiskLikelihood,
-    updateRiskImpact
+    updateRiskImpact,
+    isAutomaticRiskName
 };

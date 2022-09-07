@@ -414,7 +414,7 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
 });
 
 // Risks Tab
-const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact } = require('./tabs/Risks/handler-event');
+const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, isAutomaticRiskName } = require('./tabs/Risks/handler-event');
 const { renderRisks } = require('./tabs/Risks/render-risks');
 
 ipcMain.handle('render:risks', () => renderRisks());
@@ -423,12 +423,9 @@ ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids))
 ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
   updateRiskName(israProject, getMainWindow(), id, field, value);
 });
-ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => {
-  return updateRiskLikelihood(israProject, id, field, value);
-});
-ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => {
-  return updateRiskImpact(israProject, id, field, value);
-});
+ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
+ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
+ipcMain.handle('risks:isAutomaticRiskName', (event, riskName, allAttackPathsName)=> isAutomaticRiskName(israProject, riskName, allAttackPathsName));
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

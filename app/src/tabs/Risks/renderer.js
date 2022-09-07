@@ -151,7 +151,7 @@
     };
 
     // render selected row data on page by riskId
-    const addSelectedRowData = (id) =>{
+    const addSelectedRowData = async (id) =>{
       risksTable.selectRow(id);
       const {riskId, riskName, allAttackPathsName, riskAttackPaths, riskLikelihood, riskImpact} = risksData.find((risk) => risk.riskId === id);
       const {
@@ -183,26 +183,25 @@
       addSupportingAssetOptions(businessAssetRef);
       $('select[id="risk__supportingAsset"]').val(supportingAssetRef);
 
-      let businessAsset = null, supportingAsset = null;
-      businessAssets.forEach((ba) => {
-        if(ba.businessAssetId === businessAssetRef) businessAsset = ba;
-      })
-      supportingAssets.forEach((sa) => {
-        if(sa.supportingAssetId === supportingAssetRef) supportingAsset = sa;
-      })
-      let concatedRiskName = 'As a '+  threatAgent + ', I can ' + threatVerb + ' the ' + (businessAsset === null ? '' : businessAsset.businessAssetName) + ' compromising the ' + (supportingAsset === null ? '' : supportingAsset.supportingAssetName) + 'in order to' + motivation;
-      if(allAttackPathsName.length > 0){
-        concatedRiskName += `, exploiting the ${allAttackPathsName}`;
-      }
-      if(riskName.riskName.replace(/\s/g, '') !== concatedRiskName.replace(/\s/g, '')){
-        $('#risk__manual__riskName').show();
-        $('#riskName').hide();
-        $('#risk__manual__riskName input').val(riskName.riskName);
-      }else{
+      let isAutomaticRiskName = await window.risks.isAutomaticRiskName(riskName, allAttackPathsName);
+      if(isAutomaticRiskName){
         $('#risk__manual__riskName').hide();
         $('#riskName').show();
         $('.riskname').text(riskName.riskName);
+      }else{
+        $('#risk__manual__riskName').show();
+        $('#riskName').hide();
+        $('#risk__manual__riskName input').val(riskName.riskName);
       }
+      // if(riskName.riskName.replace(/\s/g, '') !== concatedRiskName.replace(/\s/g, '')){
+      //   $('#risk__manual__riskName').show();
+      //   $('#riskName').hide();
+      //   $('#risk__manual__riskName input').val(riskName.riskName);
+      // }else{
+      //   $('#risk__manual__riskName').hide();
+      //   $('#riskName').show();
+      //   $('.riskname').text(riskName.riskName);
+      // }
 
       // Set Risk evaluation data
       // risk likelihood
