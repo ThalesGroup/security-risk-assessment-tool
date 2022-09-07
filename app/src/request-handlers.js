@@ -427,6 +427,9 @@ ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRisk
 ipcMain.handle('risks:isAutomaticRiskName', (event, riskName, allAttackPathsName)=> isAutomaticRiskName(israProject, riskName, allAttackPathsName));
 // ipcMain.handle('risks:isOWASPRiskLikelihood', (event, riskLikelihood)=> isOWASPRiskLikelihood(riskLikelihood));
 
+const { renderVulnerabilities } = require('./tabs/Vulnerabilities/render-vulnerabilities');
+ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
+
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
 //     nativeTheme.themeSource = 'light';
