@@ -288,6 +288,13 @@ const updateRiskImpact = (israProject, id, field, value) => {
     }
 }; 
 
+/**
+  * 
+  * @param {ISRAProject} israProject current ISRA Project
+  * @param {Object} riskName of a risk
+  * @param {string} allAttackPathsName of a risk
+  * @return {Boolean} true if riskName is automatically generated
+*/
 const isAutomaticRiskName = (israProject, riskName, allAttackPathsName) =>{
     const { businessAssetRef, supportingAssetRef, threatAgent, threatVerb, motivation } = riskName;
     const { BusinessAsset, SupportingAsset }= israProject.properties;
