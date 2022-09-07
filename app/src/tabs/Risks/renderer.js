@@ -76,7 +76,6 @@
 
     // update riskLikelihood occurrence-threatFactor table
     const updateOccurrenceThreatFactorTable = (threatFactorLevel, occurrenceLevel) =>{
-      // console.log(`threaFactorLevel:${threatFactorLevel}, occurrenceLevel:${occurrenceLevel}`);
       $('#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(n+2)  td:nth-of-type(n+2)').css('visibility', 'hidden');
       $('.occurrence').css('font-weight', 'normal');
       $('.threatFactor').css('font-weight', 'normal');
@@ -86,9 +85,7 @@
       let col = $(`td[data-factor="${threatFactorLevel}"]`).attr('data-col');
       let row = $(`td[data-occurrence="${occurrenceLevel}"]`).attr('data-row');
 
-      if(col && row){
-        $(`#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(${parseInt(row) + 1})  td:nth-of-type(${parseInt(col) + 1})`).css('visibility', 'visible');
-      }
+      if(col && row) $(`#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(${parseInt(row) + 1})  td:nth-of-type(${parseInt(col) + 1})`).css('visibility', 'visible');
     };
 
     // update risk impact evaluation table
@@ -125,15 +122,16 @@
       });
 
       if(businessAssetRef){
+        // get schema values?
+        const values = {
+          0: 'Not Applicable',
+          1: 'Low',
+          2: 'Medium',
+          3: 'High',
+          4: 'Critical'
+        };
+
         businessAssetValues.forEach((value, i) => {
-          // get values from schema?
-          const values = {
-            0: 'Not Applicable',
-            1: 'Low',
-            2: 'Medium',
-            3: 'High',
-            4: 'Critical'
-          };
           $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).text('');
           $(`#risk__evaluation__table tr:nth-of-type(${i+1}) td:nth-of-type(2)`).append(values[value]);
       });
@@ -161,6 +159,17 @@
       $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
       $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+    };
+
+    const toggleSimpleAndOWASPLikelihood = () =>{
+      // check if simplelikelihood button has been pressed for current risk
+      if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
+        $('#risk__simple__evaluation').show();
+        $('#risk__likehood__table').hide();
+      }else{
+        $('#risk__simple__evaluation').hide();
+        $('#risk__likehood__table').show();
+      }
     };
 
     // render selected row data on page by riskId
@@ -216,6 +225,8 @@
       //   $('#risk__likehood__table').hide();
       // };
 
+      toggleSimpleAndOWASPLikelihood();
+
       // Set Risk evaluation data
       // risk likelihood
       addVulnerabilitySection(riskAttackPaths);
@@ -229,15 +240,6 @@
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
       addSelectedRowData(row.getIndex());
-      
-      // check if simplelikelihood button has been pressed for current risk
-      if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
-        $('#risk__simple__evaluation').show();
-        $('#risk__likehood__table').hide();
-      }else{
-        $('#risk__simple__evaluation').hide();
-        $('#risk__likehood__table').show();
-      }
     });
 
     const addRisk = (risk) => {
@@ -288,6 +290,8 @@
           addSelectedRowData(risksData[0].riskId);
         }
       });
+
+      toggleSimpleAndOWASPLikelihood();
     };
 
     const updateRisksFields = (fetchedData) => {
