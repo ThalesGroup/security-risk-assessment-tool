@@ -31,23 +31,35 @@
 
     const getCurrentVulnerabilityId = () =>{
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
-      };
+    };
 
-    const addSelectedVulnerabilityRowData = (id) =>{
+    const getCurrentVulnerability = () =>{
+        return vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+    };
+
+    const addSelectedVulnerabilityRowData = async (id) =>{
         vulnerabilitiesTable.selectRow(id);
         const {
             vulnerabilityId,
             vulnerabilityName,
             vulnerabilityTrackingID,
             vulnerabilityTrackingURI,
-            vulnerabilityCVE
+            vulnerabilityCVE,
+            vulnerabilityFamily,
+            vulnerabilityDescription,
+            vulnerabilityDescriptionAttachment,
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
 
         $('#vulnerabilityId').text(vulnerabilityId);
-        $('#vulnerabilityName').val(vulnerabilityName);
-        $('#vulnerabilityTrackingID').val(vulnerabilityTrackingID);
-        // $('#vulnerabilityTrackingURI').val(vulnerabilityTrackingURI);
-        $('#vulnerabilityCVE').val(vulnerabilityCVE);
+        $('#vulnerability__name').val(vulnerabilityName);
+        $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
+        vulnerabilityURL(vulnerabilityTrackingURI);
+        $('#vulnerability__CVE').val(vulnerabilityCVE);
+        $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? 'null' : vulnerabilityFamily);
+        tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
+
+        const attachmentResult = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
+        $('#vulnerability__file--insert').text(attachmentResult);
     };
 
     // row is clicked & selected
@@ -108,7 +120,7 @@
 
     // add Vulnerability button
     $('#vulnerabilities button').first().on('click', async () => {
-        const vulnerability = await window.vulnerabillities.addVulnerability();
+        const vulnerability = await window.vulnerabilities.addVulnerability();
         // update vulnerabilitiesData
         vulnerabilitiesData.push(vulnerability[0]);
         addVulnerability(vulnerability[0]);
@@ -126,6 +138,7 @@
     });
 
     const vulnerabilityURL = (value) => {
+        getCurrentVulnerability().vulnerabilityTrackingURI = value;
         const hyperlink = $('#vulnerability__url--hyperlink');
         const insert = $('#vulnerability__url--insert');
   
@@ -155,8 +168,16 @@
         vulnerabilityURL(url);
     });
 
+    $('#vulnerability__attachment').on('click', () => {
+        window.vulnerabilities.attachment(getCurrentVulnerabilityId());
+        window.vulnerabilities.fileName(async (event, result) => {
+            const { fileName, base64 } = result;
+            $('#vulnerability__file--insert').text(fileName);
+            getCurrentVulnerability().vulnerabilityDescriptionAttachment = base64;
+        });
+    });
+
     } catch (err) {
       alert('Failed to load vulnerabilities tab');
     }
 })();
-  

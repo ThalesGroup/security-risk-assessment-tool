@@ -40,3 +40,12 @@
 .flex {
     display: flex;
 }
+
+#vulnerability__url--insert{
+    font-size: small;
+    cursor:pointer
+}
+
+#vulnerability__url--hyperlink{
+    font-size: small;
+}

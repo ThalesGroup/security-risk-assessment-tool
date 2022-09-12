@@ -357,11 +357,11 @@
             </div>
             <div>
               <p>Vulnerability Name:</p>
-              <input type="text" name="vulnerabilityName" id="vulnerabilityName">
+              <input type="text" name="vulnerability__name" id="vulnerability__name">
               <div class="flex">
                 <div>
-                  <label for="vulnerabilityTrackingID">GTO Defect ID:</label>
-                  <input type="text" name="vulnerabilityTrackingID" id="vulnerabilityTrackingID">
+                  <label for="vulnerability__trackingID">GTO Defect ID:</label>
+                  <input type="text" name="vulnerability__trackingID" id="vulnerability__trackingID">
                 </div>
                 <div>
                   <p>GTO Defect URL:</p>
@@ -372,10 +372,26 @@
                   </div>
                 </div>
                 <div>
-                  <label for="vulnerabilityCVE">Vulnerability CVE:</label>
-                  <input type="text" name="vulnerabilityCVE" id="vulnerabilityCVE">
+                  <label for="vulnerability__CVE">Vulnerability CVE:</label>
+                  <input type="text" name="vulnerability__CVE" id="vulnerability__CVE">
                 </div>
               </div>
+
+              <label for="vulnerability__family">Vulnerability Family:</label>
+              <select name="vulnerability__family" id="vulnerability__family">
+                <option value="null">Select...</option>
+              </select>
+
+              <p>Vulnerability Description:</p>
+              <textarea class="rich-text" id="vulnerability__details" cols="30" rows="20"></textarea>
+
+              <div id="vulnerability__attachment">
+                <div class = 'hyperlink-attachment-align'>
+                  <img class= 'hyperlink-attachment-image' id= "vulnerability__file-image" src="./asset/link.png" alt="File:">
+                  <p id="vulnerability__file--insert" style="margin-top: 0px;">Click here to attach a file</p>
+                </div>
+              </div>
+
             </div>
           </section>
 

@@ -577,7 +577,7 @@
                             {
                                 "char": "1",
                                 "$": {
-                                    "score": "6",
+                                    "score": "7",
                                     "name": "Man in the middle attack through network interception"
                                 }
                             }
@@ -586,7 +586,7 @@
                             "Man in the middle attack through network interception"
                         ],
                         "attackPathScore": [
-                            "6"
+                            "7"
                         ]
                     }
                 ],
@@ -594,10 +594,10 @@
                     "Man in the middle attack through network interception"
                 ],
                 "allAttackPathsScore": [
-                    "6"
+                    "7"
                 ],
                 "inherentRiskScore": [
-                    "10"
+                    "11"
                 ],
                 "Mitigation": [
                     {
@@ -629,7 +629,7 @@
                     "0.5"
                 ],
                 "mitigatedRiskScore": [
-                    "5"
+                    "6"
                 ],
                 "riskManagementDecision": [
                     "Mitigate"
@@ -638,10 +638,10 @@
                     "Security control implemented by adding proprietary encryption on top of TLS communication layer."
                 ],
                 "residualRiskScore": [
-                    "5"
+                    "6"
                 ],
                 "residualRiskLevel": [
-                    "Low"
+                    "Medium"
                 ]
             },
             {
@@ -1847,13 +1847,13 @@
                     ""
                 ],
                 "vulnerabilityTrackingID": [
-                    ""
+                    "123"
                 ],
                 "vulnerabilityTrackingURI": [
-                    ""
+                    "https://www.google.com/"
                 ],
                 "vulnerabilityCVE": [
-                    "http:///"
+                    ""
                 ],
                 "vulnerabilityDescription": [
                     {
@@ -2013,15 +2013,15 @@
                 "vulnerabilityCVEScoring": [
                     {
                         "cveScore": [
-                            "5.9"
+                            "0"
                         ]
                     }
                 ],
                 "overallScore": [
-                    "6"
+                    "7"
                 ],
                 "overallLevel": [
-                    "Medium"
+                    "High"
                 ]
             },
             {
@@ -2117,7 +2117,7 @@
                     }
                 ],
                 "vulnerabilityDescriptionAttachment": [
-                    ""
+                    "x0lGQRQAAAABAAAAAAAAAMERAAAKAAAAdABlAHMAdAAuAGoAcwBvAG4AAAB7CiAgICAiSVNSQW1ldGEiOiB7CiAgICAgICAgImFwcFZlcnNpb24iOiAxLAogICAgICAgICJwcm9qZWN0TmFtZSI6ICIiLAogICAgICAgICJwcm9qZWN0T3JnYW5pemF0aW9uIjogIiIsCiAgICAgICAgInByb2plY3RWZXJzaW9uIjogIiIsCiAgICAgICAgIklTUkF0cmFja2luZyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgInRyYWNraW5nSXRlcmF0aW9uIjogMSwKICAgICAgICAgICAgICAgICJ0cmFja2luZ1NlY3VyaXR5T2ZmaWNlciI6ICJ0MDI2Mzc3NCIsCiAgICAgICAgICAgICAgICAidHJhY2tpbmdEYXRlIjogIjIwMjItMDktMDUiLAogICAgICAgICAgICAgICAgInRyYWNraW5nQ29tbWVudCI6ICIiCiAgICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJidXNpbmVzc0Fzc2V0c0NvdW50IjogMCwKICAgICAgICAic3VwcG9ydGluZ0Fzc2V0c0NvdW50IjogMSwKICAgICAgICAicmlza3NDb3VudCI6IDEsCiAgICAgICAgInZ1bG5lcmFiaWxpdGllc0NvdW50IjogMQogICAgfSwKICAgICJQcm9qZWN0Q29udGV4dCI6IHsKICAgICAgICAicHJvamVjdERlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgInByb2plY3RVUkwiOiAiIiwKICAgICAgICAicHJvamVjdERlc2NyaXB0aW9uQXR0YWNobWVudCI6ICIiLAogICAgICAgICJzZWN1cml0eVByb2plY3RPYmplY3RpdmVzIjogIiIsCiAgICAgICAgInNlY3VyaXR5T2ZmaWNlck9iamVjdGl2ZXMiOiAiIiwKICAgICAgICAic2VjdXJpdHlBc3N1bXB0aW9ucyI6ICIiCiAgICB9LAogICAgIkJ1c2luZXNzQXNzZXQiOiBbXSwKICAgICJTdXBwb3J0aW5nQXNzZXRzRGVzYyI6ICIiLAogICAgIlN1cHBvcnRpbmdBc3NldCI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRJZCI6IDEsCiAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRITERJZCI6ICIiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0TmFtZSI6ICJTQTEiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0VHlwZSI6ICIiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0U2VjdXJpdHlMZXZlbCI6IC0xLAogICAgICAgICAgICAiYnVzaW5lc3NBc3NldFJlZiI6IFtdCiAgICAgICAgfQogICAgXSwKICAgICJSaXNrIjogWwogICAgICAgIHsKICAgICAgICAgICAgInJpc2tJZCI6IDEsCiAgICAgICAgICAgICJwcm9qZWN0TmFtZVJlZiI6ICIiLAogICAgICAgICAgICAicHJvamVjdFZlcnNpb25SZWYiOiAiIiwKICAgICAgICAgICAgInJpc2tOYW1lIjogewogICAgICAgICAgICAgICAgInJpc2tJZFJlZiI6IDEsCiAgICAgICAgICAgICAgICAicmlza05hbWUiOiAiQXMgYSAsIEkgY2FuICB0aGUgQkExIGNvbXByb21pc2luZyB0aGUgU0ExIGluIG9yZGVyIHRvICIsCiAgICAgICAgICAgICAgICAidGhyZWF0QWdlbnQiOiAiIiwKICAgICAgICAgICAgICAgICJ0aHJlYXRBZ2VudERldGFpbCI6ICIiLAogICAgICAgICAgICAgICAgInRocmVhdFZlcmIiOiAiIiwKICAgICAgICAgICAgICAgICJ0aHJlYXRWZXJiRGV0YWlsIjogIiIsCiAgICAgICAgICAgICAgICAibW90aXZhdGlvbiI6ICIiLAogICAgICAgICAgICAgICAgIm1vdGl2YXRpb25EZXRhaWwiOiAiIiwKICAgICAgICAgICAgICAgICJidXNpbmVzc0Fzc2V0UmVmIjogMSwKICAgICAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRSZWYiOiAxCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICJyaXNrTGlrZWxpaG9vZCI6IHsKICAgICAgICAgICAgICAgICJyaXNrSWRSZWYiOiAxLAogICAgICAgICAgICAgICAgInJpc2tMaWtlbGlob29kIjogMywKICAgICAgICAgICAgICAgICJyaXNrTGlrZWxpaG9vZERldGFpbCI6ICIiLAogICAgICAgICAgICAgICAgInNraWxsTGV2ZWwiOiBudWxsLAogICAgICAgICAgICAgICAgInJld2FyZCI6IG51bGwsCiAgICAgICAgICAgICAgICAiYWNjZXNzUmVzb3VyY2VzIjogbnVsbCwKICAgICAgICAgICAgICAgICJzaXplIjogbnVsbCwKICAgICAgICAgICAgICAgICJpbnRydXNpb25EZXRlY3Rpb24iOiBudWxsLAogICAgICAgICAgICAgICAgInRocmVhdEZhY3RvclNjb3JlIjogbnVsbCwKICAgICAgICAgICAgICAgICJ0aHJlYXRGYWN0b3JMZXZlbCI6ICIiLAogICAgICAgICAgICAgICAgIm9jY3VycmVuY2UiOiBudWxsLAogICAgICAgICAgICAgICAgIm9jY3VycmVuY2VMZXZlbCI6ICIiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICJyaXNrSW1wYWN0IjogewogICAgICAgICAgICAgICAgInJpc2tJZFJlZiI6IDEsCiAgICAgICAgICAgICAgICAicmlza0ltcGFjdCI6IDMsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldENvbmZpZGVudGlhbGl0eUZsYWciOiAwLAogICAgICAgICAgICAgICAgImJ1c2luZXNzQXNzZXRJbnRlZ3JpdHlGbGFnIjogMSwKICAgICAgICAgICAgICAgICJidXNpbmVzc0Fzc2V0QXZhaWxhYmlsaXR5RmxhZyI6IDEsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldEF1dGhlbnRpY2l0eUZsYWciOiAwLAogICAgICAgICAgICAgICAgImJ1c2luZXNzQXNzZXRBdXRob3JpemF0aW9uRmxhZyI6IDEsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldE5vblJlcHVkaWF0aW9uRmxhZyI6IDEKICAgICAgICAgICAgfSwKICAgICAgICAgICAgInJpc2tBdHRhY2tQYXRocyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAicmlza0lkUmVmIjogMSwKICAgICAgICAgICAgICAgICAgICAicmlza0F0dGFja1BhdGhJZCI6IDEsCiAgICAgICAgICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlSZWYiOiBbCiAgICAgICAgICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5SWRSZWYiOiBudWxsLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgInNjb3JlIjogbnVsbCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICJuYW1lIjogIiIKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIF0sCiAgICAgICAgICAgICAgICAgICAgImF0dGFja1BhdGhOYW1lIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImF0dGFja1BhdGhTY29yZSI6IG51bGwKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgXSwKICAgICAgICAgICAgImFsbEF0dGFja1BhdGhzTmFtZSI6ICIiLAogICAgICAgICAgICAiYWxsQXR0YWNrUGF0aHNTY29yZSI6IG51bGwsCiAgICAgICAgICAgICJpbmhlcmVudFJpc2tTY29yZSI6IDAsCiAgICAgICAgICAgICJyaXNrTWl0aWdhdGlvbiI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAicmlza0lkUmVmIjogMSwKICAgICAgICAgICAgICAgICAgICAicmlza01pdGlnYXRpb25JZCI6IDEsCiAgICAgICAgICAgICAgICAgICAgImRlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImJlbmVmaXRzIjogMCwKICAgICAgICAgICAgICAgICAgICAiY29zdCI6IG51bGwsCiAgICAgICAgICAgICAgICAgICAgImRlY2lzaW9uIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImRlY2lzaW9uRGV0YWlsIjogIiIsCiAgICAgICAgICAgICAgICAgICAgIm1pdGlnYXRpb25zQmVuZWZpdHMiOiAxLAogICAgICAgICAgICAgICAgICAgICJtaXRpZ2F0aW9uc0RvbmVCZW5lZml0cyI6IDEKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgXSwKICAgICAgICAgICAgIm1pdGlnYXRlZFJpc2tTY29yZSI6IDAsCiAgICAgICAgICAgICJyaXNrTWFuYWdlbWVudERlY2lzaW9uIjogIiIsCiAgICAgICAgICAgICJyaXNrTWFuYWdlbWVudERldGFpbCI6ICIiLAogICAgICAgICAgICAicmVzaWR1YWxSaXNrU2NvcmUiOiAwLAogICAgICAgICAgICAicmVzaWR1YWxSaXNrTGV2ZWwiOiAiTG93IgogICAgICAgIH0KICAgIF0sCiAgICAiVnVsbmVyYWJpbGl0eSI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJwcm9qZWN0TmFtZVJlZiI6ICIiLAogICAgICAgICAgICAicHJvamVjdFZlcnNpb25SZWYiOiAiIiwKICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlJZCI6IDEsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5TmFtZSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eUZhbWlseSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eVRyYWNraW5nSUQiOiAiIiwKICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlUcmFja2luZ1VSSSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eURlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5RGVzY3JpcHRpb25BdHRhY2htZW50IjogIiIsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5Q1ZFIjogIkNWU1M6Mi4wL0FWOkwvQUM6TS9BdTpOL0M6UC9JOlAvQTpQL0U6TkQvUkw6TkQvUkM6TkQiLAogICAgICAgICAgICAiY3ZlU2NvcmUiOiA0LjM3ODAzMjEyMzE1LAogICAgICAgICAgICAib3ZlcmFsbFNjb3JlIjogNCwKICAgICAgICAgICAgIm92ZXJhbGxMZXZlbCI6ICJNZWRpdW0iLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0UmVmIjogW10KICAgICAgICB9CiAgICBdCn0="
                 ],
                 "supportingAssetRef": [
                     "",

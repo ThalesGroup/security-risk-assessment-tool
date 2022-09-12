@@ -309,7 +309,7 @@ ipcMain.handle('projectContext:urlPrompt', async () => {
   return url;
 });
 
-const attachmentOptions = () => {
+const projectContextAttachmentOptions = () => {
   const attachLabel = {
     label: 'Attach',
     click: () => {
@@ -355,7 +355,7 @@ const attachmentOptions = () => {
 };
 
 ipcMain.on('projectContext:attachment', () => {
-  const contextMenu = Menu.buildFromTemplate(attachmentOptions());
+  const contextMenu = Menu.buildFromTemplate(projectContextAttachmentOptions());
   contextMenu.popup();
 });
 
@@ -439,6 +439,74 @@ ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
 });
 ipcMain.on('vulnerabilities:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
+});
+
+/**
+  * vulnerabilitiesFileNames: holds names of each vulnerability file attachments
+*/
+const vulnerabilitiesFileNames = {};
+
+const vulnerabilitiesAttachmentOptions = (id) => {
+  const attachLabel = {
+    label: 'Attach',
+    click: () => {
+      try {
+        const [fileName, base64data] = attachFile();
+        if (fileName !== '') {
+          vulnerabilitiesFileNames[id] = fileName;
+          israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
+          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName: vulnerabilitiesFileNames[id], base64: base64data});
+        }
+      } catch (err) {
+        console.log(err);
+        dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
+        getMainWindow().webContents.send('vulnerabilities:fileName', { fileName:'Click here to attach a file', base64: ''});
+      }
+    },
+  };
+
+  if (israProject.getVulnerability(id).vulnerabilityDescriptionAttachment !== '') {
+    return [
+      attachLabel,
+      {
+        label: 'Save as',
+        click: () => saveAsFile(
+          israProject.getVulnerability(id).vulnerabilityDescriptionAttachment,
+          vulnerabilitiesFileNames[id],
+        ),
+      },
+      {
+        label: 'Remove',
+        click: () => {
+          const [fileName, base64data] = removeFile();
+          vulnerabilitiesFileNames[id] = fileName;
+          israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
+          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName: vulnerabilitiesFileNames[id], base64: ''});
+        },
+      },
+    ];
+  }
+  return [
+    attachLabel,
+  ];
+};
+
+ipcMain.on('vulnerabilities:attachment', (event, id) => {
+  const contextMenu = Menu.buildFromTemplate(vulnerabilitiesAttachmentOptions(id));
+  contextMenu.popup();
+});
+
+ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => {
+  try {
+    const [fileName, base64data] = decodeFile(base64, jsonFilePath);
+    vulnerabilitiesFileNames[id] = fileName;
+    israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
+    return vulnerabilitiesFileNames[id];
+  } catch (err) {
+    console.log(err);
+    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
+    return 'Click here to attach a file';
+  }
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {
