@@ -27,7 +27,8 @@
     const result = await window.render.risks();
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
-    let assetsRelationship = {}, triggeredSimpleLikelihood = {};
+    let assetsRelationship = {};
+    // triggeredSimpleLikelihood = {};
 
     /**
      * 
@@ -161,16 +162,16 @@
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
-    const toggleSimpleAndOWASPLikelihood = () =>{
-      // check if simplelikelihood button has been pressed for current risk
-      if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
-        $('#risk__simple__evaluation').show();
-        $('#risk__likehood__table').hide();
-      }else{
-        $('#risk__simple__evaluation').hide();
-        $('#risk__likehood__table').show();
-      }
-    };
+    // const toggleSimpleAndOWASPLikelihood = () =>{
+    //   // check if simplelikelihood button has been pressed for current risk
+    //   if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
+    //     $('#risk__simple__evaluation').show();
+    //     $('#risk__likehood__table').hide();
+    //   }else{
+    //     $('#risk__simple__evaluation').hide();
+    //     $('#risk__likehood__table').show();
+    //   }
+    // };
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
@@ -185,6 +186,7 @@
         motivationDetail,
         businessAssetRef,
         supportingAssetRef,
+        isAutomaticRiskName
       } = riskName;
       const {
         riskLikelihoodDetail,
@@ -205,7 +207,6 @@
       addSupportingAssetOptions(businessAssetRef);
       $('select[id="risk__supportingAsset"]').val(supportingAssetRef);
 
-      let isAutomaticRiskName = await window.risks.isAutomaticRiskName(riskName, allAttackPathsName);
       if(isAutomaticRiskName){
         $('#risk__manual__riskName').hide();
         $('#riskName').show();
@@ -216,16 +217,7 @@
         $('#risk__manual__riskName input').val(riskName.riskName);
       }; 
 
-      // let isOWASPRiskLikelihood = await window.risks.isOWASPRiskLikelihood(riskLikelihood);
-      // if(isOWASPRiskLikelihood){
-      //   $('#risk__simple__evaluation').hide();
-      //   $('#risk__likehood__table').show();
-      // }else{
-      //   $('#risk__simple__evaluation').show();
-      //   $('#risk__likehood__table').hide();
-      // };
-
-      toggleSimpleAndOWASPLikelihood();
+      // toggleSimpleAndOWASPLikelihood();
 
       // Set Risk evaluation data
       // risk likelihood
@@ -291,13 +283,13 @@
         }
       });
 
-      toggleSimpleAndOWASPLikelihood();
+      // toggleSimpleAndOWASPLikelihood();
     };
 
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
-      triggeredSimpleLikelihood = {};
+      // triggeredSimpleLikelihood = {};
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
 
@@ -462,7 +454,7 @@
     $('#risk__likehood__table button:nth-of-type(1)').on('click', async ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
-      triggeredSimpleLikelihood[getCurrentRiskId()] = true;
+      // triggeredSimpleLikelihood[getCurrentRiskId()] = true;
 
       const id = getCurrentRiskId();
       await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
@@ -492,7 +484,7 @@
     $('#risk__simple__evaluation button').on('click', ()=>{
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
-      delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
+      // delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
     });
 
     $('#risk__skillLevel').on('change', ()=>{

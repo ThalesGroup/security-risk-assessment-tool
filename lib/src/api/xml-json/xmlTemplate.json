@@ -453,7 +453,7 @@
                     "1"
                 ],
                 "riskName": [
-                    "As a Researcher, I can tamper with the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
+                    ""
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -471,7 +471,7 @@
                     "get the user credentials to be able to login through the web interface and do financial transactions"
                 ],
                 "motivationDetail": [
-                    "motivation details"
+                    "motivation details fdsf"
                 ],
                 "businessAssetRef": [
                     "1"
@@ -481,10 +481,10 @@
                 ],
                 "RiskName": [
                     {
-                        "ComputedRiskName": [
+                        "ManualRiskName": [
                             {
-                                "computedRiskName": [
-                                    "As a Researcher, I can tamper with the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
+                                "manualRiskName": [
+                                    ""
                                 ]
                             }
                         ]
@@ -534,33 +534,33 @@
                                         "ThreatFactor": [
                                             {
                                                 "skillLevel": [
-                                                    "3"
+                                                    ""
                                                 ],
                                                 "reward": [
-                                                    "9"
+                                                    ""
                                                 ],
                                                 "accessResources": [
-                                                    "7"
+                                                    ""
                                                 ],
                                                 "size": [
-                                                    "9"
+                                                    ""
                                                 ],
                                                 "intrusionDetection": [
-                                                    "9"
+                                                    ""
                                                 ]
                                             }
                                         ],
                                         "threatFactorScore": [
-                                            "7.4"
+                                            ""
                                         ],
                                         "threatFactorLevel": [
-                                            "Very High"
+                                            ""
                                         ],
                                         "occurrence": [
                                             ""
                                         ],
                                         "occurrenceLevel": [
-                                            "Medium"
+                                            ""
                                         ],
                                         "OWASPLikelihoodScore": [
                                             ""

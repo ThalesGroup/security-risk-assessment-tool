@@ -37,7 +37,7 @@
     box-sizing: border-box;
 }
 
-.flex {
+.vulnerabilities__flexbox {
     display: flex;
 }
 

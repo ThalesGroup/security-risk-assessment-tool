@@ -424,7 +424,7 @@ ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
 });
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
-ipcMain.handle('risks:isAutomaticRiskName', (event, riskName, allAttackPathsName)=> isAutomaticRiskName(israProject, riskName, allAttackPathsName));
+// ipcMain.handle('risks:isAutomaticRiskName', (event, riskName, allAttackPathsName)=> isAutomaticRiskName(israProject, riskName, allAttackPathsName));
 // ipcMain.handle('risks:isOWASPRiskLikelihood', (event, riskLikelihood)=> isOWASPRiskLikelihood(riskLikelihood));
 
 const { addVulnerability, deleteVulnerability } = require('./tabs/Vulnerabilities/handler-event')

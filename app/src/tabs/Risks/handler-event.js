@@ -123,6 +123,7 @@ const updateRiskName = (israProject, win, id, field, value) => {
             if(field === 'threatAgent' || field === 'threatVerb' || field === 'motivation' || field === 'riskName'){
                 riskName[field] = value;
                 if (field === 'threatVerb') updateRiskImpactThreatVerb(israProject, id, value);
+                else if(field === 'riskName') riskName.isAutomaticRiskName = false;
             }else{
                 riskName[field] = parseInt(value);
                 if(field === 'businessAssetRef') riskName.supportingAssetRef = null;
@@ -142,6 +143,7 @@ const updateRiskName = (israProject, win, id, field, value) => {
             if(allAttackPathsName.length > 0){
                 riskName.riskName += `, exploiting the ${allAttackPathsName}`;
               };
+            riskName.isAutomaticRiskName = true;
         };
 
         console.log('riskName', risk.riskName.properties)
