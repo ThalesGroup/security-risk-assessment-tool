@@ -34,7 +34,6 @@ const addVulnerability = (israProject) =>{
     try {
         const vulnerability = new Vulnerability();
         israProject.addVulnerability(vulnerability);
-        console.log(vulnerability.properties)
         return [vulnerability.properties];
     } catch (err) {
         return dialog.showMessageBoxSync(null, { message: 'Failed to add Vulnerability' });

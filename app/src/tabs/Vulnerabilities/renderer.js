@@ -70,6 +70,28 @@
     updateVulnerabilityFields(vulnerabilitiesData);
     });
 
+    const deleteVulnerabilities = async (checkboxes) =>{
+        const checkedVulnerabilities = [];
+        checkboxes.forEach((box) => {
+          if (box.checked) checkedVulnerabilities.push(Number(box.value));
+        });
+  
+        await window.vulnerabillities.deleteVulnerability(checkedVulnerabilities);
+        checkedVulnerabilities.forEach((id) => {
+            const index = vulnerabilitiesData.findIndex(object => {
+                return object.vulnerabilityId === id;
+            });
+            $(`#vulnerabilties__table__checkboxes__${id}`).remove();
+            vulnerabilitiesTable.getRow(Number(id)).delete();
+  
+            vulnerabilitiesData.splice(index, 1);
+            vulnerabilitiesData.forEach((v)=>{
+                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+            });
+            addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
+        });
+    };
+
     // add Vulnerability button
     $('#vulnerabilities button').first().on('click', async () => {
         const vulnerability = await window.vulnerabillities.addVulnerability();
@@ -85,7 +107,8 @@
 
     // delete Risk button
     $('#vulnerabilities button:nth-of-type(2)').on('click', async () => {
-        alert('delete vulnerability')
+        const checkboxes = document.getElementsByName('vulnerabilties__table__checkboxes');
+        deleteVulnerabilities(checkboxes);
     });
 
     } catch (err) {
