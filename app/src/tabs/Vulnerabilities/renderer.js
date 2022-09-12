@@ -69,6 +69,25 @@
     vulnerabilitiesData = fetchedData.Vulnerability;
     updateVulnerabilityFields(vulnerabilitiesData);
     });
+
+    // add Vulnerability button
+    $('#vulnerabilities button').first().on('click', async () => {
+        const vulnerability = await window.vulnerabillities.addVulnerability();
+        // update vulnerabilitiesData
+        vulnerabilitiesData.push(vulnerability[0]);
+        addVulnerability(vulnerability[0]);
+        
+        vulnerabilitiesData.forEach((v)=>{
+            vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+        });
+        addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
+    });
+
+    // delete Risk button
+    $('#vulnerabilities button:nth-of-type(2)').on('click', async () => {
+        alert('delete vulnerability')
+    });
+
     } catch (err) {
       alert('Failed to load vulnerabilities tab');
     }
