@@ -482,16 +482,7 @@
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
       await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihoodPrevValue);
-
-      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'threatFactorScore', {
-        skillLevel: 'null',
-        reward: 'null',
-        accessResources: 'null',
-        size: 'null',
-        intrusionDetection: 'null'
-      });
-      const riskLikelihood = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'occurrence', 'null');
-
+      const riskLikelihood = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'isOWASPLikelihood', true);
       const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
       riskData.riskLikelihood = riskLikelihood;
     });
