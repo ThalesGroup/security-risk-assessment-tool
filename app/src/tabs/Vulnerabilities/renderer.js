@@ -174,6 +174,7 @@
             const { fileName, base64 } = result;
             $('#vulnerability__file--insert').text(fileName);
             getCurrentVulnerability().vulnerabilityDescriptionAttachment = base64;
+            console.log(vulnerabilitiesData)
         });
     });
 
