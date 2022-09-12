@@ -142,7 +142,7 @@
 
     $('#vulnerability__url--hyperlink').on('click', (e) => {
         e.preventDefault();
-        // window.projectContext.openURL($('#vulnerability__url--hyperlink').attr('href'), navigator.onLine);
+        window.vulnerabilities.openURL($('#vulnerability__url--hyperlink').attr('href'), navigator.onLine);
       });
 
     $('#vulnerability__url--insert').on('click', async () => {

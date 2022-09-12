@@ -23,50 +23,8 @@
 */
 
 const fs = require('fs');
-const prompt = require('electron-prompt');
 const path = require('path');
-const { dialog, BrowserWindow } = require('electron');
-const { URLpattern } = require('../../../../lib/src/model/schema/validation-pattern/validation-pattern');
-
-let urlValue = 'http://www.contoso.com/';
-const electronPrompt = () => prompt({
-  title: 'Insert hyperlink',
-  label: 'Address:',
-  value: urlValue,
-  type: 'input',
-});
-
-/**
-  * Initialise user prompt for hyperlink
-*/
-const urlPrompt = async () => {
-  let url = await electronPrompt();
-
-  while (url !== null && !url.match(URLpattern)) {
-    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid URL', message: 'The address is not valid. Enter an address that begins with http://, https://, ftp://, mailto:, or another valid protocol.' });
-    // eslint-disable-next-line no-await-in-loop
-    url = await electronPrompt();
-  }
-
-  if (url === null) return 'cancelled';
-  urlValue = url;
-  return url;
-};
-
-/**
-  * Open url in new window
-  * @param {string} url
-  * @param {boolean} userStatus offline (false) / online (true)
-*/
-const openUrl = (url, userStatus) => {
-  if (userStatus) {
-    const win = new BrowserWindow({
-      width: 800,
-      height: 600,
-    });
-    win.loadURL(url);
-  } else dialog.showMessageBoxSync(null, { type: 'info', title: 'User Status', message: 'You are offline' });
-};
+const { dialog } = require('electron');
 
 const encodeFile = (fileName, dataBuffer) => {
   const fileNameSize = Buffer.byteLength(fileName);
@@ -186,8 +144,6 @@ const validateProjectContext = (israProject, data) => {
 };
 
 module.exports = {
-  urlPrompt,
-  openUrl,
   attachFile,
   removeFile,
   saveAsFile,

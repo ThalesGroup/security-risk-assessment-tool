@@ -263,6 +263,8 @@ module.exports = {
   *
 */
 
+const { urlPrompt, openUrl } = require('./utility/utility');
+
 // Welcome Tab
 const {
   addTrackingRow,
@@ -284,8 +286,6 @@ ipcMain.on('validate:welcome', (event, arr) => {
 
 // Project Context Tab
 const {
-  urlPrompt,
-  openUrl,
   attachFile,
   removeFile,
   saveAsFile,
@@ -436,6 +436,9 @@ ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
   const url = await urlPrompt();
   if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
   return url;
+});
+ipcMain.on('vulnerabilities:openURL', (event, url, userStatus) => {
+  openUrl(url, userStatus);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {
