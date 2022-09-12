@@ -430,8 +430,13 @@ ipcMain.handle('risks:isAutomaticRiskName', (event, riskName, allAttackPathsName
 const { addVulnerability, deleteVulnerability } = require('./tabs/Vulnerabilities/handler-event')
 const { renderVulnerabilities } = require('./tabs/Vulnerabilities/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
-ipcMain.handle('vulnerabillities:addVulnerability', () => addVulnerability(israProject));
-ipcMain.on('vulnerabillities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));
+ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
+ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));
+ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
+  const url = await urlPrompt();
+  if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
+  return url;
+});
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {

@@ -29,11 +29,25 @@
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     let vulnerabilitiesData;
 
+    const getCurrentVulnerabilityId = () =>{
+        return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
+      };
+
     const addSelectedVulnerabilityRowData = (id) =>{
         vulnerabilitiesTable.selectRow(id);
-        const {vulnerabilityId} = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
+        const {
+            vulnerabilityId,
+            vulnerabilityName,
+            vulnerabilityTrackingID,
+            vulnerabilityTrackingURI,
+            vulnerabilityCVE
+        } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
 
         $('#vulnerabilityId').text(vulnerabilityId);
+        $('#vulnerabilityName').val(vulnerabilityName);
+        $('#vulnerabilityTrackingID').val(vulnerabilityTrackingID);
+        // $('#vulnerabilityTrackingURI').val(vulnerabilityTrackingURI);
+        $('#vulnerabilityCVE').val(vulnerabilityCVE);
     };
 
     // row is clicked & selected
@@ -105,10 +119,40 @@
         addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
     });
 
-    // delete Risk button
+    // delete Vulnerability button
     $('#vulnerabilities button:nth-of-type(2)').on('click', async () => {
         const checkboxes = document.getElementsByName('vulnerabilties__table__checkboxes');
         deleteVulnerabilities(checkboxes);
+    });
+
+    const vulnerabilityURL = (value) => {
+        const hyperlink = $('#vulnerability__url--hyperlink');
+        const insert = $('#vulnerability__url--insert');
+  
+        if (value !== '' && value !== 'cancelled') {
+          hyperlink.show();
+          insert.hide();
+          hyperlink.attr('href', value);
+          hyperlink.text(value);
+        } else if (value === '') {
+          insert.show();
+          hyperlink.hide();
+        }
+      };
+
+    $('#vulnerability__url--hyperlink').on('click', (e) => {
+        e.preventDefault();
+        // window.projectContext.openURL($('#vulnerability__url--hyperlink').attr('href'), navigator.onLine);
+      });
+
+    $('#vulnerability__url--insert').on('click', async () => {
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId());
+        vulnerabilityURL(url);
+    });
+
+    $('#vulnerability__url--img').on('click', async () => {
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId());
+        vulnerabilityURL(url);
     });
 
     } catch (err) {
