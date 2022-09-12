@@ -529,43 +529,8 @@
                         ],
                         "LikelihoodRiskEvaluationMethod": [
                             {
-                                "OWASPLikelihoodEvaluation": [
-                                    {
-                                        "ThreatFactor": [
-                                            {
-                                                "skillLevel": [
-                                                    ""
-                                                ],
-                                                "reward": [
-                                                    ""
-                                                ],
-                                                "accessResources": [
-                                                    ""
-                                                ],
-                                                "size": [
-                                                    ""
-                                                ],
-                                                "intrusionDetection": [
-                                                    ""
-                                                ]
-                                            }
-                                        ],
-                                        "threatFactorScore": [
-                                            ""
-                                        ],
-                                        "threatFactorLevel": [
-                                            ""
-                                        ],
-                                        "occurrence": [
-                                            ""
-                                        ],
-                                        "occurrenceLevel": [
-                                            ""
-                                        ],
-                                        "OWASPLikelihoodScore": [
-                                            ""
-                                        ]
-                                    }
+                                "SimpleLikelihoodEvaluation": [
+                                    ""
                                 ]
                             }
                         ]

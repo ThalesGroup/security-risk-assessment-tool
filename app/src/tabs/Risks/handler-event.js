@@ -231,7 +231,11 @@ const updateRiskLikelihood = (israProject, id, field, value) =>{
 
         if(field === 'riskLikelihood'){
             riskLikelihood[field] = parseInt(value);
-        }else updateRiskLikelihoodValue();
+            riskLikelihood.isOWASPLikelihood = false;
+        }else {
+            updateRiskLikelihoodValue();
+            riskLikelihood.isOWASPLikelihood = true;
+        };
 
         console.log('riskLikelihood', riskLikelihood.properties);
         return riskLikelihood.properties;

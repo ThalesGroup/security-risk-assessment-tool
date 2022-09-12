@@ -28,7 +28,6 @@
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
-    // triggeredSimpleLikelihood = {};
 
     /**
      * 
@@ -162,17 +161,6 @@
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
-    // const toggleSimpleAndOWASPLikelihood = () =>{
-    //   // check if simplelikelihood button has been pressed for current risk
-    //   if(triggeredSimpleLikelihood[getCurrentRiskId()] !== undefined){
-    //     $('#risk__simple__evaluation').show();
-    //     $('#risk__likehood__table').hide();
-    //   }else{
-    //     $('#risk__simple__evaluation').hide();
-    //     $('#risk__likehood__table').show();
-    //   }
-    // };
-
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
       risksTable.selectRow(id);
@@ -193,6 +181,7 @@
         threatFactorScore,
         threatFactorLevel,
         occurrenceLevel,
+        isOWASPLikelihood
       } = riskLikelihood;
 
       // Set Risk description data
@@ -225,6 +214,14 @@
       setSecurityPropertyValues(riskLikelihood);
       updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
       tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
+
+      if(isOWASPLikelihood){
+        $('#risk__simple__evaluation').hide();
+        $('#risk__likehood__table').show();
+      }else{
+        $('#risk__simple__evaluation').show();
+        $('#risk__likehood__table').hide();
+      }
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
     };
@@ -289,7 +286,6 @@
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
       $('#risks__table__checkboxes').empty();
-      // triggeredSimpleLikelihood = {};
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
 
@@ -454,7 +450,6 @@
     $('#risk__likehood__table button:nth-of-type(1)').on('click', async ()=>{
       $('#risk__simple__evaluation').show();
       $('#risk__likehood__table').hide();
-      // triggeredSimpleLikelihood[getCurrentRiskId()] = true;
 
       const id = getCurrentRiskId();
       await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
@@ -481,10 +476,24 @@
     });
 
     // trigger owasp likelihood evaluation section
-    $('#risk__simple__evaluation button').on('click', ()=>{
+    $('#risk__simple__evaluation button').on('click', async ()=>{
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
-      // delete triggeredSimpleLikelihood[getCurrentRiskId()]; 
+
+      const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
+      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihoodPrevValue);
+
+      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'threatFactorScore', {
+        skillLevel: 'null',
+        reward: 'null',
+        accessResources: 'null',
+        size: 'null',
+        intrusionDetection: 'null'
+      });
+      const riskLikelihood = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'occurrence', 'null');
+
+      const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
+      riskData.riskLikelihood = riskLikelihood;
     });
 
     $('#risk__skillLevel').on('change', ()=>{
