@@ -41,7 +41,7 @@ function createWindow() {
     minWidth: 850,
     title: 'ISRA Risk Assessment',
     webPreferences: {
-      preload: path.join(__dirname, '../../lib/src/preload'),
+      preload: path.join(__dirname, '../../lib/src/preload.js'),
     },
   });
 
