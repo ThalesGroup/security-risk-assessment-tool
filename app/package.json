@@ -1,0 +1,22 @@
+{
+  "name": "isra-web-app",
+  "version": "1.0.0",
+  "description": "Web-based application of ISRA (app)",
+  "main": "./src/electron/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "ThalesDIS",
+  "license": "Apache-2.0 License",
+  "devDependencies": {
+    "electron": "^20.1.4"
+  },
+  "dependencies": {
+    "jquery": "^3.6.1",
+    "tabulator-tables": "^5.3.4",
+    "tinymce": "^6.2.0"
+  },
+  "overrides": {
+    "got": "^12.1.0"
+  }
+}
