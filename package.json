@@ -2,7 +2,7 @@
   "name": "isra-web-app",
   "version": "1.0.0",
   "description": "Web-based application of ISRA",
-  "main": "./app/src/main.js",
+  "main": "./app/src/electron/main.js",
   "scripts": {
     "start": "electron .",
     "test:lib": "jest --coverage --testPathPattern=lib/test",

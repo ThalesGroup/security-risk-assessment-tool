@@ -41,12 +41,12 @@ function createWindow() {
     minWidth: 850,
     title: 'ISRA Risk Assessment',
     webPreferences: {
-      preload: path.join(__dirname, '../../lib/src/preload.js'),
+      preload: path.join(__dirname, './preload.js'),
     },
   });
 
   win.maximize();
-  win.loadFile(path.join(__dirname, 'index.html'));
+  win.loadFile(path.join(__dirname, '../index.html'));
 
   // send data to populate into dom fields
   win.webContents.on('dom-ready', () => {
