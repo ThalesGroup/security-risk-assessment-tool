@@ -57,8 +57,10 @@ const getMainWindow = () => {
 */
 const newISRAProject = (win, app) => {
   try {
-    israProject = new ISRAProject();
-    DataNew(israProject);
+    if(!israProject) {
+      israProject = new ISRAProject();
+      DataNew(israProject);
+    };
     win.webContents.send('project:load', israProject.toJSON());
   } catch (err) {
     console.log(err);
@@ -426,7 +428,7 @@ ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => update
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
 
 const { addVulnerability, deleteVulnerability } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
-const { renderVulnerabilities } = require('../tabs/Vulnerabilities/render-vulnerabilities');
+const { renderVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));

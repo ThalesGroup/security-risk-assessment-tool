@@ -46,7 +46,7 @@ function createWindow() {
   });
 
   win.maximize();
-  win.loadFile(path.join(__dirname, '../index.html'));
+  win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
 
   // send data to populate into dom fields
   win.webContents.on('dom-ready', () => {

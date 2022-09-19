@@ -121,23 +121,52 @@ window.project.validationErrors((event) => {
 /**
  * create tabs
  */
+// tabs.onclick = (e) => {
+//   const { id } = e.target.dataset;
+//   const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+
+//   if (id) {
+//     tabButton.forEach((btn) => {
+//       btn.classList.remove('active');
+//     });
+//     e.target.classList.add('active');
+
+//     contents.forEach((content) => {
+//       content.classList.remove('active');
+//     });
+//     const element = document.getElementById(id);
+//     element.classList.add('active');
+
+//     validateTabs(previousActiveTab);
+//   }
+// };
+
 tabs.onclick = (e) => {
   const { id } = e.target.dataset;
   const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+  validateTabs(previousActiveTab);
 
-  if (id) {
-    tabButton.forEach((btn) => {
-      btn.classList.remove('active');
-    });
-    e.target.classList.add('active');
-
-    contents.forEach((content) => {
-      content.classList.remove('active');
-    });
-    const element = document.getElementById(id);
-    element.classList.add('active');
-
-    validateTabs(previousActiveTab);
+  switch (id) {
+    case 'welcome':
+      location.href = '../Welcome/welcome.html';
+      break;
+    case 'project-context':
+      location.href = '../Project Context/project-context.html';
+      break;
+    case 'business-assets':
+      location.href = '../Business Assets/business-assets.html';
+      break;
+    case 'supporting-assets':
+      location.href = '../Supporting Assets/supporting-assets.html';
+      break;
+    case 'risks':
+      location.href = '../Risks/risks.html';
+      break;
+    case 'vulnerabilities':
+      location.href = '../Vulnerabilities/vulnerabilities.html';
+      break;
+    default:
+      break;
   }
 };
 
@@ -161,4 +190,4 @@ tabs.onclick = (e) => {
 //   const element = result;
 //   element[key] = data.get(key);
 //   return result;
-// }, {});
+// }, {})

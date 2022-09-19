@@ -96,7 +96,7 @@
     };
 
     window.project.load(async (event, data) => {
-      tinymce.init({
+      await tinymce.init({
         selector: '.rich-text',
         height: 300,
         min_height: 300,

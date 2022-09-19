@@ -22,6 +22,50 @@
 * -----------------------------------------------------------------------------
 */
 
+/*tabs*/
+
+.wrapper {
+    width: 800px;
+    margin: auto;
+    background-color: #dedede;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.buttonWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+button {
+    border: none;
+    padding: 10px 0px;
+    background-color: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+button.active {
+    background-color: #dedede;
+}
+
+.active {
+    background-color: #dedede;
+}
+
+
+/* .content {
+    display: none;
+    padding: 10px 20px;
+    background-color: #dedede;
+} */
+
+.content.active {
+    display: block;
+    padding: 10px 20px;
+}
+
+/*tabs*/
+
 footer{
     text-align: center;
     margin-top: 10px;
@@ -108,6 +152,7 @@ select option {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .hyperlink-attachment-image{
