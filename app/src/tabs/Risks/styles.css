@@ -36,6 +36,11 @@
     padding: 1em;
 } */
 
+#risk__manual__riskName input{
+    width: 100%;
+    margin: 16px 0 16px 0;
+}
+
 .risk__flex {
     display: flex;
 }

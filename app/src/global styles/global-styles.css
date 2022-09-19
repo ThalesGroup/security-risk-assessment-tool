@@ -36,7 +36,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
-button {
+.buttonWrapper button {
     border: none;
     padding: 10px 0px;
     background-color: white;
@@ -134,7 +134,11 @@ select option {
 }
 
 .addDelete{
-   background-color: transparent;
+    background-color: transparent;
+    border: none;
+    padding: 10px 0px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
 .addDelete:hover{
