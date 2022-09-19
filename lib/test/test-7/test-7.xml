@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?mso-infoPathSolution solutionVersion="1.0.0.2065" PIVersion="1.0.0.0" href="https://vaultshare.gemalto.com/sites/isra/ISRA/Forms/template.xsn" name="urn:schemas-microsoft-com:office:infopath:ISRA:-myXSD-2015-02-04T09-20-12" productVersion="14.0.0" ?><?mso-application progid="InfoPath.Document" versionProgid="InfoPath.Document.3"?><?mso-infoPath-file-attachment-present?><my:ISRA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:pc="http://schemas.microsoft.com/office/infopath/2007/PartnerControls" xmlns:my="http://schemas.microsoft.com/office/infopath/2003/myXSD/2015-02-04T09:20:12" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003" xml:lang="en-us">
+<?xml version="1.0" encoding="UTF-8"?><?mso-infoPathSolution solutionVersion="1.0.0.2065" PIVersion="1.0.0.0" href="https://vaultshare.gemalto.com/sites/isra/ISRA/Forms/template.xsn" name="urn:schemas-microsoft-com:office:infopath:ISRA:-myXSD-2015-02-04T09-20-12" productVersion="15.0.0" ?><?mso-application progid="InfoPath.Document" versionProgid="InfoPath.Document.3"?><?mso-infoPath-file-attachment-present?><my:ISRA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:pc="http://schemas.microsoft.com/office/infopath/2007/PartnerControls" xmlns:my="http://schemas.microsoft.com/office/infopath/2003/myXSD/2015-02-04T09:20:12" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003" xml:lang="en-us">
 	<my:ISRAmeta>
 		<my:templateVersion>49</my:templateVersion>
 		<my:projectName>name of proj</my:projectName>
@@ -132,7 +132,7 @@
 									<my:projectName>name of proj</my:projectName>
 									<my:projectVersion></my:projectVersion>
 									<my:riskId>2</my:riskId>
-									<my:riskName>As a , I can  the  compromising the  in order to </my:riskName>
+									<my:riskName></my:riskName>
 									<my:threatAgent></my:threatAgent>
 									<my:threatAgentDetail></my:threatAgentDetail>
 									<my:threatVerb></my:threatVerb>
@@ -142,9 +142,9 @@
 									<my:businessAssetRef></my:businessAssetRef>
 									<my:supportingAssetRef></my:supportingAssetRef>
 									<my:RiskName>
-										<my:ComputedRiskName>
-											<my:computedRiskName>As a , I can  the  compromising the  in order to </my:computedRiskName>
-										</my:ComputedRiskName>
+										<my:ManualRiskName>
+									<my:manualRiskName></my:manualRiskName>
+								</my:ManualRiskName>
 									</my:RiskName>
 									<my:ImpactRiskEvaluation>
 										<my:riskImpact xsi:nil="true"></my:riskImpact>
