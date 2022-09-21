@@ -165,12 +165,6 @@ select option {
     cursor: pointer;
 }
 
-.hyperlink-attachment-align{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
 /*tooltip*/
 
 .tooltip {
@@ -250,4 +244,8 @@ table, th, td {
 
 select{
     width: 100%;
+}
+
+.table {
+    margin-bottom: 10px;
 }

@@ -48,6 +48,8 @@
             vulnerabilityFamily,
             vulnerabilityDescription,
             vulnerabilityDescriptionAttachment,
+            cveScore,
+            overallLevel
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
 
         $('#vulnerabilityId').text(vulnerabilityId);
@@ -57,6 +59,8 @@
         $('#vulnerability__CVE').val(vulnerabilityCVE);
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? 'null' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
+        $('#vulnerability__scoring').val(cveScore);
+        $('#vulnerability__level').text(overallLevel);
 
         const attachmentResult = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
         $('#vulnerability__file--insert').text(attachmentResult);

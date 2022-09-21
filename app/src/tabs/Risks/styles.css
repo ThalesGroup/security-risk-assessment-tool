@@ -50,6 +50,10 @@
     margin-bottom: 1em;
 }
 
+.tox-tinymce{
+    margin-top: 10px;
+}
+
 #risk__simple__evaluation,
 #risk__manual__riskName {
     display: none;
@@ -69,10 +73,6 @@
 
 #risks h2{
     font-size: 1em;
-}
-
-.table {
-    margin-bottom: 10px;
 }
 
 #risk__likehood__table div {

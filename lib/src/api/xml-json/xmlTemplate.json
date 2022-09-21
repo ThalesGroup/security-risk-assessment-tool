@@ -1809,7 +1809,7 @@
                     "Man in the middle attack through network interception"
                 ],
                 "vulnerabilityFamily": [
-                    ""
+                    "Password Management Vulnerability‎"
                 ],
                 "vulnerabilityTrackingID": [
                     "123"
@@ -2003,7 +2003,7 @@
                     "Dumping of the local storage from a rooted device"
                 ],
                 "vulnerabilityFamily": [
-                    ""
+                    "Logging and Auditing Vulnerability‎"
                 ],
                 "vulnerabilityTrackingID": [
                     ""

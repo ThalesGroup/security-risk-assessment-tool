@@ -71,7 +71,7 @@
                         <h1>Vulnerability id: <span id="vulnerabilityId"></span></h1>
                     </div>
                     <div>
-                        <p>Vulnerability Name:</p>
+                        <label for="vulnerability__name">Vulnerability Name:</label>
                         <input type="text" name="vulnerability__name" id="vulnerability__name">
                         <div class="vulnerabilities__flexbox">
                             <div>
@@ -79,17 +79,13 @@
                                 <input type="text" name="vulnerability__trackingID" id="vulnerability__trackingID">
                             </div>
                             <div>
-                                <p>GTO Defect URL:</p>
+                                <label for="vulnerability__url--hyperlink">GTO Defect URL:</label>
                                 <div class='hyperlink-attachment-align'>
                                     <img class='hyperlink-attachment-image' id="vulnerability__url--img" src="../../asset/link.png"
                                         alt="Hyperlink:">
-                                    <p id="vulnerability__url--insert" style="margin-top: 0px;">Click here to insert a hyperlink</p>
+                                    <a id="vulnerability__url--insert">Click here to insert a hyperlink</a>
                                     <a id="vulnerability__url--hyperlink" href=" " hidden></a>
                                 </div>
-                            </div>
-                            <div>
-                                <label for="vulnerability__CVE">Vulnerability CVE:</label>
-                                <input type="text" name="vulnerability__CVE" id="vulnerability__CVE">
                             </div>
                         </div>
                 
@@ -99,7 +95,7 @@
                         </select>
                 
                         <div>
-                            <p>Vulnerability Description:</p>
+                            <label for="vulnerability__details">Vulnerability Description:</label>
                             <textarea class="rich-text" id="vulnerability__details" cols="30" rows="20"></textarea>
                         </div>
                 
@@ -107,10 +103,27 @@
                             <div class='hyperlink-attachment-align'>
                                 <img class='hyperlink-attachment-image' id="vulnerability__file-image" src="../../asset/link.png"
                                     alt="File:">
-                                <p id="vulnerability__file--insert" style="margin-top: 0px;">Click here to attach a file</p>
+                                <a id="vulnerability__file--insert">Click here to attach a file</a>
                             </div>
                         </div>
-                
+
+                        <div>
+                            <label for="vulnerability__supporting-assets-refs">Supporting Asset <span>potentially affected by this vulnerability:</span></label>
+                            <input type="checkbox" name="vulnerability__supporting-assets-refs">
+                        </div>
+
+                        <div>
+                            <label for="vulnerability__CVE">Vulnerability CVE:</label>
+                            <input type="text" name="vulnerability__CVE" id="vulnerability__CVE">
+                        </div>
+
+                        <div class="score">
+                            <div>
+                                <label for="vulnerability__scoring">Vulnerability Scoring:</label>
+                                <input type="text" id="vulnerability__scoring">
+                            </div>
+                            <p>Vulnerability Level: <span id="vulnerability__level"></span></p>
+                        </div>
                     </div>
                 </section>
         

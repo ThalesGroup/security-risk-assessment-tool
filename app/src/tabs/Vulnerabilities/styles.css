@@ -32,13 +32,34 @@
     background-color: rgb(199, 199, 199);
 }
 
+#vulnerability__name {
+    box-sizing:border-box;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#vulnerability__family {
+    margin-bottom: 10px;
+}
+
+#vulnerability__CVE,
 #vulnerabilityName {
     width: 100%;
     box-sizing: border-box;
 }
 
+#vulnerability__CVE{
+    margin-bottom: 10px;
+}
+
 .vulnerabilities__flexbox {
     display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.vulnerabilities__flexbox div:first-child{
+    margin-right: 10px;
 }
 
 #vulnerability__url--insert{
@@ -48,4 +69,43 @@
 
 #vulnerability__url--hyperlink{
     font-size: small;
+}
+
+label[for=vulnerability__details],
+label[for=vulnerability__scoring],
+label[for=vulnerability__name],
+label[for=vulnerability__family]{
+    font-style: normal;
+}
+
+label{
+    display: block;
+    margin-bottom: 10px;
+}
+
+.hyperlink-attachment-align {
+    display: flex;
+    flex-direction: row;
+    font-size:small;
+    margin: 10px 0 10px 0;
+}
+
+.score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.score label{
+    display: inline;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+span{
+    font-style: normal;
+    font-weight: normal;
 }

@@ -22,6 +22,12 @@
 * -----------------------------------------------------------------------------
 */
 
+.hyperlink-attachment-align {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 #project-context section{
     background-color: rgb(199, 199, 199);
 }
