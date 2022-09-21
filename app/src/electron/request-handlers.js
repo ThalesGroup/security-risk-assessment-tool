@@ -265,7 +265,7 @@ module.exports = {
   *
 */
 
-const { urlPrompt, openUrl } = require('../utility/utility');
+const { urlPrompt, openUrl } = require('../../../lib/src/model/classes/utility');
 
 // Welcome Tab
 const {
