@@ -28,6 +28,10 @@
     padding: 5px;
 }
 
+#vulnerabilityId {
+    font-weight: bold;
+}
+
 #vulnerabilities section {
     background-color: rgb(199, 199, 199);
 }
@@ -105,7 +109,17 @@ label{
     font-size: 20px;
 }
 
+.refs label,
 span{
     font-style: normal;
     font-weight: normal;
+}
+
+.refs label {
+    display: inline;
+    font-size: small;
+}
+
+.select__refs {
+    margin-bottom: 10px;
 }

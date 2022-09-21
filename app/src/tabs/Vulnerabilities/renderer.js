@@ -27,7 +27,7 @@
     try {
     const result = await window.render.vulnerabilities();
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
-    let vulnerabilitiesData;
+    let vulnerabilitiesData, supportingAssetsData;
 
     const getCurrentVulnerabilityId = () =>{
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
@@ -49,7 +49,8 @@
             vulnerabilityDescription,
             vulnerabilityDescriptionAttachment,
             cveScore,
-            overallLevel
+            overallLevel,
+            supportingAssetRef
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
 
         $('#vulnerabilityId').text(vulnerabilityId);
@@ -61,6 +62,11 @@
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         $('#vulnerability__scoring').val(cveScore);
         $('#vulnerability__level').text(overallLevel);
+
+        $('input[name="refs__checkboxes"]').prop('checked', false);
+        supportingAssetRef.forEach((ref)=>{
+            $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
+        });
 
         const attachmentResult = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
         $('#vulnerability__file--insert').text(attachmentResult);
@@ -94,20 +100,49 @@
         });
     };
 
-    window.project.load(async (event, data) => {
-    await tinymce.init({
-        selector: '.rich-text',
-        height: 300,
-        min_height: 300,
-        verify_html: true,
-        statusbar: false,
-        plugins: 'link lists',
-        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
-    });
+    const updateSupportingAssets = (supportingAssets) =>{
+        $('.refs').empty();
 
-    const fetchedData = await JSON.parse(data);
-    vulnerabilitiesData = fetchedData.Vulnerability;
-    updateVulnerabilityFields(vulnerabilitiesData);
+        supportingAssets.forEach((sa)=>{
+            // add div
+            const div = document.createElement('div');
+
+            // add checkbox
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = `${sa.supportingAssetId}`;
+            checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
+            checkbox.name = 'refs__checkboxes';
+            div.append(checkbox);
+
+            // add label
+            const label = document.createElement('label');
+            label.innerHTML = sa.supportingAssetName;
+            div.append(label);
+
+            $('.refs').append(div);
+        });
+    }
+
+    const loadVulnerabilities = async (data) =>{
+        const fetchedData = await JSON.parse(data);
+        vulnerabilitiesData = fetchedData.Vulnerability;
+        supportingAssetsData = fetchedData.SupportingAsset;
+        updateSupportingAssets(supportingAssetsData);
+        updateVulnerabilityFields(vulnerabilitiesData);
+    };
+
+    window.project.load(async (event, data) => {
+        await tinymce.init({
+            selector: '.rich-text',
+            height: 300,
+            min_height: 300,
+            verify_html: true,
+            statusbar: false,
+            plugins: 'link lists',
+            toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+        });
+        loadVulnerabilities(data);
     });
 
     const deleteVulnerabilities = async (checkboxes) =>{
@@ -165,7 +200,7 @@
           insert.show();
           hyperlink.hide();
         }
-      };
+    };
 
     $('#vulnerability__url--hyperlink').on('click', (e) => {
         e.preventDefault();

@@ -212,25 +212,25 @@
       deleteSupportingAsset(checkboxes);
     });
 
-    window.supportingAssets.getBusinessAssets((event, label, value) => {
-      const options = $(`${matrixTable} option[value=${value}]`);
+    // window.supportingAssets.getBusinessAssets((event, label, value) => {
+    //   const options = $(`${matrixTable} option[value=${value}]`);
 
-      if (label === null) {
-        // delete option
-        $(`${matrixTable} option[value=${value}]`).remove();
-        delete selectOptions[value];
-        $(`${matrixTable} select`).trigger('check:options');
-      } else if (options.length) {
-        // update label
-        options.text(label);
-        selectOptions[value] = label;
-      } else {
-        // add option
-        $(`${matrixTable} select`).append(new Option(label, value));
-        selectOptions[value] = label;
-        $(`${matrixTable} select`).trigger('check:options');
-      }
-    });
+    //   if (label === null) {
+    //     // delete option
+    //     $(`${matrixTable} option[value=${value}]`).remove();
+    //     delete selectOptions[value];
+    //     $(`${matrixTable} select`).trigger('check:options');
+    //   } else if (options.length) {
+    //     // update label
+    //     options.text(label);
+    //     selectOptions[value] = label;
+    //   } else {
+    //     // add option
+    //     $(`${matrixTable} select`).append(new Option(label, value));
+    //     selectOptions[value] = label;
+    //     $(`${matrixTable} select`).trigger('check:options');
+    //   }
+    // });
   } catch (err) {
     alert('Failed to load Supporting Assets tab');
   }
