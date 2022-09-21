@@ -90,6 +90,7 @@ contextBridge.exposeInMainWorld('risks', {
 contextBridge.exposeInMainWorld('vulnerabilities', {
   addVulnerability: () => ipcRenderer.invoke('vulnerabilities:addVulnerability'),
   deleteVulnerability: (ids) => ipcRenderer.send('vulnerabilities:deleteVulnerability', ids),
+  updateVulnerability: (id, field, value) => ipcRenderer.invoke('vulnerabilities:updateVulnerability', id, field, value),
   urlPrompt: (id) => ipcRenderer.invoke('vulnerabilities:urlPrompt', id),
   openURL: (url, userStatus) => ipcRenderer.send('vulnerabilities:openURL', url, userStatus),
   attachment: (id) => ipcRenderer.send('vulnerabilities:attachment', id),

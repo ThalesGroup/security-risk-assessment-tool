@@ -114,6 +114,10 @@
             checkbox.value = `${sa.supportingAssetId}`;
             checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
             checkbox.name = 'refs__checkboxes';
+            checkbox.addEventListener('change', (e) =>{
+                if (e.target.checked) window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
+                else window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
+            })
             div.append(checkbox);
 
             // add label

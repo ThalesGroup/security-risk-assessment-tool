@@ -265,7 +265,14 @@ module.exports = {
   *
 */
 
-const { urlPrompt, openUrl } = require('../../../lib/src/model/classes/utility');
+const { 
+  urlPrompt, 
+  openUrl,
+  attachFile,
+  removeFile,
+  saveAsFile,
+  decodeFile, 
+} = require('../../../lib/src/model/classes/utility');
 
 // Welcome Tab
 const {
@@ -288,10 +295,6 @@ ipcMain.on('validate:welcome', (event, arr) => {
 
 // Project Context Tab
 const {
-  attachFile,
-  removeFile,
-  saveAsFile,
-  decodeFile,
   validateProjectContext,
 } = require('../../../lib/src/model/classes/ISRAProjectContext/handler-event');
 const { renderProjectContext } = require('../../../lib/src/model/classes/ISRAProjectContext/render-project-context');
@@ -427,11 +430,14 @@ ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
 
-const { addVulnerability, deleteVulnerability } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
+const { addVulnerability, deleteVulnerability, updateVulnerability } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));
+ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
+  updateVulnerability(israProject, getMainWindow(), id, field, value);
+});
 ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
   const url = await urlPrompt();
   if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
