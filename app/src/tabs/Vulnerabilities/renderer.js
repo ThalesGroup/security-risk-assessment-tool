@@ -68,8 +68,9 @@
             $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
         });
 
-        const attachmentResult = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
-        $('#vulnerability__file--insert').text(attachmentResult);
+        const { fileName, vulnerabilities } = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
+        $('#vulnerability__file--insert').text(fileName);
+        vulnerabilitiesData = vulnerabilities;
     };
 
     // row is clicked & selected
@@ -220,10 +221,8 @@
     $('#vulnerability__attachment').on('click', () => {
         window.vulnerabilities.attachment(getCurrentVulnerabilityId());
         window.vulnerabilities.fileName(async (event, result) => {
-            const { fileName, base64 } = result;
+            const { fileName } = result;
             $('#vulnerability__file--insert').text(fileName);
-            getCurrentVulnerability().vulnerabilityDescriptionAttachment = base64;
-            console.log(vulnerabilitiesData)
         });
     });
 

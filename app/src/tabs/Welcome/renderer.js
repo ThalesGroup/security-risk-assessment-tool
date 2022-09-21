@@ -42,8 +42,17 @@
       $('#welcome__isra-meta--project-version').val(value);
     };
 
+    const setSessionStorage = () =>{
+      sessionStorage.setItem('validate-isra-meta-organization', document.getElementById('welcome__isra-meta--organization').checkValidity());
+    }
+
+    $('#welcome__isra-meta--organization').click((e)=>{
+      setSessionStorage();
+    })
+
     const organization = (value) => {
       $('#welcome__isra-meta--organization').val(value);
+      setSessionStorage();
     };
 
     const addTrackingRow = (tracking) => {

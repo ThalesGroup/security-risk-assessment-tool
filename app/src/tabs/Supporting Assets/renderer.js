@@ -42,6 +42,7 @@
           $(`${matrixTable}-${id} td`).first().css('color', 'black');
         }
       }
+      sessionStorage.setItem('validate-supporting-asset', $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)');
     };
 
     // cell edited callback function

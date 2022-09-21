@@ -99,3 +99,7 @@ tbody {
     font-weight: bold;
     visibility: hidden;
 }
+
+#risks__vulnerability__evaluation div{
+    padding: 10px;
+}

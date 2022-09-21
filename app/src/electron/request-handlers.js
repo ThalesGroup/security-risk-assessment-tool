@@ -363,7 +363,7 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   try {
-    const [fileName, base64data] = decodeFile(base64, jsonFilePath);
+    const [fileName, base64data] = decodeFile(base64, israProject.israProjectContext);
     projectContextFileName = fileName;
     israProject.israProjectContext.projectDescriptionAttachment = base64data;
     return projectContextFileName;
@@ -444,8 +444,6 @@ ipcMain.on('vulnerabilities:openURL', (event, url, userStatus) => {
 /**
   * vulnerabilitiesFileNames: holds names of each vulnerability file attachments
 */
-const vulnerabilitiesFileNames = {};
-const isFileManuallyAttached = {};
 
 const vulnerabilitiesAttachmentOptions = (id) => {
   const attachLabel = {
@@ -454,10 +452,8 @@ const vulnerabilitiesAttachmentOptions = (id) => {
       try {
         const [fileName, base64data] = attachFile();
         if (fileName !== '') {
-          vulnerabilitiesFileNames[id] = fileName;
-          isFileManuallyAttached[id] = true;
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName: vulnerabilitiesFileNames[id], base64: base64data});
+          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: base64data});
         }
       } catch (err) {
         console.log(err);
@@ -474,17 +470,15 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         label: 'Save as',
         click: () => saveAsFile(
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment,
-          vulnerabilitiesFileNames[id],
+          fileName,
         ),
       },
       {
         label: 'Remove',
         click: () => {
           const [fileName, base64data] = removeFile();
-          vulnerabilitiesFileNames[id] = fileName;
-          delete isFileManuallyAttached[id];
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName: vulnerabilitiesFileNames[id], base64: ''});
+          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: ''});
         },
       },
     ];
@@ -501,13 +495,10 @@ ipcMain.on('vulnerabilities:attachment', (event, id) => {
 
 ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => {
   try {
-    let newDecodingMethod = jsonFilePath;
-    if(isFileManuallyAttached[id] !== undefined) newDecodingMethod = 'UseNewDecodingMethod';
-
-    const [fileName, base64data] = decodeFile(base64, jsonFilePath);
-    vulnerabilitiesFileNames[id] = fileName;
-    israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-    return vulnerabilitiesFileNames[id];
+    const vulnerability = israProject.getVulnerability(id);
+    const [fileName, base64data] = decodeFile(base64, vulnerability);
+    vulnerability.vulnerabilityDescriptionAttachment = base64data;
+    return { fileName, vulnerabilities: israProject.properties.Vulnerability };
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });

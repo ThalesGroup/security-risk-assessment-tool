@@ -97,13 +97,11 @@ const validateTabs = (tab) => {
 };
 
 /**
- * get & validate all data on tabs
+ * get & validate data of current tab
  */
 window.validate.allTabs((event, filePath) => {
-  validateTabs('welcome');
-  validateTabs('project-context');
-  validateTabs('business-assets');
-  validateTabs('supporting-assets');
+  const currentActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+  validateTabs(currentActiveTab);
   event.sender.send('validate:allTabs', filePath);
 });
 
@@ -111,36 +109,17 @@ window.validate.allTabs((event, filePath) => {
  * validate for errors in each tab
  */
 window.project.validationErrors((event) => {
-  const state = document.getElementById('welcome__isra-meta--organization').checkValidity()
-    && $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)';
+  let state = sessionStorage.getItem('validate-isra-meta-organization') === 'true';
+  // && sessionStorage.getItem('validate-supporting-asset') === 'true';
+ // $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)';
 
   // return boolean
   event.sender.send('project:validationErrors', state);
 });
 
 /**
- * create tabs
+ * validate previously viewed tab
  */
-// tabs.onclick = (e) => {
-//   const { id } = e.target.dataset;
-//   const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
-
-//   if (id) {
-//     tabButton.forEach((btn) => {
-//       btn.classList.remove('active');
-//     });
-//     e.target.classList.add('active');
-
-//     contents.forEach((content) => {
-//       content.classList.remove('active');
-//     });
-//     const element = document.getElementById(id);
-//     element.classList.add('active');
-
-//     validateTabs(previousActiveTab);
-//   }
-// };
-
 tabs.onclick = (e) => {
   const { id } = e.target.dataset;
   const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
