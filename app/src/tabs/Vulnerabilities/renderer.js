@@ -26,8 +26,8 @@
 (async () => {
     try {
     const result = await window.render.vulnerabilities();
-    const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     let vulnerabilitiesData, supportingAssetsData;
+    const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
 
     const getCurrentVulnerabilityId = () =>{
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
@@ -228,6 +228,14 @@
             const { fileName } = result;
             $('#vulnerability__file--insert').text(fileName);
         });
+    });
+
+    $('input[name="vulnerability__name"]').on('change', async (e)=> {
+        await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'vulnerabilityName', e.target.value);
+    });
+
+    $('input[name="vulnerability__scoring"]').on('change', async  (e)=>{
+        await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
     });
 
     } catch (err) {
