@@ -45,7 +45,7 @@
                     "5"
                 ],
                 "risksCount": [
-                    "10"
+                    "11"
                 ],
                 "vulnerabilitiesCount": [
                     "52"
@@ -345,6 +345,11 @@
                         "$": {
                             "businessAssetRef": "3"
                         }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": "3"
+                        }
                     }
                 ]
             },
@@ -453,7 +458,7 @@
                     "1"
                 ],
                 "riskName": [
-                    ""
+                    "As a Researcher, I can tamper with the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -481,10 +486,10 @@
                 ],
                 "RiskName": [
                     {
-                        "ManualRiskName": [
+                        "ComputedRiskName": [
                             {
-                                "manualRiskName": [
-                                    ""
+                                "computedRiskName": [
+                                    "As a Researcher, I can tamper with the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
                                 ]
                             }
                         ]
@@ -553,10 +558,27 @@
                         "attackPathScore": [
                             "7"
                         ]
+                    },
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "1",
+                                "$": {
+                                    "score": "7",
+                                    "name": "Man in the middle attack through network interception"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Man in the middle attack through network interception"
+                        ],
+                        "attackPathScore": [
+                            "7"
+                        ]
                     }
                 ],
                 "allAttackPathsName": [
-                    "Man in the middle attack through network interception"
+                    "(Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
                 ],
                 "allAttackPathsScore": [
                     "7"
@@ -822,7 +844,7 @@
                     "3"
                 ],
                 "riskName": [
-                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack"
+                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
                 ],
                 "threatAgent": [
                     "Criminal"
@@ -853,7 +875,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack"
+                                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
                                 ]
                             }
                         ]
@@ -922,10 +944,26 @@
                         "attackPathScore": [
                             "6"
                         ]
+                    },
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
                     }
                 ],
                 "allAttackPathsName": [
-                    "Shoulder surfing attack"
+                    "(Shoulder surfing attack) OR ()"
                 ],
                 "allAttackPathsScore": [
                     "6"
@@ -1741,6 +1779,213 @@
                 ],
                 "allAttackPathsName": [
                     ""
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "10"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to , exploiting the  AND "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to , exploiting the  AND "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            },
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            " AND "
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    " AND "
                 ],
                 "allAttackPathsScore": [
                     ""

@@ -32,16 +32,18 @@
     const matrixTable = '#supporting-asset-business-assets__table';
     let selectOptions = {};
 
+    const validate = (id, value) =>{
+      if ((value.length === 0 && $(`${matrixTable}-${id} select`).length)
+        || value.length !== new Set(value).size) {
+        $(`${matrixTable}-${id} td`).first().css('color', 'red');
+      } else {
+        $(`${matrixTable}-${id} td`).first().css('color', 'black');
+      }
+    }
+
     const updateSupportingAsset = (id, field, value) => {
       window.supportingAssets.updateSupportingAsset(id, field, value);
-      if (field === 'businessAssetRef') {
-        if ((value.length === 0 && $(`${matrixTable}-${id} select`).length)
-        || value.length !== new Set(value).size) {
-          $(`${matrixTable}-${id} td`).first().css('color', 'red');
-        } else {
-          $(`${matrixTable}-${id} td`).first().css('color', 'black');
-        }
-      }
+      if (field === 'businessAssetRef') validate(id, value);
     };
 
     // cell edited callback function
@@ -52,13 +54,14 @@
     };
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
-    const addBusinessAsset = (id, ref) => {
+    const addBusinessAsset = (id, ref, index) => {
       const matrixRow = $(`${matrixTable}-${id} td:nth-child(2)`);
 
       const newDiv = document.createElement('div');
       const newInput = document.createElement('input');
       const newSelect = document.createElement('select');
       newInput.setAttribute('type', 'checkbox');
+      newInput.setAttribute('data-index', index);
 
       Object.entries(selectOptions).forEach(([value, label]) => {
         const newOption = document.createElement('option');
@@ -78,7 +81,7 @@
       $(newSelect).on('change', () => {
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         prevOption();
-        updateSupportingAsset(id, 'businessAssetRef', selected);
+        // updateSupportingAsset(id, 'businessAssetRef', selected);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
@@ -108,17 +111,32 @@
       $(`${matrixTable} tbody`).append(row);
 
       // add business asset ref
-      $(`${matrixTable}-${id} button`).first().on('click', () => {
-        addBusinessAsset(id);
+      $(`${matrixTable}-${id} button`).first().on('click', async () => {
+        let index = $(`${matrixTable}-${id} div:last-of-type input:last-of-type`).attr('data-index');
+        if(!index) index = -1;
+        addBusinessAsset(id, null, parseInt(index)+1);
+        const value = $(`${matrixTable}-${id} option:selected`).last().val();
+        if (!value) await window.supportingAssets.addBusinessAssetRef(id, 'null');
+        else await window.supportingAssets.addBusinessAssetRef(id, value);
+
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
-        updateSupportingAsset(id, 'businessAssetRef', selected);
+        validate(id, selected);
       });
 
       // delete business asset ref
       $(`${matrixTable}-${id} button:nth-child(2)`).on('click', () => {
+        const checkedBusinessAssetRefs = $(`${matrixTable}-${id} input:checked`).map((i, e) => {
+          return {
+            index: e.getAttribute('data-index')
+          };
+        }).get();
+        checkedBusinessAssetRefs.forEach(async (ref) =>{
+          await window.supportingAssets.deleteBusinessAssetRef(id, ref.index);
+        })
+        
         $(`${matrixTable}-${id} input:checked`).parent().remove();
-        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
-        updateSupportingAsset(id, 'businessAssetRef', selected);
+        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
+        validate(id, selected);
       });
     };
 
@@ -134,9 +152,12 @@
         $('#supporting-assets__section-checkboxes').append(checkbox);
 
         addMatrixRow(id, asset.supportingAssetName);
-        asset.businessAssetRef.forEach((ref) => {
-          addBusinessAsset(id, ref);
+        asset.businessAssetRef.forEach((ref, index) => {
+          addBusinessAsset(id, ref, index);
         });
+
+        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
+        updateSupportingAsset(id, 'businessAssetRef', selected);
       });
     };
 

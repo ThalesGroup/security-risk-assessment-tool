@@ -75,6 +75,9 @@ contextBridge.exposeInMainWorld('supportingAssets', {
   addSupportingAsset: () => ipcRenderer.invoke('supportingAssets:addSupportingAsset'),
   deleteSupportingAsset: (ids) => ipcRenderer.send('supportingAssets:deleteSupportingAsset', ids),
   updateSupportingAsset: (id, field, value) => ipcRenderer.send('supportingAssets:updateSupportingAsset', id, field, value),
+  addBusinessAssetRef: (id, value) => ipcRenderer.send('supportingAssets:addBusinessAssetRef', id, value),
+  deleteBusinessAssetRef: (id, index) => ipcRenderer.send('supportingAssets:deleteBusinessAssetRef', id, index),
+  // updateBusinessAssetRef: (id, field, value, index) => ipcRenderer.invoke('supportingAssets:updateBusinessAssetRef', id, field, value, index),
   // getBusinessAssets: (label, value) => ipcRenderer.on('supportingAssets:getBusinessAssets', label, value),
 });
 
@@ -87,6 +90,8 @@ contextBridge.exposeInMainWorld('risks', {
   updateRiskImpact: (id, field, value) => ipcRenderer.invoke('risks:updateRiskImpact', id, field, value),
   addRiskAttackPath: (riskId) => ipcRenderer.invoke('risks:addRiskAttackPath', riskId),
   deleteRiskAttackPath: (riskId, ids) => ipcRenderer.invoke('risks:deleteRiskAttackPath', riskId, ids),
+  addRiskVulnerabilityRef: (riskId, riskAttackPathId) => ipcRenderer.invoke('risks:addRiskVulnerabilityRef', riskId, riskAttackPathId),
+  deleteRiskVulnerabilityRef: (riskId, riskAttackPathId, ids) => ipcRenderer.invoke('risks:deleteRiskVulnerabilityRef', riskId, riskAttackPathId, ids),
 });
 
 contextBridge.exposeInMainWorld('vulnerabilities', {

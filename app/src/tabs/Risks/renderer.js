@@ -52,6 +52,30 @@
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
+    // add vulnerability ref
+    const addVulnerabilityRef = (refs, div, vulnerabilityOptions) => {
+      refs.forEach((ref, i) => {
+        if (i > 0) div.append('<p>AND</p>');
+
+        let vulnerabilityDiv = $('<div>');
+        vulnerabilityDiv.css('display', 'flex');
+        vulnerabilityDiv.css('padding', '0');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `${ref.vulnerabilityIdRef}`;
+        checkbox.id = `risks__vulnerability__checkboxes__${ref.vulnerabilityIdRef}`;
+        checkbox.name = 'risks__vulnerability__checkboxes';
+        vulnerabilityDiv.append(checkbox);
+
+        let select = $('<select>').append(vulnerabilityOptions);
+        vulnerabilityDiv.append(select);
+
+        div.append(vulnerabilityDiv);
+        select.val(ref.vulnerabilityIdRef);
+      });
+    };
+
     // add Vulnerabilities evaluation section
     const addVulnerabilitySection = (riskAttackPaths) =>{
       let vulnerabilityOptions = '';
@@ -76,31 +100,32 @@
 
         // add div
         let div = $("<div>").append(`<p>Attack Path ${riskAttackPathId}</p><p>scoring: ${attackPathScore === null ? '' : attackPathScore}<p>`).css('background-color', 'rgb(183, 183, 183)');
-        div.append('<div class="add-delete-container"><button class= "addDelete"> Add</button> | <button class="addDelete">Delete</button></div > ');
-        mainDiv.append(div);
+        const addDeleteDiv = $('<div>');
+        addDeleteDiv.addClass('add-delete-container');
+        const addButton = document.createElement('button');
+        addButton.className = 'addDelete';
+        addButton.innerText = 'Add';
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'addDelete';
+        deleteButton.innerText = 'Delete';
 
+        addButton.addEventListener('click', async ()=>{
+          const vulnerabilityRef = await window.risks.addRiskVulnerabilityRef();
+          addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions);
+          risksData = risks;
+        });
+        deleteButton.addEventListener('click', ()=>{
+          alert(`Delete vulnerability from attack path ${riskAttackPathId}`);
+        });
+
+        addDeleteDiv.append(addButton);
+        addDeleteDiv.append(' | ');
+        addDeleteDiv.append(deleteButton);
+        div.append(addDeleteDiv);
+        mainDiv.append(div);
         $('#risks__vulnerability__attack__path').append(mainDiv);
 
-        vulnerabilityRef.forEach((ref, i)=>{
-          if(i > 0) div.append('<p>AND</p>');
-          
-          let vulnerabilityDiv = $('<div>');
-          vulnerabilityDiv.css('display', 'flex');
-          vulnerabilityDiv.css('padding', '0');
-
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.value = `${ref.vulnerabilityIdRef}`;
-          checkbox.id = `risks__vulnerability__checkboxes__${ref.vulnerabilityIdRef}`;
-          checkbox.name = 'risks__vulnerability__checkboxes';
-          vulnerabilityDiv.append(checkbox);
-
-          let select = $('<select>').append(vulnerabilityOptions);
-          vulnerabilityDiv.append(select);
-
-          div.append(vulnerabilityDiv);
-          select.val(ref.vulnerabilityIdRef);
-        });
+        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions);
       });
     };
 
