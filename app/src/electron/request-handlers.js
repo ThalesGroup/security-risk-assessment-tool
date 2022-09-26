@@ -430,7 +430,7 @@ ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
 ipcMain.handle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId));
-ipcMain.on('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
+ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
 
 // Vulnerability Tab
 const { addVulnerability, deleteVulnerability, updateVulnerability } = require('../../../lib/src/model/classes/Vulnerability/handler-event')

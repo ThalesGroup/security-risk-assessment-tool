@@ -593,21 +593,15 @@
 
     // delete Risk attack path button
     $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', async () => {
-      // const checkedRisks = [];
-      // checkboxes.forEach((box) => {
-      //   if (box.checked) checkedRisks.push(Number(box.value));
-      // });
-
-      // await window.risks.deleteRisk(checkedRisks);
-      // checkedRisks.forEach((id) => {
-      //   const index = risksData.findIndex(object => {
-      //     return object.riskId === id;
-      //   });
-
-      //   $(`#risks__table__checkboxes__${id}`).remove();
-      //   risksTable.getRow(Number(id)).delete();
-      // await window.risks.deleteRiskAttackPath(getCurrentRiskId());
-      
+      const checkedRiskAttackPaths = [];
+      const checkboxes = document.getElementsByName('risks__attack__path__checkboxes');
+      checkboxes.forEach((box) => {
+        if (box.checked) checkedRiskAttackPaths.push(Number(box.value));
+      });
+      const [riskAttackPaths, risks] = await window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
+      $(`#risks__vulnerability__attack__path`).empty();
+      addVulnerabilitySection(riskAttackPaths);
+      risksData = risks;
     });
 
     // refresh businessAsset & supportingAsset Data
