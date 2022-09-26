@@ -137,17 +137,19 @@
         updateVulnerabilityFields(vulnerabilitiesData);
     };
 
-    window.project.load(async (event, data) => {
-        await tinymce.init({
-            selector: '.rich-text',
-            height: 300,
-            min_height: 300,
-            verify_html: true,
-            statusbar: false,
-            plugins: 'link lists',
-            toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+    $(document).ready(async function () {
+        window.project.load(async (event, data) => {
+            await tinymce.init({
+                selector: '.rich-text',
+                height: 300,
+                min_height: 300,
+                verify_html: true,
+                statusbar: false,
+                plugins: 'link lists',
+                toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+            });
+            loadVulnerabilities(data);
         });
-        loadVulnerabilities(data);
     });
 
     const deleteVulnerabilities = async (checkboxes) =>{
@@ -156,7 +158,7 @@
           if (box.checked) checkedVulnerabilities.push(Number(box.value));
         });
   
-        await window.vulnerabillities.deleteVulnerability(checkedVulnerabilities);
+        await window.vulnerabilities.deleteVulnerability(checkedVulnerabilities);
         checkedVulnerabilities.forEach((id) => {
             const index = vulnerabilitiesData.findIndex(object => {
                 return object.vulnerabilityId === id;

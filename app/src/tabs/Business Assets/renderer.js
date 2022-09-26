@@ -123,10 +123,12 @@
       });
     };
 
-    window.project.load(async (event, data) => {
-      tinymce.remove('.business-assets-rich-text');
-      $('#business-assets__sections').empty();
-      addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
+    $(document).ready(function () {
+      window.project.load(async (event, data) => {
+        tinymce.remove('.business-assets-rich-text');
+        $('#business-assets__sections').empty();
+        addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
+      });
     });
 
     $('#business-assets__section--add').on('click', async () => {

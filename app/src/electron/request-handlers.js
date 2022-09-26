@@ -418,18 +418,21 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
 });
 
 // Risks Tab
-const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact } = require('../../../lib/src/model/classes/Risk/handler-event');
+const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, addRiskAttackPath, deleteRiskAttackPath } = require('../../../lib/src/model/classes/Risk/handler-event');
 const { renderRisks } = require('../../../lib/src/model/classes/Risk/render-risks');
 
 ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
-ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids))
+ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
 ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
   updateRiskName(israProject, getMainWindow(), id, field, value);
 });
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
+ipcMain.handle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId));
+ipcMain.on('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
 
+// Vulnerability Tab
 const { addVulnerability, deleteVulnerability, updateVulnerability } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());

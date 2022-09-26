@@ -82,8 +82,10 @@
       iterationsHistory(fetchedData.ISRAtracking);
     };
 
-    window.project.load(async (event, data) => {
-      updateWelcomeFields(await JSON.parse(data).ISRAmeta);
+    $(document).ready(function () {
+      window.project.load(async (event, data) => {
+        updateWelcomeFields(await JSON.parse(data).ISRAmeta);
+      });
     });
 
     // events

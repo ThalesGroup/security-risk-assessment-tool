@@ -42,7 +42,6 @@
           $(`${matrixTable}-${id} td`).first().css('color', 'black');
         }
       }
-      sessionStorage.setItem('validate-supporting-asset', $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)');
     };
 
     // cell edited callback function
@@ -166,19 +165,21 @@
       supportingAssetTable(fetchedData.SupportingAsset, fetchedData.BusinessAsset);
     };
 
-    window.project.load(async (event, data) => {
-      await tinymce.init({
-        selector: '.rich-text',
-        height: 300,
-        min_height: 300,
-        verify_html: true,
-        statusbar: false,
-        plugins: 'link lists',
-        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+    $(document).ready(async function () {
+      window.project.load(async (event, data) => {
+        await tinymce.init({
+          selector: '.rich-text',
+          height: 300,
+          min_height: 300,
+          verify_html: true,
+          statusbar: false,
+          plugins: 'link lists',
+          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+        });
+
+        const fetchedData = await JSON.parse(data);
+        updateSupportingAssetFields(fetchedData);
       });
-      
-      const fetchedData = await JSON.parse(data);
-      updateSupportingAssetFields(fetchedData);
     });
 
     // add supporting asset

@@ -59,16 +59,46 @@
         vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
       });
 
-      $('#risks__vulnerability__evaluation').empty();
       riskAttackPaths.forEach((path, i) =>{
-        if(i > 0) $('#risks__vulnerability__evaluation').append('<p>OR</p>');
+        if(i > 0) $('#risks__vulnerability__attack__path').append('<p>OR</p>');
         const {riskAttackPathId, vulnerabilityRef, attackPathScore} = path;
+        
+        const mainDiv = $('<div>');
+        mainDiv.css('padding', '0');
+
+        // add checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `${riskAttackPathId}`;
+        checkbox.id = `risks__attack__path__checkboxes__${riskAttackPathId}`;
+        checkbox.name = 'risks__attack__path__checkboxes';
+        mainDiv.append(checkbox);
+
+        // add div
         let div = $("<div>").append(`<p>Attack Path ${riskAttackPathId}</p><p>scoring: ${attackPathScore === null ? '' : attackPathScore}<p>`).css('background-color', 'rgb(183, 183, 183)');
-        $('#risks__vulnerability__evaluation').append(div);
+        div.append('<div class="add-delete-container"><button class= "addDelete"> Add</button> | <button class="addDelete">Delete</button></div > ');
+        mainDiv.append(div);
+
+        $('#risks__vulnerability__attack__path').append(mainDiv);
+
         vulnerabilityRef.forEach((ref, i)=>{
           if(i > 0) div.append('<p>AND</p>');
+          
+          let vulnerabilityDiv = $('<div>');
+          vulnerabilityDiv.css('display', 'flex');
+          vulnerabilityDiv.css('padding', '0');
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = `${ref.vulnerabilityIdRef}`;
+          checkbox.id = `risks__vulnerability__checkboxes__${ref.vulnerabilityIdRef}`;
+          checkbox.name = 'risks__vulnerability__checkboxes';
+          vulnerabilityDiv.append(checkbox);
+
           let select = $('<select>').append(vulnerabilityOptions);
-          div.append(select);
+          vulnerabilityDiv.append(select);
+
+          div.append(vulnerabilityDiv);
           select.val(ref.vulnerabilityIdRef);
         });
       });
@@ -210,6 +240,7 @@
 
       // Set Risk evaluation data
       // risk likelihood
+      $('#risks__vulnerability__attack__path').empty();
       addVulnerabilitySection(riskAttackPaths);
       setSecurityPropertyValues(riskLikelihood);
       updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
@@ -279,8 +310,6 @@
           addSelectedRowData(risksData[0].riskId);
         }
       });
-
-      // toggleSimpleAndOWASPLikelihood();
     };
 
     const updateRisksFields = (fetchedData) => {
@@ -334,22 +363,24 @@
       $('#risk__businessAsset').append(businessAssetsOptions);
     }
 
-    window.project.load(async (event, data) => {
-      await tinymce.init({
-        selector: '.rich-text',
-        height: 300,
-        min_height: 300,
-        verify_html: true,
-        statusbar: false,
-        plugins: 'link lists',
-        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+    $(document).ready(async function () {
+      window.project.load(async (event, data) => {
+        await tinymce.init({
+          selector: '.rich-text',
+          height: 300,
+          min_height: 300,
+          verify_html: true,
+          statusbar: false,
+          plugins: 'link lists',
+          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+        });
+
+        const fetchedData = await JSON.parse(data);
+        risksData = fetchedData.Risk;
+        vulnerabilities = fetchedData.Vulnerability;
+        assetsRelationshipSetUp(fetchedData);
+        updateRisksFields(risksData);
       });
-      
-      const fetchedData = await JSON.parse(data);
-      risksData = fetchedData.Risk;
-      vulnerabilities = fetchedData.Vulnerability;
-      assetsRelationshipSetUp(fetchedData);
-      updateRisksFields(risksData);
     });
 
   /**
@@ -544,6 +575,39 @@
 
     $('#risk__nonrepudiation').on('change', ()=>{
       checkbox('businessAssetNonRepudiationFlag', $('#risk__nonrepudiation').is(":checked") ? 1 : 0);
+    });
+
+    /**
+    * 
+    * 
+    * Risk evaluation
+    * 
+    * 
+ */
+    // add Risk attack path button
+    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
+      const [ riskAttackPath, risks ] = await window.risks.addRiskAttackPath(getCurrentRiskId());
+      addVulnerabilitySection(riskAttackPath);
+      risksData = risks;
+    });
+
+    // delete Risk attack path button
+    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', async () => {
+      // const checkedRisks = [];
+      // checkboxes.forEach((box) => {
+      //   if (box.checked) checkedRisks.push(Number(box.value));
+      // });
+
+      // await window.risks.deleteRisk(checkedRisks);
+      // checkedRisks.forEach((id) => {
+      //   const index = risksData.findIndex(object => {
+      //     return object.riskId === id;
+      //   });
+
+      //   $(`#risks__table__checkboxes__${id}`).remove();
+      //   risksTable.getRow(Number(id)).delete();
+      // await window.risks.deleteRiskAttackPath(getCurrentRiskId());
+      
     });
 
     // refresh businessAsset & supportingAsset Data

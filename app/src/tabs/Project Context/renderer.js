@@ -95,18 +95,22 @@
       assumptions(fetchedData.securityAssumptions);
     };
 
-    window.project.load(async (event, data) => {
-      await tinymce.init({
-        selector: '.rich-text',
-        height: 300,
-        min_height: 300,
-        verify_html: true,
-        statusbar: false,
-        plugins: 'link lists',
-        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+    $(document).ready(function () {
+      window.project.load(async (event, data) => {
+        await tinymce.init({
+          selector: '.rich-text',
+          height: 300,
+          min_height: 300,
+          verify_html: true,
+          statusbar: false,
+          plugins: 'link lists',
+          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+        });
+          updateProjectContextFields(await JSON.parse(data).ProjectContext);
       });
-      updateProjectContextFields(await JSON.parse(data).ProjectContext);
     });
+
+    
   } catch (err) {
     alert('Failed to load project context tab');
   }
