@@ -401,7 +401,7 @@ ipcMain.on('validate:businessAssets', (event, arr) => {
 
 // Supporting Assets Tab
 const {
-  addSupportingAsset, deleteSupportingAsset, updateSupportingAsset, validateSupportingAssets, addBusinessAssetRef, deleteBusinessAssetRef
+  addSupportingAsset, deleteSupportingAsset, updateSupportingAsset, validateSupportingAssets, addBusinessAssetRef, deleteBusinessAssetRef, updateBusinessAssetRef
 } = require('../../../lib/src/model/classes/SupportingAsset/handler-event');
 const { renderSupportingAssets } = require('../../../lib/src/model/classes/SupportingAsset/render-supporting-assets');
 
@@ -418,6 +418,7 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
 });
 ipcMain.on('supportingAssets:addBusinessAssetRef', (event, id, value) => addBusinessAssetRef(israProject, id, value));
 ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, index) => deleteBusinessAssetRef(israProject, id, index));
+ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index));
 
 // Risks Tab
 const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, addRiskAttackPath, deleteRiskAttackPath, addVulnerabilityRef, deleteVulnerabilityRef } = require('../../../lib/src/model/classes/Risk/handler-event');

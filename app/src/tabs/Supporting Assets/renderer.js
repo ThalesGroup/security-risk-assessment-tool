@@ -67,6 +67,7 @@
         const newOption = document.createElement('option');
         newOption.text = label;
         newOption.value = value;
+        newSelect.setAttribute('data-index', index);
         newSelect.add(newOption);
       });
 
@@ -78,10 +79,11 @@
       prevOption();
 
       // change in selected option due to user input
-      $(newSelect).on('change', () => {
-        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
+      $(newSelect).on('change', async (e) => {
         prevOption();
-        // updateSupportingAsset(id, 'businessAssetRef', selected);
+        await window.supportingAssets.updateBusinessAssetRef(id, e.target.value, $(e.target).attr('data-index'));
+        const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
+        updateSupportingAsset(id, 'businessAssetRef', selected);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
