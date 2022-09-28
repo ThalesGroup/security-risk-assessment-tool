@@ -240,38 +240,6 @@
             },
             {
                 "businessAssetId": [
-                    "3"
-                ],
-                "businessAssetName": [
-                    "Account information"
-                ],
-                "businessAssetType": [
-                    "Data"
-                ],
-                "businessAssetDescription": [
-                    "Account information of the user"
-                ],
-                "businessAssetConfidentiality": [
-                    "3"
-                ],
-                "businessAssetIntegrity": [
-                    "0"
-                ],
-                "businessAssetAvailability": [
-                    "2"
-                ],
-                "businessAssetAuthenticity": [
-                    "1"
-                ],
-                "businessAssetAuthorization": [
-                    "3"
-                ],
-                "businessAssetNonRepudiation": [
-                    "1"
-                ]
-            },
-            {
-                "businessAssetId": [
                     "4"
                 ],
                 "businessAssetName": [
@@ -343,12 +311,12 @@
                 "supportingAndBusinessAssetLink": [
                     {
                         "$": {
-                            "businessAssetRef": "3"
+                            "businessAssetRef": "1"
                         }
                     },
                     {
                         "$": {
-                            "businessAssetRef": "3"
+                            "businessAssetRef": "1"
                         }
                     }
                 ]
@@ -441,6 +409,11 @@
                     {
                         "$": {
                             "businessAssetRef": "1"
+                        }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": ""
                         }
                     }
                 ]
@@ -1027,7 +1000,7 @@
                     "4"
                 ],
                 "riskName": [
-                    "As a Script Kiddy, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                    "As a Script Kiddy, I can steal the  compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "threatAgent": [
                     "Script Kiddy"
@@ -1058,7 +1031,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Script Kiddy, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                                    "As a Script Kiddy, I can steal the  compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                                 ]
                             }
                         ]
@@ -1067,7 +1040,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            "3"
+                            ""
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -1195,7 +1168,7 @@
                     "6"
                 ],
                 "inherentRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "Mitigation": [
                     {
@@ -1248,7 +1221,7 @@
                     "0.25"
                 ],
                 "mitigatedRiskScore": [
-                    "2"
+                    "0"
                 ],
                 "riskManagementDecision": [
                     "Mitigate"
@@ -1257,7 +1230,7 @@
                     "Risk reduced through implementation of hardware backed storage."
                 ],
                 "residualRiskScore": [
-                    "2"
+                    "0"
                 ],
                 "residualRiskLevel": [
                     "Low"

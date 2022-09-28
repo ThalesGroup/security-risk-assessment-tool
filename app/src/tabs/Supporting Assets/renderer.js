@@ -34,7 +34,8 @@
 
     const validate = (id, value) =>{
       if ((value.length === 0 && $(`${matrixTable}-${id} select`).length)
-        || value.length !== new Set(value).size) {
+        || value.length !== new Set(value).size
+        || value.includes('null')) {
         $(`${matrixTable}-${id} td`).first().css('color', 'red');
       } else {
         $(`${matrixTable}-${id} td`).first().css('color', 'black');
@@ -75,13 +76,13 @@
       const prevOption = () => {
         $(newSelect).data('prevOption', $(newSelect).val());
       };
-      if (ref) newSelect.value = ref;
+      newSelect.value = ref;
       prevOption();
 
       // change in selected option due to user input
       $(newSelect).on('change', async (e) => {
-        prevOption();
-        await window.supportingAssets.updateBusinessAssetRef(id, e.target.value, $(e.target).attr('data-index'));
+        // prevOption();
+        await window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
       });
@@ -171,6 +172,7 @@
       // clear relationship matrix
       $(`${matrixTable} tbody`).empty();
       selectOptions = {};
+      selectOptions[null] = 'Select...';
       businessAssets.forEach((asset) => {
         selectOptions[asset.businessAssetId] = asset.businessAssetName;
       });
