@@ -459,7 +459,7 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
   validateSupportingAssets(israProject, arr, desc);
 });
 ipcMain.on('supportingAssets:addBusinessAssetRef', (event, id, value) => addBusinessAssetRef(israProject, id, value));
-ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, index) => deleteBusinessAssetRef(israProject, id, index));
+ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => deleteBusinessAssetRef(israProject, id, indexes));
 ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index));
 
 // Risks Tab

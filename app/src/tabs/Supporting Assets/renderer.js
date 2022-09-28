@@ -127,17 +127,17 @@
       });
 
       // delete business asset ref
-      $(`${matrixTable}-${id} button:nth-child(2)`).on('click', () => {
-        const checkedBusinessAssetRefs = $(`${matrixTable}-${id} input:checked`).map((i, e) => {
-          return {
-            index: e.getAttribute('data-index')
-          };
-        }).get();
-        checkedBusinessAssetRefs.forEach(async (ref) =>{
-          await window.supportingAssets.deleteBusinessAssetRef(id, ref.index);
-        })
+      $(`${matrixTable}-${id} button:nth-child(2)`).on('click', async () => {
+        const checkedBusinessAssetRefs = $(`${matrixTable}-${id} input:checked`).map((i, e) => e.getAttribute('data-index')).get();
+
+        await window.supportingAssets.deleteBusinessAssetRef(id, checkedBusinessAssetRefs);
         
         $(`${matrixTable}-${id} input:checked`).parent().remove();
+        // document.querySelectorAll('#supporting-asset-business-assets__table input[type="checkbox"]').forEach((checkbox, index) => {
+        //   checkbox.setAttribute('data-index', index);
+        //   console.log(index)
+        //   console.log(checkbox)
+        // })
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
         validate(id, selected);
       });

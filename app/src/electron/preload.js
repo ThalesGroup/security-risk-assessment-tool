@@ -76,7 +76,7 @@ contextBridge.exposeInMainWorld('supportingAssets', {
   deleteSupportingAsset: (ids) => ipcRenderer.send('supportingAssets:deleteSupportingAsset', ids),
   updateSupportingAsset: (id, field, value) => ipcRenderer.send('supportingAssets:updateSupportingAsset', id, field, value),
   addBusinessAssetRef: (id, value) => ipcRenderer.send('supportingAssets:addBusinessAssetRef', id, value),
-  deleteBusinessAssetRef: (id, index) => ipcRenderer.send('supportingAssets:deleteBusinessAssetRef', id, index),
+  deleteBusinessAssetRef: (id, indexes) => ipcRenderer.send('supportingAssets:deleteBusinessAssetRef', id, indexes),
   updateBusinessAssetRef: (id, value, index) => ipcRenderer.invoke('supportingAssets:updateBusinessAssetRef', id, value, index),
   // getBusinessAssets: (label, value) => ipcRenderer.on('supportingAssets:getBusinessAssets', label, value),
 });
