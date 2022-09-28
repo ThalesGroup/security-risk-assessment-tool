@@ -8,15 +8,13 @@
   },
   "author": "ThalesDIS",
   "license": "Apache-2.0 License",
-  "devDependencies": {
-    "electron": "^20.1.4"
-  },
   "dependencies": {
+    "electron": "^21.0.0",
     "jquery": "^3.6.1",
     "tabulator-tables": "^5.3.4",
     "tinymce": "^6.2.0"
   },
   "overrides": {
-    "got": "^12.1.0"
+    "got": "^11.8.5"
   }
 }
