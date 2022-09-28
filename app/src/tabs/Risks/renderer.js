@@ -49,6 +49,7 @@
           supportingAssetOptions += `<option value="${sa.supportingAssetId}">${sa.supportingAssetName}</option>`;
         }
       });
+      supportingAssetOptions += '<option value="null">Select...</option>'
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
@@ -247,9 +248,9 @@
       $('select[id="risk__threatAgent"]').val(threatAgent);
       $('select[id="risk__threat"]').val(threatVerb);
       $('#risk__motivation').val(motivation);
-      $('select[id="risk__businessAsset"]').val(businessAssetRef);
+      $('select[id="risk__businessAsset"]').val(businessAssetRef === null ? 'null' : businessAssetRef);
       addSupportingAssetOptions(businessAssetRef);
-      $('select[id="risk__supportingAsset"]').val(supportingAssetRef);
+      $('select[id="risk__supportingAsset"]').val(supportingAssetRef === null ? 'null' : supportingAssetRef);
 
       if(isAutomaticRiskName){
         $('#risk__manual__riskName').hide();
@@ -385,6 +386,7 @@
       businessAssets.forEach((ba)=>{
         businessAssetsOptions += `<option value="${ba.businessAssetId}">${ba.businessAssetName}</option>`;
       });
+      businessAssetsOptions += '<option value="null">Select...</option>'
       $('#risk__businessAsset').append(businessAssetsOptions);
     }
 
