@@ -133,11 +133,13 @@
         await window.supportingAssets.deleteBusinessAssetRef(id, checkedBusinessAssetRefs);
         
         $(`${matrixTable}-${id} input:checked`).parent().remove();
-        // document.querySelectorAll('#supporting-asset-business-assets__table input[type="checkbox"]').forEach((checkbox, index) => {
-        //   checkbox.setAttribute('data-index', index);
-        //   console.log(index)
-        //   console.log(checkbox)
-        // })
+        document.querySelectorAll(`${matrixTable}-${id} input[type="checkbox"]`).forEach((checkbox, index) => {
+          checkbox.setAttribute('data-index', index);
+        });
+        document.querySelectorAll(`${matrixTable}-${id} select`).forEach((select, index) => {
+          select.setAttribute('data-index', index);
+        });
+
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
         validate(id, selected);
       });
