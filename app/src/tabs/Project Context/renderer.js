@@ -96,8 +96,8 @@
     };
 
     $(document).ready(function () {
-      window.project.load((event, data) => {
-        tinymce.init({
+      window.project.load(async (event, data) => {
+        await tinymce.init({
           selector: '.rich-text',
           height: 300,
           min_height: 300,
@@ -105,12 +105,9 @@
           statusbar: false,
           plugins: 'link lists',
           toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
-          setup: function (ed) {
-            ed.on('init', function (args) {
-              updateProjectContextFields(JSON.parse(data).ProjectContext);
-            });
-          }
         });
+
+        updateProjectContextFields(await JSON.parse(data).ProjectContext);
       });
     });
 

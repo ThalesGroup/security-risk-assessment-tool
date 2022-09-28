@@ -1000,7 +1000,7 @@
                     "4"
                 ],
                 "riskName": [
-                    "As a Script Kiddy, I can steal the  compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                    "As a Script Kiddy, I can steal the  compromising the  in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "threatAgent": [
                     "Script Kiddy"
@@ -1021,17 +1021,17 @@
                     ""
                 ],
                 "businessAssetRef": [
-                    "3"
+                    ""
                 ],
                 "supportingAssetRef": [
-                    "1"
+                    ""
                 ],
                 "RiskName": [
                     {
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Script Kiddy, I can steal the  compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                                    "As a Script Kiddy, I can steal the  compromising the  in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                                 ]
                             }
                         ]
