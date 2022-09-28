@@ -108,14 +108,14 @@ window.validate.allTabs((event, filePath) => {
 /**
  * validate for errors in each tab
  */
-window.project.validationErrors((event) => {
-  let state = sessionStorage.getItem('validate-isra-meta-organization') === 'true';
-  // && sessionStorage.getItem('validate-supporting-asset') === 'true';
- // $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)';
+// window.project.validationErrors((event) => {
+//   let state = sessionStorage.getItem('validate-isra-meta-organization') === 'true';
+//   // && sessionStorage.getItem('validate-supporting-asset') === 'true';
+//  // $('#supporting-asset-business-assets__table td').css('color') === 'rgb(0, 0, 0)';
 
-  // return boolean
-  event.sender.send('project:validationErrors', state);
-});
+//   // return boolean
+//   event.sender.send('project:validationErrors', state);
+// });
 
 /**
  * validate previously viewed tab

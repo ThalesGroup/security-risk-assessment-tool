@@ -89,7 +89,7 @@ const newISRAProject = (win, app) => {
   * jsonFilePath: tracks if file opened is json file type (save/saveAs)
   * labelSelected: tracks if 'Save' or 'Save As' menu item is selected
 */
-let jsonFilePath = '', labelSelected;
+let jsonFilePath = '';
 
 /**
   * save as new project in selected directory (save as)
@@ -154,25 +154,43 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
 });
 
 /**
-  * check for validation errors in dom (save/save as)
-  * @param {string} label keeps track if either 'Save' or 'Save As' menu item is selected
+  * validation instantly fails when one of the validation methods fails
 */
-const validationErrors = (label) => {
-  labelSelected = label;
-  getMainWindow().webContents.send('project:validationErrors');
+const validateClasses = () => {
+  const { ISRAmeta, SupportingAsset } = israProject.properties;
+
+  const validateWelcomeTab = () =>{
+    if (!ISRAmeta.projectOrganization) return false;
+    return true;
+  };
+
+  const validateSupportingAssetsTab = () =>{
+    for(let i=0; i<SupportingAsset.length; i++){
+      const { businessAssetRef } = SupportingAsset[i];
+      const uniqueRefs = new Set();
+      for (let j = 0; j < businessAssetRef.length; j++){
+        const ref = businessAssetRef[j];
+        if (!ref || uniqueRefs.has(ref)) return false;
+        uniqueRefs.add(ref);
+      }
+      return true;
+    }
+  };
+
+  return validateWelcomeTab() && validateSupportingAssetsTab();
 };
 
-/** After checking for validation errors in dom,
-  * prompt validation error dialog if needed (save/save as)
-  *  @param {boolean} state checks if dom is valid or invalid
+/**
+  * check for validation errors in dom (save/save as)
+  * @param {string} labelSelected either 'Save' or 'Save As' menu item is selected
 */
-ipcMain.on('project:validationErrors', (event, state) => {
+const validationErrors = (labelSelected) => {
   const saveOrSaveAs = () => {
     if (labelSelected === 'Save As') saveAs();
     else if (labelSelected === 'Save') saveProject();
   };
 
-  if (state) saveOrSaveAs();
+  if (validateClasses()) saveOrSaveAs();
   else {
     const result = dialog.showMessageBoxSync(null, {
       type: 'warning',
@@ -182,7 +200,31 @@ ipcMain.on('project:validationErrors', (event, state) => {
     });
     if (result === 0) saveOrSaveAs();
   }
-});
+  // labelSelected = label;
+  // getMainWindow().webContents.send('project:validationErrors');
+};
+
+/** After checking for validation errors in dom,
+  * prompt validation error dialog if needed (save/save as)
+  *  @param {boolean} state checks if dom is valid or invalid
+*/
+// ipcMain.on('project:validationErrors', (event, state) => {
+//   const saveOrSaveAs = () => {
+//     if (labelSelected === 'Save As') saveAs();
+//     else if (labelSelected === 'Save') saveProject();
+//   };
+
+//   if (state) saveOrSaveAs();
+//   else {
+//     const result = dialog.showMessageBoxSync(null, {
+//       type: 'warning',
+//       message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
+//       title: 'Validation Errors',
+//       buttons: ['Yes', 'No'], // Yes returns 0, No returns 1
+//     });
+//     if (result === 0) saveOrSaveAs();
+//   }
+// });
 
 /**
   * Load JSON file
