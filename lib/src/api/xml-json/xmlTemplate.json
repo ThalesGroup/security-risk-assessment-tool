@@ -176,38 +176,6 @@
         "BusinessAsset": [
             {
                 "businessAssetId": [
-                    "1"
-                ],
-                "businessAssetName": [
-                    "User credentials"
-                ],
-                "businessAssetType": [
-                    "Data"
-                ],
-                "businessAssetDescription": [
-                    "Presents the user credential to login to the payment application"
-                ],
-                "businessAssetConfidentiality": [
-                    "3"
-                ],
-                "businessAssetIntegrity": [
-                    "3"
-                ],
-                "businessAssetAvailability": [
-                    "1"
-                ],
-                "businessAssetAuthenticity": [
-                    "1"
-                ],
-                "businessAssetAuthorization": [
-                    "1"
-                ],
-                "businessAssetNonRepudiation": [
-                    "1"
-                ]
-            },
-            {
-                "businessAssetId": [
                     "2"
                 ],
                 "businessAssetName": [
@@ -431,7 +399,7 @@
                     "1"
                 ],
                 "riskName": [
-                    "As a Researcher, I can tamper with the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
+                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -452,17 +420,17 @@
                     "motivation details fdsf"
                 ],
                 "businessAssetRef": [
-                    "1"
+                    "2"
                 ],
                 "supportingAssetRef": [
-                    "4"
+                    "2"
                 ],
                 "RiskName": [
                     {
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Researcher, I can tamper with the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
+                                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Man in the middle attack through network interception)"
                                 ]
                             }
                         ]
@@ -655,7 +623,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            "3"
+                            ""
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -759,7 +727,7 @@
                     "6"
                 ],
                 "inherentRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "Mitigation": [
                     {
@@ -791,7 +759,7 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "riskManagementDecision": [
                     "Accept"
@@ -800,10 +768,10 @@
                     "Risk accepted by Product Owner on 2020-11-24."
                 ],
                 "residualRiskScore": [
-                    "8"
+                    "0"
                 ],
                 "residualRiskLevel": [
-                    "Medium"
+                    "Low"
                 ]
             },
             {
@@ -817,7 +785,7 @@
                     "3"
                 ],
                 "riskName": [
-                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
+                    "As a Criminal, I can steal the  compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
                 ],
                 "threatAgent": [
                     "Criminal"
@@ -848,7 +816,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
+                                    "As a Criminal, I can steal the  compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
                                 ]
                             }
                         ]
@@ -857,7 +825,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            "3"
+                            ""
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -942,7 +910,7 @@
                     "6"
                 ],
                 "inherentRiskScore": [
-                    "10"
+                    "0"
                 ],
                 "Mitigation": [
                     {
@@ -974,7 +942,7 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "10"
+                    "0"
                 ],
                 "riskManagementDecision": [
                     "Transfer"
@@ -983,10 +951,10 @@
                     "Risk transferred to users, with application help  indicating that displaying of sensitive information should be protected from prying eyes and users should be aware of their surroundings."
                 ],
                 "residualRiskScore": [
-                    "10"
+                    "0"
                 ],
                 "residualRiskLevel": [
-                    "Medium"
+                    "Low"
                 ]
             },
             {
