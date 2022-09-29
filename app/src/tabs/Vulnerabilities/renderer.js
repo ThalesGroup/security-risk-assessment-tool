@@ -28,6 +28,7 @@
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
+    
 
     const getCurrentVulnerabilityId = () =>{
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
@@ -35,6 +36,12 @@
 
     const getCurrentVulnerability = () =>{
         return vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+    };
+
+    const styleTable = (overallLevel) => {
+        if (overallLevel === 'High') vulnerabilitiesTable.getSelectedRows()[0].getElement().style.color = '#FF0000';
+        else if (overallLevel === 'Medium') vulnerabilitiesTable.getSelectedRows()[0].getElement().style.color = '#FFA500';
+        else vulnerabilitiesTable.getSelectedRows()[0].getElement().style.color = '#000000';
     };
 
     const addSelectedVulnerabilityRowData = async (id) =>{
@@ -61,7 +68,8 @@
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? 'null' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         $('#vulnerability__scoring').val(cveScore);
-        $('#vulnerability__level').text(overallLevel);
+        $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
+        styleTable(overallLevel);
 
         $('input[name="refs__checkboxes"]').prop('checked', false);
         supportingAssetRef.forEach((ref)=>{
@@ -239,8 +247,11 @@
 
     $('input[name="vulnerability__scoring"]').on('change', async  (e)=>{
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
-        vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: vulnerability.overallLevel }]);
-        $('#vulnerability__level').text(vulnerability.overallLevel);
+        const { overallLevel } = vulnerability;
+        vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
+        $('#vulnerability__level').removeClass();
+        $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
+        styleTable(overallLevel);   
     });
 
     } catch (err) {

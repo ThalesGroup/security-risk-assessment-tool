@@ -123,3 +123,15 @@ span{
 .select__refs {
     margin-bottom: 10px;
 }
+
+.Low {
+    color: black;
+}
+
+.Medium {
+    color: orange;
+}
+
+.High {
+    color: red;
+}
