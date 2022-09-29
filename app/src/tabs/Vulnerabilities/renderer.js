@@ -234,10 +234,13 @@
 
     $('input[name="vulnerability__name"]').on('change', async (e)=> {
         await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'vulnerabilityName', e.target.value);
+        vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
     });
 
     $('input[name="vulnerability__scoring"]').on('change', async  (e)=>{
-        await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
+        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
+        vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: vulnerability.overallLevel }]);
+        $('#vulnerability__level').text(vulnerability.overallLevel);
     });
 
     } catch (err) {

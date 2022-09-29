@@ -486,7 +486,7 @@ ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));
 ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
-  updateVulnerability(israProject, getMainWindow(), id, field, value);
+  return updateVulnerability(israProject, getMainWindow(), id, field, value);
 });
 ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
   const url = await urlPrompt();
