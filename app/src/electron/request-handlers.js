@@ -173,8 +173,8 @@ const validateClasses = () => {
         if (!ref || uniqueRefs.has(ref)) return false;
         uniqueRefs.add(ref);
       }
-      return true;
     }
+    return true;
   };
 
   return validateWelcomeTab() && validateSupportingAssetsTab();
