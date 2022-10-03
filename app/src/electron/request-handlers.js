@@ -509,12 +509,12 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         const [fileName, base64data] = attachFile();
         if (fileName !== '') {
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: base64data});
+          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: base64data, useNewDecode: israProject.getVulnerability(id).useNewDecode });
         }
       } catch (err) {
         console.log(err);
         dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
-        getMainWindow().webContents.send('vulnerabilities:fileName', { fileName:'Click here to attach a file', base64: ''});
+        getMainWindow().webContents.send('vulnerabilities:fileName', { fileName: 'Click here to attach a file', base64: '', useNewDecode: israProject.getVulnerability(id).useNewDecode });
       }
     },
   };
@@ -534,7 +534,7 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         click: () => {
           const [fileName, base64data] = removeFile();
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: ''});
+          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: '', useNewDecode: israProject.getVulnerability(id).useNewDecode });
         },
       },
     ];
@@ -554,7 +554,7 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
     const vulnerability = israProject.getVulnerability(id);
     const [fileName, base64data] = decodeFile(base64, vulnerability);
     vulnerability.vulnerabilityDescriptionAttachment = base64data;
-    return { fileName, vulnerabilities: israProject.properties.Vulnerability };
+    return { fileName, base64: base64data, useNewDecode: vulnerability.useNewDecode };
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });

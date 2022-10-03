@@ -45,7 +45,7 @@
     };
 
     const validateCVEScore = (cveScore) => {
-        if (cveScore < 0 || cveScore > 10 || !Number(cveScore) || cveScore === null) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
+        if (cveScore < 0 || cveScore > 10 || cveScore === null) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
 
@@ -82,9 +82,14 @@
             $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
         });
 
-        const { fileName, vulnerabilities } = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
+        const { fileName, base64, useNewDecode } = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
         $('#vulnerability__file--insert').text(fileName);
-        vulnerabilitiesData = vulnerabilities;
+        vulnerabilitiesData.forEach((v) => {
+            if (v.vulnerabilityId === getCurrentVulnerabilityId()) {
+                v.vulnerabilityDescriptionAttachment = base64;
+                v.useNewDecode = useNewDecode;
+            };
+        });
     };
 
     // row is clicked & selected
@@ -162,6 +167,15 @@
                 statusbar: false,
                 plugins: 'link lists',
                 toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+                setup: function (editor) {
+                    editor.on('change', function (editor) {
+                        vulnerabilitiesData.forEach((v)=>{
+                            if (v.vulnerabilityId === getCurrentVulnerabilityId()) {
+                                v.vulnerabilityDescription = tinymce.activeEditor.getContent()
+                            };
+                        });
+                    });
+                }
             });
             loadVulnerabilities(data);
         });
@@ -242,8 +256,15 @@
     $('#vulnerability__attachment').on('click', () => {
         window.vulnerabilities.attachment(getCurrentVulnerabilityId());
         window.vulnerabilities.fileName(async (event, result) => {
-            const { fileName } = result;
+            const { fileName, base64, useNewDecode } = result;
             $('#vulnerability__file--insert').text(fileName);
+
+            vulnerabilitiesData.forEach((v) => {
+                if (v.vulnerabilityId === getCurrentVulnerabilityId()) {
+                    v.vulnerabilityDescriptionAttachment = base64;
+                    v.useNewDecode = useNewDecode;
+                };
+            });
         });
     });
 

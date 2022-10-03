@@ -78,6 +78,15 @@ const validateTabs = (tab) => {
     window.validate.supportingAssets(tableData, desc);
   };
 
+  // const validateRisks = () => {
+  //   const tableData = Tabulator.findTable('#risks__table')[0].getData();
+
+  // };
+
+  // const validateVulnerabilities = () => {
+  //   const tableData = Tabulator.findTable('#vulnerabilties__table')[0].getData();
+  // };
+
   switch (tab) {
     case 'welcome':
       validateWelcome();
@@ -91,6 +100,10 @@ const validateTabs = (tab) => {
     case 'supporting-assets':
       validateSupportingAsset();
       break;
+    // case 'risks':
+    //   validateRisks();
+    // case 'vulnerabilities':
+    //   validateVulnerabilities();
     default:
       break;
   }
