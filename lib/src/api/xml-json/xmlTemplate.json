@@ -1116,7 +1116,7 @@
                             {
                                 "char": "16",
                                 "$": {
-                                    "score": "6",
+                                    "score": "12",
                                     "name": "Phone backup data analysis of a non-encrypted backup"
                                 }
                             }
@@ -1125,7 +1125,7 @@
                             "Phone backup data analysis of a non-encrypted backup"
                         ],
                         "attackPathScore": [
-                            "6"
+                            "12"
                         ]
                     }
                 ],
@@ -1133,7 +1133,7 @@
                     "(Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "allAttackPathsScore": [
-                    "6"
+                    "12"
                 ],
                 "inherentRiskScore": [
                     "0"
@@ -2793,15 +2793,15 @@
                 "vulnerabilityCVEScoring": [
                     {
                         "cveScore": [
-                            "6.2"
+                            "12.3"
                         ]
                     }
                 ],
                 "overallScore": [
-                    "6"
+                    "12"
                 ],
                 "overallLevel": [
-                    "Medium"
+                    "High"
                 ]
             }
         ],

@@ -30,19 +30,24 @@
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     
 
-    const getCurrentVulnerabilityId = () =>{
+    const getCurrentVulnerabilityId = () => {
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
     };
 
-    const getCurrentVulnerability = () =>{
+    const getCurrentVulnerability = () => {
         return vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
     };
 
-    const styleTable = (overallLevel) => {
-        if (overallLevel === 'High') vulnerabilitiesTable.getSelectedRows()[0].getElement().style.color = '#FF0000';
-        else if (overallLevel === 'Medium') vulnerabilitiesTable.getSelectedRows()[0].getElement().style.color = '#FFA500';
-        else vulnerabilitiesTable.getSelectedRows()[0].getElement().style.color = '#000000';
+    const styleTable = (id, overallLevel) => {
+        if (overallLevel === 'High') vulnerabilitiesTable.getRow(id).getCell('overallLevel').getElement().style.color = '#FF0000';
+        else if (overallLevel === 'Medium') vulnerabilitiesTable.getRow(id).getCell('overallLevel').getElement().style.color = '#FFA500';
+        else vulnerabilitiesTable.getRow(id).getCell('overallLevel').getElement().style.color = '#000000';
     };
+
+    const validateCVEScore = (cveScore) => {
+        if (cveScore < 0 || cveScore > 10 || !Number(cveScore) || cveScore === null) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
+        else $('input[name="vulnerability__scoring"]').css('border', 'none');
+    }
 
     const addSelectedVulnerabilityRowData = async (id) =>{
         vulnerabilitiesTable.selectRow(id);
@@ -69,7 +74,8 @@
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         $('#vulnerability__scoring').val(cveScore);
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        styleTable(overallLevel);
+        styleTable(vulnerabilityId, overallLevel);
+        validateCVEScore(cveScore);
 
         $('input[name="refs__checkboxes"]').prop('checked', false);
         supportingAssetRef.forEach((ref)=>{
@@ -89,6 +95,7 @@
     const addVulnerability = (vulnerability) =>{
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
+        styleTable(vulnerability.vulnerabilityId, vulnerability.overallLevel);
 
         // add checkbox
         const checkbox = document.createElement('input');
@@ -245,13 +252,14 @@
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
     });
 
-    $('input[name="vulnerability__scoring"]').on('change', async  (e)=>{
+    $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
         const { overallLevel } = vulnerability;
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        styleTable(overallLevel);   
+        styleTable(getCurrentVulnerabilityId(), overallLevel);
+        validateCVEScore(e.target.value);
     });
 
     } catch (err) {
