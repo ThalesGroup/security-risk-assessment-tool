@@ -480,7 +480,7 @@ ipcMain.handle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId
 ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids));
 
 // Vulnerability Tab
-const { addVulnerability, deleteVulnerability, updateVulnerability } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
+const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
@@ -509,12 +509,13 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         const [fileName, base64data] = attachFile();
         if (fileName !== '') {
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: base64data, useNewDecode: israProject.getVulnerability(id).useNewDecode });
+          getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
         }
       } catch (err) {
         console.log(err);
+        const fileName = 'Click here to attach a file';
         dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
-        getMainWindow().webContents.send('vulnerabilities:fileName', { fileName: 'Click here to attach a file', base64: '', useNewDecode: israProject.getVulnerability(id).useNewDecode });
+        getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
       }
     },
   };
@@ -534,7 +535,7 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         click: () => {
           const [fileName, base64data] = removeFile();
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', { fileName, base64: '', useNewDecode: israProject.getVulnerability(id).useNewDecode });
+          getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
         },
       },
     ];
@@ -554,12 +555,16 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
     const vulnerability = israProject.getVulnerability(id);
     const [fileName, base64data] = decodeFile(base64, vulnerability);
     vulnerability.vulnerabilityDescriptionAttachment = base64data;
-    return { fileName, base64: base64data, useNewDecode: vulnerability.useNewDecode };
+    return fileName;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
     return 'Click here to attach a file';
   }
+});
+
+ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => {
+  return validateVulnerabilities(israProject, currentVulnerability);
 });
 
 // ipcMain.handle('dark-mode:toggle', () => {

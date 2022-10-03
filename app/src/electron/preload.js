@@ -48,6 +48,7 @@ contextBridge.exposeInMainWorld('validate', {
   projectContext: (data) => ipcRenderer.send('validate:projectContext', data),
   businessAssets: (data) => ipcRenderer.send('validate:businessAssets', data),
   supportingAssets: (data, desc) => ipcRenderer.send('validate:supportingAssets', data, desc),
+  vulnerabilities: (data) => ipcRenderer.invoke('validate:vulnerabilities', data),
   allTabs: (filePath) => ipcRenderer.on('validate:allTabs', filePath),
 });
 
