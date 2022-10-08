@@ -104,4 +104,5 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
   attachment: (id) => ipcRenderer.send('vulnerabilities:attachment', id),
   decodeAttachment: (id, fileName) => ipcRenderer.invoke('vulnerabilities:decodeAttachment', id, fileName),
   fileName: (result) => ipcRenderer.on('vulnerabilities:fileName', result),
+  isVulnerabilityExist: (id) => ipcRenderer.invoke('vulnerabilities:isVulnerabilityExist', id)
 });

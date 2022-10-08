@@ -61,7 +61,6 @@
     
 
     const addSelectedVulnerabilityRowData = async (id) =>{
-        console.log(vulnerabilitiesData)
         vulnerabilitiesTable.selectRow(id);
         const {
             vulnerabilityId,
@@ -82,7 +81,7 @@
         $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
         vulnerabilityURL(vulnerabilityTrackingURI);
         $('#vulnerability__CVE').val(vulnerabilityCVE);
-        $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? 'null' : vulnerabilityFamily);
+        $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         $('#vulnerability__scoring').val(cveScore);
 
@@ -102,19 +101,13 @@
 
     const validatePreviousVulnerability = async (id) => {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
-        vulnerability.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
-        vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
-        vulnerability.vulnerabilityCVE = $('input[name="vulnerability__CVE"]').val();
+        const isVulnerabilityExist = await window.vulnerabilities.isVulnerabilityExist(vulnerability.vulnerabilityId);
 
-        const checkboxes = document.getElementsByName('refs__checkboxes');
-        const checkedRefs = [];
-        checkboxes.forEach((box) => {
-            if (box.checked) checkedRefs.push(Number(box.value));
-        });
-        vulnerability.supportingAssetRef = checkedRefs;
-
-        const vulnerabilities = await window.validate.vulnerabilities(vulnerability);
-        vulnerabilitiesData = vulnerabilities;
+        if(isVulnerabilityExist){
+            const vulnerabilities = await window.validate.vulnerabilities(vulnerability);
+            vulnerabilitiesData = vulnerabilities;
+            console.log(vulnerabilitiesData)
+        }  
     };
 
     vulnerabilitiesTable.on("rowDeselected", (row) => {
@@ -153,9 +146,9 @@
             checkbox.value = `${sa.supportingAssetId}`;
             checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
             checkbox.name = 'refs__checkboxes';
-            checkbox.addEventListener('change', (e) =>{
-                if (e.target.checked) window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
-                else window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
+            checkbox.addEventListener('change', async (e) =>{
+                if (e.target.checked) await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
+                else await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
             })
             div.append(checkbox);
 
@@ -185,6 +178,13 @@
                 statusbar: false,
                 plugins: 'link lists',
                 toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+                setup: function (ed) {
+                    ed.on('change', function (e) {
+                        //console.log(e.target.id)
+                        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+                        vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
+                    });
+                }
             });
             loadVulnerabilities(data);
         });
@@ -205,10 +205,10 @@
             vulnerabilitiesTable.getRow(Number(id)).delete();
   
             vulnerabilitiesData.splice(index, 1);
-            vulnerabilitiesData.forEach((v)=>{
-                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-            });
-            addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
+            // vulnerabilitiesData.forEach((v)=>{
+            //     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+            // });
+            if (vulnerabilitiesData[0]) addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
         });
     };
 
@@ -283,6 +283,21 @@
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
         styleTable(getCurrentVulnerabilityId(), overallLevel);
         validateCVEScore(e.target.value);
+    });
+
+    $('input[name="vulnerability__trackingID"]').on('change', (e)=> {
+        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+        vulnerability.vulnerabilityTrackingID = e.target.value;
+    });
+
+    $('input[name="vulnerability__CVE"]').on('change', (e) => {
+        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+        vulnerability.vulnerabilityCVE = e.target.value;
+    });
+
+    $('select[name="vulnerability__family"]').on('change', (e) => {
+        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+        vulnerability.vulnerabilityFamily = e.target.value;
     });
 
     } catch (err) {

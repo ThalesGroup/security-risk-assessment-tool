@@ -78,6 +78,10 @@ const validateTabs = (tab) => {
     window.validate.supportingAssets(tableData, desc);
   };
 
+  const validateVulnerabilities = () => {
+
+  };
+
   switch (tab) {
     case 'welcome':
       validateWelcome();
@@ -90,6 +94,9 @@ const validateTabs = (tab) => {
       break;
     case 'supporting-assets':
       validateSupportingAsset();
+      break;
+    case 'vulnerabilities':
+      validateVulnerabilities();
       break;
     default:
       break;

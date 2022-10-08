@@ -480,7 +480,7 @@ ipcMain.handle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId
 ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids));
 
 // Vulnerability Tab
-const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
+const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
@@ -563,9 +563,8 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
   }
 });
 
-ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => {
-  return validateVulnerabilities(israProject, currentVulnerability);
-});
+ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => validateVulnerabilities(israProject, currentVulnerability));
+ipcMain.handle('vulnerabilities:isVulnerabilityExist', (event, id) => isVulnerabilityExist(israProject, id));
 
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
