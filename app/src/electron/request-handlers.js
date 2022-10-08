@@ -157,7 +157,7 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
   * validation instantly fails when one of the validation methods fails
 */
 const validateClasses = () => {
-  const { ISRAmeta, SupportingAsset } = israProject.properties;
+  const { ISRAmeta, SupportingAsset, Vulnerability} = israProject.properties;
 
   const validateWelcomeTab = () =>{
     if (!ISRAmeta.projectOrganization) return false;
@@ -177,7 +177,15 @@ const validateClasses = () => {
     return true;
   };
 
-  return validateWelcomeTab() && validateSupportingAssetsTab();
+  const validateVulnerabilitiesTab = () => {
+    for(let i=0; i<Vulnerability.length; i++) {
+      const { cveScore } = Vulnerability[i];
+      if (cveScore < 0 || cveScore > 10) return false;
+    }
+    return true;
+  };
+
+  return validateWelcomeTab() && validateSupportingAssetsTab() && validateVulnerabilitiesTab();
 };
 
 /**
