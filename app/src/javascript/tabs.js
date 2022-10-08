@@ -84,8 +84,7 @@ const validateTabs = (tab) => {
     data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
     data.vulnerabilityDescription = tinymce.get('vulnerability__details').getContent();
     data.vulnerabilityCVE = $('input[name="vulnerability__CVE"]').val();
-    //data.vulnerabilityFamily = $('select[name="vulnerability__family"]').val();
-    data.vulnerabilityFamily = '';
+    data.vulnerabilityFamily = $('select[name="vulnerability__family"]').val();
     window.validate.vulnerabilities(data);
   };
 

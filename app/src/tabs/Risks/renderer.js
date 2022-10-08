@@ -283,6 +283,21 @@
       updateEvaluationTable(riskImpact, businessAssetRef);
     };
 
+    const validatePreviousRisk = async (id) => {
+      let risk = risksData.find((risk) => risk.riskId === id);
+      const isRiskExist = await window.risks.isRiskExist(risk.riskId);
+      console.log(isRiskExist)
+
+      if (isRiskExist) {
+        const risks = await window.validate.risks(risk);
+        risksData = risks;
+      } 
+    };
+
+    risksTable.on("rowDeselected", (row) => {
+      validatePreviousRisk(row.getIndex());
+    });
+
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
       addSelectedRowData(row.getIndex());
@@ -400,6 +415,18 @@
           statusbar: false,
           plugins: 'link lists',
           toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+          setup: function (ed) {
+            ed.on('change', function (e) {
+              const { id } = e.target;
+              let richText = tinymce.get(id).getContent();
+              const { riskName, riskLikelihood } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+
+              if (id === 'risk__threatAgent__rich-text') riskName.threatAgentDetail = richText;
+              else if (id === 'risk__threat__rich-text') riskName.threatVerbDetail = richText;
+              else if (id === 'risk__motivation__rich-text') riskName.motivationDetail = richText;
+              else if (id === 'risk__likelihood__details') riskLikelihood.riskLikelihoodDetail = richText;
+            });
+          }
         });
 
         const fetchedData = await JSON.parse(data);

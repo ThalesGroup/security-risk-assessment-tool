@@ -49,6 +49,7 @@ contextBridge.exposeInMainWorld('validate', {
   businessAssets: (data) => ipcRenderer.send('validate:businessAssets', data),
   supportingAssets: (data, desc) => ipcRenderer.send('validate:supportingAssets', data, desc),
   vulnerabilities: (data) => ipcRenderer.invoke('validate:vulnerabilities', data),
+  risks: (data) => ipcRenderer.invoke('validate:risks', data),
   allTabs: (filePath) => ipcRenderer.on('validate:allTabs', filePath),
 });
 
@@ -93,6 +94,7 @@ contextBridge.exposeInMainWorld('risks', {
   deleteRiskAttackPath: (riskId, ids) => ipcRenderer.invoke('risks:deleteRiskAttackPath', riskId, ids),
   addRiskVulnerabilityRef: (riskId, riskAttackPathId) => ipcRenderer.invoke('risks:addRiskVulnerabilityRef', riskId, riskAttackPathId),
   deleteRiskVulnerabilityRef: (riskId, riskAttackPathId, ids) => ipcRenderer.invoke('risks:deleteRiskVulnerabilityRef', riskId, riskAttackPathId, ids),
+  isRiskExist: (id) => ipcRenderer.invoke('risks:isRiskExist', id)
 });
 
 contextBridge.exposeInMainWorld('vulnerabilities', {
