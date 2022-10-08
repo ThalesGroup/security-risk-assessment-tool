@@ -79,7 +79,14 @@ const validateTabs = (tab) => {
   };
 
   const validateVulnerabilities = () => {
-
+    let data = {};
+    data.vulnerabilityId = Tabulator.findTable('#vulnerabilties__table')[0].getSelectedData()[0].vulnerabilityId;
+    data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
+    data.vulnerabilityDescription = tinymce.get('vulnerability__details').getContent();
+    data.vulnerabilityCVE = $('input[name="vulnerability__CVE"]').val();
+    //data.vulnerabilityFamily = $('select[name="vulnerability__family"]').val();
+    data.vulnerabilityFamily = '';
+    window.validate.vulnerabilities(data);
   };
 
   switch (tab) {
