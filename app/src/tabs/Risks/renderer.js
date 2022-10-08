@@ -40,6 +40,12 @@
       return risksTable.getSelectedData()[0].riskId;
     };
 
+    const validateRiskName = (riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef) => {
+      if(threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null){
+        risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#FF0000';
+      } else risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#000000';
+    };
+
     // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
       let supportingAssetOptions = '';
@@ -305,6 +311,7 @@
 
     const addRisk = (risk) => {
       const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
+      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef } = riskName;
       // risksTable.on('tableBuilt', () => {
         // add risk data
         const tableData = {
@@ -315,6 +322,7 @@
           riskManagementDecision
         };
         risksTable.addData([tableData]);
+        validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef);
 
         // add checkbox
         const checkbox = document.createElement('input');
@@ -471,22 +479,26 @@
     $('#risk__threatAgent').on('change', ()=>{   
       const selected = $('#risk__threatAgent').find(":selected").val();
       updateRiskName('threatAgent', selected);
+      validateRiskName(getCurrentRiskId(), selected, 'threatVerb', 'businessAssetRef', 'supportingRef');
     });
 
     $('#risk__threat').on('change', ()=>{
       const selected = $('#risk__threat').find(":selected").val();
       updateRiskName('threatVerb', selected);
+      validateRiskName(getCurrentRiskId(), 'threatAgent', selected, 'businessAssetRef', 'supportingRef');
     });
 
     $('#risk__businessAsset').on('change', ()=>{
       const selected = $('#risk__businessAsset').find(":selected").val();
       updateRiskName('businessAssetRef', selected);
+      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', selected, 'supportingRef');
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
+      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', selected);
     });
 
     $('#risk__motivation').on('change', ()=>{
