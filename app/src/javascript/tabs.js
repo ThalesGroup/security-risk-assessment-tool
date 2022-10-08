@@ -72,10 +72,23 @@ const validateTabs = (tab) => {
     });
   };
 
-  const validateSupportingAsset = () => {
-    const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
+  const validateSupportingAsset = () => {const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
     const desc = tinymce.get('product-architecture-diagram__text').getContent();
+    
     window.validate.supportingAssets(tableData, desc);
+  };
+
+  const validateRisks = () => {
+    let data = {
+      riskName: {},
+      riskLikelihood: {}
+    };
+    data.riskId = Tabulator.findTable('#risks__table')[0].getSelectedData()[0].riskId;
+    data.riskName.threatAgentDetail = tinymce.get('risk__threatAgent__rich-text').getContent();
+    data.riskName.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
+    data.riskName.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
+    data.riskLikelihood.riskLikelihoodDetail = tinymce.get('risk__likelihood__details').getContent();
+    window.validate.risks(data);
   };
 
   const validateVulnerabilities = () => {
@@ -100,6 +113,9 @@ const validateTabs = (tab) => {
       break;
     case 'supporting-assets':
       validateSupportingAsset();
+      break;
+    case 'risks':
+      validateRisks();
       break;
     case 'vulnerabilities':
       validateVulnerabilities();
