@@ -27,6 +27,7 @@
     try {
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData;
+    $('#vulnerabilities').append(result[0]);
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     
 
@@ -106,7 +107,6 @@
         if(isVulnerabilityExist){
             const vulnerabilities = await window.validate.vulnerabilities(vulnerability);
             vulnerabilitiesData = vulnerabilities;
-            console.log(vulnerabilitiesData)
         }  
     };
 
