@@ -97,7 +97,6 @@ tbody {
 
 #risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(n+2)  td:nth-of-type(n+2) {
     font-weight: bold;
-    visibility: hidden;
 }
 
 #risks__vulnerability__evaluation div{

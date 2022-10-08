@@ -132,7 +132,7 @@
 
     // update riskLikelihood occurrence-threatFactor table
     const updateOccurrenceThreatFactorTable = (threatFactorLevel, occurrenceLevel) =>{
-      $('#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(n+2)  td:nth-of-type(n+2)').css('visibility', 'hidden');
+      $('#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(n+2)  td:nth-of-type(n+2) span').css('visibility', 'hidden');
       $('.occurrence').css('font-weight', 'normal');
       $('.threatFactor').css('font-weight', 'normal');
 
@@ -141,7 +141,7 @@
       let col = $(`td[data-factor="${threatFactorLevel}"]`).attr('data-col');
       let row = $(`td[data-occurrence="${occurrenceLevel}"]`).attr('data-row');
 
-      if(col && row) $(`#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(${parseInt(row) + 1})  td:nth-of-type(${parseInt(col) + 1})`).css('visibility', 'visible');
+      if (col && row) $(`#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(${parseInt(row) + 1})  td:nth-of-type(${parseInt(col) + 1}) span`).css('visibility', 'visible');
     };
 
     // update risk impact evaluation table
