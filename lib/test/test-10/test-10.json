@@ -16,7 +16,8 @@
         "projectDescriptionAttachment": "",
         "securityProjectObjectives": "",
         "securityOfficerObjectives": "",
-        "securityAssumptions": ""
+        "securityAssumptions": "",
+        "useNewDecode": true
     },
     "BusinessAsset": [],
     "SupportingAssetsDesc": "",
