@@ -117,10 +117,11 @@
         deleteButton.innerText = 'Delete';
 
         addButton.addEventListener('click', async ()=>{
-          const vulnerabilityRef = await window.risks.addRiskVulnerabilityRef();
+          const vulnerabilityRef = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
           addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions);
-          risksData = risks;
+          // risksData = risks;
         });
+
         deleteButton.addEventListener('click', ()=>{
           alert(`Delete vulnerability from attack path ${riskAttackPathId}`);
         });
@@ -646,7 +647,7 @@
     /**
     * 
     * 
-    * Risk evaluation
+    * Vulnerability evaluation
     * 
     * 
  */

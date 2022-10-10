@@ -43,8 +43,8 @@
     }
 
     const updateSupportingAsset = (id, field, value) => {
-      window.supportingAssets.updateSupportingAsset(id, field, value);
       if (field === 'businessAssetRef') validate(id, value);
+      else window.supportingAssets.updateSupportingAsset(id, field, value);
     };
 
     // cell edited callback function
