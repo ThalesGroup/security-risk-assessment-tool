@@ -331,7 +331,7 @@ const {
   removeFile,
   saveAsFile,
   decodeFile, 
-} = require('../../../lib/src/model/classes/utility');
+} = require('../../../lib/src/api/utility');
 
 // Welcome Tab
 const {
@@ -339,8 +339,8 @@ const {
   deleteTrackingRow,
   updateTrackingRow,
   validateISRAmeta,
-} = require('../../../lib/src/model/classes/ISRAProject/handler-event');
-const { renderWelcome } = require('../../../lib/src/model/classes/ISRAProject/render-welcome');
+} = require('../../../lib/src/api/ISRAProject/handler-event');
+const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
 
 ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
@@ -355,8 +355,8 @@ ipcMain.on('validate:welcome', (event, arr) => {
 // Project Context Tab
 const {
   validateProjectContext,
-} = require('../../../lib/src/model/classes/ISRAProjectContext/handler-event');
-const { renderProjectContext } = require('../../../lib/src/model/classes/ISRAProjectContext/render-project-context');
+} = require('../../../lib/src/api/ISRAProjectContext/handler-event');
+const { renderProjectContext } = require('../../../lib/src/api/ISRAProjectContext/render-project-context');
 
 /**
   * projectContextFileName: holds name of project descriptive document
@@ -443,8 +443,8 @@ ipcMain.on('validate:projectContext', (event, arr) => {
 // Business Assets Tab
 const {
   addBusinessAsset, deleteBusinessAsset, validateBusinessAsset, updateBusinessAsset,
-} = require('../../../lib/src/model/classes/BusinessAsset/handler-event');
-const { renderBusinessAssets } = require('../../../lib/src/model/classes/BusinessAsset/render-business-assets');
+} = require('../../../lib/src/api/Business Asset/handler-event');
+const { renderBusinessAssets } = require('../../../lib/src/api/Business Asset/render-business-assets');
 
 ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
 ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject, getMainWindow()));
@@ -461,8 +461,8 @@ ipcMain.on('validate:businessAssets', (event, arr) => {
 // Supporting Assets Tab
 const {
   addSupportingAsset, deleteSupportingAsset, updateSupportingAsset, validateSupportingAssets, addBusinessAssetRef, deleteBusinessAssetRef, updateBusinessAssetRef
-} = require('../../../lib/src/model/classes/SupportingAsset/handler-event');
-const { renderSupportingAssets } = require('../../../lib/src/model/classes/SupportingAsset/render-supporting-assets');
+} = require('../../../lib/src/api/Supporting Asset/handler-event');
+const { renderSupportingAssets } = require('../../../lib/src/api/Supporting Asset/render-supporting-assets');
 
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
 ipcMain.handle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
@@ -480,8 +480,8 @@ ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => de
 ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index));
 
 // Risks Tab
-const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, addRiskAttackPath, deleteRiskAttackPath, addVulnerabilityRef, deleteVulnerabilityRef, isRiskExist, validateRisks } = require('../../../lib/src/model/classes/Risk/handler-event');
-const { renderRisks } = require('../../../lib/src/model/classes/Risk/render-risks');
+const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, addRiskAttackPath, deleteRiskAttackPath, addVulnerabilityRef, deleteVulnerabilityRef, isRiskExist, validateRisks } = require('../../../lib/src/api/Risk/handler-event');
+const { renderRisks } = require('../../../lib/src/api/Risk/render-risks');
 
 ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
@@ -499,8 +499,8 @@ ipcMain.handle('risks:isRiskExist', (event, id) => isRiskExist(israProject, id))
 ipcMain.handle('validate:risks', (event, currentRisk) => validateRisks(israProject, currentRisk));
 
 // Vulnerability Tab
-const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/model/classes/Vulnerability/handler-event')
-const { renderVulnerabilities } = require('../../../lib/src/model/classes/Vulnerability/render-vulnerabilities');
+const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/api/Vulnerability/handler-event')
+const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));
