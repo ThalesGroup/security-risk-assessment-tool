@@ -117,9 +117,10 @@
         deleteButton.innerText = 'Delete';
 
         addButton.addEventListener('click', async ()=>{
-          const vulnerabilityRef = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
-          addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions);
-          // risksData = risks;
+          const [vulnerabilityRef, risks] = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
+          if (vulnerabilityRef.rowId > 1) div.append('<p>AND</p>');
+          addVulnerabilityRef([vulnerabilityRef], div, vulnerabilityOptions);
+          risksData = risks;
         });
 
         deleteButton.addEventListener('click', ()=>{
@@ -293,7 +294,6 @@
     const validatePreviousRisk = async (id) => {
       let risk = risksData.find((risk) => risk.riskId === id);
       const isRiskExist = await window.risks.isRiskExist(risk.riskId);
-      console.log(isRiskExist)
 
       if (isRiskExist) {
         const risks = await window.validate.risks(risk);
