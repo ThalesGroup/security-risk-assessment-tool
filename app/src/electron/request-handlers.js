@@ -477,7 +477,7 @@ ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
 });
 ipcMain.on('supportingAssets:addBusinessAssetRef', (event, id, value) => addBusinessAssetRef(israProject, id, value));
 ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => deleteBusinessAssetRef(israProject, id, indexes, getMainWindow()));
-ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index));
+ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index, getMainWindow()));
 
 // Risks Tab
 const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, addRiskAttackPath, deleteRiskAttackPath, addVulnerabilityRef, deleteVulnerabilityRef, isRiskExist, validateRisks } = require('../../../lib/src/api/Risk/handler-event');

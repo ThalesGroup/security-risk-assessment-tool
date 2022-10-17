@@ -89,9 +89,9 @@
       prevOption();
 
       // change in selected option due to user input
-      $(newSelect).on('change', async (e) => {
+      $(newSelect).on('change', (e) => {
         // prevOption();
-        await window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
+        window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
       });
