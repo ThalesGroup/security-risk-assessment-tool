@@ -68,13 +68,14 @@
     };
 
     // add vulnerability ref
-    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, refcount) => {
+    const addVulnerabilityRef = (refs, div, vulnerabilityOptions) => {
       refs.forEach((ref, i) => {
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
+        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`)
 
-        if (i > 0 || refcount > 1) div.append('<p>AND</p>');
+        // if (i > 0) div.append('<p>AND</p>');
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -86,6 +87,7 @@
 
         let select = $('<select>').append(vulnerabilityOptions);
         vulnerabilityDiv.append(select);
+        vulnerabilityDiv.append('<span style="margin-left: 10px" class="and">AND<span>')
 
         div.append(vulnerabilityDiv);
         select.val(ref.vulnerabilityIdRef);
@@ -100,11 +102,13 @@
       });
 
       riskAttackPaths.forEach((path, i) =>{
-        if(i > 0) $('#risks__vulnerability__attack__path').append('<p>OR</p>');
         const {riskAttackPathId, vulnerabilityRef, attackPathScore} = path;
+        if (i > 0 || riskAttackPathId > 1) $('#risks__vulnerability__attack__path').append('<p style="margin-left: 18px">OR</p>');
         
         const mainDiv = $('<div>');
         mainDiv.css('padding', '0');
+        mainDiv.attr('class', 'attackpathsections')
+        mainDiv.attr('id', `attackpath_${riskAttackPathId}`);
 
         // add checkbox
         const checkbox = document.createElement('input');
@@ -115,7 +119,20 @@
         mainDiv.append(checkbox);
 
         // add div
-        let div = $("<div>").append(`<p>Attack Path ${riskAttackPathId}</p><p>scoring: ${attackPathScore === null ? '' : attackPathScore}<p>`).css('background-color', 'rgb(183, 183, 183)');
+        let div = $("<div>").append(`
+          <div style="width:100%;">
+            <div style="width:49%; display:inline-block; padding:0">
+              <span>Attack Path ${riskAttackPathId}</span>
+            </div>
+            <div style="text-align:right; width:48%; display:inline-block; padding:0; padding-right:10px">
+              <span>scoring: ${attackPathScore === null ? '' : attackPathScore}<span>
+            </div>
+          </div>
+        `).css('background-color', 'rgb(183, 183, 183)');
+        div.css('width', '100%');
+        div.css('margin-left', '20px');
+        div.attr('id', `risk_attack_path_${riskAttackPathId}`);
+        div.attr('class', `risk_attack_paths`);
         const addDeleteDiv = $('<div>');
         addDeleteDiv.addClass('add-delete-container');
         const addButton = document.createElement('button');
@@ -125,22 +142,23 @@
         deleteButton.className = 'addDelete';
         deleteButton.innerText = 'Delete';
 
+        // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
           const [count, ref, risks] = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
-          addVulnerabilityRef([ref], div, vulnerabilityOptions, count);
+          // if (count > 1) div.append('<p>AND</p>');
+          addVulnerabilityRef([ref], div, vulnerabilityOptions);
           risksData = risks;
         });
 
+        // delete vulnerabilityRef
         deleteButton.addEventListener('click', ()=>{
           const checkboxes = document.getElementsByName('risks__vulnerability__checkboxes');
-   
+
           checkboxes.forEach(async (box) => {
             if (box.checked) {
               const risks = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
               risksData = risks;
-              $(`input[data-row-id=${box['data-row-id']}]`).parent().prev().remove();
               box.parentElement.remove();
-              // remove and before
             }
           });
         });

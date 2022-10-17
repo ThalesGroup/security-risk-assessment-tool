@@ -112,3 +112,15 @@ label {
 .table {
     grid-template-columns: auto;
 }
+
+.attackpathsections {
+    display: flex;
+}
+
+input[name="risks__attack__path__checkboxes"]{
+    position: absolute;
+}
+
+.risk_attack_paths div:nth-child(3) .and {
+    visibility: hidden;
+}
