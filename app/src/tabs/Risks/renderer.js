@@ -68,7 +68,7 @@
     };
 
     // add vulnerability ref
-    const addVulnerabilityRef = (refs, div, vulnerabilityOptions) => {
+    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
       refs.forEach((ref, i) => {
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
@@ -86,6 +86,11 @@
         vulnerabilityDiv.append(checkbox);
 
         let select = $('<select>').append(vulnerabilityOptions);
+        select.on('change', async (e)=> {
+          const { value } = e.target;
+          const risks = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
+          risksData = risks;
+        });
         vulnerabilityDiv.append(select);
         vulnerabilityDiv.append('<span style="margin-left: 10px" class="and">AND<span>')
 
@@ -146,7 +151,7 @@
         addButton.addEventListener('click', async ()=>{
           const [count, ref, risks] = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
           // if (count > 1) div.append('<p>AND</p>');
-          addVulnerabilityRef([ref], div, vulnerabilityOptions);
+          addVulnerabilityRef([ref], div, vulnerabilityOptions, riskAttackPathId);
           risksData = risks;
         });
 
@@ -170,7 +175,7 @@
         mainDiv.append(div);
         $('#risks__vulnerability__attack__path').append(mainDiv);
 
-        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions);
+        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions, riskAttackPathId);
       });
     };
 

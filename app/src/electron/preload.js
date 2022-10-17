@@ -92,6 +92,7 @@ contextBridge.exposeInMainWorld('risks', {
   updateRiskImpact: (id, field, value) => ipcRenderer.invoke('risks:updateRiskImpact', id, field, value),
   addRiskAttackPath: (riskId) => ipcRenderer.invoke('risks:addRiskAttackPath', riskId),
   deleteRiskAttackPath: (riskId, ids) => ipcRenderer.invoke('risks:deleteRiskAttackPath', riskId, ids),
+  updateRiskAttackPath: (riskId, riskAttackPathId, rowid, field, value) => ipcRenderer.invoke('risks:updateRiskAttackPath', riskId, riskAttackPathId, rowid, field, value),
   addRiskVulnerabilityRef: (riskId, riskAttackPathId) => ipcRenderer.invoke('risks:addRiskVulnerabilityRef', riskId, riskAttackPathId),
   deleteRiskVulnerabilityRef: (riskId, riskAttackPathId, ids) => ipcRenderer.invoke('risks:deleteRiskVulnerabilityRef', riskId, riskAttackPathId, ids),
   isRiskExist: (id) => ipcRenderer.invoke('risks:isRiskExist', id)
