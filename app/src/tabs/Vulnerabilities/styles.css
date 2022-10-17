@@ -135,3 +135,7 @@ span{
 .High {
     color: red;
 }
+
+.table {
+    grid-template-columns: auto;
+}

@@ -28,6 +28,14 @@
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData;
     $('#vulnerabilities').append(result[0]);
+    result[1].columns[0].formatter = (cell) => {
+        const vulnerabililityId = cell.getRow().getIndex();
+        if (vulnerabililityId) {
+            return `
+        <input type="checkbox" name="vulnerabilties__table__checkboxes" value="${vulnerabililityId}" id="vulnerabilties__table__checkboxes__${vulnerabililityId}"/>
+    `;
+        }
+    };
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     
 
@@ -125,12 +133,12 @@
         styleTable(vulnerability.vulnerabilityId, vulnerability.overallLevel);
 
         // add checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = `${vulnerability.vulnerabilityId}`;
-        checkbox.id = `vulnerabilties__table__checkboxes__${vulnerability.vulnerabilityId}`;
-        checkbox.name = 'vulnerabilties__table__checkboxes';
-        $('#vulnerabilties__table__checkboxes').append(checkbox);
+        // const checkbox = document.createElement('input');
+        // checkbox.type = 'checkbox';
+        // checkbox.value = `${vulnerability.vulnerabilityId}`;
+        // checkbox.id = `vulnerabilties__table__checkboxes__${vulnerability.vulnerabilityId}`;
+        // checkbox.name = 'vulnerabilties__table__checkboxes';
+        // $('#vulnerabilties__table__checkboxes').append(checkbox);
     };
 
     const updateSupportingAssets = (supportingAssets) =>{
@@ -201,7 +209,7 @@
             const index = vulnerabilitiesData.findIndex(object => {
                 return object.vulnerabilityId === id;
             });
-            $(`#vulnerabilties__table__checkboxes__${id}`).remove();
+            // $(`#vulnerabilties__table__checkboxes__${id}`).remove();
             vulnerabilitiesTable.getRow(Number(id)).delete();
   
             vulnerabilitiesData.splice(index, 1);

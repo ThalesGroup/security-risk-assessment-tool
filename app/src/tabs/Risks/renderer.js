@@ -25,6 +25,14 @@
 (async () => {
   try {
     const result = await window.render.risks();
+    result[1].columns[0].formatter = (cell) => {
+      const riskId = cell.getRow().getIndex();
+      if (riskId) {
+        return `
+            <input type="checkbox" name="risks__table__checkboxes" value="${riskId}" id="risks__table__checkboxes__${riskId}"/>
+        `;
+      }
+    };
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
@@ -60,13 +68,13 @@
     };
 
     // add vulnerability ref
-    const addVulnerabilityRef = (refs, div, vulnerabilityOptions) => {
+    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, refcount) => {
       refs.forEach((ref, i) => {
-        if (i > 0) div.append('<p>AND</p>');
-
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
+
+        if (i > 0 || refcount > 1) div.append('<p>AND</p>');
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -119,8 +127,7 @@
 
         addButton.addEventListener('click', async ()=>{
           const [count, ref, risks] = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
-          if (count > 1) div.append('<p>AND</p>');
-          addVulnerabilityRef([ref], div, vulnerabilityOptions);
+          addVulnerabilityRef([ref], div, vulnerabilityOptions, count);
           risksData = risks;
         });
 
@@ -131,7 +138,9 @@
             if (box.checked) {
               const risks = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
               risksData = risks;
+              $(`input[data-row-id=${box['data-row-id']}]`).parent().prev().remove();
               box.parentElement.remove();
+              // remove and before
             }
           });
         });
@@ -335,12 +344,12 @@
         validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef);
 
         // add checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = `${riskId}`;
-        checkbox.id = `risks__table__checkboxes__${riskId}`;
-        checkbox.name = 'risks__table__checkboxes';
-        $('#risks__table__checkboxes').append(checkbox);
+        // const checkbox = document.createElement('input');
+        // checkbox.type = 'checkbox';
+        // checkbox.value = `${riskId}`;
+        // checkbox.id = `risks__table__checkboxes__${riskId}`;
+        // checkbox.name = 'risks__table__checkboxes';
+        // $('#risks__table__checkboxes').append(checkbox);
       // });
     };
 
@@ -356,7 +365,7 @@
           return object.riskId === id;
         });
 
-        $(`#risks__table__checkboxes__${id}`).remove();
+        // $(`#risks__table__checkboxes__${id}`).remove();
         risksTable.getRow(Number(id)).delete();
 
         // update risksData`
@@ -373,7 +382,7 @@
 
     const updateRisksFields = (fetchedData) => {
       risksTable.clearData();
-      $('#risks__table__checkboxes').empty();
+      // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
 
@@ -384,6 +393,7 @@
           addSelectedRowData(riskId)
         }
       });
+      
     };
 
     // add Risk button

@@ -31,3 +31,7 @@
     flex-direction:row;
     padding-top: 10px;
 }
+
+.table {
+    grid-template-columns: auto;
+}

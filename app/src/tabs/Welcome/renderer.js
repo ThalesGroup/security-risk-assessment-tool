@@ -28,6 +28,14 @@
   try {
     const result = await window.render.welcome();
     $('#welcome').append(result[0]);
+    result[1].columns[0].formatter = (cell) => {
+      const id = cell.getRow().getIndex();
+      if (id) {
+        return `
+            <input type="checkbox" name="welcome__isra-meta-tracking-checkbox" value="${id}" id="welcome__isra-meta-tracking-checkbox${id}"/>
+        `;
+      }
+    };
     const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
 
     const appVersion = (value) => {
@@ -62,12 +70,12 @@
       checkbox.value = `${tracking.trackingIteration}`;
       checkbox.id = `welcome__isra-meta-tracking-checkbox${tracking.trackingIteration}`;
       checkbox.name = 'welcome__isra-meta-tracking-checkbox';
-      $('#welcome__isra-meta-tracking-checkboxes').append(checkbox);
+      // $('#welcome__isra-meta-tracking-checkboxes').append(checkbox);
     };
 
     const iterationsHistory = (arr) => {
       trackingtable.clearData();
-      $('#welcome__isra-meta-tracking-checkboxes').empty();
+      // $('#welcome__isra-meta-tracking-checkboxes').empty();
 
       arr.forEach((tracking) => {
         addTrackingRow(tracking);

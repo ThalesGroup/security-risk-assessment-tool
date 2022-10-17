@@ -102,3 +102,13 @@ tbody {
 #risks__vulnerability__evaluation div{
     padding: 10px;
 }
+
+label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.table {
+    grid-template-columns: auto;
+}

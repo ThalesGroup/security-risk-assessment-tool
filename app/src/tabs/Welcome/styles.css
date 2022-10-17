@@ -49,3 +49,6 @@
     width: 80%;
 }
 
+.table {
+    grid-template-columns: auto;
+}

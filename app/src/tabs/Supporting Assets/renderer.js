@@ -53,6 +53,15 @@
       updateSupportingAsset(id, cell.getField(), cell.getValue());
       $(`${matrixTable}-${id} td`).first().html(cell.getValue());
     };
+
+    result[1].columns[0].formatter = (cell) => {
+      const id = cell.getRow().getIndex();
+      if (id) {
+        return `
+            <input type="checkbox" name="supporting-assets__section-checkbox" value="${id}" id="supporting-assets__section-checkbox${id}"/>
+        `;
+      }
+    };
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
     const addBusinessAsset = (id, ref, index) => {
@@ -149,12 +158,12 @@
       supportingAssetsTable.addData(assets);
       assets.forEach((asset) => {
         const id = asset.supportingAssetId;
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = `${id}`;
-        checkbox.id = `supporting-assets__section-checkbox${id}`;
-        checkbox.name = 'supporting-assets__section-checkbox';
-        $('#supporting-assets__section-checkboxes').append(checkbox);
+        // const checkbox = document.createElement('input');
+        // checkbox.type = 'checkbox';
+        // checkbox.value = `${id}`;
+        // checkbox.id = `supporting-assets__section-checkbox${id}`;
+        // checkbox.name = 'supporting-assets__section-checkbox';
+        // $('#supporting-assets__section-checkboxes').append(checkbox);
 
         addMatrixRow(id, asset.supportingAssetName);
         asset.businessAssetRef.forEach((ref, index) => {
@@ -169,7 +178,7 @@
     const supportingAssetTable = (supportingAssets, businessAssets) => {
       // clear list of supporting assets table
       supportingAssetsTable.clearData();
-      $('#supporting-assets__section-checkboxes').empty();
+      // $('#supporting-assets__section-checkboxes').empty();
 
       // clear relationship matrix
       $(`${matrixTable} tbody`).empty();
