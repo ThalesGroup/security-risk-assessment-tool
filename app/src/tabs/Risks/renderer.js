@@ -73,7 +73,7 @@
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
-        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`)
+        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`);
 
         // if (i > 0) div.append('<p>AND</p>');
 
@@ -90,13 +90,13 @@
         vulnerabilityDiv.append('<span style="margin-left: 10px" class="and">AND<span>')
 
         div.append(vulnerabilityDiv);
-        select.val(ref.vulnerabilityIdRef);
+        select.val(!ref.vulnerabilityIdRef ? '' : ref.vulnerabilityIdRef);
       });
     };
 
     // add Vulnerabilities evaluation section
     const addVulnerabilitySection = (riskAttackPaths) =>{
-      let vulnerabilityOptions = '';
+      let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.forEach((v)=>{
         vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
       });
