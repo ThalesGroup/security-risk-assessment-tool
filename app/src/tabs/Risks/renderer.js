@@ -580,7 +580,7 @@
       const intrusionDetection = $('#risk__intrusionDetection').find(":selected").val();
       const id = getCurrentRiskId();
 
-      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
         skillLevel: skillLevel,
         reward: reward,
         accessResources: accessResources,
@@ -589,6 +589,7 @@
       });
       const riskData = risksData.find((risk)=> risk.riskId === id);
       riskData.riskLikelihood = riskLikelihood;
+      $('#inherent_risk_score').text(inherentRiskScore);
 
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
@@ -610,9 +611,10 @@
       await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
-      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
+      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
       const riskData = risksData.find((risk)=> risk.riskId === id);
       riskData.riskLikelihood = riskLikelihood;
+      $('#inherent_risk_score').text(inherentRiskScore);
 
       setSecurityPropertyValues(riskLikelihood);  
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
@@ -620,7 +622,8 @@
 
     $('#risk__likelihood').on('change', async ()=>{
       const riskLikelihood = $('#risk__likelihood').find(":selected").val();
-      await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood); 
+      const { inherentRiskScore } = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood);
+      $('#inherent_risk_score').text(inherentRiskScore); 
     });
 
     // trigger owasp likelihood evaluation section
@@ -630,9 +633,10 @@
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
       await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihoodPrevValue);
-      const riskLikelihood = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'isOWASPLikelihood', true);
+      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'isOWASPLikelihood', true);
       const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
       riskData.riskLikelihood = riskLikelihood;
+      $('#inherent_risk_score').text(inherentRiskScore);
     });
 
     $('#risk__skillLevel').on('change', ()=>{
@@ -658,9 +662,10 @@
     $('#risk__occurrence').on('change', async ()=>{
       const selected = $('#risk__occurrence').find(":selected").val();
       const id = getCurrentRiskId();
-      const riskLikelihood = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
+      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+      $('#inherent_risk_score').text(inherentRiskScore);
     });
 
     // Risk Impact
@@ -668,6 +673,7 @@
       const risk = await window.risks.updateRiskImpact(getCurrentRiskId(), field, value);
       const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
       riskData.riskImpact = risk.riskImpact;
+      $('#inherent_risk_score').text(risk.inherentRiskScore);
 
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };

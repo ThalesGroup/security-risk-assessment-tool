@@ -492,8 +492,8 @@ ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
 ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
   updateRiskName(israProject, getMainWindow(), id, field, value);
 });
-ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
-ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
+ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value, getMainWindow()));
+ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value, getMainWindow()));
 ipcMain.handle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId, getMainWindow()));
 ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids, getMainWindow()));
 ipcMain.handle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value, getMainWindow()));
