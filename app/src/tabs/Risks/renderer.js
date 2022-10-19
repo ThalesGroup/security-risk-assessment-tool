@@ -86,10 +86,9 @@
         vulnerabilityDiv.append(checkbox);
 
         let select = $('<select>').append(vulnerabilityOptions);
-        select.on('change', async (e)=> {
+        select.on('change', (e)=> {
           const { value } = e.target;
-          const risks = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
-          risksData = risks;
+          window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
         });
         vulnerabilityDiv.append(select);
         vulnerabilityDiv.append('<span style="margin-left: 10px" class="and">AND<span>')
@@ -713,7 +712,7 @@
       risksData = risks;
     });
 
-    // refresh businessAsset & supportingAsset Data
+    // reload risks
     window.risks.load(async (event, data) => {
       const fetchedData = await JSON.parse(data);
       risksData = fetchedData.Risk;
