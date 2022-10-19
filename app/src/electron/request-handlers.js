@@ -40,7 +40,7 @@ const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-pro
 /**
   * israProject: holds current class for project
 */
-let israProject;
+let israProject, browserTitle = 'ISRA Risk Assessment';
 
 /**
   * every time you want the main window, call this function.
@@ -61,6 +61,7 @@ const newISRAProject = (win, app) => {
       israProject = new ISRAProject();
       DataNew(israProject);
     };
+    getMainWindow().title = browserTitle;
     win.webContents.send('project:load', israProject.toJSON());
   } catch (err) {
     console.log(err);
@@ -135,7 +136,7 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
     try {
       await DataStore(israProject, filePath);
       jsonFilePath = filePath;
-      getMainWindow().title = filePath;
+      getMainWindow().title = browserTitle;
       dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${filePath}` });
     } catch (err) {
       console.log(err);
@@ -254,7 +255,8 @@ const loadJSONFile = async (win, filePath) => {
     await DataLoad(israProject, filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
-    getMainWindow().title = `ISRA Risk Asessment - ${filePath}`;
+    browserTitle = `ISRA Risk Assessment - ${filePath}`;
+    getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
@@ -271,7 +273,8 @@ const loadXMLFile = (win, filePath) => {
     israProject = XML2JSON(filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = '';
-    getMainWindow().title = `ISRA Risk Asessment - ${filePath}`;
+    browserTitle = `ISRA Risk Assessment - ${filePath}`;
+    getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
