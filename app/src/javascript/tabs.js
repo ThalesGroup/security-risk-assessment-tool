@@ -83,22 +83,28 @@ const validateTabs = (tab) => {
       riskName: {},
       riskLikelihood: {}
     };
-    data.riskId = Tabulator.findTable('#risks__table')[0].getSelectedData()[0].riskId;
-    data.riskName.threatAgentDetail = tinymce.get('risk__threatAgent__rich-text').getContent();
-    data.riskName.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
-    data.riskName.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
-    data.riskLikelihood.riskLikelihoodDetail = tinymce.get('risk__likelihood__details').getContent();
-    window.validate.risks(data);
+    const selectedTableData = Tabulator.findTable('#risks__table')[0].getSelectedData()[0];
+    if (selectedTableData){
+      data.riskId = selectedTableData.riskId;
+      data.riskName.threatAgentDetail = tinymce.get('risk__threatAgent__rich-text').getContent();
+      data.riskName.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
+      data.riskName.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
+      data.riskLikelihood.riskLikelihoodDetail = tinymce.get('risk__likelihood__details').getContent();
+      window.validate.risks(data);
+    }
   };
 
   const validateVulnerabilities = () => {
     let data = {};
-    data.vulnerabilityId = Tabulator.findTable('#vulnerabilties__table')[0].getSelectedData()[0].vulnerabilityId;
-    data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
-    data.vulnerabilityDescription = tinymce.get('vulnerability__details').getContent();
-    data.vulnerabilityCVE = $('input[name="vulnerability__CVE"]').val();
-    data.vulnerabilityFamily = $('select[name="vulnerability__family"]').val();
-    window.validate.vulnerabilities(data);
+    const selectedTableData = Tabulator.findTable('#vulnerabilties__table')[0].getSelectedData()[0];
+    if (selectedTableData){
+      data.vulnerabilityId = selectedTableData.vulnerabilityId;
+      data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
+      data.vulnerabilityDescription = tinymce.get('vulnerability__details').getContent();
+      data.vulnerabilityCVE = $('input[name="vulnerability__CVE"]').val();
+      data.vulnerabilityFamily = $('select[name="vulnerability__family"]').val();
+      window.validate.vulnerabilities(data);
+    }
   };
 
   switch (tab) {

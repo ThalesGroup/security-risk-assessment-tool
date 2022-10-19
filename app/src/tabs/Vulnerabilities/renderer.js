@@ -172,6 +172,7 @@
     const loadVulnerabilities = async (data) =>{
         const fetchedData = await JSON.parse(data);
         vulnerabilitiesData = fetchedData.Vulnerability;
+        if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
         updateSupportingAssets(fetchedData.SupportingAsset);
         updateVulnerabilityFields(vulnerabilitiesData);
     };
@@ -213,10 +214,13 @@
             vulnerabilitiesTable.getRow(Number(id)).delete();
   
             vulnerabilitiesData.splice(index, 1);
-            // vulnerabilitiesData.forEach((v)=>{
-            //     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-            // });
-            if (vulnerabilitiesData[0]) addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
+            if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
+            else {
+                vulnerabilitiesData.forEach((v) => {
+                    vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+                });
+                addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
+            }
         });
     };
 

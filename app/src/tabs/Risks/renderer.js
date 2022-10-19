@@ -339,7 +339,7 @@
       updateEvaluationTable(riskImpact, businessAssetRef);
       addVulnerabilitySection(riskAttackPaths);
       $('#all_attack_paths_score').text(allAttackPathsScore);
-      $('#inherent_risk_score').text(allAttackPathsScore);
+      $('#inherent_risk_score').text(inherentRiskScore);
     };
 
     const validatePreviousRisk = async (id) => {
@@ -418,15 +418,14 @@
       // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
-
+      
       fetchedData.forEach((risk, i) => {
         addRisk(risk);
-        if(i===0) {
-          const {riskId} = risk;
+        if (i === 0) {
+          const { riskId } = risk;
           addSelectedRowData(riskId)
         }
       });
-      
     };
 
     // add Risk button
@@ -492,6 +491,7 @@
 
         const fetchedData = await JSON.parse(data);
         risksData = fetchedData.Risk;
+        if (risksData.length === 0) $('#risks section').hide();
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
         updateRisksFields(risksData);
@@ -704,10 +704,8 @@
     * 
  */
     // add Risk attack path button
-    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
-      const [ riskAttackPath, risks ] = await window.risks.addRiskAttackPath(getCurrentRiskId());
-      addVulnerabilitySection(riskAttackPath);
-      risksData = risks;
+    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', () => {
+      window.risks.addRiskAttackPath(getCurrentRiskId());
     });
 
     // delete Risk attack path button
