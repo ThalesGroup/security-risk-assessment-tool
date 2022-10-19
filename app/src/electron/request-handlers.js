@@ -492,7 +492,7 @@ ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
 ipcMain.handle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId));
-ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
+ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids, getMainWindow()));
 ipcMain.handle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value, getMainWindow()));
 ipcMain.handle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId) => addVulnerabilityRef(israProject, riskId, riskAttackPathId, getMainWindow()));
 ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids, getMainWindow()));
@@ -504,7 +504,7 @@ const { addVulnerability, deleteVulnerability, updateVulnerability, validateVuln
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
-ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids));
+ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));
 ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
   return updateVulnerability(israProject, id, field, value);
 });

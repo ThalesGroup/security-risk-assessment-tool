@@ -21,6 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
 /* global $ tinymce Tabulator */
 (async () => {
   try {
@@ -158,11 +159,9 @@
         deleteButton.addEventListener('click', ()=>{
           const checkboxes = document.getElementsByName('risks__vulnerability__checkboxes');
 
-          checkboxes.forEach(async (box) => {
+          checkboxes.forEach((box) => {
             if (box.checked) {
-              const risks = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
-              risksData = risks;
-              box.parentElement.remove();
+              window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
             }
           });
         });
@@ -268,7 +267,16 @@
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
       risksTable.selectRow(id);
-      const {riskId, riskName, allAttackPathsName, riskAttackPaths, riskLikelihood, riskImpact} = risksData.find((risk) => risk.riskId === id);
+      const {
+        riskId,
+        riskName,
+        allAttackPathsName,
+        allAttackPathsScore,
+        inherentRiskScore,
+        riskAttackPaths,
+        riskLikelihood,
+        riskImpact
+      } = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
         threatAgentDetail, 
@@ -315,7 +323,6 @@
       // Set Risk evaluation data
       // risk likelihood
       $('#risks__vulnerability__attack__path').empty();
-      addVulnerabilitySection(riskAttackPaths);
       setSecurityPropertyValues(riskLikelihood);
       updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
       tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
@@ -327,8 +334,12 @@
         $('#risk__simple__evaluation').show();
         $('#risk__likehood__table').hide();
       }
+
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
+      addVulnerabilitySection(riskAttackPaths);
+      $('#all_attack_paths_score').text(allAttackPathsScore);
+      $('#inherent_risk_score').text(allAttackPathsScore);
     };
 
     const validatePreviousRisk = async (id) => {
@@ -700,16 +711,13 @@
     });
 
     // delete Risk attack path button
-    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', async () => {
+    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', () => {
       const checkedRiskAttackPaths = [];
       const checkboxes = document.getElementsByName('risks__attack__path__checkboxes');
       checkboxes.forEach((box) => {
         if (box.checked) checkedRiskAttackPaths.push(Number(box.value));
       });
-      const [riskAttackPaths, risks] = await window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
-      $(`#risks__vulnerability__attack__path`).empty();
-      addVulnerabilitySection(riskAttackPaths);
-      risksData = risks;
+      window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
     });
 
     // reload risks
