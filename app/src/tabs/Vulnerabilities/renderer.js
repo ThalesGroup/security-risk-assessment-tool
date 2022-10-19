@@ -26,7 +26,7 @@
 (async () => {
     try {
     const result = await window.render.vulnerabilities();
-    let vulnerabilitiesData;
+    let vulnerabilitiesData, supportingAssetsData;
     $('#vulnerabilities').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
         const vulnerabililityId = cell.getRow().getIndex();
@@ -57,6 +57,15 @@
         if (cveScore < 0 || cveScore > 10) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
+
+    const validateVulnerabilityName = (vulnerability) => {
+        const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability;
+        if (supportingAssetsData.length === 0 
+            || supportingAssetRef.length === 0
+            || vulnerabilityDescription === '' 
+            || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#FF0000';
+        else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#000000';
+    };
 
     const updateVulnerabilityFields = (vulnerabilities) => {
         vulnerabilitiesTable.clearData();
@@ -131,7 +140,7 @@
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
         styleTable(vulnerability.vulnerabilityId, vulnerability.overallLevel);
-
+        validateVulnerabilityName(vulnerability);
         // add checkbox
         // const checkbox = document.createElement('input');
         // checkbox.type = 'checkbox';
@@ -155,8 +164,10 @@
             checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
             checkbox.name = 'refs__checkboxes';
             checkbox.addEventListener('change', async (e) =>{
-                if (e.target.checked) await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
-                else await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
+                let vulnerability;
+                if (e.target.checked) vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
+                else vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
+                validateVulnerabilityName(vulnerability);
             })
             div.append(checkbox);
 
@@ -172,6 +183,7 @@
     const loadVulnerabilities = async (data) =>{
         const fetchedData = await JSON.parse(data);
         vulnerabilitiesData = fetchedData.Vulnerability;
+        supportingAssetsData = fetchedData.SupportingAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
         updateSupportingAssets(fetchedData.SupportingAsset);
         updateVulnerabilityFields(vulnerabilitiesData);
@@ -192,6 +204,7 @@
                         //console.log(e.target.id)
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
+                        validateVulnerabilityName(vulnerability);
                     });
                 }
             });
@@ -283,8 +296,9 @@
     });
 
     $('input[name="vulnerability__name"]').on('change', async (e)=> {
-        await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'vulnerabilityName', e.target.value);
+        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'vulnerabilityName', e.target.value);
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
+        validateVulnerabilityName(vulnerability);
     });
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{

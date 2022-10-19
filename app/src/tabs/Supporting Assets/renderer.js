@@ -48,7 +48,7 @@
     };
 
     // cell edited callback function
-    result[1].columns[2].cellEdited = (cell) => {
+    result[1].columns[3].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
       updateSupportingAsset(id, cell.getField(), cell.getValue());
       $(`${matrixTable}-${id} td`).first().html(cell.getValue());
