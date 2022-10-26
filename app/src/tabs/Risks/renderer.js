@@ -289,25 +289,88 @@
     const addMitigationSection = (riskMitigations)=> {
       riskMitigations.forEach((mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
-        const mitigationSection = $('#risks__risk__mitigation__evaluation section:first-of-type');
+        const mitigationSection = $('#risks__risk__mitigation__evaluation .mitigations');
 
+        const section = $('<section>');
+        section.css('background-color', 'rgb(183, 183, 183)');
+
+        const topSection = $('<section>');
+        topSection.attr('class', 'top');
+        topSection.css('display', 'flex');
+        topSection.css('justify-content', 'space-evenly');
+        topSection.css('padding', '0');
+        topSection.css('margin', '0');
+        topSection.css('background-color', 'transparent');
+
+        // security control desc
+        const securityControlDescSection = $('<section>');
+        securityControlDescSection.css('background-color', 'transparent');
+        securityControlDescSection.css('margin', '0');
+        securityControlDescSection.css('padding', '5px');
         const textArea1 = $('<textArea>');
         textArea1.attr('class', 'rich-text');
         textArea1.attr('id', `security__control__desc__rich-text__${riskMitigationId}`);
         textArea1.attr('name', `security__control__desc__rich-text__${riskMitigationId}`);
-        mitigationSection.append('<p style="font-size: small; font-weight: bold; font-style: italic;">Security control Description</p>');
-        mitigationSection.append(textArea1);
-        addRichTextArea(`#security__control__desc__rich-text__${riskMitigationId}`, description, 400);
+        securityControlDescSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Security control Description</p>');
+        securityControlDescSection.append(textArea1);
+        
+        topSection.append(securityControlDescSection);
+        section.append(topSection);
+        mitigationSection.append(section);
+        addRichTextArea(`#security__control__desc__rich-text__${riskMitigationId}`, description, '100%');
 
-        const select = $();
+        // expected benefits
+        const benefitsSection = $('<section>');
+        benefitsSection.css('background-color', 'transparent');
+        benefitsSection.css('margin', '0');
+        benefitsSection.css('padding', '5px');
+        benefitsSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Expected benefits</p>');
+        // to get from schema
+        const expectedBenefitsOptions = {
+          1: '100%',
+          0.9: '90%',
+          0.75: '75%',
+          0.5: '50%',
+          0.25: '25%',
+          0.1: '10%'
+        };
 
-        const textArea2 = $('<textArea>');
-        textArea2.attr('class', 'rich-text');
-        textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
-        textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
-        mitigationSection.append('<p style="font-size: small; font-weight: bold; font-style: italic;">Decision Comment</p>');
-        mitigationSection.append(textArea2);
-        addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, 400);
+        const div = $('<div>');
+        for (const [key, value] of Object.entries(expectedBenefitsOptions)) {
+          const input = $('<input>');
+          input.attr('type', 'radio');
+          input.attr('name', `benefits__risk__mitigation__${riskMitigationId}`);
+          input.attr('id', value);
+          input.attr('value', key);
+          const label = $('<label>');
+          label.attr('id', value);
+          label.text(value);
+          div.append(input);
+          div.append(label);
+          div.append('<br>');
+        }
+        benefitsSection.append(div);
+
+        topSection.append(benefitsSection);
+        $(`input:radio[name=benefits__risk__mitigation__${riskMitigationId}]`).val([benefits]);
+       
+        // cost
+        const costSection = $('<section>');
+        costSection.css('background-color', 'transparent');
+        costSection.css('margin', '0');
+        costSection.css('padding', '5px');
+        costSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Estimated Cost (md)</p>');
+        costSection.append(`<input type="text" id="risk__mitigation__cost__${riskMitigationId}" name="risk__mitigation__cost__${riskMitigationId}" value="${cost == null ? '' : cost}">`);
+        topSection.append(costSection);
+        section.append(topSection);
+
+        // const textArea2 = $('<textArea>');
+        // textArea2.attr('class', 'rich-text');
+        // textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
+        // textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
+        // mitigationSection.append('<p style="font-size: small; font-weight: bold; font-style: italic;">Decision Comment</p>');
+        // mitigationSection.append(textArea2);
+        // addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, 400);
       });
     };
 
@@ -391,7 +454,7 @@
       $('#inherent_risk_score').text(inherentRiskScore);
 
       //risk mitigation
-      $('#risks__risk__mitigation__evaluation section:first-of-type').empty();
+      $('#risks__risk__mitigation__evaluation section').empty();
       addMitigationSection(riskMitigation);
       $('#mitigated_risk_score').text(mitigatedRiskScore);
     };
@@ -472,7 +535,7 @@
       // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
-      $('#risks__risk__mitigation__evaluation section:first-of-type').empty();
+      $('#risks__risk__mitigation__evaluation section').empty();
       
       fetchedData.forEach((risk, i) => {
         addRisk(risk);
