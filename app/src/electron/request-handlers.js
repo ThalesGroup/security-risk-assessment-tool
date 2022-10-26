@@ -334,6 +334,7 @@ const {
   removeFile,
   saveAsFile,
   decodeFile, 
+  useNewDecodeFileMethod
 } = require('../../../lib/src/api/utility');
 
 // Welcome Tab
@@ -551,12 +552,7 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         label: 'Save as',
         click: () => {
           const attachmentData = israProject.getVulnerability(id).vulnerabilityDescriptionAttachment;
-          const decodedBuffer = Buffer.from(attachmentData, 'base64');
-          const decodedFileNameSize = decodedBuffer.slice(0, 8).toString();
-          const fileName = decodedBuffer.slice(
-            8,
-            8 + parseInt(decodedFileNameSize, 10),
-          ).toString();
+          const fileName = useNewDecodeFileMethod(attachmentData);
           return saveAsFile(
             attachmentData,
             fileName,
