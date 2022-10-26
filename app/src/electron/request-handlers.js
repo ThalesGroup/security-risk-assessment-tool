@@ -531,6 +531,7 @@ const vulnerabilitiesAttachmentOptions = (id) => {
       try {
         const [fileName, base64data] = attachFile();
         if (fileName !== '') {
+          vulnerabilityFileName = fileName;
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
           getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
         }
@@ -548,10 +549,19 @@ const vulnerabilitiesAttachmentOptions = (id) => {
       attachLabel,
       {
         label: 'Save as',
-        click: () => saveAsFile(
-          israProject.getVulnerability(id).vulnerabilityDescriptionAttachment,
-          fileName,
-        ),
+        click: () => {
+          const attachmentData = israProject.getVulnerability(id).vulnerabilityDescriptionAttachment;
+          const decodedBuffer = Buffer.from(attachmentData, 'base64');
+          const decodedFileNameSize = decodedBuffer.slice(0, 8).toString();
+          const fileName = decodedBuffer.slice(
+            8,
+            8 + parseInt(decodedFileNameSize, 10),
+          ).toString();
+          return saveAsFile(
+            attachmentData,
+            fileName,
+          );
+        },
       },
       {
         label: 'Remove',
