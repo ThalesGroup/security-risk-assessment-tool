@@ -544,6 +544,27 @@
                                     "Done"
                                 ],
                                 "decisionDetail": [
+                                    "DEcision coment"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
                                     ""
                                 ]
                             }

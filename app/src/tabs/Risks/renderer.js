@@ -264,6 +264,53 @@
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
+    const addRichTextArea = (selector, desc, width) => {
+      tinymce.init({
+        selector,
+        height: 200,
+        min_height: 200,
+        width,
+        verify_html: true,
+        statusbar: false,
+        deep: true,
+        plugins: 'link lists',
+        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+
+        setup: (editor) => {
+          editor.on('init', () => {
+            const content = desc;
+            editor.setContent(content);
+          });
+        },
+      });
+    }
+
+    // add Mitigation evaluation section
+    const addMitigationSection = (riskMitigations)=> {
+      riskMitigations.forEach((mitigation)=> {
+        const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
+        const mitigationSection = $('#risks__risk__mitigation__evaluation section:first-of-type');
+
+        const textArea1 = $('<textArea>');
+        textArea1.attr('class', 'rich-text');
+        textArea1.attr('id', `security__control__desc__rich-text__${riskMitigationId}`);
+        textArea1.attr('name', `security__control__desc__rich-text__${riskMitigationId}`);
+        mitigationSection.append('<p style="font-size: small; font-weight: bold; font-style: italic;">Security control Description</p>');
+        mitigationSection.append(textArea1);
+        addRichTextArea(`#security__control__desc__rich-text__${riskMitigationId}`, description, 400);
+
+        const select = $();
+
+        const textArea2 = $('<textArea>');
+        textArea2.attr('class', 'rich-text');
+        textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
+        textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
+        mitigationSection.append('<p style="font-size: small; font-weight: bold; font-style: italic;">Decision Comment</p>');
+        mitigationSection.append(textArea2);
+        addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, 400);
+      });
+    };
+
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
       risksTable.selectRow(id);
@@ -275,7 +322,9 @@
         inherentRiskScore,
         riskAttackPaths,
         riskLikelihood,
-        riskImpact
+        riskImpact,
+        riskMitigation,
+        mitigatedRiskScore
       } = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
@@ -340,6 +389,11 @@
       addVulnerabilitySection(riskAttackPaths);
       $('#all_attack_paths_score').text(allAttackPathsScore);
       $('#inherent_risk_score').text(inherentRiskScore);
+
+      //risk mitigation
+      $('#risks__risk__mitigation__evaluation section:first-of-type').empty();
+      addMitigationSection(riskMitigation);
+      $('#mitigated_risk_score').text(mitigatedRiskScore);
     };
 
     const validatePreviousRisk = async (id) => {
@@ -418,6 +472,7 @@
       // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
+      $('#risks__risk__mitigation__evaluation section:first-of-type').empty();
       
       fetchedData.forEach((risk, i) => {
         addRisk(risk);
@@ -723,6 +778,14 @@
       });
       window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
     });
+
+        /**
+    * 
+    * 
+    * Risk Mitigation evaluation
+    * 
+    * 
+ */
 
     // reload risks
     window.risks.load(async (event, data) => {
