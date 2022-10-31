@@ -264,7 +264,7 @@
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
-    const addRichTextArea = (selector, desc, width) => {
+    const addRichTextArea = (selector, desc, width, riskMitigationId) => {
       tinymce.init({
         selector,
         height: 250,
@@ -280,6 +280,17 @@
           editor.on('init', () => {
             const content = desc;
             editor.setContent(content);
+            
+          });
+
+          editor.on('change', function (e) {
+            const { id } = e.target;
+            let richText = tinymce.get(id).getContent();
+            const { riskMitigation } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+            const mitigation = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
+         
+            if (id === `security__control__desc__rich-text__${riskMitigationId}`) mitigation.description = richText;
+            else if (id === `comment__desc__rich-text__${riskMitigationId}`) mitigation.decisionDetail = richText;
           });
         },
       });
@@ -321,7 +332,7 @@
         topSection.append(securityControlDescSection);
         section.append(topSection);
         mitigationSection.append(section);
-        addRichTextArea(`#security__control__desc__rich-text__${riskMitigationId}`, description, '100%');
+        addRichTextArea(`#security__control__desc__rich-text__${riskMitigationId}`, description, '100%', riskMitigationId);
 
         // expected benefits
         const benefitsSection = $('<section>');
@@ -434,7 +445,7 @@
         bottomSection.append(decisionSection);
         section.append(bottomSection);
         mitigationSection.append(section);
-        addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, '100%');
+        addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
       });
     };
 

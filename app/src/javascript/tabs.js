@@ -90,6 +90,15 @@ const validateTabs = (tab) => {
       data.riskName.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
       data.riskName.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
       data.riskLikelihood.riskLikelihoodDetail = tinymce.get('risk__likelihood__details').getContent();
+      data.riskMitigation = [];
+      $('.mitigations section .top').each((index)=> {
+        const mitigation = {};
+        mitigation.riskMitigationId = index + 1;
+        mitigation.description = tinymce.get(`security__control__desc__rich-text__${index + 1}`).getContent();
+        mitigation.cost = $(`#risk__mitigation__cost__${index + 1}`).val() === '' ? null : Number($(`#risk__mitigation__cost__${index + 1}`).val());
+        mitigation.decisionDetail = tinymce.get(`comment__desc__rich-text__${index + 1}`).getContent();
+        data.riskMitigation.push(mitigation);
+      });
       window.validate.risks(data);
     }
   };
