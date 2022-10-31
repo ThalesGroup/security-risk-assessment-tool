@@ -914,8 +914,9 @@
  */
 
     // add Risk Mitigation button
-    $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', () => {
-      window.risks.addRiskMitigation(getCurrentRiskId());
+    $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
+      const riskMitigation = await window.risks.addRiskMitigation(getCurrentRiskId());
+      addMitigationSection(riskMitigation);
     });
 
     // delete Risk Mitigation button
@@ -926,6 +927,10 @@
         if (box.checked) checkedRiskMitigations.push(Number(box.value));
       });
       window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
+      checkboxes.forEach((box) => {
+        $(`#risks__mitigation__checkboxes__${box.value}`).next('section').remove();
+        $(`#risks__mitigation__checkboxes__${box.value}`).remove();
+      });
     });
 
     // reload risks
