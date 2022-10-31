@@ -374,12 +374,29 @@
         topSection.append(benefitsSection);
        
         // cost
+        const validateCost = (input, cost) => {
+          console.log(cost)
+          if (!Number.isInteger(cost)) input.css('border', '1px solid red');
+          else input.css('border', 'none');
+        }
+
         const costSection = $('<section>');
         costSection.css('background-color', 'transparent');
         costSection.css('margin', '0');
         costSection.css('padding', '5px');
         costSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Estimated Cost (md)</p>');
-        costSection.append(`<input type="number" id="risk__mitigation__cost__${riskMitigationId}" name="risk__mitigation__cost__${riskMitigationId}" value="${cost == null ? '' : cost}">`);
+        const input = $('<input>');
+        input.attr('type', 'number');
+        input.attr('id', `risk__mitigation__cost__${riskMitigationId}`);
+        input.attr('name', `risk__mitigation__cost__${riskMitigationId}`);
+        input.attr('value', `${cost == null ? '' : cost}`);
+        validateCost(input, Number(cost));
+        input.on('change', (e) => {
+          const { value } = e.target;
+          validateCost(input, Number(value));
+        });
+        costSection.append(input);
+        
         topSection.append(costSection);
         section.append(topSection);
 
