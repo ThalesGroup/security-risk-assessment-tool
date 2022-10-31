@@ -130,7 +130,7 @@
               <span>Attack Path ${riskAttackPathId}</span>
             </div>
             <div style="text-align:right; width:48%; display:inline-block; padding:0; padding-right:10px">
-              <span>scoring: ${attackPathScore === null ? '' : attackPathScore}<span>
+              <span>scoring: ${attackPathScore == null ? 'NaN' : attackPathScore}<span>
             </div>
           </div>
         `).css('background-color', 'rgb(183, 183, 183)');
@@ -267,8 +267,8 @@
     const addRichTextArea = (selector, desc, width) => {
       tinymce.init({
         selector,
-        height: 200,
-        min_height: 200,
+        height: 250,
+        min_height: 250,
         width,
         verify_html: true,
         statusbar: false,
@@ -286,7 +286,7 @@
     }
 
     // add Mitigation evaluation section
-    const addMitigationSection = (riskMitigations)=> {
+    const addMitigationSection = (riskMitigations, riskManagementDecision)=> {
       riskMitigations.forEach((mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
         const mitigationSection = $('#risks__risk__mitigation__evaluation .mitigations');
@@ -296,10 +296,6 @@
 
         const topSection = $('<section>');
         topSection.attr('class', 'top');
-        topSection.css('display', 'flex');
-        topSection.css('justify-content', 'space-evenly');
-        topSection.css('padding', '0');
-        topSection.css('margin', '0');
         topSection.css('background-color', 'transparent');
 
         // security control desc
@@ -342,6 +338,7 @@
           input.attr('name', `benefits__risk__mitigation__${riskMitigationId}`);
           input.attr('id', value);
           input.attr('value', key);
+          if (benefits == key) input.attr('checked', true);
           const label = $('<label>');
           label.attr('id', value);
           label.text(value);
@@ -350,9 +347,7 @@
           div.append('<br>');
         }
         benefitsSection.append(div);
-
         topSection.append(benefitsSection);
-        $(`input:radio[name=benefits__risk__mitigation__${riskMitigationId}]`).val([benefits]);
        
         // cost
         const costSection = $('<section>');
@@ -360,17 +355,68 @@
         costSection.css('margin', '0');
         costSection.css('padding', '5px');
         costSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Estimated Cost (md)</p>');
-        costSection.append(`<input type="text" id="risk__mitigation__cost__${riskMitigationId}" name="risk__mitigation__cost__${riskMitigationId}" value="${cost == null ? '' : cost}">`);
+        costSection.append(`<input type="number" id="risk__mitigation__cost__${riskMitigationId}" name="risk__mitigation__cost__${riskMitigationId}" value="${cost == null ? '' : cost}">`);
         topSection.append(costSection);
         section.append(topSection);
 
-        // const textArea2 = $('<textArea>');
-        // textArea2.attr('class', 'rich-text');
-        // textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
-        // textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
-        // mitigationSection.append('<p style="font-size: small; font-weight: bold; font-style: italic;">Decision Comment</p>');
-        // mitigationSection.append(textArea2);
-        // addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, 400);
+        const bottomSection = $('<section>');
+        bottomSection.attr('class', 'bottom');
+        bottomSection.css('background-color', 'transparent');
+
+        if (riskManagementDecision !== 'Mitigate') {
+          bottomSection.css('display', 'none');
+        }
+
+        // mitigation decision
+        const mitigationDecisionSection = $('<section>');
+        mitigationDecisionSection.css('background-color', 'transparent');
+        mitigationDecisionSection.css('margin', '0');
+        mitigationDecisionSection.css('padding', '5px');
+        mitigationDecisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Mitigation Decision</p>');
+        // to get from schema
+        const mitigationDecisionOptions = {
+          'Not Defined': '',
+          'Rejected': 'Rejected',
+          'Accepted': 'Accepted',
+          'Postphoned': 'Postphoned',
+          'Done': 'Done'
+        };
+
+          const div2 = $('<div>');
+          for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
+            const input = $('<input>');
+            input.attr('type', 'radio');
+            input.attr('name', `risk__mitigation__decision__${riskMitigationId}`);
+            input.attr('id', key);
+            input.attr('value', value);
+            if(decision === value) input.attr('checked', true);
+            const label = $('<label>');
+            label.attr('id', key);
+            label.text(key);
+            div2.append(input);
+            div2.append(label);
+            div2.append('<br>');
+          }
+          mitigationDecisionSection.append(div2);
+          bottomSection.append(mitigationDecisionSection);
+
+          // decision comment
+          const decisionSection = $('<section>');
+          decisionSection.css('background-color', 'transparent');
+          decisionSection.css('margin', '0');
+          decisionSection.css('padding', '5px');
+          decisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Decision Comment</p>');
+
+          const textArea2 = $('<textArea>');
+          textArea2.attr('class', 'rich-text');
+          textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
+          textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
+          decisionSection.append(textArea2);
+
+          bottomSection.append(decisionSection);
+          section.append(bottomSection);
+          mitigationSection.append(section);
+          addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, '100%');
       });
     };
 
@@ -387,7 +433,8 @@
         riskLikelihood,
         riskImpact,
         riskMitigation,
-        mitigatedRiskScore
+        mitigatedRiskScore,
+        riskManagementDecision,
       } = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
@@ -450,13 +497,13 @@
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
       addVulnerabilitySection(riskAttackPaths);
-      $('#all_attack_paths_score').text(allAttackPathsScore);
-      $('#inherent_risk_score').text(inherentRiskScore);
+      $('#all_attack_paths_score').text(allAttackPathsScore == null ? 'NaN' : allAttackPathsScore);
+      $('#inherent_risk_score').text(inherentRiskScore == null ? 'NaN' : inherentRiskScore);
 
       //risk mitigation
       $('#risks__risk__mitigation__evaluation section').empty();
-      addMitigationSection(riskMitigation);
-      $('#mitigated_risk_score').text(mitigatedRiskScore);
+      addMitigationSection(riskMitigation, riskManagementDecision);
+      $('#mitigated_risk_score').text(mitigatedRiskScore == null ? 'NaN' : mitigatedRiskScore);
     };
 
     const validatePreviousRisk = async (id) => {

@@ -536,7 +536,7 @@
                             "0.5"
                         ],
                         "cost": [
-                            ""
+                            "12"
                         ],
                         "mitigationDecision": [
                             {
@@ -554,10 +554,10 @@
                             ""
                         ],
                         "benefits": [
-                            "0"
+                            "0.1"
                         ],
                         "cost": [
-                            ""
+                            "10"
                         ],
                         "mitigationDecision": [
                             {

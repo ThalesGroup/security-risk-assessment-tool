@@ -124,3 +124,11 @@ input[name="risks__attack__path__checkboxes"]{
 .risk_attack_paths div:nth-child(3) .and {
     visibility: hidden;
 }
+
+.bottom,
+.top {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0;
+    margin: 0;
+}
