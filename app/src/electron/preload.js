@@ -97,6 +97,7 @@ contextBridge.exposeInMainWorld('risks', {
   deleteRiskVulnerabilityRef: (riskId, riskAttackPathId, ids) => ipcRenderer.invoke('risks:deleteRiskVulnerabilityRef', riskId, riskAttackPathId, ids),
   addRiskMitigation: (riskId) => ipcRenderer.invoke('risks:addRiskMitigation', riskId),
   deleteRiskMitigation: (riskId, ids) => ipcRenderer.invoke('risks:deleteRiskMitigation', riskId, ids),
+  updateRiskMitigation: (riskId, riskMitigationId, field, value) => ipcRenderer.invoke('risks:updateRiskMitigation', riskId, riskMitigationId, field, value),
   isRiskExist: (id) => ipcRenderer.invoke('risks:isRiskExist', id)
 });
 

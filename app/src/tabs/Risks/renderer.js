@@ -356,7 +356,7 @@
 
           input.on('change', (e)=> {
             const { value } = e.target;
-            alert(`riskId: ${riskIdRef}, riskMitigationId: ${riskMitigationId}, value: ${value}`);
+            window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
           })
         }
         benefitsSection.append(div);
@@ -412,7 +412,7 @@
 
           input.on('change', (e) => {
             const { value } = e.target;
-            alert(`riskId: ${riskIdRef}, riskMitigationId: ${riskMitigationId}, value: ${value}`);
+            window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
           })
         }
         mitigationDecisionSection.append(div2);
