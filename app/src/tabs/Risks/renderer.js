@@ -920,13 +920,12 @@
 
     // delete Risk Mitigation button
     $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', () => {
-      alert('delete risk mitigation')
-      // const checkedRiskAttackPaths = [];
-      // const checkboxes = document.getElementsByName('risks__attack__path__checkboxes');
-      // checkboxes.forEach((box) => {
-      //   if (box.checked) checkedRiskAttackPaths.push(Number(box.value));
-      // });
-      // window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
+      const checkedRiskMitigations = [];
+      const checkboxes = document.getElementsByName('risks__mitigation__checkboxes');
+      checkboxes.forEach((box) => {
+        if (box.checked) checkedRiskMitigations.push(Number(box.value));
+      });
+      window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
     });
 
     // reload risks

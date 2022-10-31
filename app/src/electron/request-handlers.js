@@ -484,7 +484,21 @@ ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => de
 ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index, getMainWindow()));
 
 // Risks Tab
-const { addRisk, deleteRisk, updateRiskName, updateRiskLikelihood, updateRiskImpact, addRiskAttackPath, deleteRiskAttackPath, addVulnerabilityRef, deleteVulnerabilityRef, isRiskExist, validateRisks, updateRiskAttackPath, addRiskMitigation } = require('../../../lib/src/api/Risk/handler-event');
+const { 
+  addRisk,
+  deleteRisk,
+  updateRiskName,
+  updateRiskLikelihood,
+  updateRiskImpact,
+  addRiskAttackPath,
+  deleteRiskAttackPath,
+  addVulnerabilityRef,
+  deleteVulnerabilityRef,
+  isRiskExist,
+  validateRisks,
+  updateRiskAttackPath,
+  addRiskMitigation,
+  deleteRiskMitigation } = require('../../../lib/src/api/Risk/handler-event');
 const { renderRisks } = require('../../../lib/src/api/Risk/render-risks');
 
 ipcMain.handle('render:risks', () => renderRisks());
@@ -500,7 +514,8 @@ ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskA
 ipcMain.handle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value, getMainWindow()));
 ipcMain.handle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId) => addVulnerabilityRef(israProject, riskId, riskAttackPathId, getMainWindow()));
 ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids, getMainWindow()));
-ipcMain.handle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId, getMainWindow()));
+ipcMain.handle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId));
+ipcMain.handle('risks:deleteRiskMitigation', (event, riskId, ids) => deleteRiskMitigation(israProject, riskId, ids, getMainWindow()));
 ipcMain.handle('risks:isRiskExist', (event, id) => isRiskExist(israProject, id));
 ipcMain.handle('validate:risks', (event, currentRisk) => validateRisks(israProject, currentRisk));
 
