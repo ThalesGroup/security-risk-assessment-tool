@@ -288,8 +288,16 @@
     // add Mitigation evaluation section
     const addMitigationSection = (riskMitigations, riskManagementDecision)=> {
       riskMitigations.forEach((mitigation)=> {
-        const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
+        const { description, benefits, cost, decision, decisionDetail, riskMitigationId, riskIdRef } = mitigation;
         const mitigationSection = $('#risks__risk__mitigation__evaluation .mitigations');
+
+        // add checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `${riskMitigationId}`;
+        checkbox.id = `risks__mitigation__checkboxes__${riskMitigationId}`;
+        checkbox.name = 'risks__mitigation__checkboxes';
+        mitigationSection.append(checkbox);
 
         const section = $('<section>');
         section.css('background-color', 'rgb(183, 183, 183)');
@@ -345,6 +353,11 @@
           div.append(input);
           div.append(label);
           div.append('<br>');
+
+          input.on('change', (e)=> {
+            const { value } = e.target;
+            alert(`riskId: ${riskIdRef}, riskMitigationId: ${riskMitigationId}, value: ${value}`);
+          })
         }
         benefitsSection.append(div);
         topSection.append(benefitsSection);
@@ -382,41 +395,46 @@
           'Done': 'Done'
         };
 
-          const div2 = $('<div>');
-          for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
-            const input = $('<input>');
-            input.attr('type', 'radio');
-            input.attr('name', `risk__mitigation__decision__${riskMitigationId}`);
-            input.attr('id', key);
-            input.attr('value', value);
-            if(decision === value) input.attr('checked', true);
-            const label = $('<label>');
-            label.attr('id', key);
-            label.text(key);
-            div2.append(input);
-            div2.append(label);
-            div2.append('<br>');
-          }
-          mitigationDecisionSection.append(div2);
-          bottomSection.append(mitigationDecisionSection);
+        const div2 = $('<div>');
+        for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
+          const input = $('<input>');
+          input.attr('type', 'radio');
+          input.attr('name', `risk__mitigation__decision__${riskMitigationId}`);
+          input.attr('id', key);
+          input.attr('value', value);
+          if(decision === value) input.attr('checked', true);
+          const label = $('<label>');
+          label.attr('id', key);
+          label.text(key);
+          div2.append(input);
+          div2.append(label);
+          div2.append('<br>');
 
-          // decision comment
-          const decisionSection = $('<section>');
-          decisionSection.css('background-color', 'transparent');
-          decisionSection.css('margin', '0');
-          decisionSection.css('padding', '5px');
-          decisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Decision Comment</p>');
+          input.on('change', (e) => {
+            const { value } = e.target;
+            alert(`riskId: ${riskIdRef}, riskMitigationId: ${riskMitigationId}, value: ${value}`);
+          })
+        }
+        mitigationDecisionSection.append(div2);
+        bottomSection.append(mitigationDecisionSection);
 
-          const textArea2 = $('<textArea>');
-          textArea2.attr('class', 'rich-text');
-          textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
-          textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
-          decisionSection.append(textArea2);
+        // decision comment
+        const decisionSection = $('<section>');
+        decisionSection.css('background-color', 'transparent');
+        decisionSection.css('margin', '0');
+        decisionSection.css('padding', '5px');
+        decisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Decision Comment</p>');
 
-          bottomSection.append(decisionSection);
-          section.append(bottomSection);
-          mitigationSection.append(section);
-          addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, '100%');
+        const textArea2 = $('<textArea>');
+        textArea2.attr('class', 'rich-text');
+        textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
+        textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
+        decisionSection.append(textArea2);
+
+        bottomSection.append(decisionSection);
+        section.append(bottomSection);
+        mitigationSection.append(section);
+        addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, '100%');
       });
     };
 
@@ -426,7 +444,6 @@
       const {
         riskId,
         riskName,
-        allAttackPathsName,
         allAttackPathsScore,
         inherentRiskScore,
         riskAttackPaths,
@@ -449,7 +466,6 @@
       } = riskName;
       const {
         riskLikelihoodDetail,
-        threatFactorScore,
         threatFactorLevel,
         occurrenceLevel,
         isOWASPLikelihood
@@ -502,7 +518,7 @@
 
       //risk mitigation
       $('#risks__risk__mitigation__evaluation section').empty();
-      addMitigationSection(riskMitigation, riskManagementDecision);
+      addMitigationSection(riskMitigation, riskManagementDecision, riskId);
       $('#mitigated_risk_score').text(mitigatedRiskScore == null ? 'NaN' : mitigatedRiskScore);
     };
 
@@ -896,6 +912,22 @@
     * 
     * 
  */
+
+    // add Risk Mitigation button
+    $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', () => {
+      window.risks.addRiskMitigation(getCurrentRiskId());
+    });
+
+    // delete Risk Mitigation button
+    $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', () => {
+      alert('delete risk mitigation')
+      // const checkedRiskAttackPaths = [];
+      // const checkboxes = document.getElementsByName('risks__attack__path__checkboxes');
+      // checkboxes.forEach((box) => {
+      //   if (box.checked) checkedRiskAttackPaths.push(Number(box.value));
+      // });
+      // window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
+    });
 
     // reload risks
     window.risks.load(async (event, data) => {
