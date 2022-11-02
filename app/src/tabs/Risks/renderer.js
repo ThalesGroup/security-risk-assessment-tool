@@ -300,7 +300,7 @@
     const addMitigationSection = (riskMitigations, riskManagementDecision)=> {
       riskMitigations.forEach((mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId, riskIdRef } = mitigation;
-        const mitigationSection = $('#risks__risk__mitigation__evaluation .mitigations');
+        const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
 
         // add checkbox
         const checkbox = document.createElement('input');
@@ -308,10 +308,13 @@
         checkbox.value = `${riskMitigationId}`;
         checkbox.id = `risks__mitigation__checkboxes__${riskMitigationId}`;
         checkbox.name = 'risks__mitigation__checkboxes';
-        mitigationSection.append(checkbox);
+        checkbox.style.position = 'absolute';
+        mitigationSections.append(checkbox);
 
         const section = $('<section>');
+        section.attr('id', `risks__mitigation__section__${riskMitigationId}`);
         section.css('background-color', 'rgb(183, 183, 183)');
+        section.css('margin-left', '20px');
 
         const topSection = $('<section>');
         topSection.attr('class', 'top');
@@ -324,15 +327,15 @@
         securityControlDescSection.css('padding', '5px');
         const textArea1 = $('<textArea>');
         textArea1.attr('class', 'rich-text');
-        textArea1.attr('id', `security__control__desc__rich-text__${riskMitigationId}`);
+        textArea1.attr('id', `security__control__desc__rich-text__${riskIdRef}__${riskMitigationId}`);
         textArea1.attr('name', `security__control__desc__rich-text__${riskMitigationId}`);
         securityControlDescSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Security control Description</p>');
         securityControlDescSection.append(textArea1);
         
         topSection.append(securityControlDescSection);
         section.append(topSection);
-        mitigationSection.append(section);
-        addRichTextArea(`#security__control__desc__rich-text__${riskMitigationId}`, description, '100%', riskMitigationId);
+        mitigationSections.append(section);
+        addRichTextArea(`#security__control__desc__rich-text__${riskIdRef}__${riskMitigationId}`, description, '100%', riskMitigationId);
 
         // expected benefits
         const benefitsSection = $('<section>');
@@ -375,7 +378,6 @@
        
         // cost
         const validateCost = (input, cost) => {
-          console.log(cost)
           if (!Number.isInteger(cost)) input.css('border', '1px solid red');
           else input.css('border', 'none');
         }
@@ -455,14 +457,14 @@
 
         const textArea2 = $('<textArea>');
         textArea2.attr('class', 'rich-text');
-        textArea2.attr('id', `comment__desc__rich-text__${riskMitigationId}`);
+        textArea2.attr('id', `comment__desc__rich-text__${riskIdRef}__${riskMitigationId}`);
         textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
         decisionSection.append(textArea2);
 
         bottomSection.append(decisionSection);
         section.append(bottomSection);
-        mitigationSection.append(section);
-        addRichTextArea(`#comment__desc__rich-text__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
+        mitigationSections.append(section);
+        addRichTextArea(`#comment__desc__rich-text__${riskIdRef}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
       });
     };
 
@@ -546,7 +548,7 @@
 
       //risk mitigation
       $('#risks__risk__mitigation__evaluation section').empty();
-      addMitigationSection(riskMitigation, riskManagementDecision, riskId);
+      addMitigationSection(riskMitigation, riskManagementDecision);
       $('#mitigated_risk_score').text(mitigatedRiskScore == null ? 'NaN' : mitigatedRiskScore);
     };
 
@@ -943,8 +945,10 @@
 
     // add Risk Mitigation button
     $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
-      const riskMitigation = await window.risks.addRiskMitigation(getCurrentRiskId());
-      addMitigationSection(riskMitigation);
+      const [ riskMitigation, risks ] = await window.risks.addRiskMitigation(getCurrentRiskId());
+      const { riskManagementDecision } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+      addMitigationSection(riskMitigation, riskManagementDecision);
+      risksData = risks;
     });
 
     // delete Risk Mitigation button
@@ -955,10 +959,6 @@
         if (box.checked) checkedRiskMitigations.push(Number(box.value));
       });
       window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
-      checkboxes.forEach((box) => {
-        $(`#risks__mitigation__checkboxes__${box.value}`).next('section').remove();
-        $(`#risks__mitigation__checkboxes__${box.value}`).remove();
-      });
     });
 
     // reload risks

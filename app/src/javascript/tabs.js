@@ -94,9 +94,9 @@ const validateTabs = (tab) => {
       $('.mitigations section .top').each((index)=> {
         const mitigation = {};
         mitigation.riskMitigationId = index + 1;
-        mitigation.description = tinymce.get(`security__control__desc__rich-text__${index + 1}`).getContent();
+        mitigation.description = tinymce.get(`security__control__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
         mitigation.cost = $(`#risk__mitigation__cost__${index + 1}`).val() === '' ? null : Number($(`#risk__mitigation__cost__${index + 1}`).val());
-        mitigation.decisionDetail = tinymce.get(`comment__desc__rich-text__${index + 1}`).getContent();
+        mitigation.decisionDetail = tinymce.get(`comment__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
         data.riskMitigation.push(mitigation);
       });
       window.validate.risks(data);
@@ -166,8 +166,10 @@ window.validate.allTabs((event, filePath) => {
  */
 tabs.onclick = (e) => {
   const { id } = e.target.dataset;
-  const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
-  validateTabs(previousActiveTab);
+  if(id){
+    const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+    validateTabs(previousActiveTab);
+  }
 
   switch (id) {
     case 'welcome':
