@@ -368,9 +368,10 @@
           div.append(label);
           div.append('<br>');
 
-          input.on('change', (e)=> {
+          input.on('change', async (e)=> {
             const { value } = e.target;
-            window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
+            const { mitigatedRiskScore } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
+            $('#mitigated_risk_score').text(mitigatedRiskScore);
           })
         }
         benefitsSection.append(div);
@@ -440,9 +441,10 @@
           div2.append(label);
           div2.append('<br>');
 
-          input.on('change', (e) => {
+          input.on('change', async (e) => {
             const { value } = e.target;
-            window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
+            const { mitigatedRiskScore } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
+            $('#mitigated_risk_score').text(mitigatedRiskScore);
           })
         }
         mitigationDecisionSection.append(div2);
@@ -791,7 +793,7 @@
       const intrusionDetection = $('#risk__intrusionDetection').find(":selected").val();
       const id = getCurrentRiskId();
 
-      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+      const { riskLikelihood, inherentRiskScore, mitigatedRiskScore } = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
         skillLevel: skillLevel,
         reward: reward,
         accessResources: accessResources,
@@ -801,6 +803,7 @@
       const riskData = risksData.find((risk)=> risk.riskId === id);
       riskData.riskLikelihood = riskLikelihood;
       $('#inherent_risk_score').text(inherentRiskScore);
+      $('#mitigated_risk_score').text(mitigatedRiskScore);
 
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
@@ -885,6 +888,7 @@
       const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
       riskData.riskImpact = risk.riskImpact;
       $('#inherent_risk_score').text(risk.inherentRiskScore);
+      $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
 
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };
@@ -945,10 +949,9 @@
 
     // add Risk Mitigation button
     $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
-      const [ riskMitigation, risks ] = await window.risks.addRiskMitigation(getCurrentRiskId());
+      const riskMitigation = await window.risks.addRiskMitigation(getCurrentRiskId());
       const { riskManagementDecision } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
       addMitigationSection(riskMitigation, riskManagementDecision);
-      risksData = risks;
     });
 
     // delete Risk Mitigation button
