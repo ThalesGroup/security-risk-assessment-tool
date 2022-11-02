@@ -289,8 +289,8 @@
             const { riskMitigation } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
             const mitigation = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
          
-            if (id === `security__control__desc__rich-text__${riskMitigationId}`) mitigation.description = richText;
-            else if (id === `comment__desc__rich-text__${riskMitigationId}`) mitigation.decisionDetail = richText;
+            if (id === `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.description = richText;
+            else if (id === `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.decisionDetail = richText;
           });
         },
       });
