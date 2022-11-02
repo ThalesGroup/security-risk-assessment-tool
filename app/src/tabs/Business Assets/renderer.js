@@ -88,17 +88,19 @@
     };
 
     const addSection = (id, asset) => {
-      // add section inside sections div
-      $('#business-assets__sections').append(`<section class="section" id="business-assets__section__${id}"></section>`);
-      const section = $(`#business-assets__section__${id}`);
-
       // add checkbox
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.value = id;
       checkbox.id = `business-assets__section__checkbox-${id}`;
       checkbox.name = 'business-assets__section-checkboxes';
-      section.append(checkbox);
+      checkbox.style.position = 'absolute';
+      $('#business-assets__sections').append(checkbox);
+
+      // add section inside sections div
+      $('#business-assets__sections').append(`<section class="section" id="business-assets__section__${id}"></section>`);
+      const section = $(`#business-assets__section__${id}`);
+      section.css('margin-left', '20px');
 
       // add table
       section.append(`<div id="business-assets__section-table__${id}"></div>`);
