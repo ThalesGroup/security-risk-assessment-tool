@@ -79,13 +79,13 @@
                         </p>
                 
                         <div id="riskName">
+                            <button style="display: block; margin-left: auto;">Replace with Manual Risk Name</button>
                             <p class="riskname"></p>
-                            <button>Replace with Manual Risk Name</button>
                         </div id="riskName">
                 
                         <div id="risk__manual__riskName">
+                            <button style="display: block; margin-left: auto;">Replace with Automatic Risk Name</button>
                             <input type="text">
-                            <button>Replace with Automatic Risk Name</button>
                         </div>
                 
                         <div class="risk__flex">
@@ -163,7 +163,7 @@
                             and motivation</p>
                 
                         <div id="risk__simple__evaluation">
-                            <button>Replace with OWASP Likelihood Evaluation Method</button>
+                            <button style="display: block; margin-left: auto;">Replace with OWASP Likelihood Evaluation Method</button>
                             <select name="risk__likelihood" id="risk__likelihood">
                                 <option value="4">Very High</option>
                                 <option value="3">High</option>
@@ -173,7 +173,7 @@
                         </div>
                 
                         <div id="risk__likehood__table">
-                            <button>Replace with Simple Likelihood Evaluation Method</button>
+                            <button style="display: block; margin-left: auto;">Replace with Simple Likelihood Evaluation Method</button>
                             <div>
                                 <p>How technically skilled is this group of threat agents?</p>
                                 <select name="risk__skillLevel" id="risk__skillLevel">
@@ -367,6 +367,42 @@
                     </section>
                     <h1 style="text-align: center;">Mitigated Risk Score: <span id="mitigated_risk_score"></span>/20</h1>
                     <p style="text-align: center; margin-top: 0; font-size: small;">(taking into account mitigations accepted or done)</p>
+                </section>
+                <section id="risks__risk__management__evaluation">
+                    <h1>Risk management</h1>
+                    <div style="display: flex;">
+                        <div style="margin-right: 10px;">
+                            <p style="font-weight: bold; text-align: center;">Decision</p>
+                            <div>
+                                <input type="radio" name="risk__management__decision" id="Not Defined" value="">
+                                <label id="Not Defined" style="font-size: small; font-style: italic;">Not Defined</label>
+                                <br>
+                                <input type="radio" name="risk__management__decision" id="Discarded" value="Discarded">
+                                <label id="Discarded" style="font-size: small; font-style: italic;">Discarded</label>
+                                <br>
+                                <br>
+                                <input type="radio" name="risk__management__decision" id="Avoid" value="Avoid">
+                                <label id="Avoid">Avoid (Avoid)</label>
+                                <br>
+                                <input type="radio" name="risk__management__decision" id="Transfer" value="Transfer">
+                                <label id="Transfer">Share (Transfer)</label>
+                                <br>
+                                <input type="radio" name="risk__management__decision" id="Mitigate" value="Mitigate">
+                                <label id="Mitigate">Reduce (Mitigate)</label>
+                                <br>
+                                <input type="radio" name="risk__management__decision" id="Accept" value="Accept">
+                                <label id="Accept">Retain (Accept)</label>
+                                <br>
+                            </div>
+                        </div>
+                        <div>
+                            <p style="text-align: center;">Decision details: (who take the decision, who must do what, what, and when):</p>
+                            <textarea class="rich-text" id="risk__management__detail__rich-text"></textarea>
+                        </div>
+                    </div>
+                        <h1 style="text-align: center;">Residual Risk Score: <span id="residual_risk_score"></span>/20</h1>
+                        <h1 style="text-align: center;">Residual Risk Level: <span id="residual_risk_level"></span></h1>
+                        <p style="text-align: center; margin-top: 0; font-size: small;">(taking into account mitigations done)</p>
                 </section>
                 <footer></footer>
             </div>
