@@ -68,6 +68,14 @@
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
+    const setNaNValues = (riskAttackPathId) => {
+      $(`#risk__attack__path__score__${riskAttackPathId}`).text('NaN');
+      $('#all_attack_paths_score').text('NaN');
+      $('#inherent_risk_score').text('NaN');
+      $('#mitigated_risk_score').text('NaN');
+      $('#residual_risk_score').text('NaN');
+    }
+
     // add vulnerability ref
     const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
       refs.forEach((ref, i) => {
@@ -87,9 +95,10 @@
         vulnerabilityDiv.append(checkbox);
 
         let select = $('<select>').append(vulnerabilityOptions);
-        select.on('change', (e)=> {
+        select.on('change', async (e)=> {
           const { value } = e.target;
-          window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
+          const id = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
+          if (id) setNaNValues(id);
         });
         vulnerabilityDiv.append(select);
         vulnerabilityDiv.append('<span style="margin-left: 10px" class="and">AND<span>')
@@ -130,7 +139,7 @@
               <span>Attack Path ${riskAttackPathId}</span>
             </div>
             <div style="text-align:right; width:48%; display:inline-block; padding:0; padding-right:10px">
-              <span>scoring: ${attackPathScore == null ? 'NaN' : attackPathScore}<span>
+              <span>scoring: <span id="risk__attack__path__score__${riskAttackPathId}">${attackPathScore == null ? '' : attackPathScore}<span><span>
             </div>
           </div>
         `).css('background-color', 'rgb(183, 183, 183)');
@@ -545,13 +554,21 @@
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
       addVulnerabilitySection(riskAttackPaths);
-      $('#all_attack_paths_score').text(allAttackPathsScore == null ? 'NaN' : allAttackPathsScore);
-      $('#inherent_risk_score').text(inherentRiskScore == null ? 'NaN' : inherentRiskScore);
+      $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
+      $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
 
       //risk mitigation
       $('#risks__risk__mitigation__evaluation section').empty();
       addMitigationSection(riskMitigation, riskManagementDecision);
-      $('#mitigated_risk_score').text(mitigatedRiskScore == null ? 'NaN' : mitigatedRiskScore);
+      $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
+
+      // set 'NaN' values
+      riskAttackPaths.forEach((path) => {
+        const { vulnerabilityRef, riskAttackPathId } = path;
+        vulnerabilityRef.forEach((ref)=> {
+          if (ref.vulnerabilityIdRef !== null && ref.score === null) setNaNValues(riskAttackPathId);
+        })
+      })
     };
 
     const validatePreviousRisk = async (id) => {
