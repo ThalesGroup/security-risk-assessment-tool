@@ -37,7 +37,33 @@
         }
     };
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
-    
+
+    // filter
+    $('input[id="filter-value"]').on('change', (e)=> {
+        const { value } = e.target;
+        const filterOptions = [
+            [
+                { field: "vulnerabilityId", type: "like", value: value },
+                { field: "projectVersionRef", type: "like", value: value },
+                { field: "vulnerabilityName", type: "like", value: value },
+                { field: "overallLevel", type: "like", value: value },
+            ]
+        ];
+        vulnerabilitiesTable.setFilter(filterOptions);
+        const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
+        if (filteredRows[0]) {
+            vulnerabilitiesData.forEach((v) => {
+                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+            });
+            addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
+        } else $('#vulnerabilities section').hide();
+    });
+
+    $('button[id="filter-clear"]').on('click', () => { 
+        vulnerabilitiesTable.clearFilter();
+        $('input[id="filter-value"]').val('');
+        if (vulnerabilitiesData.length > 0) $('#vulnerabilities section').show();
+    });
 
     const getCurrentVulnerabilityId = () => {
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
@@ -239,7 +265,7 @@
     };
 
     // add Vulnerability button
-    $('#vulnerabilities button').first().on('click', async () => {
+    $('#vulnerabilities .add-delete-container button').first().on('click', async () => {
         const vulnerability = await window.vulnerabilities.addVulnerability();
         // update vulnerabilitiesData
         vulnerabilitiesData.push(vulnerability[0]);
@@ -252,7 +278,7 @@
     });
 
     // delete Vulnerability button
-    $('#vulnerabilities button:nth-of-type(2)').on('click', async () => {
+    $('#vulnerabilities .add-delete-container button:nth-of-type(2)').on('click', async () => {
         const checkboxes = document.getElementsByName('vulnerabilties__table__checkboxes');
         deleteVulnerabilities(checkboxes);
     });

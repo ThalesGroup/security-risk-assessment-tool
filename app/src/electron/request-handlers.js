@@ -190,7 +190,7 @@ const validateClasses = () => {
   const validateVulnerabilitiesTab = () => {
     for(let i=0; i<Vulnerability.length; i++) {
       const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
-      if (cveScore < 0 || cveScore > 10 || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return false;
+      if (cveScore < 0 || cveScore > 10 || cveScore === null || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return false;
     }
     return true;
   };

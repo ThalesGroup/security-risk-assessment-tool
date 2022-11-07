@@ -144,10 +144,10 @@
         // add div
         let div = $("<div>").append(`
           <div style="width:100%;">
-            <div style="width:49%; display:inline-block; padding:0">
+            <div style="width:49%; display:inline-block; padding:0; border: 1px solid black;">
               <span>Attack Path ${riskAttackPathId}</span>
             </div>
-            <div style="text-align:right; width:48%; display:inline-block; padding:0; padding-right:10px">
+            <div style="text-align:right; width:48%; display:inline-block; padding:0; padding-right:10px; border: 1px solid black;">
               <span>scoring: <span id="risk__attack__path__score__${riskAttackPathId}">${attackPathScore == null ? '' : attackPathScore}<span><span>
             </div>
           </div>
