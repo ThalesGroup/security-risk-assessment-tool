@@ -285,6 +285,7 @@
     const addRichTextArea = (selector, desc, width, riskMitigationId) => {
       tinymce.init({
         selector,
+        promotion: false,
         height: 250,
         min_height: 250,
         width,
@@ -762,6 +763,7 @@
       window.project.load(async (event, data) => {
         await tinymce.init({
           selector: '.rich-text',
+          promotion: false,
           height: 300,
           min_height: 300,
           verify_html: true,

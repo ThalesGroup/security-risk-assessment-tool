@@ -71,6 +71,7 @@
     const addDesc = (id, desc) => {
       tinymce.init({
         selector: `#business-assets__section-text-${id}`,
+        promotion: false,
         height: 200,
         min_height: 200,
         verify_html: true,

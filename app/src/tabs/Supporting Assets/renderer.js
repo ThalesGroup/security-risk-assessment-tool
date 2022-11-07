@@ -205,6 +205,7 @@
       window.project.load(async (event, data) => {
         await tinymce.init({
           selector: '.rich-text',
+          promotion: false,
           height: 300,
           min_height: 300,
           verify_html: true,
