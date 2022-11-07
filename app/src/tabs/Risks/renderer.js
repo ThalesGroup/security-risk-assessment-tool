@@ -384,6 +384,7 @@
               $('#mitigated_risk_score').text(mitigatedRiskScore);
               $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
               $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+              styleResidualRiskLevel(residualRiskLevel);
             }
           })
         }
@@ -461,6 +462,7 @@
               $('#mitigated_risk_score').text(mitigatedRiskScore);
               $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
               $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+              styleResidualRiskLevel(residualRiskLevel);
             }
           })
         }
@@ -495,7 +497,10 @@
     };
 
     const styleResidualRiskLevel = (residualRiskLevel) => {
-
+      if (residualRiskLevel === 'Critical') $('#residual_risk_level').css('color', '#FF0000');
+      else if (residualRiskLevel === 'High') $('#residual_risk_level').css('color', '#E73927');
+      else if (residualRiskLevel === 'Medium') $('#residual_risk_level').css('color', '#FFA500');
+      else $('#residual_risk_level').css('color', '#000000');
     }
 
     // render selected row data on page by riskId
@@ -597,11 +602,13 @@
           $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
           risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
           styleTable(getCurrentRiskId(), residualRiskLevel);
+          styleResidualRiskLevel(residualRiskLevel);
         }
       });
       tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
       $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
       $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+      styleResidualRiskLevel(residualRiskLevel);
 
       // set 'NaN' values
       riskAttackPaths.forEach((path) => {
@@ -751,12 +758,14 @@
             ed.on('change', function (e) {
               const { id } = e.target;
               let richText = tinymce.get(id).getContent();
-              const { riskName, riskLikelihood } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+              const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+              const { riskName, riskLikelihood } = risk;
 
               if (id === 'risk__threatAgent__rich-text') riskName.threatAgentDetail = richText;
               else if (id === 'risk__threat__rich-text') riskName.threatVerbDetail = richText;
               else if (id === 'risk__motivation__rich-text') riskName.motivationDetail = richText;
               else if (id === 'risk__likelihood__details') riskLikelihood.riskLikelihoodDetail = richText;
+              else if (id === 'risk__management__detail__rich-text') risk.riskManagementDetail = richText;
             });
           }
         });
@@ -865,6 +874,7 @@
       $('#mitigated_risk_score').text(mitigatedRiskScore);
       $('#residual_risk_score').text(residualRiskScore);
       $('#residual_risk_level').text(residualRiskLevel); 
+      styleResidualRiskLevel(residualRiskLevel);
 
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
@@ -893,6 +903,7 @@
       $('#mitigated_risk_score').text(mitigatedRiskScore);
       $('#residual_risk_score').text(residualRiskScore);
       $('#residual_risk_level').text(residualRiskLevel); 
+      styleResidualRiskLevel(residualRiskLevel);
 
       setSecurityPropertyValues(riskLikelihood);  
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
@@ -904,7 +915,8 @@
       $('#inherent_risk_score').text(inherentRiskScore);
       $('#mitigated_risk_score').text(mitigatedRiskScore);
       $('#residual_risk_score').text(residualRiskScore);
-      $('#residual_risk_level').text(residualRiskLevel); 
+      $('#residual_risk_level').text(residualRiskLevel);
+      styleResidualRiskLevel(residualRiskLevel); 
     });
 
     // trigger owasp likelihood evaluation section
@@ -950,6 +962,7 @@
       $('#mitigated_risk_score').text(mitigatedRiskScore);
       $('#residual_risk_score').text(residualRiskScore);
       $('#residual_risk_level').text(residualRiskLevel);
+      styleResidualRiskLevel(residualRiskLevel);
     });
 
     // Risk Impact
@@ -961,6 +974,7 @@
       $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
       $('#residual_risk_score').text(risk.residualRiskScore);
       $('#residual_risk_level').text(risk.residualRiskLevel);
+      styleResidualRiskLevel(residualRiskLevel);
 
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };

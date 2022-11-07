@@ -99,6 +99,7 @@ const validateTabs = (tab) => {
         mitigation.decisionDetail = tinymce.get(`comment__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
         data.riskMitigation.push(mitigation);
       });
+      data.riskManagementDetail = tinymce.get('risk__management__detail__rich-text').getContent();
       window.validate.risks(data);
     }
   };
