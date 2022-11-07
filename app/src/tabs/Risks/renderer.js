@@ -493,6 +493,9 @@
         riskMitigation,
         mitigatedRiskScore,
         riskManagementDecision,
+        riskManagementDetail,
+        residualRiskScore,
+        residualRiskLevel
       } = risksData.find((risk) => risk.riskId === id);
       const {
         threatAgent,
@@ -561,6 +564,20 @@
       $('#risks__risk__mitigation__evaluation section').empty();
       addMitigationSection(riskMitigation, riskManagementDecision);
       $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
+
+      //risk management
+      $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
+      $(`input[type='radio'][name='risk__management__decision']`).change(async (e)=> {
+        const { value } = e.target;
+        if (value === 'Mitigate') $('.bottom:hidden').css('display', 'flex');
+        else $('.bottom').css('display', 'none');
+        const { residualRiskScore, residualRiskLevel } = await window.risks.updateRiskManagement(riskId, 'riskManagementDecision', value);
+        $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+        $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+      })
+      tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
+      $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+      $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
 
       // set 'NaN' values
       riskAttackPaths.forEach((path) => {

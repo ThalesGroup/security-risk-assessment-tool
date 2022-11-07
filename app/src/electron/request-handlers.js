@@ -499,7 +499,8 @@ const {
   updateRiskAttackPath,
   addRiskMitigation,
   deleteRiskMitigation,
-  updateRiskMitigation
+  updateRiskMitigation,
+  updateRiskManagement
 } = require('../../../lib/src/api/Risk/handler-event');
 const { renderRisks } = require('../../../lib/src/api/Risk/render-risks');
 
@@ -519,6 +520,7 @@ ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPat
 ipcMain.handle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId));
 ipcMain.handle('risks:deleteRiskMitigation', (event, riskId, ids) => deleteRiskMitigation(israProject, riskId, ids, getMainWindow()));
 ipcMain.handle('risks:updateRiskMitigation', (event, riskId, riskMitigationId, field, value) => updateRiskMitigation(israProject, riskId, riskMitigationId, field, value));
+ipcMain.handle('risks:updateRiskManagement', (event, riskId, field, value) => updateRiskManagement(israProject, riskId, field, value));
 ipcMain.handle('risks:isRiskExist', (event, id) => isRiskExist(israProject, id));
 ipcMain.handle('validate:risks', (event, currentRisk) => validateRisks(israProject, currentRisk));
 

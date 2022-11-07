@@ -98,6 +98,7 @@ contextBridge.exposeInMainWorld('risks', {
   addRiskMitigation: (riskId) => ipcRenderer.invoke('risks:addRiskMitigation', riskId),
   deleteRiskMitigation: (riskId, ids) => ipcRenderer.invoke('risks:deleteRiskMitigation', riskId, ids),
   updateRiskMitigation: (riskId, riskMitigationId, field, value) => ipcRenderer.invoke('risks:updateRiskMitigation', riskId, riskMitigationId, field, value),
+  updateRiskManagement: (riskId, field, value) => ipcRenderer.invoke('risks:updateRiskManagement', riskId, field, value),
   isRiskExist: (id) => ipcRenderer.invoke('risks:isRiskExist', id)
 });
 
