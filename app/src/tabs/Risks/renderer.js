@@ -379,8 +379,12 @@
 
           input.on('change', async (e)=> {
             const { value } = e.target;
-            const { mitigatedRiskScore } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
-            $('#mitigated_risk_score').text(mitigatedRiskScore);
+            const { mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
+            if ($('#inherent_risk_score').text() !== 'NaN') {
+              $('#mitigated_risk_score').text(mitigatedRiskScore);
+              $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+              $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+            }
           })
         }
         benefitsSection.append(div);
@@ -452,8 +456,12 @@
 
           input.on('change', async (e) => {
             const { value } = e.target;
-            const { mitigatedRiskScore } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
-            $('#mitigated_risk_score').text(mitigatedRiskScore);
+            const { mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
+            if ($('#inherent_risk_score').text() !== 'NaN') {
+              $('#mitigated_risk_score').text(mitigatedRiskScore);
+              $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+              $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+            }
           })
         }
         mitigationDecisionSection.append(div2);
@@ -478,6 +486,17 @@
         addRichTextArea(`#comment__desc__rich-text__${riskIdRef}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
       });
     };
+
+    const styleTable = (id, residualRiskLevel) => {
+      if (residualRiskLevel === 'Critical') risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#FF0000';
+      else if (residualRiskLevel === 'High') risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#E73927';
+      else if (residualRiskLevel === 'Medium') risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#FFA500';
+      else risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#000000';
+    };
+
+    const styleResidualRiskLevel = (residualRiskLevel) => {
+
+    }
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
@@ -571,10 +590,15 @@
         const { value } = e.target;
         if (value === 'Mitigate') $('.bottom:hidden').css('display', 'flex');
         else $('.bottom').css('display', 'none');
+       
         const { residualRiskScore, residualRiskLevel } = await window.risks.updateRiskManagement(riskId, 'riskManagementDecision', value);
-        $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-        $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-      })
+        if ($('#inherent_risk_score').text() !== 'NaN') {  
+          $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+          $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+          risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
+          styleTable(getCurrentRiskId(), residualRiskLevel);
+        }
+      });
       tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
       $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
       $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
@@ -621,6 +645,7 @@
         };
         risksTable.addData([tableData]);
         validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef);
+        styleTable(riskId, residualRiskLevel);
 
         // add checkbox
         // const checkbox = document.createElement('input');
@@ -827,7 +852,7 @@
       const intrusionDetection = $('#risk__intrusionDetection').find(":selected").val();
       const id = getCurrentRiskId();
 
-      const { riskLikelihood, inherentRiskScore, mitigatedRiskScore } = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
+      const { riskLikelihood, inherentRiskScore, mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
         skillLevel: skillLevel,
         reward: reward,
         accessResources: accessResources,
@@ -838,6 +863,8 @@
       riskData.riskLikelihood = riskLikelihood;
       $('#inherent_risk_score').text(inherentRiskScore);
       $('#mitigated_risk_score').text(mitigatedRiskScore);
+      $('#residual_risk_score').text(residualRiskScore);
+      $('#residual_risk_level').text(residualRiskLevel); 
 
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
@@ -859,10 +886,13 @@
       await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
-      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
+      const { riskLikelihood, inherentRiskScore, mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
       const riskData = risksData.find((risk)=> risk.riskId === id);
       riskData.riskLikelihood = riskLikelihood;
       $('#inherent_risk_score').text(inherentRiskScore);
+      $('#mitigated_risk_score').text(mitigatedRiskScore);
+      $('#residual_risk_score').text(residualRiskScore);
+      $('#residual_risk_level').text(residualRiskLevel); 
 
       setSecurityPropertyValues(riskLikelihood);  
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
@@ -870,8 +900,11 @@
 
     $('#risk__likelihood').on('change', async ()=>{
       const riskLikelihood = $('#risk__likelihood').find(":selected").val();
-      const { inherentRiskScore } = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood);
-      $('#inherent_risk_score').text(inherentRiskScore); 
+      const { inherentRiskScore, residualRiskScore, residualRiskLevel, mitigatedRiskScore } = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood);
+      $('#inherent_risk_score').text(inherentRiskScore);
+      $('#mitigated_risk_score').text(mitigatedRiskScore);
+      $('#residual_risk_score').text(residualRiskScore);
+      $('#residual_risk_level').text(residualRiskLevel); 
     });
 
     // trigger owasp likelihood evaluation section
@@ -910,10 +943,13 @@
     $('#risk__occurrence').on('change', async ()=>{
       const selected = $('#risk__occurrence').find(":selected").val();
       const id = getCurrentRiskId();
-      const { riskLikelihood, inherentRiskScore } = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
+      const { riskLikelihood, inherentRiskScore, mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
       updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
       $('#inherent_risk_score').text(inherentRiskScore);
+      $('#mitigated_risk_score').text(mitigatedRiskScore);
+      $('#residual_risk_score').text(residualRiskScore);
+      $('#residual_risk_level').text(residualRiskLevel);
     });
 
     // Risk Impact
@@ -923,6 +959,8 @@
       riskData.riskImpact = risk.riskImpact;
       $('#inherent_risk_score').text(risk.inherentRiskScore);
       $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
+      $('#residual_risk_score').text(risk.residualRiskScore);
+      $('#residual_risk_level').text(risk.residualRiskLevel);
 
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };
