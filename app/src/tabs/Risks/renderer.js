@@ -69,11 +69,19 @@
     };
 
     const setNaNValues = (riskAttackPathId) => {
-      $(`#risk__attack__path__score__${riskAttackPathId}`).text('NaN');
-      $('#all_attack_paths_score').text('NaN');
-      $('#inherent_risk_score').text('NaN');
-      $('#mitigated_risk_score').text('NaN');
-      $('#residual_risk_score').text('NaN');
+      if(riskAttackPathId) {
+        $(`#risk__attack__path__score__${riskAttackPathId}`).text('NaN').addClass('NaN');
+        $('#all_attack_paths_score').text('NaN').addClass('NaN');
+        $('#inherent_risk_score').text('NaN').addClass('NaN');
+        $('#mitigated_risk_score').text('NaN').addClass('NaN');
+        $('#residual_risk_score').text('NaN').addClass('NaN');
+      }else {
+        $(`#risk__attack__path__score__${riskAttackPathId}`).removeClass();
+        $('#all_attack_paths_score').removeClass();
+        $('#inherent_risk_score').removeClass();
+        $('#mitigated_risk_score').removeClass();
+        $('#residual_risk_score').removeClass();
+      }
     }
 
     // add vulnerability ref
@@ -99,6 +107,7 @@
           const { value } = e.target;
           const id = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
           if (id) setNaNValues(id);
+          else setNaNValues();
         });
         vulnerabilityDiv.append(select);
         vulnerabilityDiv.append('<span style="margin-left: 10px" class="and">AND<span>')
@@ -384,7 +393,9 @@
               $('#mitigated_risk_score').text(mitigatedRiskScore);
               $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
               $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+              risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
               styleResidualRiskLevel(residualRiskLevel);
+              styleTable(getCurrentRiskId(), residualRiskLevel);
             }
           })
         }
@@ -462,7 +473,9 @@
               $('#mitigated_risk_score').text(mitigatedRiskScore);
               $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
               $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+              risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
               styleResidualRiskLevel(residualRiskLevel);
+              styleTable(getCurrentRiskId(), residualRiskLevel);
             }
           })
         }
@@ -615,6 +628,7 @@
         const { vulnerabilityRef, riskAttackPathId } = path;
         vulnerabilityRef.forEach((ref)=> {
           if (ref.vulnerabilityIdRef !== null && ref.score === null) setNaNValues(riskAttackPathId);
+          else setNaNValues();
         })
       })
     };
@@ -974,7 +988,9 @@
       $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
       $('#residual_risk_score').text(risk.residualRiskScore);
       $('#residual_risk_level').text(risk.residualRiskLevel);
-      styleResidualRiskLevel(residualRiskLevel);
+      risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel: risk.residualRiskLevel }]);
+      styleTable(risk.riskId, risk.residualRiskLevel);
+      styleResidualRiskLevel(risk.residualRiskLevel);
 
       updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };

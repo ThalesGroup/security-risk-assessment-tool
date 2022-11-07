@@ -132,3 +132,7 @@ input[name="risks__attack__path__checkboxes"]{
     padding: 0;
     margin: 0;
 }
+
+.NaN {
+    color: red;
+}
