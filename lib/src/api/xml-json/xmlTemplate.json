@@ -581,7 +581,7 @@
                     ""
                 ],
                 "riskManagementDecision": [
-                    "Mitigate"
+                    "Discarded"
                 ],
                 "riskManagementDetail": [
                     "Security control implemented by adding proprietary encryption on top of TLS communication layer."

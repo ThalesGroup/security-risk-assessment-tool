@@ -43,10 +43,11 @@
       const { value } = e.target;
       const filterOptions = [
         [
-          { field: "vulnerabilityId", type: "like", value: value },
+          { field: "riskId", type: "like", value: value },
           { field: "projectVersionRef", type: "like", value: value },
-          { field: "vulnerabilityName", type: "like", value: value },
-          { field: "overallLevel", type: "like", value: value },
+          { field: "riskName", type: "like", value: value },
+          { field: "residualRiskLevel", type: "like", value: value },
+          { field: "riskManagementDecision", type: "like", value: value },
         ]
       ];
       risksTable.setFilter(filterOptions);
@@ -56,8 +57,8 @@
           risksTable.deselectRow(r.riskId);
         });
         risksTable.selectRow(filteredRows[0].riskId);
-        addSelectedVulnerabilityRowData(filteredRows[0].riskId);
-      } else $('#vulnerabilities section').hide();
+        addSelectedRowData(filteredRows[0].riskId);
+      } else $('#risks section').hide();
     });
 
     $('button[id="filter-clear"]').on('click', () => {
@@ -545,9 +546,13 @@
       else $('#residual_risk_level').css('color', '#000000');
     }
 
+    const styleRiskName = (value, id) => {
+      if (value === 'Discarded') risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
+      else risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'none';
+    };
+
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
-      risksTable.selectRow(id);
       const {
         riskId,
         riskName,
@@ -633,20 +638,6 @@
 
       //risk management
       $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
-      $(`input[type='radio'][name='risk__management__decision']`).change(async (e)=> {
-        const { value } = e.target;
-        if (value === 'Mitigate') $('.bottom:hidden').css('display', 'flex');
-        else $('.bottom').css('display', 'none');
-       
-        const { residualRiskScore, residualRiskLevel } = await window.risks.updateRiskManagement(riskId, 'riskManagementDecision', value);
-        if ($('#inherent_risk_score').text() !== 'NaN') {  
-          $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-          $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-          risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
-          styleTable(getCurrentRiskId(), residualRiskLevel);
-          styleResidualRiskLevel(residualRiskLevel);
-        }
-      });
       tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
       $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
       $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
@@ -696,6 +687,7 @@
         risksTable.addData([tableData]);
         validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef);
         styleTable(riskId, residualRiskLevel);
+        styleRiskName(riskManagementDecision, riskId);
 
         // add checkbox
         // const checkbox = document.createElement('input');
@@ -729,6 +721,7 @@
           risksData.forEach((risk)=>{
             risksTable.deselectRow(risk.riskId);
           })
+          risksTable.selectRow(risksData[0].riskId);
           addSelectedRowData(risksData[0].riskId);
         }
       });
@@ -745,6 +738,7 @@
         addRisk(risk);
         if (i === 0) {
           const { riskId } = risk;
+          risksTable.selectRow(riskId);
           addSelectedRowData(riskId)
         }
       });
@@ -758,10 +752,10 @@
       risksData.push(risk[0]);
       addRisk(risk[0]);
       
-      risksData.forEach((risk)=>{
-        risksTable.deselectRow(risk.riskId);
-      })
-      addSelectedRowData(risk[0].riskId);
+      // risksData.forEach((risk)=>{
+      //   risksTable.deselectRow(risk.riskId);
+      // })
+      // addSelectedRowData(risk[0].riskId);
     });
 
     // delete Risk button
@@ -1096,6 +1090,32 @@
       window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
     });
 
+
+    /**
+* 
+* 
+* Risk Management evaluation
+* 
+* 
+*/
+
+  $(`input[type='radio'][name='risk__management__decision']`).change(async (e) => {
+    const { value } = e.target;
+    if (value === 'Mitigate') $('.bottom:hidden').css('display', 'flex');
+    else $('.bottom').css('display', 'none');
+
+    const { residualRiskScore, residualRiskLevel } = await window.risks.updateRiskManagement(getCurrentRiskId(), 'riskManagementDecision', value);
+    styleRiskName(value, getCurrentRiskId());
+    risksTable.updateData([{ riskId: getCurrentRiskId(), riskManagementDecision: value }]);
+    if ($('#inherent_risk_score').text() !== 'NaN') {
+      $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+      $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+      risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
+      styleTable(getCurrentRiskId(), residualRiskLevel);
+      styleResidualRiskLevel(residualRiskLevel);
+    }
+  });
+
     // reload risks
     window.risks.load(async (event, data) => {
       const fetchedData = await JSON.parse(data);
@@ -1109,6 +1129,7 @@
         addRisk(risk);
         if(risk.riskId === currentRiskId) {
           const {riskId} = risk;
+          risksTable.selectRow(riskId);
           addSelectedRowData(riskId)
         }
       });
