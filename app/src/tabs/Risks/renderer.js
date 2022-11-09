@@ -38,6 +38,34 @@
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
 
+    // filter
+    $('input[id="filter-value"]').on('change', (e) => {
+      const { value } = e.target;
+      const filterOptions = [
+        [
+          { field: "vulnerabilityId", type: "like", value: value },
+          { field: "projectVersionRef", type: "like", value: value },
+          { field: "vulnerabilityName", type: "like", value: value },
+          { field: "overallLevel", type: "like", value: value },
+        ]
+      ];
+      risksTable.setFilter(filterOptions);
+      const filteredRows = risksTable.searchData(filterOptions);
+      if (filteredRows[0]) {
+        risksData.forEach((r) => {
+          risksTable.deselectRow(r.riskId);
+        });
+        risksTable.selectRow(filteredRows[0].riskId);
+        addSelectedVulnerabilityRowData(filteredRows[0].riskId);
+      } else $('#vulnerabilities section').hide();
+    });
+
+    $('button[id="filter-clear"]').on('click', () => {
+      risksTable.clearFilter();
+      $('input[id="filter-value"]').val('');
+      if (risksData.length > 0) $('#vulnerabilities section').show();
+    });
+
     /**
      * 
      * 
@@ -723,7 +751,7 @@
     };
 
     // add Risk button
-    $('#risks button').first().on('click', async () => {
+    $('#risks .add-delete-container button').first().on('click', async () => {
       const risk = await window.risks.addRisk();
       // update risksData
       if(risksData.length === 0) $('#risks section').show();
@@ -737,7 +765,7 @@
     });
 
     // delete Risk button
-    $('#risks button:nth-child(2)').on('click', async () => {
+    $('#risks .add-delete-container button:nth-child(2)').on('click', async () => {
       const checkboxes = document.getElementsByName('risks__table__checkboxes');
       deleteRisks(checkboxes);
     });

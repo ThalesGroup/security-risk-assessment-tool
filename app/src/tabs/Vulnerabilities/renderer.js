@@ -55,6 +55,7 @@
             vulnerabilitiesData.forEach((v) => {
                 vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
             });
+            vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
             addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
         } else $('#vulnerabilities section').hide();
     });
@@ -99,13 +100,15 @@
 
         vulnerabilities.forEach((v, i) => {
             addVulnerability(v);
-            if (i === 0) addSelectedVulnerabilityRowData(v.vulnerabilityId);
+            if (i === 0) {
+                vulnerabilitiesTable.selectRow(v.vulnerabilityId);
+                addSelectedVulnerabilityRowData(v.vulnerabilityId);
+            }
         });
     };
     
 
     const addSelectedVulnerabilityRowData = async (id) =>{
-        vulnerabilitiesTable.selectRow(id);
         const {
             vulnerabilityId,
             vulnerabilityName,
@@ -259,6 +262,7 @@
                 vulnerabilitiesData.forEach((v) => {
                     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
                 });
+                vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
                 addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
             }
         });
@@ -268,13 +272,15 @@
     $('#vulnerabilities .add-delete-container button').first().on('click', async () => {
         const vulnerability = await window.vulnerabilities.addVulnerability();
         // update vulnerabilitiesData
+        $('#vulnerabilities section').show();
         vulnerabilitiesData.push(vulnerability[0]);
         addVulnerability(vulnerability[0]);
         
-        vulnerabilitiesData.forEach((v)=>{
-            vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-        });
-        addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
+        // vulnerabilitiesData.forEach((v)=>{
+        //     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+        // });
+
+        // addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
     });
 
     // delete Vulnerability button
