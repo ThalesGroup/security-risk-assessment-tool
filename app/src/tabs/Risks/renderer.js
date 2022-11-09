@@ -669,6 +669,7 @@
 
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
+      risksTable.selectRow(row.getIndex());
       addSelectedRowData(row.getIndex());
     });
 
@@ -811,6 +812,7 @@
         const fetchedData = await JSON.parse(data);
         risksData = fetchedData.Risk;
         if (risksData.length === 0) $('#risks section').hide();
+        else $('#risks section').show();
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
         updateRisksFields(risksData);

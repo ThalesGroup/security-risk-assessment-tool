@@ -39,11 +39,11 @@
 #vulnerability__name {
     box-sizing:border-box;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 2%;
 }
 
 #vulnerability__family {
-    margin-bottom: 10px;
+    margin-bottom: 2%;
 }
 
 #vulnerability__CVE,
@@ -53,17 +53,17 @@
 }
 
 #vulnerability__CVE{
-    margin-bottom: 10px;
+    margin-bottom: 2%;
 }
 
 .vulnerabilities__flexbox {
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 2%;
 }
 
 .vulnerabilities__flexbox div:first-child{
-    margin-right: 10px;
+    margin-right: 2%;
 }
 
 #vulnerability__url--insert{
@@ -84,14 +84,14 @@ label[for=vulnerability__family]{
 
 label{
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 2%;
 }
 
 .hyperlink-attachment-align {
     display: flex;
     flex-direction: row;
     font-size:small;
-    margin: 10px 0 10px 0;
+    margin: 2% 0 2% 0;
 }
 
 .score {
@@ -100,7 +100,7 @@ label{
     align-items: center;
     font-weight: bold;
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 4%;
 }
 
 .score label{
@@ -121,7 +121,7 @@ span{
 }
 
 .select__refs {
-    margin-bottom: 10px;
+    margin-bottom: 2%;
 }
 
 .Low {

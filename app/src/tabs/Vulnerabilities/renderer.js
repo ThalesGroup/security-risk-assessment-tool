@@ -162,6 +162,7 @@
 
     // row is clicked & selected
     vulnerabilitiesTable.on('rowClick', (e, row) => {
+        vulnerabilitiesTable.selectRow(row.getIndex());
         addSelectedVulnerabilityRowData(row.getIndex());
     });
 
@@ -214,6 +215,7 @@
         vulnerabilitiesData = fetchedData.Vulnerability;
         supportingAssetsData = fetchedData.SupportingAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
+        else $('#vulnerabilities section').show();
         updateSupportingAssets(fetchedData.SupportingAsset);
         updateVulnerabilityFields(vulnerabilitiesData);
     };
@@ -254,18 +256,19 @@
                 return object.vulnerabilityId === id;
             });
             // $(`#vulnerabilties__table__checkboxes__${id}`).remove();
-            vulnerabilitiesTable.getRow(Number(id)).delete();
   
+            vulnerabilitiesTable.getRow(Number(id)).delete();
             vulnerabilitiesData.splice(index, 1);
-            if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
-            else {
-                vulnerabilitiesData.forEach((v) => {
-                    vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-                });
-                vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
-                addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
-            }
         });
+        
+        if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
+        else {
+            vulnerabilitiesData.forEach((v) => {
+                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+            });
+            vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
+            addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
+        }
     };
 
     // add Vulnerability button
@@ -275,6 +278,7 @@
         $('#vulnerabilities section').show();
         vulnerabilitiesData.push(vulnerability[0]);
         addVulnerability(vulnerability[0]);
+        if (vulnerabilitiesData.length === 0) vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
         
         // vulnerabilitiesData.forEach((v)=>{
         //     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
