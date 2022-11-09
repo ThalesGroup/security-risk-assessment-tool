@@ -119,6 +119,7 @@
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
+        vulnerabilityDiv.css('margin-bottom', '1%');
         vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`);
 
         // if (i > 0) div.append('<p>AND</p>');
@@ -172,17 +173,18 @@
 
         // add div
         let div = $("<div>").append(`
-          <div style="width:100%;">
-            <div style="width:49%; display:inline-block; padding:0; border: 1px solid black;">
+          <div style="width:100%; display: grid; grid-template-columns: auto auto;">
+            <div style="display:inline-block; padding:2%; border: 1px solid black;">
               <span>Attack Path ${riskAttackPathId}</span>
             </div>
-            <div style="text-align:right; width:48%; display:inline-block; padding:0; padding-right:10px; border: 1px solid black;">
+            <div style="text-align:right; display:inline-block; padding:2%; padding-right:10px; border: 1px solid black;">
               <span>scoring: <span id="risk__attack__path__score__${riskAttackPathId}">${attackPathScore == null ? '' : attackPathScore}<span><span>
             </div>
           </div>
         `).css('background-color', 'rgb(183, 183, 183)');
         div.css('width', '100%');
-        div.css('margin-left', '20px');
+        div.css('margin-left', '3%');
+        div.css('border', '1px solid black');
         div.attr('id', `risk_attack_path_${riskAttackPathId}`);
         div.attr('class', `risk_attack_paths`);
         const addDeleteDiv = $('<div>');
