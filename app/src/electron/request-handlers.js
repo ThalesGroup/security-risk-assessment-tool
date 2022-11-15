@@ -180,9 +180,12 @@ const validateClasses = () => {
 
   const validateRisksTab = () => {
     for (let i = 0; i < Risk.length; i++) {
-      const { riskName } = Risk[i];
+      const { riskName, riskMitigation } = Risk[i];
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
+     for(let i=0; i<riskMitigation.length; i++){
+      if(!Number.isInteger(riskMitigation.cost)) return false;
+     }
     }
     return true;
   };
