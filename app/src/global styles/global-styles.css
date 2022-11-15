@@ -131,12 +131,13 @@ select option {
 
 .add-delete-container{
     text-align: right;
+    margin-bottom: 2%;
 }
 
 .addDelete{
-    background-color: transparent;
-    border: none;
-    padding: 10px 0px;
+    /* background-color: transparent;
+    border: none; */
+    width: 8%;
     font-size: 12px;
     cursor: pointer;
 }

@@ -479,13 +479,6 @@
         decisionOptions.forEach((option) => {
           mitigationDecisionOptions[option.title] = option.const;
         });
-        // const mitigationDecisionOptions = {
-        //   'Not Defined': '',
-        //   'Rejected': 'Rejected',
-        //   'Accepted': 'Accepted',
-        //   'Postphoned': 'Postphoned',
-        //   'Done': 'Done'
-        // };
 
         const div2 = $('<div>');
         for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
