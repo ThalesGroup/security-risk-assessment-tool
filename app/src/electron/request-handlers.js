@@ -520,10 +520,10 @@ ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskA
 ipcMain.handle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value, getMainWindow()));
 ipcMain.handle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId) => addVulnerabilityRef(israProject, riskId, riskAttackPathId, getMainWindow()));
 ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids, getMainWindow()));
-ipcMain.handle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId));
+ipcMain.handle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId, getMainWindow()));
 ipcMain.handle('risks:deleteRiskMitigation', (event, riskId, ids) => deleteRiskMitigation(israProject, riskId, ids, getMainWindow()));
-ipcMain.handle('risks:updateRiskMitigation', (event, riskId, riskMitigationId, field, value) => updateRiskMitigation(israProject, riskId, riskMitigationId, field, value));
-ipcMain.handle('risks:updateRiskManagement', (event, riskId, field, value) => updateRiskManagement(israProject, riskId, field, value));
+ipcMain.handle('risks:updateRiskMitigation', (event, riskId, riskMitigationId, field, value) => updateRiskMitigation(israProject, riskId, riskMitigationId, field, value, getMainWindow()));
+ipcMain.handle('risks:updateRiskManagement', (event, riskId, field, value) => updateRiskManagement(israProject, riskId, field, value, getMainWindow()));
 ipcMain.handle('risks:isRiskExist', (event, id) => isRiskExist(israProject, id));
 ipcMain.handle('validate:risks', (event, currentRisk) => validateRisks(israProject, currentRisk));
 

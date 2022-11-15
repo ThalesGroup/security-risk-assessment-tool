@@ -135,9 +135,11 @@
         let select = $('<select>').append(vulnerabilityOptions);
         select.on('change', async (e)=> {
           const { value } = e.target;
-          const id = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
-          if (id) setNaNValues(id);
-          else setNaNValues();
+          await validatePreviousRisk(getCurrentRiskId());
+          const risk = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
+          reloadCurrentRisk(risk);
+          // if (id) setNaNValues(id);
+          // else setNaNValues();
         });
         vulnerabilityDiv.append(select);
         vulnerabilityDiv.append('<span style="margin-left: 2%; margin-right: 2%" class="and">AND<span>')
@@ -198,21 +200,30 @@
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
-          const [count, ref, risks] = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
+          await validatePreviousRisk(getCurrentRiskId());
+          const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
+          reloadCurrentRisk(risk);
+          // reloadCurrentRisk(risk);
           // if (count > 1) div.append('<p>AND</p>');
-          addVulnerabilityRef([ref], div, vulnerabilityOptions, riskAttackPathId);
-          risksData = risks;
+          // addVulnerabilityRef([ref], div, vulnerabilityOptions, riskAttackPathId);
+          // risksData = risks;
         });
 
         // delete vulnerabilityRef
-        deleteButton.addEventListener('click', ()=>{
+        deleteButton.addEventListener('click', async ()=>{
           const checkboxes = document.getElementsByName('risks__vulnerability__checkboxes');
+          const ids = [];
 
           checkboxes.forEach((box) => {
             if (box.checked) {
-              window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
+              ids.push(Number(box.getAttribute('data-row-id')));
+              // window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
             }
           });
+
+          await validatePreviousRisk(getCurrentRiskId());
+          const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, ids);
+          reloadCurrentRisk(risk);
         });
 
         addDeleteDiv.append(addButton);
@@ -420,15 +431,17 @@
 
           input.on('change', async (e)=> {
             const { value } = e.target;
-            const { mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
-            if ($('#inherent_risk_score').text() !== 'NaN') {
-              $('#mitigated_risk_score').text(mitigatedRiskScore);
-              $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-              $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-              risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
-              styleResidualRiskLevel(residualRiskLevel);
-              styleResidualRiskLevelTable(getCurrentRiskId(), residualRiskLevel);
-            }
+            await validatePreviousRisk(getCurrentRiskId());
+            const risk = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
+            reloadCurrentRisk(risk);
+            // if ($('#inherent_risk_score').text() !== 'NaN') {
+            //   $('#mitigated_risk_score').text(mitigatedRiskScore);
+            //   $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+            //   $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+            //   risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
+            //   styleResidualRiskLevel(residualRiskLevel);
+            //   styleResidualRiskLevelTable(getCurrentRiskId(), residualRiskLevel);
+            // }
           })
         }
         benefitsSection.append(div);
@@ -453,6 +466,9 @@
         validateCost(input, Number(cost));
         input.on('change', (e) => {
           const { value } = e.target;
+          const { riskMitigation } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+          const rm = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
+          rm.cost = Number(value);
           validateCost(input, Number(value));
         });
         costSection.append(input);
@@ -500,15 +516,17 @@
 
           input.on('change', async (e) => {
             const { value } = e.target;
-            const { mitigatedRiskScore, residualRiskScore, residualRiskLevel } = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
-            if ($('#inherent_risk_score').text() !== 'NaN') {
-              $('#mitigated_risk_score').text(mitigatedRiskScore);
-              $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-              $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-              risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
-              styleResidualRiskLevel(residualRiskLevel);
-              styleResidualRiskLevelTable(getCurrentRiskId(), residualRiskLevel);
-            }
+            await validatePreviousRisk(getCurrentRiskId());
+            const risk = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
+            reloadCurrentRisk(risk);
+            // if ($('#inherent_risk_score').text() !== 'NaN') {
+            //   $('#mitigated_risk_score').text(mitigatedRiskScore);
+            //   $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+            //   $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+            //   risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
+            //   styleResidualRiskLevel(residualRiskLevel);
+            //   styleResidualRiskLevelTable(getCurrentRiskId(), residualRiskLevel);
+            // }
           })
         }
         mitigationDecisionSection.append(div2);
@@ -811,7 +829,7 @@
       });
     });
 
-    const reloadCurrentRisk = (updatedRisk) => {
+    const reloadCurrentRisk = async (updatedRisk) => {
       const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       let riskIndex = risksData.findIndex((risk) => risk.riskId === updatedRisk.riskId);
@@ -832,8 +850,9 @@
      * 
   */
     const updateRiskName = async (field, value) =>{
-      const updatedRisk = await window.risks.updateRiskName(getCurrentRiskId(), field, value);
-      reloadCurrentRisk(updatedRisk);
+      await validatePreviousRisk(getCurrentRiskId());
+      const risk = await window.risks.updateRiskName(getCurrentRiskId(), field, value);
+      reloadCurrentRisk(risk);
     };
 
     // trigger Manual RiskName section
@@ -907,6 +926,7 @@
       const intrusionDetection = $('#risk__intrusionDetection').find(":selected").val();
       const id = getCurrentRiskId();
 
+      await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
         skillLevel: skillLevel,
         reward: reward,
@@ -914,8 +934,19 @@
         size: size,
         intrusionDetection: intrusionDetection
       });
-      const { riskLikelihood } = risk;
       reloadCurrentRisk(risk);
+      // const { riskLikelihood } = risk;
+      // reloadCurrentRisk(risk);
+      // const riskData = risksData.find((risk)=> risk.riskId === id);
+      // riskData.riskLikelihood = riskLikelihood;
+      // $('#inherent_risk_score').text(inherentRiskScore);
+      // $('#mitigated_risk_score').text(mitigatedRiskScore);
+      // $('#residual_risk_score').text(residualRiskScore);
+      // $('#residual_risk_level').text(residualRiskLevel); 
+      // styleResidualRiskLevel(residualRiskLevel);
+
+      // updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+      // $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
     };
 
     // trigger simple likelihood evaluation section
@@ -934,14 +965,31 @@
       await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
+      await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
       reloadCurrentRisk(risk);
+      // const riskData = risksData.find((risk)=> risk.riskId === id);
+      // riskData.riskLikelihood = riskLikelihood;
+      // $('#inherent_risk_score').text(inherentRiskScore);
+      // $('#mitigated_risk_score').text(mitigatedRiskScore);
+      // $('#residual_risk_score').text(residualRiskScore);
+      // $('#residual_risk_level').text(residualRiskLevel); 
+      // styleResidualRiskLevel(residualRiskLevel);
+
+      // setSecurityPropertyValues(riskLikelihood);  
+      // updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
     });
 
     $('#risk__likelihood').on('change', async ()=>{
       const riskLikelihood = $('#risk__likelihood').find(":selected").val();
+      await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihood);
       reloadCurrentRisk(risk);
+      // $('#inherent_risk_score').text(inherentRiskScore);
+      // $('#mitigated_risk_score').text(mitigatedRiskScore);
+      // $('#residual_risk_score').text(residualRiskScore);
+      // $('#residual_risk_level').text(residualRiskLevel);
+      // styleResidualRiskLevel(residualRiskLevel); 
     });
 
     // trigger owasp likelihood evaluation section
@@ -950,9 +998,13 @@
       $('#risk__likehood__table').show();
 
       const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
+      await validatePreviousRisk(getCurrentRiskId());
       await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'riskLikelihood', riskLikelihoodPrevValue);
       const risk = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'isOWASPLikelihood', true);
       reloadCurrentRisk(risk);
+      // const riskData = risksData.find((risk)=> risk.riskId === getCurrentRiskId());
+      // riskData.riskLikelihood = riskLikelihood;
+      // $('#inherent_risk_score').text(inherentRiskScore);
     });
 
     $('#risk__skillLevel').on('change', ()=>{
@@ -978,16 +1030,23 @@
     $('#risk__occurrence').on('change', async ()=>{
       const selected = $('#risk__occurrence').find(":selected").val();
       const id = getCurrentRiskId();
+      await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskLikelihood(id, 'occurrence', selected);
-      const { riskLikelihood } = risk;
       reloadCurrentRisk(risk);
+      // updateOccurrenceThreatFactorTable(riskLikelihood.threatFactorLevel, riskLikelihood.occurrenceLevel);
+      // $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+      // $('#inherent_risk_score').text(inherentRiskScore);
+      // $('#mitigated_risk_score').text(mitigatedRiskScore);
+      // $('#residual_risk_score').text(residualRiskScore);
+      // $('#residual_risk_level').text(residualRiskLevel);
+      // styleResidualRiskLevel(residualRiskLevel);
     });
 
     // Risk Impact
     const checkbox = async (field, value)=>{
+      await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskImpact(getCurrentRiskId(), field, value);
       reloadCurrentRisk(risk);
-      updateEvaluationTable(risk.riskImpact, risk.riskName.businessAssetRef);
     };
 
     $('#risk__confidentialty').on('change', ()=>{
@@ -1022,18 +1081,22 @@
     * 
  */
     // add Risk attack path button
-    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', () => {
-      window.risks.addRiskAttackPath(getCurrentRiskId());
+    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
+      await validatePreviousRisk(getCurrentRiskId());
+      const risk = await window.risks.addRiskAttackPath(getCurrentRiskId());
+      reloadCurrentRisk(risk);
     });
 
     // delete Risk attack path button
-    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', () => {
+    $('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', async () => {
       const checkedRiskAttackPaths = [];
       const checkboxes = document.getElementsByName('risks__attack__path__checkboxes');
       checkboxes.forEach((box) => {
         if (box.checked) checkedRiskAttackPaths.push(Number(box.value));
       });
-      window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
+      await validatePreviousRisk(getCurrentRiskId());
+      const risk = await window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
+      reloadCurrentRisk(risk);
     });
 
         /**
@@ -1046,19 +1109,23 @@
 
     // add Risk Mitigation button
     $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:first-of-type').on('click', async () => {
-      const riskMitigation = await window.risks.addRiskMitigation(getCurrentRiskId());
-      const { riskManagementDecision } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
-      addMitigationSection(riskMitigation, riskManagementDecision);
+      await validatePreviousRisk(getCurrentRiskId());
+      const risk = await window.risks.addRiskMitigation(getCurrentRiskId());
+      reloadCurrentRisk(risk);
+      // const { riskManagementDecision } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+      // addMitigationSection(riskMitigation, riskManagementDecision);
     });
 
     // delete Risk Mitigation button
-    $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', () => {
+    $('#risks__risk__mitigation__evaluation .add-delete-container:first-of-type button:nth-child(2)').on('click', async () => {
       const checkedRiskMitigations = [];
       const checkboxes = document.getElementsByName('risks__mitigation__checkboxes');
       checkboxes.forEach((box) => {
         if (box.checked) checkedRiskMitigations.push(Number(box.value));
       });
-      window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
+      await validatePreviousRisk(getCurrentRiskId());
+      const risk = await window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
+      reloadCurrentRisk(risk);
     });
 
 
@@ -1075,36 +1142,39 @@
     if (value === 'Mitigate') $('.bottom:hidden').css('display', 'flex');
     else $('.bottom').css('display', 'none');
 
-    const { residualRiskScore, residualRiskLevel } = await window.risks.updateRiskManagement(getCurrentRiskId(), 'riskManagementDecision', value);
-    styleRiskName(value, getCurrentRiskId());
-    risksTable.updateData([{ riskId: getCurrentRiskId(), riskManagementDecision: value }]);
-    if ($('#inherent_risk_score').text() !== 'NaN') {
-      $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-      $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-      risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
-      styleResidualRiskLevelTable(getCurrentRiskId(), residualRiskLevel);
-      styleResidualRiskLevel(residualRiskLevel);
-    }
+    await validatePreviousRisk(getCurrentRiskId());
+    const risk = await window.risks.updateRiskManagement(getCurrentRiskId(), 'riskManagementDecision', value);
+    reloadCurrentRisk(risk);
+    // styleRiskName(value, getCurrentRiskId());
+    // risksTable.updateData([{ riskId: getCurrentRiskId(), riskManagementDecision: value }]);
+    // if ($('#inherent_risk_score').text() !== 'NaN') {
+    //   $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+    //   $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+    //   risksTable.updateData([{ riskId: getCurrentRiskId(), residualRiskLevel }]);
+    //   styleResidualRiskLevelTable(getCurrentRiskId(), residualRiskLevel);
+    //   styleResidualRiskLevel(residualRiskLevel);
+    // }
   });
 
-    // reload risks
-    window.risks.load(async (event, data) => {
-      const fetchedData = await JSON.parse(data);
-      risksData = fetchedData.Risk;
-      assetsRelationshipSetUp(fetchedData);
+    // // reload current risk
+    // window.risks.load(async (event, risk) => {
+    //   reloadCurrentRisk(risk);
+    //   // const risk = await JSON.parse(data);
+    //   // risksData = fetchedData.Risk;
+    //   // assetsRelationshipSetUp(fetchedData);
 
-      const currentRiskId = risksTable.getSelectedData()[0].riskId;
-      risksTable.clearData();
-      $('#risks__table__checkboxes').empty();
-      risksData.forEach((risk, i) => {
-        addRisk(risk);
-        if(risk.riskId === currentRiskId) {
-          const {riskId} = risk;
-          risksTable.selectRow(riskId);
-          addSelectedRowData(riskId)
-        }
-      });
-    });
+    //   // const currentRiskId = risksTable.getSelectedData()[0].riskId;
+    //   // risksTable.clearData();
+    //   // $('#risks__table__checkboxes').empty();
+    //   // risksData.forEach((risk, i) => {
+    //   //   addRisk(risk);
+    //   //   if(risk.riskId === currentRiskId) {
+    //   //     const {riskId} = risk;
+    //   //     risksTable.selectRow(riskId);
+    //   //     addSelectedRowData(riskId)
+    //   //   }
+    //   // });
+    // });
     
   } catch (err) {
     alert('Failed to load Risks Tab: ' + err);
