@@ -882,7 +882,6 @@
       const input = $('#risk__motivation').val();
       updateRiskName('motivation', input);
       validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', 'supportingRef', input);
-
     });
 
   /**

@@ -181,8 +181,8 @@ const validateClasses = () => {
   const validateRisksTab = () => {
     for (let i = 0; i < Risk.length; i++) {
       const { riskName } = Risk[i];
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef } = riskName;
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null) return false;
+      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
+      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
     }
     return true;
   };
