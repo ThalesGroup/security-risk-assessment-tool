@@ -78,8 +78,8 @@
       return risksTable.getSelectedData()[0].riskId;
     };
 
-    const validateRiskName = (riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef) => {
-      if(threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null){
+    const validateRiskName = (riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation) => {
+      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
         risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#FF0000';
       } else risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#000000';
     };
@@ -549,7 +549,8 @@
     }
 
     const styleRiskName = (value, id) => {
-      if (value === 'Discarded') risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
+      const currentColour = risksTable.getRow(id).getCell('riskName').getElement().style.color;
+      if (value === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
       else risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'none';
     };
 
@@ -677,7 +678,7 @@
 
     const addRisk = (risk) => {
       const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef } = riskName;
+      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       // risksTable.on('tableBuilt', () => {
         // add risk data
         const tableData = {
@@ -688,7 +689,7 @@
           riskManagementDecision
         };
         risksTable.addData([tableData]);
-        validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef);
+        validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation);
         styleTable(riskId, residualRiskLevel);
         styleRiskName(riskManagementDecision, riskId);
 
@@ -855,31 +856,33 @@
     $('#risk__threatAgent').on('change', ()=>{   
       const selected = $('#risk__threatAgent').find(":selected").val();
       updateRiskName('threatAgent', selected);
-      validateRiskName(getCurrentRiskId(), selected, 'threatVerb', 'businessAssetRef', 'supportingRef');
+      validateRiskName(getCurrentRiskId(), selected, 'threatVerb', 'businessAssetRef', 'supportingRef', 'motivation');
     });
 
     $('#risk__threat').on('change', ()=>{
       const selected = $('#risk__threat').find(":selected").val();
       updateRiskName('threatVerb', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', selected, 'businessAssetRef', 'supportingRef');
+      validateRiskName(getCurrentRiskId(), 'threatAgent', selected, 'businessAssetRef', 'supportingRef', 'motivation');
     });
 
     $('#risk__businessAsset').on('change', ()=>{
       const selected = $('#risk__businessAsset').find(":selected").val();
       updateRiskName('businessAssetRef', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', selected, 'supportingRef');
+      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', selected, 'supportingRef', 'motivation');
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', selected);
+      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', selected, 'motivation');
     });
 
     $('#risk__motivation').on('change', ()=>{
       const input = $('#risk__motivation').val();
       updateRiskName('motivation', input);
+      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', 'supportingRef', input);
+
     });
 
   /**
