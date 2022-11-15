@@ -191,6 +191,9 @@ tabs.onclick = (e) => {
     case 'vulnerabilities':
       location.href = '../Vulnerabilities/vulnerabilities.html';
       break;
+    case 'isra-report':
+      location.href = '../Report/report.html';
+      break;
     default:
       break;
   }

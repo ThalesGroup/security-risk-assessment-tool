@@ -803,6 +803,7 @@
       });
     });
 
+    // reloads all data displayed for current risk
     const reloadCurrentRisk = (updatedRisk) => {
       const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
@@ -816,7 +817,7 @@
       addSelectedRowData(riskId);
     };
 
-    // for updateRiskLikelihood, updateRiskMitigation, updateRiskManagement
+    // reloads selected data displayed for updateRiskLikelihood, updateRiskMitigation, updateRiskManagement
     const updateScoresAndLevel = (risk) => {
       let riskIndex = risksData.findIndex((r) => r.riskId === risk.riskId);
       risksData[riskIndex] = risk;
