@@ -25,7 +25,7 @@
 #risks__risk__description > div:first-child {
     display: flex;
     justify-content: space-between;
-    padding: 5px;
+    padding: 2%;
 }
 
 #risks section {
@@ -38,7 +38,7 @@
 
 #risk__manual__riskName input{
     width: 100%;
-    margin: 16px 0 16px 0;
+    margin: 2% 0 2% 0;
 }
 
 .risk__flex {

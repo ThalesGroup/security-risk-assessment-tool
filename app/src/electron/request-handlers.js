@@ -510,8 +510,8 @@ const { renderRisks } = require('../../../lib/src/api/Risk/render-risks');
 ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
 ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
-ipcMain.on('risks:updateRiskName', (event, id, field, value) => {
-  updateRiskName(israProject, getMainWindow(), id, field, value);
+ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
+  return updateRiskName(israProject, getMainWindow(), id, field, value);
 });
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value, getMainWindow()));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value, getMainWindow()));
