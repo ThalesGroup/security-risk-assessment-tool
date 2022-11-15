@@ -99,7 +99,9 @@ contextBridge.exposeInMainWorld('risks', {
   deleteRiskMitigation: (riskId, ids) => ipcRenderer.invoke('risks:deleteRiskMitigation', riskId, ids),
   updateRiskMitigation: (riskId, riskMitigationId, field, value) => ipcRenderer.invoke('risks:updateRiskMitigation', riskId, riskMitigationId, field, value),
   updateRiskManagement: (riskId, field, value) => ipcRenderer.invoke('risks:updateRiskManagement', riskId, field, value),
-  isRiskExist: (id) => ipcRenderer.invoke('risks:isRiskExist', id)
+  isRiskExist: (id) => ipcRenderer.invoke('risks:isRiskExist', id),
+  expectedBenefitsOptions: () => ipcRenderer.invoke('risks:expectedBenefitsOptions'),
+  mitigationDecisionOptions: () => ipcRenderer.invoke('risks:mitigationDecisionOptions')
 });
 
 contextBridge.exposeInMainWorld('vulnerabilities', {

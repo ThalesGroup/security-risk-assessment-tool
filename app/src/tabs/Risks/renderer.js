@@ -279,7 +279,6 @@
       });
 
       if(businessAssetRef){
-        // get schema values?
         const values = {
           0: 'Not Applicable',
           1: 'Low',
@@ -353,7 +352,7 @@
 
     // add Mitigation evaluation section
     const addMitigationSection = (riskMitigations, riskManagementDecision)=> {
-      riskMitigations.forEach((mitigation)=> {
+      riskMitigations.forEach(async (mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId, riskIdRef } = mitigation;
         const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
 
@@ -399,14 +398,11 @@
         benefitsSection.css('padding', '5px');
         benefitsSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Expected benefits</p>');
         // to get from schema
-        const expectedBenefitsOptions = {
-          1: '100%',
-          0.9: '90%',
-          0.75: '75%',
-          0.5: '50%',
-          0.25: '25%',
-          0.1: '10%'
-        };
+        const expectedBenefitsOptions = {};
+        const options = await window.risks.expectedBenefitsOptions();
+        options.forEach((option)=> {
+          if(option.title) expectedBenefitsOptions[option.const] = option.title;
+        });
 
         const div = $('<div>');
         for (const [key, value] of Object.entries(expectedBenefitsOptions)) {
@@ -478,13 +474,18 @@
         mitigationDecisionSection.css('padding', '5px');
         mitigationDecisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Mitigation Decision</p>');
         // to get from schema
-        const mitigationDecisionOptions = {
-          'Not Defined': '',
-          'Rejected': 'Rejected',
-          'Accepted': 'Accepted',
-          'Postphoned': 'Postphoned',
-          'Done': 'Done'
-        };
+        const mitigationDecisionOptions = {};
+        const decisionOptions = await window.risks.mitigationDecisionOptions();
+        decisionOptions.forEach((option) => {
+          mitigationDecisionOptions[option.title] = option.const;
+        });
+        // const mitigationDecisionOptions = {
+        //   'Not Defined': '',
+        //   'Rejected': 'Rejected',
+        //   'Accepted': 'Accepted',
+        //   'Postphoned': 'Postphoned',
+        //   'Done': 'Done'
+        // };
 
         const div2 = $('<div>');
         for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
@@ -821,7 +822,7 @@
     const updateScoresAndLevel = (risk) => {
       let riskIndex = risksData.findIndex((r) => r.riskId === risk.riskId);
       risksData[riskIndex] = risk;
-      risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: riskName['riskName'], residualRiskLevel: risk.residualRiskLevel }]);
+      risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: risk.riskName.riskName, residualRiskLevel: risk.residualRiskLevel }]);
       if(risk.inherentRiskScore != null){
         $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
         $('#residual_risk_score').text(risk.residualRiskScore);
