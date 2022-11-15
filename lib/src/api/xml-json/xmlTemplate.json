@@ -45,7 +45,7 @@
                     "5"
                 ],
                 "risksCount": [
-                    "11"
+                    "12"
                 ],
                 "vulnerabilitiesCount": [
                     "52"
@@ -399,7 +399,7 @@
                     "1"
                 ],
                 "riskName": [
-                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Phone backup data analysis of a non-encrypted backup)"
+                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -430,7 +430,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Phone backup data analysis of a non-encrypted backup)"
+                                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
                                 ]
                             }
                         ]
@@ -503,6 +503,13 @@
                     {
                         "vulnerabilityRef": [
                             {
+                                "char": "3",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Shoulder surfing attack"
+                                }
+                            },
+                            {
                                 "char": "16",
                                 "$": {
                                     "score": "",
@@ -511,7 +518,7 @@
                             }
                         ],
                         "attackPathName": [
-                            "Phone backup data analysis of a non-encrypted backup"
+                            "Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup"
                         ],
                         "attackPathScore": [
                             ""
@@ -519,7 +526,7 @@
                     }
                 ],
                 "allAttackPathsName": [
-                    "(Man in the middle attack through network interception) OR (Phone backup data analysis of a non-encrypted backup)"
+                    "(Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "allAttackPathsScore": [
                     ""
@@ -590,7 +597,7 @@
                     ""
                 ],
                 "residualRiskLevel": [
-                    "Medium"
+                    "Low"
                 ]
             },
             {
@@ -1954,6 +1961,207 @@
                 ],
                 "allAttackPathsName": [
                     " AND "
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "11"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
                 ],
                 "allAttackPathsScore": [
                     ""
