@@ -167,6 +167,11 @@
     });
 
     const addVulnerability = (vulnerability) =>{
+        // filter
+        vulnerabilitiesTable.clearFilter();
+        $('input[id="filter-value"]').val('');
+        if (vulnerabilitiesData.length > 0) $('#vulnerabilities section').show();
+
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
         styleTable(vulnerability.vulnerabilityId, vulnerability.overallLevel);

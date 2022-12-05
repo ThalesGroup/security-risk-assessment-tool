@@ -674,6 +674,11 @@
     });
 
     const addRisk = (risk) => {
+      // filter
+      risksTable.clearFilter();
+      $('input[id="filter-value"]').val('');
+      if (risksData.length > 0) $('#risks section').show();
+
       const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       const tableData = {

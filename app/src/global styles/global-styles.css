@@ -250,3 +250,7 @@ select{
 .table {
     margin-bottom: 10px;
 }
+
+.filter {
+    margin-bottom: 2%;
+}

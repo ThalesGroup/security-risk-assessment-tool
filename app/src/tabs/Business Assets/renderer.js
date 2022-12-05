@@ -149,6 +149,7 @@
       checkedSections.forEach((id) => {
         tinymce.remove(`#business-assets__section-text-${id}`);
         $(`#business-assets__section__${id}`).remove();
+        $(`input[id="business-assets__section__checkbox-${id}"]`).remove();
       });
     };
 

@@ -66,6 +66,7 @@ const validateTabs = (tab) => {
   const validateBusinessAsset = () => {
     const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
     checkboxIds.forEach((id) => {
+      console.log(id)
       const tableData = Tabulator.findTable(`#business-assets__section-table__${id.value}`)[0].getData()[0];
       tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
       window.validate.businessAssets(tableData);
