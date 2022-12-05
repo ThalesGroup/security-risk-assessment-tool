@@ -552,7 +552,7 @@
     };
 
     // render selected row data on page by riskId
-    const addSelectedRowData = async (id) =>{
+    const addSelectedRowData = (id) =>{
       const {
         riskId,
         riskName,
@@ -691,6 +691,7 @@
 
     const deleteRisks = async (checkboxes) =>{
       const checkedRisks = [];
+      let currentRiskId;
       checkboxes.forEach((box) => {
         if (box.checked) checkedRisks.push(Number(box.value));
       });
@@ -711,9 +712,11 @@
             risksTable.deselectRow(risk.riskId);
           })
           risksTable.selectRow(risksData[0].riskId);
-          addSelectedRowData(risksData[0].riskId);
+          currentRiskId = risksData[0].riskId;
         }
       });
+
+      if (currentRiskId) addSelectedRowData(currentRiskId);
     };
 
     const updateRisksFields = (fetchedData) => {
@@ -1104,7 +1107,9 @@
     await validatePreviousRisk(getCurrentRiskId());
     const risk = await window.risks.updateRiskManagement(getCurrentRiskId(), 'riskManagementDecision', value);
     updateScoresAndLevel(risk);
-    // reloadCurrentRisk(risk);
+    risksTable.updateData([{ riskId: getCurrentRiskId(), riskManagementDecision: value }]);
+    styleRiskName(value, risk.riskId)
+    //reloadCurrentRisk(risk);
   });
     
   } catch (err) {
