@@ -177,68 +177,92 @@
                 
                         <div id="risk__likehood__table">
                             <button style="display: block; margin-left: auto;">Replace with Simple Likelihood Evaluation Method</button>
-                            <div>
-                                <p>How technically skilled is this group of threat agents?</p>
-                                <select name="risk__skillLevel" id="risk__skillLevel">
-                                    <option value="null">Select...</option>
-                                    <option value="9">No technical skill</option>
-                                    <option value="6">Some technical skills</option>
-                                    <option value="5">Advanced computer skills</option>
-                                    <option value="3">Network and programming skills</option>
-                                    <option value="1">Security penetration skills</option>
-                                </select>
+                            <div class="likelihood-options">
+                                <div>
+                                    <p>How technically skilled is this group of threat agents?</p>
+                                </div>
+                                <div>
+                                    <select name="risk__skillLevel" id="risk__skillLevel">
+                                        <option value="null">Select...</option>
+                                        <option value="9">No technical skill</option>
+                                        <option value="6">Some technical skills</option>
+                                        <option value="5">Advanced computer skills</option>
+                                        <option value="3">Network and programming skills</option>
+                                        <option value="1">Security penetration skills</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <p>How motivated is this group of threat agents to find and exploit this vulnerability?</p>
-                                <select name="risk__reward" id="risk__reward">
-                                    <option value="null">Select...</option>
-                                    <option value="9">High reward</option>
-                                    <option value="4">Possible reward</option>
-                                    <option value="1">Low or no reward</option>
-                                </select>
+                            <div class="likelihood-options">
+                                <div>
+                                    <p>How motivated is this group of threat agents to find and exploit this vulnerability?</p>
+                                </div>
+                                <div>
+                                    <select name="risk__reward" id="risk__reward">
+                                        <option value="null">Select...</option>
+                                        <option value="9">High reward</option>
+                                        <option value="4">Possible reward</option>
+                                        <option value="1">Low or no reward</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <p>What resources and opportunities are required for this group of threat agents to find and exploit
-                                    this vulnerability?</p>
-                                <select name="risk__accessResources" id="risk__accessResources">
-                                    <option value="null">Select...</option>
-                                    <option value="9">No access or resources required</option>
-                                    <option value="7">Some access or resources required</option>
-                                    <option value="4">Special access or resources required</option>
-                                    <option value="0">Full access or expensive resources required</option>
-                                </select>
+                            <div class="likelihood-options">
+                                <div>
+                                    <p>What resources and opportunities are required for this group of threat agents to find and exploit
+                                        this vulnerability?</p>
+                                </div>
+                                <div>
+                                    <select name="risk__accessResources" id="risk__accessResources">
+                                        <option value="null">Select...</option>
+                                        <option value="9">No access or resources required</option>
+                                        <option value="7">Some access or resources required</option>
+                                        <option value="4">Special access or resources required</option>
+                                        <option value="0">Full access or expensive resources required</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <p>How large is this group of threat agents?</p>
-                                <select name="risk__size" id="risk__size">
-                                    <option value="null">Select...</option>
-                                    <option value="9">Anonymous Internet users</option>
-                                    <option value="6">Authenticated users</option>
-                                    <option value="5">Partners</option>
-                                    <option value="4">Intranet users</option>
-                                    <option value="2">Developers/system administrators</option>
-                                </select>
+                            <div class="likelihood-options">
+                                <div>
+                                    <p>How large is this group of threat agents?</p>
+                                </div>
+                                <div>
+                                    <select name="risk__size" id="risk__size">
+                                        <option value="null">Select...</option>
+                                        <option value="9">Anonymous Internet users</option>
+                                        <option value="6">Authenticated users</option>
+                                        <option value="5">Partners</option>
+                                        <option value="4">Intranet users</option>
+                                        <option value="2">Developers/system administrators</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <p>How likely is an exploit to be detected?</p>
-                                <select name="risk__intrusionDetection" id="risk__intrusionDetection">
-                                    <option value="null">Select...</option>
-                                    <option value="9">Not logged</option>
-                                    <option value="8">Logged without review</option>
-                                    <option value="3">Logged and reviewed</option>
-                                    <option value="1">Active detection in application</option>
-                                </select>
+                            <div class="likelihood-options">
+                                <div>
+                                    <p>How likely is an exploit to be detected?</p>
+                                </div>
+                                <div>
+                                    <select name="risk__intrusionDetection" id="risk__intrusionDetection">
+                                        <option value="null">Select...</option>
+                                        <option value="9">Not logged</option>
+                                        <option value="8">Logged without review</option>
+                                        <option value="3">Logged and reviewed</option>
+                                        <option value="1">Active detection in application</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <p>What is the probability of occurrence?</p>
-                                <select name="risk__occurrence" id="risk__occurrence">
-                                    <option value="null">Select...</option>
-                                    <option value="9">Very high (it will happen)</option>
-                                    <option value="7">High (it already happened in Thales DIS)</option>
-                                    <option value="5">Medium (it already happened in similar companies)</option>
-                                    <option value="3">Low (it happened)</option>
-                                    <option value="1">Very low</option>
-                                </select>
+                            <div class="likelihood-options">
+                                <div>
+                                    <p>What is the probability of occurrence?</p>
+                                </div>
+                                <div>
+                                    <select name="risk__occurrence" id="risk__occurrence">
+                                        <option value="null">Select...</option>
+                                        <option value="9">Very high (it will happen)</option>
+                                        <option value="7">High (it already happened in Thales DIS)</option>
+                                        <option value="5">Medium (it already happened in similar companies)</option>
+                                        <option value="3">Low (it happened)</option>
+                                        <option value="1">Very low</option>
+                                    </select>
+                                </div>
                             </div>
                             <div id="risk__occurrence__threatFactor__table">
                                 <table style="border: 0;">
