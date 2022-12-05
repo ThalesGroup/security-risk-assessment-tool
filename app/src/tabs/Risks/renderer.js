@@ -356,6 +356,9 @@
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId, riskIdRef } = mitigation;
         const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
 
+        const mainSection = $('<section>');
+        mainSection.css('padding', '0');
+
         // add checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -363,7 +366,7 @@
         checkbox.id = `risks__mitigation__checkboxes__${riskMitigationId}`;
         checkbox.name = 'risks__mitigation__checkboxes';
         checkbox.style.position = 'absolute';
-        mitigationSections.append(checkbox);
+        mainSection.append(checkbox);
 
         const section = $('<section>');
         section.attr('id', `risks__mitigation__section__${riskMitigationId}`);
@@ -388,7 +391,8 @@
         
         topSection.append(securityControlDescSection);
         section.append(topSection);
-        mitigationSections.append(section);
+        mainSection.append(section);
+        mitigationSections.append(mainSection);
         addRichTextArea(`#security__control__desc__rich-text__${riskIdRef}__${riskMitigationId}`, description, '100%', riskMitigationId);
 
         // expected benefits
@@ -521,7 +525,8 @@
 
         bottomSection.append(decisionSection);
         section.append(bottomSection);
-        mitigationSections.append(section);
+        mainSection.append(section);
+        mitigationSections.append(mainSection);
         addRichTextArea(`#comment__desc__rich-text__${riskIdRef}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
       });
     };
