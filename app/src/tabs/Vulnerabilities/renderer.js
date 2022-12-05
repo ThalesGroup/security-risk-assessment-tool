@@ -183,6 +183,11 @@
         // checkbox.id = `vulnerabilties__table__checkboxes__${vulnerability.vulnerabilityId}`;
         // checkbox.name = 'vulnerabilties__table__checkboxes';
         // $('#vulnerabilties__table__checkboxes').append(checkbox);
+
+        if (vulnerabilitiesData.length === 1) {
+            vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
+            addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
+        }
     };
 
     const updateSupportingAssets = (supportingAssets) =>{

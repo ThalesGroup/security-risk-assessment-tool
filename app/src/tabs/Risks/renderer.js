@@ -743,11 +743,15 @@
 
     // add Risk button
     $('#risks .add-delete-container button').first().on('click', async () => {
-      const risk = await window.risks.addRisk();
+      const [risk, risks] = await window.risks.addRisk();
       // update risksData
       if(risksData.length === 0) $('#risks section').show();
-      risksData.push(risk[0]);
-      addRisk(risk[0]);
+      risksData = risks;
+      addRisk(risk);
+      if (risksData.length === 1) {
+        risksTable.selectRow(risk.riskId);
+        addSelectedRowData(risk.riskId);
+      }
     });
 
     // delete Risk button

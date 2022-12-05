@@ -73,9 +73,9 @@ const validateTabs = (tab) => {
     });
   };
 
-  const validateSupportingAsset = () => {const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
+  const validateSupportingAsset = () => {
+    const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
     const desc = tinymce.get('product-architecture-diagram__text').getContent();
-    
     window.validate.supportingAssets(tableData, desc);
   };
 
@@ -108,6 +108,7 @@ const validateTabs = (tab) => {
   const validateVulnerabilities = () => {
     let data = {};
     const selectedTableData = Tabulator.findTable('#vulnerabilties__table')[0].getSelectedData()[0];
+    console.log(selectedTableData)
     if (selectedTableData){
       data.vulnerabilityId = selectedTableData.vulnerabilityId;
       data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
