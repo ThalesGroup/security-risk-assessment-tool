@@ -37,6 +37,7 @@
         || value.length !== new Set(value).size
         || value.includes('null')) {
         $(`${matrixTable}-${id} td`).first().css('color', 'red');
+        $(`${matrixTable}-${id} td`).first().css('font-weight', 'bold');
       } else {
         $(`${matrixTable}-${id} td`).first().css('color', 'black');
       }

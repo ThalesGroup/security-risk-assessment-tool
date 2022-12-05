@@ -110,7 +110,7 @@ footer{
 
 footer::before{
     content: "THALES GROUP CONFIDENTIAL <PROJECT>";
-    font-weight: 300;
+    font-weight: bold;
     font-size: 16px;
     color: red;
 }
@@ -119,7 +119,8 @@ header {
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    margin: 20px 100px;
+    margin: 0 100px 20px 100px;
+    padding-top: 2%;
 }
 
 .details {

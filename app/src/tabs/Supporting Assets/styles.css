@@ -27,7 +27,7 @@ html {
 }
 
 #supporting-assets section{
-    background-color: rgb(199, 199, 199);
+    background-color: #f8ecac;
 }
 
 #supporting-asset-business-assets__table > tbody > tr > td:nth-child(2) > div:nth-child(n+2){
@@ -38,4 +38,8 @@ html {
 
 .table {
     grid-template-columns: auto;
+}
+
+.subheading:first-of-type {
+    color: #944538;
 }

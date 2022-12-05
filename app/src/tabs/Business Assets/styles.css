@@ -26,6 +26,16 @@ html {
     background-color: #92d050;
 }
 
+article {
+    background-color: white;
+    margin-bottom: 2%;
+}
+
+div[class='content active'] {
+    background-color: #c0dc8c;
+    padding: 0 2%;
+}
+
 .business-assets__sections-description{
     font-size:small; 
     font-weight:bold
@@ -40,5 +50,6 @@ html {
 }
 
 #business-assets section{
-    background-color: rgb(199, 199, 199);
+    background-color: #f8f4f4;;
 }
+
