@@ -181,7 +181,7 @@
               <span>scoring: <span id="risk__attack__path__score__${riskAttackPathId}">${attackPathScore == null ? '' : attackPathScore}<span><span>
             </div>
           </div>
-        `).css('background-color', 'rgb(183, 183, 183)');
+        `).css('background-color', 'rgb(248,220,212)');
         div.css('width', '100%');
         div.css('margin-left', '3%');
         div.css('border', '1px solid black');
@@ -371,8 +371,9 @@
 
         const section = $('<section>');
         section.attr('id', `risks__mitigation__section__${riskMitigationId}`);
-        section.css('background-color', 'rgb(183, 183, 183)');
+        section.css('background-color', 'rgb(200,212,204)');
         section.css('margin-left', '20px');
+        section.css('margin-top', '2%');
 
         const topSection = $('<section>');
         topSection.attr('class', 'top');

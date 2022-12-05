@@ -40,6 +40,7 @@
         $(`${matrixTable}-${id} td`).first().css('font-weight', 'bold');
       } else {
         $(`${matrixTable}-${id} td`).first().css('color', 'black');
+        $(`${matrixTable}-${id} td`).first().css('font-weight', 'normal');
       }
     }
 

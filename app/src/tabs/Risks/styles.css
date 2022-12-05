@@ -32,8 +32,28 @@ html {
     padding: 2%;
 }
 
-#risks section {
+/* #risks section {
     background-color: rgb(199, 199, 199);
+} */
+
+section {
+    margin-bottom: 0;
+}
+
+#risks > section:first-of-type {
+    background-color: #f0e4e4;
+}
+
+#risks > section:nth-of-type(2) {
+    background-color: #e8bcac;
+}
+
+#risks > section:nth-of-type(3) {
+    background-color: #e8ece4;
+}
+
+#risks > section:nth-of-type(4) {
+    background-color: #a0bccc;
 }
 
 /* #risks button{
