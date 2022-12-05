@@ -114,7 +114,7 @@ section {
     display: flex;
     border: 1px solid black;
     align-items: center;
-    padding: 2% 0;
+    padding: 2%;
 }
 
 #risk__likehood__table .likelihood-options select {
@@ -175,4 +175,13 @@ input[name="risks__attack__path__checkboxes"]{
 
 .NaN {
     color: red;
+}
+
+#risk__evaluation__table {
+    width: 60%;
+    margin: auto;
+}
+
+#risk__evaluation__table tbody tr td:first-of-type {
+    text-align: left;
 }
