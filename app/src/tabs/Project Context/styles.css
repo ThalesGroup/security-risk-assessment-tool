@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+html {
+    background-color: #68a7ab;
+}
+
 .hyperlink-attachment-align {
     display: flex;
     flex-direction: row;

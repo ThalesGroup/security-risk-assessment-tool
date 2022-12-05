@@ -189,6 +189,7 @@
         div.attr('class', `risk_attack_paths`);
         const addDeleteDiv = $('<div>');
         addDeleteDiv.addClass('add-delete-container');
+        addDeleteDiv.css('margin-top', '2%');
         const addButton = document.createElement('button');
         addButton.className = 'addDelete';
         addButton.innerText = 'Add';

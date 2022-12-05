@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+html {
+    background-color: #dedede;
+}
+
 #details__app-version {
     font-size: 12px;
 }

@@ -119,6 +119,10 @@ const validateTabs = (tab) => {
     }
   };
 
+  const addStyle = (bgcolor) => {
+    $('html').css('background-color', bgcolor);
+  };
+
   switch (tab) {
     case 'welcome':
       validateWelcome();

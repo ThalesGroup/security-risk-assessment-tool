@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+html {
+    background-color: #b789fb;
+}
+
 #risks__risk__description > div:first-child {
     display: flex;
     justify-content: space-between;

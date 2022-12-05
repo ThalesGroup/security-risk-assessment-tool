@@ -27,29 +27,66 @@
 .wrapper {
     width: 800px;
     margin: auto;
-    background-color: #dedede;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+/* .tab-button {
+    border: 1px solid black;
+} */
 
 .buttonWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 2px;
 }
 
 .buttonWrapper button {
     border: none;
     padding: 10px 0px;
-    background-color: white;
+    /* background-color: white; */
     font-size: 12px;
     cursor: pointer;
 }
 
-button.active {
+/* button.active {
     background-color: #dedede;
+} */
+
+button[data-id='welcome']{
+    background-color: #e1e1e1;
 }
 
-.active {
-    background-color: #dedede;
+button[data-id='project-context'] {
+    background-color: #68a7ab;
+}
+
+button[data-id='business-assets'] {
+    background-color: #92d050;
+}
+
+button[data-id='supporting-assets'] {
+    background-color: #ffc000;
+}
+
+button[data-id='risks'] {
+    background-color: #b789fb;
+}
+
+button[data-id='vulnerabilities'] {
+    background-color: #f3748c;
+}
+
+button[data-id='isra-report'] {
+    background-color: #a6c2b2;
+}
+
+button[class="tab-button active"] {
+    font-weight: bold;
+    border: 1px solid black;
+}
+
+button[class="tab-button"] {
+    border: 1px solid black;
 }
 
 
@@ -59,7 +96,7 @@ button.active {
     background-color: #dedede;
 } */
 
-.content.active {
+.content .active {
     display: block;
     padding: 10px 20px;
 }
@@ -253,4 +290,10 @@ select{
 
 .filter {
     margin-bottom: 2%;
+}
+
+.contentWrapper {
+    padding: 2%;
+    margin-top: 2%;
+    background-color: white;
 }

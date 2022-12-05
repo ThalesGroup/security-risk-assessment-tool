@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+html {
+    background-color: #f1778b;
+}
+
 #vulnerabilities section > div:first-of-type{
     display: flex;
     justify-content: space-between;

@@ -22,6 +22,10 @@
 * -----------------------------------------------------------------------------
 */
 
+html {
+    background-color: #92d050;
+}
+
 .business-assets__sections-description{
     font-size:small; 
     font-weight:bold
