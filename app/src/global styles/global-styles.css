@@ -25,7 +25,8 @@
 /*tabs*/
 
 .wrapper {
-    width: 800px;
+    min-width: 800px;
+    width: 55%;
     margin: auto;
     font-family: Arial, Helvetica, sans-serif;
 }

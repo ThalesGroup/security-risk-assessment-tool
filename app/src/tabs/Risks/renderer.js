@@ -374,6 +374,7 @@
         section.css('background-color', 'rgb(200,212,204)');
         section.css('margin-left', '20px');
         section.css('margin-top', '2%');
+        section.css('padding', '0');
 
         const topSection = $('<section>');
         topSection.attr('class', 'top');
