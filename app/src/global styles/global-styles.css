@@ -110,7 +110,7 @@ footer{
 }
 
 footer::before{
-    content: "THALES GROUP CONFIDENTIAL <PROJECT>";
+    content: "THALES GROUP CONFIDENTIAL {PROJECT}";
     font-weight: bold;
     font-size: 16px;
     color: red;

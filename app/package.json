@@ -16,5 +16,9 @@
   },
   "overrides": {
     "got": "^11.8.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.28.1",
+    "playwright": "^1.28.1"
   }
 }

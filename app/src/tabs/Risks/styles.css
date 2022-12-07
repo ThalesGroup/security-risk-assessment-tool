@@ -176,7 +176,12 @@ input[name="risks__attack__path__checkboxes"]{
 
 .top {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto 15% 15%;
+}
+
+.top input[type='number']{
+    display: inline-block;
+    width: 97%;
 }
 
 .bottom {
@@ -226,3 +231,13 @@ input[name="risks__attack__path__checkboxes"]{
     border: 1px solid black;
     padding: 1%;
 }
+
+#risk__automatic_riskname label {
+    font-style: italic;
+}
+
+#risk__automatic_riskname label span {
+    font-style: normal;
+    font-weight: bold;
+}
+
