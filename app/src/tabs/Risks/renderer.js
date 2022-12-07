@@ -26,6 +26,8 @@
 (async () => {
   try {
     const result = await window.render.risks();
+    $('#risks').append(result[0]);
+
     result[1].columns[0].formatter = (cell) => {
       const riskId = cell.getRow().getIndex();
       if (riskId) {

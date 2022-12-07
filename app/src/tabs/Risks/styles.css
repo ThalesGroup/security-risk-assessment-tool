@@ -241,3 +241,12 @@ input[name="risks__attack__path__checkboxes"]{
     font-weight: bold;
 }
 
+select[name='risk__likelihood'] {
+    width: 10%;
+}
+
+label[name='Not defined'],
+label[name='Discarded'] {
+    font-style: italic;
+    font-size: small;
+}
