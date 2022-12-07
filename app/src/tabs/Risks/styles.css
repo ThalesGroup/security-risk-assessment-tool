@@ -71,7 +71,8 @@ section {
 
 .risk__flex > div{
     flex: 1;
-    margin-bottom: 1em;
+    border: 1px solid black;
+    padding: 1%;
 }
 
 .tox-tinymce{
@@ -207,6 +208,21 @@ input[name="risks__attack__path__checkboxes"]{
 }
 
 #risks__risk__management__evaluation > div > div {
+    border: 1px solid black;
+    padding: 1%;
+}
+
+#risk__automatic_riskname>div:first-of-type {
+    padding: 1%;
+    border: 1px solid black;
+}
+
+#risk__automatic_riskname > div:first-of-type > p:first-of-type {
+    font-size: small;
+    font-style: italic;
+}
+
+#risk__automatic_riskname > div:last-of-type {
     border: 1px solid black;
     padding: 1%;
 }
