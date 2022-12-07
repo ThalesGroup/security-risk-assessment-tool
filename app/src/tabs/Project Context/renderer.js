@@ -98,6 +98,7 @@
     $(document).ready(function () {
       window.project.load(async (event, data) => {
         await tinymce.init({
+          tooltip: 'Add your formatted picures!!',
           selector: '.rich-text',
           promotion: false,
           height: 300,

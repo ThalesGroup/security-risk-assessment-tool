@@ -450,6 +450,7 @@
         costSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Estimated Cost (md)</p>');
         const input = $('<input>');
         input.attr('type', 'number');
+        input.attr('title', 'Only integers allowed');
         input.attr('id', `risk__mitigation__cost__${riskMitigationId}`);
         input.attr('name', `risk__mitigation__cost__${riskMitigationId}`);
         input.attr('value', `${cost == null ? '' : cost}`);

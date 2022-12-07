@@ -207,43 +207,53 @@ select option {
 
 /*tooltip*/
 
+.tabulator-tooltip {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #4f4f4f;
+}
+
 .tooltip {
     position:relative;
     text-align:left;
 }
 
 .tooltip .top {
-    min-width:100; 
     top:-20px;
     left:50%;
     transform:translate(-50%, -100%);
-    padding:10px 20px;
-    color:#000000;
+    color:#4f4f4f;
+    padding: 0 2px;
     background-color:#FFFFFF;
     font-weight:normal;
-    font-size:10px;
+    font-size:12px;
     position:absolute;
-    z-index:99999999;
+    z-index:1;
     box-sizing:border-box;
-    border:1px solid transparent;box-shadow:0 1px 8px transparent;
-    visibility:hidden; opacity:0; transition:opacity 0.8s;
+    border:1px solid #bcbcbc;
+    visibility:hidden;
+    opacity:0;
+    transition-delay: 0.2s;
 }
 
 .tooltip:hover .top {
     visibility:visible; opacity:1;
 }
 
-.tooltip .top i {
+.tooltip .top p {
+    margin: 5px 2px;
+}
+
+/* .tooltip .top i {
     position:absolute;
     top:100%;
     left:50%;
     margin-left:-12px;
-    width:24px;
+    width:auto;
     height:12px;
     overflow:hidden;
-}
+} */
 
-.tooltip .top i::after {
+/* .tooltip .top i::after {
     content:'';
     position:absolute;
     width:12px;
@@ -252,7 +262,7 @@ select option {
     transform:translate(-50%,-50%) rotate(45deg);
     background-color:#FFFFFF;
     border:1px solid transparent;box-shadow:0 1px 8px transparent;
-}
+} */
 
 /*tooltip*/
 

@@ -36,6 +36,20 @@
         `;
       }
     };
+
+    // result[1]['columnDefaults'] = {
+    //   tooltip: function(e, cell, onRendered) {
+    //     var el = document.createElement("div");
+    //     el.style.fontFamily = "Arial";
+    //     el.style.color = "red";
+    //     el.innerText = cell.getColumn().getField() + " - " + cell.getValue(); //return cells "field - value";
+
+    //     return el;
+    //   },
+    // };
+
+    console.log(result[1])
+
     const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
 
     const appVersion = (value) => {
