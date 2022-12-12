@@ -349,7 +349,7 @@ const downloadReport = async (app) => {
             if (err) {
               throw err; 
             } else {
-              dialog.showMessageBoxSync(null, { message: `Successfully saved current ISRA report to ${filePath}` });
+              dialog.showMessageBoxSync(null, { message: `Successfully saved current ISRA report to ${filePath}.` });
             }
           });
         }).catch((err) => {

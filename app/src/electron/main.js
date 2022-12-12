@@ -69,7 +69,6 @@ function createWindow() {
         {
           label: 'Save As',
           click: () => validationErrors('Save As'),
-          accelerator: 'CmdOrCtrl+S',
         },
         {
           label: 'Open File',
