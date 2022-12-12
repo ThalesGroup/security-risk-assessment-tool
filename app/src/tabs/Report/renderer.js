@@ -36,7 +36,7 @@
                     <td>${vulnerabilityId}</td>
                     <td>${vulnerabilityName}</td>
                     <td style="color: ${overallScore === null ? 'red' : 'black'}">${overallScore === null ? 'NaN' : overallScore}/10</td>
-                    <td style="color: ${color}; ${overallLevel === 'High' || overallLevel === 'Medium' ? 'bold' : 'normal'};">${overallLevel}</td>
+                    <td style="color: ${color}; font-weight:${overallLevel === 'High' || overallLevel === 'Medium' ? 'bold' : 'normal'};">${overallLevel}</td>
                     </td>`);
             });
         };
@@ -51,7 +51,7 @@
                 $('#risks tbody').append(`<tr>
                     <td>${riskId}</td>
                     <td style="padding:0;">
-                        <div style="display:grid; grid-template-columns: 15% auto;">
+                        <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
                             <div class="grid-item">${riskName.riskName}</div>
                             <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>

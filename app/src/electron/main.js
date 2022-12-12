@@ -30,6 +30,7 @@ const {
   validationErrors,
   loadFile,
   newISRAProject,
+  downloadReport
 } = require('./request-handlers');
 
 app.disableHardwareAcceleration();
@@ -68,10 +69,15 @@ function createWindow() {
         {
           label: 'Save As',
           click: () => validationErrors('Save As'),
+          accelerator: 'CmdOrCtrl+S',
         },
         {
           label: 'Open File',
           click: () => loadFile(win),
+        },
+        {
+          label: 'Print',
+          click: () => downloadReport(app),
         },
         {
           role: 'quit',

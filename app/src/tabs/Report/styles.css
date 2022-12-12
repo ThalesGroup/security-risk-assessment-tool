@@ -67,6 +67,10 @@ section {
     margin: auto;
 }
 
+#risks tbody tr td:first-of-type {
+    background-color: #d8d8d8;
+}
+
 #risks tbody tr td,
 #vulnerabilites tbody tr td {
     text-align: center;
@@ -91,6 +95,7 @@ section {
     color: #564f6b;
 }
 
+.grid-header,
 thead {
     background-color: #f8f4f4;
 }

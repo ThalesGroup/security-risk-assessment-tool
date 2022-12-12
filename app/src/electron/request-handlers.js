@@ -23,10 +23,12 @@
 */
 
 const {
-  dialog, ipcMain, Menu, BrowserWindow,
+  dialog, ipcMain, Menu, BrowserWindow
   // nativeTheme,
 } = require('electron');
 const os = require('os');
+const path = require('path');
+const fs = require('fs');
 
 const {
   DataStore,
@@ -308,10 +310,65 @@ const loadFile = (win) => {
   }
 };
 
+const downloadReport = async (app) => {
+  try{
+    const options = {
+      title: 'Save ISRA report - Electron ISRA Project',
+      defaultPath: 'ISRA_ISRA report.pdf',
+      buttonLabel: 'Save ISRA report',
+      filters: [
+        { name: 'PDF', extensions: ['pdf'] },
+      ],
+    };
+
+    const fileName = await dialog.showSaveDialog(options);
+    if (!fileName.canceled) {
+      const { filePath } = fileName;
+      const pdfOptions = {
+        marginsType: 0,
+        pageSize: 'A4',
+        printBackground: true,
+        printSelectionOnly: true,
+        landscape: false
+      };
+
+      let win = new BrowserWindow({
+        show: false,
+        webPreferences: {
+          preload: path.join(__dirname, './preload.js'),
+        },
+      });
+      win.loadFile(path.join(__dirname, '../tabs/Report/report.html'));
+      win.webContents.on('dom-ready', () => {
+        newISRAProject(win, app);
+      });
+
+      win.webContents.on('did-finish-load', () => { 
+        win.webContents.printToPDF(pdfOptions).then(data => {
+          fs.writeFile(filePath, data, function (err) {
+            if (err) {
+              throw err; 
+            } else {
+              dialog.showMessageBoxSync(null, { message: `Successfully saved current ISRA report to ${filePath}` });
+            }
+          });
+        }).catch((err) => {
+          console.log(err);
+          dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
+        });
+      });
+    }
+  } catch(err){
+    console.log(err);
+    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });
+  }
+};
+
 module.exports = {
   validationErrors,
   loadFile,
   newISRAProject,
+  downloadReport
 };
 
 /**
