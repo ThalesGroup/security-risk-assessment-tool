@@ -632,7 +632,7 @@
                     ""
                 ],
                 "businessAssetRef": [
-                    "1"
+                    "4"
                 ],
                 "supportingAssetRef": [
                     "4"
@@ -651,7 +651,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            ""
+                            "2"
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -755,51 +755,60 @@
                     "6"
                 ],
                 "inherentRiskScore": [
-                    "0"
+                    "6"
                 ],
                 "Mitigation": [
                     {
                         "description": [
-                            ""
+                            {
+                                "div": [
+                                    {
+                                        "char": "TEST",
+                                        "$": {
+                                            "xmlns": "http://www.w3.org/1999/xhtml"
+                                        }
+                                    }
+                                ]
+                            }
                         ],
                         "benefits": [
-                            "0"
+                            "0.9"
                         ],
                         "cost": [
-                            ""
+                            "10"
                         ],
                         "mitigationDecision": [
                             {
                                 "decision": [
-                                    ""
+                                    "Accepted"
                                 ],
                                 "decisionDetail": [
-                                    ""
+                                    "gdfg"
                                 ]
                             }
                         ]
                     }
                 ],
                 "mitigationsBenefits": [
-                    "1"
+                    "0.10000000000000009"
                 ],
                 "mitigationsDoneBenefits": [
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "0"
+                    "1"
                 ],
                 "riskManagementDecision": [
-                    "Accept"
+                    "Mitigate"
                 ],
                 "riskManagementDetail": [
                     "Risk accepted by Product Owner on 2020-11-24."
                 ],
                 "residualRiskScore": [
-                    "0"
+                    "6"
                 ],
                 "residualRiskLevel": [
-                    "Low"
+                    "Medium"
                 ]
             },
             {

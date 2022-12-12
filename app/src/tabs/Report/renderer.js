@@ -25,23 +25,104 @@
 
 (async () => {
     try {
+        const renderVulnerability = (sortedVulnerability, overallLevel) => {
+            sortedVulnerability[overallLevel].forEach((vulnerability) => {
+                const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
+                let color = 'black';
+                if (overallLevel === 'High') color = 'red';
+                else if (overallLevel === 'Medium') color = 'orange';
 
-        $(document).ready(function () {
-            window.project.load(async (event, data) => {
-                const { Vulnerability, Risk, ISRAmeta } = await JSON.parse(data);
-                Vulnerability.forEach((vulnerability) => {
-                    const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
-                    let color = 'black';
-                    if (overallLevel === 'High') color = 'red';
-                    else if (overallLevel === 'Medium') color = 'orange'
-
-                    $('#vulnerabilites tbody').append(`<tr>
+                $('#vulnerabilites tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
                     <td>${vulnerabilityName}</td>
                     <td style="color: ${overallScore === null ? 'red' : 'black'}">${overallScore === null ? 'NaN' : overallScore}/10</td>
-                    <td style="color: ${color}; font-weight: bold;">${overallLevel}</td>
+                    <td style="color: ${color}; ${overallLevel === 'High' || overallLevel === 'Medium' ? 'bold' : 'normal'};">${overallLevel}</td>
                     </td>`);
+            });
+        };
+
+        const renderRisk = (sortedRisk, residualRiskLevel) => {
+            sortedRisk[residualRiskLevel].forEach((risk) => {
+                const { riskId, residualRiskLevel, inherentRiskScore, residualRiskScore, riskManagementDecision, riskName, riskManagementDetail } = risk;
+                let color = 'black';
+                if (residualRiskLevel === 'High') color = 'red';
+                else if (residualRiskLevel === 'Medium') color = 'orange';
+
+                $('#risks tbody').append(`<tr>
+                    <td>${riskId}</td>
+                    <td style="padding:0;">
+                        <div style="display:grid; grid-template-columns: 15% auto;">
+                            <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
+                            <div class="grid-item">${riskName.riskName}</div>
+                            <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
+                            <div class="grid-item">${riskManagementDetail}</div>
+                        </div>
+                    </td>
+                    <td style="color: ${inherentRiskScore === null ? 'red' : 'black'}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
+                    <td style="color: ${residualRiskScore === null ? 'red' : 'black'}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
+                    <td style="color: ${color}; font-weight: ${residualRiskLevel === 'High' || residualRiskLevel === 'Medium' ? 'bold' : 'normal'};">${residualRiskLevel}</td>
+                    <td>${riskManagementDecision}</td>
+                    </td>`);
+            });
+        };
+
+        $(document).ready(function () {
+            window.project.load(async (event, data) => {
+                const { Vulnerability, Risk } = await JSON.parse(data);
+                const sortedVulnerability = {
+                    high: [],
+                    medium: [],
+                    low: []
+                };
+                const sortedRisk = {
+                    high: [],
+                    medium: [],
+                    low: []
+                };
+                $('#risks tbody').empty();
+                $('#vulnerabilites tbody').empty();
+                $('#riskmanagement tbody').empty();
+
+                let totalCost = 0;
+                Risk.forEach((risk) => {
+                    const { residualRiskLevel, riskMitigation } = risk;
+                    if (residualRiskLevel === 'High') sortedRisk['high'].push(risk);
+                    else if (residualRiskLevel === 'Medium') sortedRisk['medium'].push(risk);
+                    else if (residualRiskLevel === 'Low') sortedRisk['low'].push(risk);
+
+                    riskMitigation.forEach((mitigation) => {
+                        const { description, decisionDetail, cost, decision } = mitigation;
+                        if(decision === 'Accepted'){
+                            $('#riskmanagement tbody').append(`<tr>
+                            <td>${description}</td>
+                            <td>${decisionDetail}</td>
+                            <td>${cost}</td>
+                            </td>`);
+
+                            totalCost += cost;
+                        };
+                    });
                 });
+                $('#riskmanagement tbody')
+                .append(`
+                <tr style="border: 0">
+                    <td></td>
+                    <td><strong>Total accepted security control cost:</strong></td>
+                    <td>${totalCost === 0 ? '' : totalCost}</td>
+                </tr>`);
+                renderRisk(sortedRisk, 'high');
+                renderRisk(sortedRisk, 'medium');
+                renderRisk(sortedRisk, 'low');
+
+                Vulnerability.forEach((vulnerability) => {
+                    const { overallLevel } = vulnerability;
+                    if (overallLevel === 'High') sortedVulnerability['high'].push(vulnerability);
+                    else if (overallLevel === 'Medium') sortedVulnerability['medium'].push(vulnerability);
+                    else if (overallLevel === 'Low') sortedVulnerability['low'].push(vulnerability);
+                });
+                renderVulnerability(sortedVulnerability, 'high');
+                renderVulnerability(sortedVulnerability, 'medium');
+                renderVulnerability(sortedVulnerability, 'low'); 
             });
         });
 

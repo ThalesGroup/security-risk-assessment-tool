@@ -25,13 +25,54 @@
 h1 {
     text-align: center;
     margin: 0;
-    padding: 5%;
+    padding: 2%;
+    font-size: 20px;
+    margin-bottom: 2%;
 }
 
+section {
+    padding: 0;
+    padding-bottom: 5%;
+    margin-bottom: 5%;
+}
+
+#isra-report section:nth-of-type(1) h1 {
+ background-color: #b789fb;
+}
+
+#isra-report section:nth-of-type(2) h1 {
+ background-color: #f1778b;
+}
+
+#isra-report section:nth-of-type(3) h1 {
+ background-color: #c4d6cb;
+}
+
+#isra-report section:nth-of-type(1) {
+    background-color: #f0e4e4;
+}
+
+#isra-report section:nth-of-type(2) {
+    background-color: #f2dbd7;
+}
+
+#isra-report section:nth-of-type(3) {
+    background-color: #e1eae5;
+}
+
+#risks,
+#vulnerabilites,
+#riskmanagement {
+    width: 95%;
+    margin: auto;
+}
+
+#risks tbody tr td,
 #vulnerabilites tbody tr td {
     text-align: center;
 }
 
+#risks tbody tr td:nth-of-type(2),
 #vulnerabilites tbody tr td:nth-of-type(2) {
     text-align: left;
 }
@@ -39,4 +80,30 @@ h1 {
 #vulnerabilites tbody tr td:nth-of-type(3), 
 #vulnerabilites tbody tr td:nth-of-type(4) {
     width: 10%;
+}
+
+.grid-item {
+    border: 0.5px solid rgba(0, 0, 0, 0.8);
+    padding: 2%;
+}
+
+.grid-header {
+    color: #564f6b;
+}
+
+thead {
+    background-color: #f8f4f4;
+}
+
+strong {
+    float: right;
+}
+
+#riskmanagement,
+#riskmanagement tbody tr:last-child td {
+    border: 0;
+}
+
+#riskmanagement tbody tr td:nth-of-type(3){
+    text-align: right;
 }
