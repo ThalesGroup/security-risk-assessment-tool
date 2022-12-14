@@ -11,16 +11,16 @@
         "ISRAmeta": [
             {
                 "templateVersion": [
-                    "49"
+                    "44"
                 ],
                 "projectName": [
-                    ""
+                    "Sample Mobile Application"
                 ],
                 "projectOrganization": [
-                    "MCS"
+                    "ITE"
                 ],
                 "projectVersion": [
-                    ""
+                    "1.0"
                 ],
                 "ISRAtracking": [
                     {
@@ -28,40 +28,112 @@
                             "1"
                         ],
                         "trackingSecurityOfficer": [
-                            "t0263774"
+                            "ccodere"
                         ],
                         "trackingDate": [
-                            "2022-10-19"
+                            "2020-11-24"
                         ],
                         "trackingComment": [
-                            ""
+                            "Initial revision"
                         ]
                     }
                 ],
                 "businessAssetsCount": [
-                    "2"
+                    "5"
                 ],
                 "supportingAssetsCount": [
-                    "4"
+                    "5"
                 ],
                 "risksCount": [
-                    "2"
+                    "12"
                 ],
                 "vulnerabilitiesCount": [
-                    "3"
+                    "52"
                 ]
             }
         ],
         "ProjectContext": [
             {
                 "projectDescription": [
-                    ""
+                    {
+                        "div": [
+                            {
+                                "char": "The system is composed of a mobile payment application that permits to do financial transactions which connects to the bank backend.",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "It permits to see the account information of the user even if offline.",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            }
+                        ]
+                    }
                 ],
                 "projectURL": [
                     ""
                 ],
                 "projectDescriptionAttachment": [
-                    ""
+                    "x0lGQRQAAAABAAAAAAAAAPkAAAAJAAAAbQBhAGkAbAAuAHQAeAB0AAAAbWVnYW4ubGlvd0B0aGFsZXNncm91cC5jb20gDQoNCldpbmRvd3MgUFcgLSBUaGFsZXMxMjM0DQoNClRHSSAtIFQwMjYzNzc0DQoNClRHSSBQVyAtIFdlbGNvbWUmMTIzDQoNCkNvc3QgQ2VudGVyIC0gUkRNT0ItSFEtQ0VOMDMNCg0KSklSQSAmIENvbmZsdWVuY2UgbGlua3M6DQpodHRwczovL2ppcmEuZ2VtYWx0by5jb20vc2VjdXJlL0Rhc2hib2FyZC5qc3BhDQpodHRwczovL2NvbmZsdWVuY2UuZ2VtYWx0by5jb20vI2FsbC11cGRhdGVz"
+                ],
+                "securityAssumptions": [
+                    {
+                        "ul": [
+                            {
+                                "$": {
+                                    "style": "MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px",
+                                    "type": "disc",
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                },
+                                "li": [
+                                    "We assume that the platform interface internal processing are valid and yield correct result.",
+                                    {
+                                        "font": [
+                                            {
+                                                "char": "We assume that the server and backend is secure and yield correct results.",
+                                                "$": {
+                                                    "size": "2",
+                                                    "face": "Calibri"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "div": [
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                },
+                                "font": [
+                                    {
+                                        "$": {
+                                            "size": "2",
+                                            "face": "Calibri"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 ]
             }
         ],
@@ -104,10 +176,10 @@
         "BusinessAsset": [
             {
                 "businessAssetId": [
-                    "1"
+                    "2"
                 ],
                 "businessAssetName": [
-                    ""
+                    "Financial transactions"
                 ],
                 "businessAssetType": [
                     "Data"
@@ -122,10 +194,10 @@
                     "3"
                 ],
                 "businessAssetAvailability": [
-                    "3"
+                    "2"
                 ],
                 "businessAssetAuthenticity": [
-                    "3"
+                    "2"
                 ],
                 "businessAssetAuthorization": [
                     "3"
@@ -133,16 +205,129 @@
                 "businessAssetNonRepudiation": [
                     "3"
                 ]
+            },
+            {
+                "businessAssetId": [
+                    "4"
+                ],
+                "businessAssetName": [
+                    "Server URL"
+                ],
+                "businessAssetType": [
+                    "Data"
+                ],
+                "businessAssetDescription": [
+                    "Server address to execute financial transactions and retrieve account information"
+                ],
+                "businessAssetConfidentiality": [
+                    "2"
+                ],
+                "businessAssetIntegrity": [
+                    "3"
+                ],
+                "businessAssetAvailability": [
+                    "1"
+                ],
+                "businessAssetAuthenticity": [
+                    "1"
+                ],
+                "businessAssetAuthorization": [
+                    "0"
+                ],
+                "businessAssetNonRepudiation": [
+                    "0"
+                ]
             }
         ],
         "SupportingAssetsDesc": [
             {
                 "supportingAssetDiagram": [
-                    ""
+                    {
+                        "img": [
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml",
+                                    "tabIndex": "-1",
+                                    "alt": "Diagram 1 diagram screenshot\n            ",
+                                    "src": "data:image/png;base64,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E1dPcJ2Zdu533M8MGmhGHVxixh9xmDly5KHm3y/9N7u/Hdu3u8OGDm26r/BjS1ve87ANSAGhFwAAIImJEyeap59+2lxyySVm2rRp5oILLmCW5y6iLxl02iH1tn/88cfmySefNM8//7w56aST/C16jsMOO8xZsGCBDZRvvPGGly8dDZN3tXzdunV2eTD0We8pteC21isQtxz+fNwXJpoNm7aYH152uXPnvfc7b65ea1a8v84cfsRn3Reff868vXKl+6h3n951Z8oZ33Tf+r8PzYknnWz3oUi4Y+dO9/PHHGPPTa37ue6661w9tltvvdVuo5mf1XusodM69lczPtvh0PQQI4M4sViMdzTQBUpKS+1lWSxmLwEA6Skej9tz+v7ud7+zwevyyy+3gQKdp7Ky0g4nnz9/vsnKyrJfNJx99tmaFMrfIjWawbm7XH/99e5tt91muyKfffZZV8eKB8f7bt682Xn00Udd73k55513nvvwww/b7XTM74cffmjefPNNhVMN43bmLXjUPfErX3XsZFbVcTPz0h+4S/78UlMX5/0PznUXPrrAvPynF517/vN37he/9GXn+WcXubN+NNP55llnu6d+4xvmBzMuatUlGtyvAq/Cri5tT7C3TrND52Rn2+ODO1NZWZl/bd/xuQodoq+WwhSCO4oaaoSaJDWNp9nzb+zRq16DNlBDjVBDjaRTzY4dO9y77rrLHTp0qHvmmWe6K1as8NfskemvQSo6UvPSSy+5F110kTtw4ED3wgsvdJcuXeqvSW5vHtv+5gXXhD5u33LLLYl169bZ617oTWjdggUL7G0vfNrbMm7cuERhYWFi9erVCe89ZdfPf/SxRGzzVvflV/5mb+cXFCSeePaFxIknnWxv333/nGbXl6/+wL31jrvsbS/0Ju7/7e/sdS9gN91PIpFwGxoSrhd0XS9Mu9t3lbubtu90N3tty45d7s7yCrc6HrfrtZ227w7t/ky958TnqmjUtK5heDMAAMBe0KRJV1xxhZ1ESef3nTp1qp3A6IUXXvC3QCo0fFkTUh188MHmpz/9qfnCF75gXn31VfPQQw/Z4b/pRL23wbBhWbRokb3UqZT0flEvr13g+drXvmZve0Hf3g4mujryyCM1g3hTz2xOVpbJzc427618x96efNLJ5rCRhzsbPv7Y3pYRh420l88/87Tp4zjmz88/Z2/36eOYL0xoPM74j3/8o2a39gKsa27xHuNb77zj7q6sMrsqKk15VbUp967bS69puVp5ZbWdNVqnSfJyg90PkI4IvQAAAPsgPz/f/OAHP7Cny/ne975ng9uIESPsqXM2btzob4Wwt956y54KSsfp/vCHPzQHHXSQWbp0qT1HsmZh7tevn79l+rnhhhvssbxqCrG33HKL+41vfMMZOHCgo+cWTGSlsK8W3A6GPr/++uvNhiJrkq683BzzrXOmOqM++1n3+UVPO/80+nBTWVnhb2HMJTN/5IwcdYT7wjOL7Lo1q1bZ5Y7TxxxxxChnzfvvu1VVVc7YsWMdDV2+/bbbTLy2rinc2oAbCru7vbC7u0IBuMqeLqlxNmjbrWr3C6QbQi8AAEAnUDjRTMIKb+rh27Ztm+0BPv30080TTzxhT7XTW+k8x+oBv+yyy+wXAuoVF01KpRmYr732WjtTdro799xzHQXDcJs1a1ZTiP3Zz37WtF5BWBNchbfVsb7+pnpt7LrTpkxxcrKzTH5ejln8yv8662IbzZr1G8xLf/2bo0mrJp042VHv7n8/+4Lz7rqPvXUxc+2sG+w+jhw71h6fO3zECEfhtbK6xuwsrzTrY584JYcc6lTX1Hrvywa7bXZWlj2GVwFc96sJrarjjTUKv5Xez1C9vjr2Vz2/QDoh9AIAAHSycePGmXvuuUcz+NrzyN5xxx1m2LBhdtZnBeCKij29dJkqFouZ3/72t+bCCy+0z/3WW2+1E0tp5uUPPvjAnnJIrxPal+1PKlWYn2f6FxWaAcVFpriwwN7WsGel5D5eWM3LyfGW5Zr62hr35p/MNoWFhe4553zLBlnN0KxTGynAqid3Z0WlDbE6x68CbGOozjX5ubl2PxoWrRmc1RtcUVVjduyusHWaTEuzPCsoKxgD6YLQCwAAsJ/k5eXZ0KfeX/Vo6nhVnWNWIVDH/2oW6Ew59dHatWvtuYx1eiGdS1ft5ZdfNmeccYYNuRq6rB5dzWKM1CnQqhdWgVRht6gw3xTl55sCL6Tm5mTbQLx54yfumBEHm8NKhplxRxzuVFVVmdffeMMcOfZIR8fwanZm29PrBd2K6mpT5YXf2tp6L7g29vA2BuY8U+CF5vzcnMYw7YSCr7e9wq9Cr/ajXmD1+Gp9t9GDJ3gjRYReAACALqDhu5deeqnRxEU61lfH//7lL3+xkxxpyK/CokKwwmNPp55qHY/6q1/9yg5VVog/4YQT7GRJ48ePN/PmzTM7duwwCxYssKcaGjRokF+JfaWe2zwv7BYV5JsBfYvMoAH9zPijjnS27dpte2OrvWC6u7zcGTXqCKcqHm+cqKqy2gut1ba3V72+fbL62OHS/YoKTV8vSBcXeWHaC73FBQWmX7G3zFveuK7QHk+s4dMKugq9uyv2HAesBqQDQi/QVfhGEgDgKy4utsf/KhQqHOoYYPUCv/baa3Yip8GDB5uzzjrLTvb06KOPmuXLl3fbkOg1a9bYIdl6LHpsmnxKj08TUL333ntmypQpZvHixTbI6xhdzWh97LHH2mOc0fls6M3LbQy93vvowP59zQF9i21IVW+tDaneNnUN9XY48y6F06oq21sb16RUXujN6tM4nLmfF3b7K+Qq+HqBt693u58XdDWMunF5vrc/v9e3IdEYejXJVdC8AAykA0IvAABAN9OxrZoBWqfpWbJkiR0OrJ7g/v37mxdffNEGTPWm6rQ+p556qpkxY4adHfree++1oVjDpxVOt27d6u+xfRpSvWHDBluj+3vmmWdsL/N1111njztWr616nxV2dH8PP/ywnYhLQVzBtry83A7XnjNnjh2+zZDlrqOfiXpeFX41SZWGN6uFJ6LScb4a1qzjbzU8WcObdQxuVjBM2gvMCsi6riHSttbbV9M+vWUa8lyQl+dtl2+HVStMa98a1lxbV2dq4rV2oisgHRB6AQDAXtm5c6eZNm2aOeCAAxo/aLdoGs4btby9Rk1jjV5TBcyrr77aHicb9PRqcijNgqwJonRqJM2GrJ+BhhjrGFr1wEbts2VToD3++ONtzeTJk+0M0wrWt99+u5k/f749T25wrLEun3rqKbvu4osvNkcddZQXihoDUFtNj1/7/PTTT+0+0PUUctWrq5CqkWb6uSjg2iHMdjhzflPgVc9wmEJ1dnaWDboa9tw4eZa3vReuXe+fDb719bYB6YDQCwAA9opCUnZeg3ntnefN1qo1rdqq9X+NXN5eoyYzat5c9SczetyhTacmQtezodcLp8EphoLe4ZwchdlcG2rDPcMt2e2z+njBOMce/6ve5CAca3/ar47zBdIBoRcAAOwV9TjOvvlKc+CgA/wlQKP+A/qZmddcbHuM0f2CXl+F1OC0RZrwqrZeoThh14fpdjCMWTM+76qosnW21xhIQ4ReAACwVzS8WYG3oipu3v6/WKv23oefRi5vr0XVrNuwxb9HpBNNtoSeQT2zTacfqlKIrfRCrBd6vdtarvVhum1PcxTX9tVmR3mFvaRnF+nKicViTCcLAAA6TMeearhrZU2tWf/JdqNBklnZfUx2H012kzANDTr6L/WPGcEwy5zsLDsJj+2B8v4VFeSa4cMGNm6EtDJ2+JfsccjdpaSkxL+W/vQ7oX865VCQUTX8WMOQ9bvTkoLtlh277OzNAf2G9fF+P3Ucryap0rl+ddxu47G96gtzbC+vwq2dBKuuzk5WpVmbg/tv2Sv8+dGH+9eSKysr86/tuxLv74+UdeP7C+nD8d64zd65ejN29A8ENdQINdQINdQINb2jRh+0dfymenrXxbbYD8353gfoQi+kVlbVmo2bNpl+/Qf4WyeX5X0Y371rlzm4ZJj9YF+hD9pecC7MzzUjDx7sb9Xa5s2bzZAhQ/xbqaGma2oGFY62obenvq/ThT6uB5NS6dRBui4Kq5pcquVEVNJW6JUg+KppH8Eszgk3YcOtenl1eqM67/7q7RBozf7sPQ7vX0sdCb0d1e7PNAj6LUJ4V713qEmvGoY3A11Ff5wjvokFgEygD9MKvP375psD+xV5lzrFScfO06rzuhYX5pqBXv2AfoWmOD/P9LG9T0DvpYCr1hhE60zc74Gt8a6rN9aOqvDW255YLwC27IkNsz213j9tr33oeF0dq2svvaahzxrGrFZZE7c9vJqhWcOd9Q9IV/yXBAAAdAr1BtXEG0xVXOfwrLPDmztCvbu1tQnvw3ytra+tazCutwzozRRKFUbLvSC6u9ILpNXV9hy5jZNMxW2Pbrm3XCFWYbaj0VQ1Cs/VNbV+qK6zv8v6fQQyBaEXAADsM/UCxWsbvA/kcbNzd6W9VGjtiPr6hKn2Au/Ocu/DfUWNDb987kZvp8CrXtjyyiobfCu92+rlVTit8gLxToVeb7l+X4Kw2l5vb0vqIbahNx63+9DvrXqVtRzIFIReAADQKRR867wP4gq8dd4H5472FNlhlw2unTjHBl7vMzdDKtHbKYzqd0JBNidL59jNsRNQFeTm2vPsKpzaURZeEFZTYO1A5rW/Y/ZYXq+osTVOIOcf/gtkBEIvAADoNAqqDd7/7e2HZtWpXvsBoNBba08tpIBbVJhv+hcXmX5FhaZvYaHJ98KvJoBr8EKvJp5Sz696be3vH4AmhF4AALBf6MO4eqVSbdnZWX5l25b+73J3cNEY943XVqTNp/orL/2xe/aU6UkfbyKRcDXb8ZEjvtztz++B3/ze/acxXyU59QAaxqxZlEUzNQctJyfLBmF9u2Qnpqqttz299fVe6HVdO7u6TmmkGZq1XdRpjfaG3a+3v2D2ZyAdEHoBAMB+UVSQZ8+vm2ob1L/Ir2zbwgVPm38+YYK57aZf+0t6BgXbq//9p5Eh8c57b3L+8OxDSRPHVZffaKbPmOa+99FfnAlfOKZLB5fqy4RwyL34ku86f1/9MgNcewgdKqBAq+N6d1ZUmB3lajp2Xj27mjROx/H6hxP4PzWd77ooP9/2CuuURAqq+xJ+dT5g1Stw6xy/6nE+oG+xv7YbaAx3R8Zxo1cj9AIAgP1CPb35eTkpt2Q9va5n8Z//1zz53Fzz6l9e85cCmU/H2uo4991V1WanF3YVenfurrAzO+sURvUJ/zy6NgQ2hlr1whYVKPQWmML8PHs8sALv3n6TEe7h1X77FxeaAX2Tf1EF9ASEXqCr8I0kgF5Gx+baU6Ck2Orr25/tednf3jQjRh5i+vTp4xz/xWPNg//5SNMfVQXioz/7FTs8WC1Ypx7MYNmQ4rFN23/v3Mublod7OL/59e+64f2Gb6tmzn3zm+qCIcvq5f39g487D81Z4ITvIxDuBdb+ku3j5EnfscvCj10teBwaBq37UY2Ger+29O/uV7841f3P/5hntw+Gf+u+dDv8mDRsOdhfMIxa93P6yec7//i4zAnuR9uFh2QH+xo7/EvNXi89hqsuv7HptWdIdOezQdVrCr6asEoTVem4XZ0/t07n0LUTxnnb9GkczqweWfF+T0xOdrbt5S3MzzXFhQWmyAu/6qVVb60CbDK6X4XcvBxNnpUXCtG5dr9qQDog9AIAgP2isjpu1n+yLeW2dVeFXxnt9pt+bU775sn2+jfOOMk888eX7HU585TvmZNP+bLZWrXGtu//v/MchcMzvnaBeX7xAlfLNlessmlAAS7L+yAfbHviV7/YFD6TmXX1z2yNty/3lSXLjEKjhi9/9/vfdjU0ObiP9iTbx0uvPuYoiLZ47O41M2+222of3nNz9By2VK52jpt4jN3v/ffMtfu95efXmVMnT3O++a1T7G19QRCEbg1b1jK1a2dfaoeJe+udRS/Ndw85tMTel147u0Offb2yG1+vVev/2ur1+q/fPWbm/P4OPRZXMwmHvzTAvlOI1Q8kCLOi11lhN+jY1aqgF1ZBVbS9bufmZHthtcD2yvb3mg470ARYCsThfUbRWvUQq6e4uDDfDNAkWl7TbRucvZANpAPeqQAAYL9QT2+NnVwntabz9LZFAdYLgk2BbMYPz28a4hys+8XdP2n2CX7OffPNCSdONOHjY9Uj/I+Py8yDD9/VtOyXv74x5eHSt995g71Ub/M/T5pgVr692t7uiFT28c5bq8yFF53b9Ni17QXTp5rHH3narvduuy2f7wNzf2kvP3f0WKMAG7xWI0cNt8sl3CN+2033OOs//Ie/JlrweoWPSW75egWPU75y8iSz+r0P/DXoDAquNqB6odaGVO9/mp1ZPb/hsKtjeBVQdViBDcpe8942fm9vju2l1TG+ajrlUZ4XhlWn+nD4tXVe03LVapI5bW9rveBb7O3HHiPsBd5UeouBnoB3KgAA2C86c/ZmBVj1biqsqQ0pHqueXEe9iiuWrzSlBw/zt9zj/dVrzcjD9wS+3k4B9pjRXzWX/+gi22s77/F76JFNAwf0K7a9tBqanJvj/Z74QVVN4bO4oMD0LSywl7YH1vtdUnBtSUFWterltTVFhaZfcaENw9qv9hfsW/vVKZF0v9pO2ygkE3KRrpxYLMYfPAAA0GGlpaV2uGtlTa1Z/8l2f+ke/YryzeADUp/dtbyyxmze0XqIc1FBrvnJzBvdU6ZMNtMuOKvp0/y8Bxe6v3/wCfOnVx41J036tvny5OPNj2+5smn9m6+/7X73O5ebh//7N+bofxrXtFzH5mpocNDb+5PrfuFu+Mcn9nb4unqQxx12ojP75pmu7ld14ccQvq067TN8/4HwulT30fKx67EcNXKyva2e3M8d/hXz7odL7D4UZvX877jnJ3Zb1V575c+MhklrfbDfG266wgT70HZa/rdXltvtWtbotV388t/s65Ds9Qo/75a3dQyw91lTV7tFSUmJfy19abIqDWeuqK72ftdqTF1dgz22V4LjdO0XR15wVXhV3o0KveK9VWxTL7GOC9bxwVXePitr4qbaa0Evb2MwzvdCdL7t0VUvsnqatde29p2KsrIy/xrQxfSHMkwhuKOooUaooUaooUao6R01+hixtWqNu37r2+7Lb/25VfvzG4vs+lTb+xvfdBf+z+Ot9rN0zV8S3gfuRMvtN1esSngfwBOP/OE/ErquxxO0n//qx3b7W39xfdPyYB9bKlcnhpUc1LT8kENLmvYd3o+2/+IJxyWCfU2YeHTTdbXwukUvzbd1LR/nqvV/db/7/W8nps+YZpeHa1reDrZTjW6HH7tasJ0eY/h+gufz/OIFdpkeS/g5he9f14P9HTfxmKbttI/Sgz9j1+l+dN9fmnx8q3Vqbe076ra278nv63RQU1vrVlXXuJu27XDXxj5xV334D3fl2vW2ffTJJnfrzl1uRVW164VYvyI5fYkSr62zddrvuthGu793131s9x/stzoe9/Zbp2O1u0VPfu9Qk141jv7P+4PURN/AdPRbMWqoEWqoEWqoEWp6R416fLxgYyqq4mZdbIu/dA+3rtocfeQo/1Zy23ZVmndWrzMDBw70lzQqLsgzIw8e7N9qbfPmzWbIkCH+rdRQ0zU1Goruffjsse9r9Gzt/kyDHufmUabL3jvUpFcNA/MBAAAAABmL0At0FX0juQ/HwQAAAADoOEIvAADYL3TKonhtXcqtvr5xch5gf9BwfFrXN6AnIPQCAID9orI6btZ/si3ltnVX65mbAQDYV4ReAACwX6int6a2PuVWX68JggEA6FyEXgAAAGSkVzZsb2o6YUnLppmlo5a316jpWE3w+v957Ub/pwJ0PUIvAADYK8XFxaaiotIUF+aZ8UeUtmpHHjY0cnl7LaqmvdMVoedKNNBzD6BnIPQCAIC9MmnSJHPvnQ+aeLzWXwI0UuCd99ATZty4cf6S7hfu9Q3a6uo+kcvba9R0rGa/cd1W5+gF2uK4GncQkuknJk4FNdRIp9cEMxi2+APdq16DNlBDjVCTfjUa4jh16lSzbNkyfwmwhwLvwoULTd++fbvtPZosdMXjcZOXl+ffSg01e19z0uHD/Fup6c6/b8lQk1419PQCXYVvJAFkmNLSUrN06VLvT1v0sXyZckxi0KjpWM3KlSvN6NGj/XcLAHQj749SM94fM/9a6qihRqihRqihRqihRqihRqihRqihRrqrxtECP/8CAAAAAJBZ/PDbJJ0SeyqooUaooUaooUaooUaooUaooUaoyfwajukFAAAAAGQsQi8AAAAAIGMRegEAAACkF50KMjgdJJAEoRcAAAAAkLEIvUBX4RtJAAAAoMsRegEAAAAAGYvQCwAAAADIWIReAAAAAEDGIvQCAAAAADIWoRcAAAAAkLEIvQAAAADSi+s2NiAFhF4AAAAAQMZyYrEYX5EAAAAAADKT24JCcEdRQ41QQ41QQ41QQ41QQ41QQ41QQ410Vw3DmwEAAAAAGYvQCwAAAADIWIReAAAAAEDGIvQCAAAAADIWoRcAAABAenGcxgakgNALAAAAAMhYhF6gq/CNJAAAANDlCL0AAAAAgIxF6AUAAAAAZCxCLwAAAAAgYxF6AQAAAAAZi9ALAAAAAMhYTiwWc/3rAPajktJSe1kWi9lLAAAAAF3AbUEhuKOooUaoSVKjX7fWv3LNa4Jt2mq+Nu8nqibckomqCbdkomrCrQ1NzyeqJtxCIl+DqJpQa/fnIxE1zVoyUTXh1g772KJqwq2FVs8nqibcPO2+BlE14ZZMVE24JRNVE24Rmj2fqJpw87X5GkTVhFsyUTXhlkxUTbi1oen5RNWEW0jkaxBVE2rtvnckoqZZSyaqJtzaYR9bVE24tdDq+UTVhJun3dcgqibckomqCbdkomrCLUKz5xNVE26+Nl+DqJpwSyaqJtySiaoJtzY0PZ+omnALiXwNompCrd33jkTUNGvJRNWEWzvsY4uqCbcWWj2fqJpw87T7GkTVhFsHJH2tI1CT+TUMbwa6SvCnGwAAAECXIfQCPUnz7zVbt2SiavyW0rDqqJrwsmSiasItmaiacEsmqibckomoafZ8komqCbdkomrCLZmomnBLJqrGa03PJ5momnBLot33jloyUTXhlkxUjd/sY0smqia8LJmomnBLJqom3JKJqgm3ZCJqmj2fZKJqwi2ZqJpwSyaqJtySiarxWtPzSSaqJtySaPe9o5ZMVE24JRNV4zf72JKJqgkvSyaqJtySiaoJt2SiasItmYiaZs8nmaiacEsmqibckomqCbdkomq81vR8gH1E6AUAAAAAZCxCLwAAAAAgYxF6AQAAAAAZi9ALAAAAAMhYhF4AAAAAQMYi9AIAAAAAMhahFwAAAACQsQi9AAAAAICMRegFAAAAAGQsQi8AAAAAIGM5sVjM9a8DAAAAAJBZ3BYUgjuKGmqEGmqEGmqEGmqEGmqEGmqEGmqku2oY3gwAAAAAyFiEXgAAAABAxiL0AgAAAAAyFqEXAAAAAJCxCL0AAAAAgIxF6AUAAAAAZCxCLwAAAAAgYxF6AQAAAAAZi9ALAAAAAMhYhF4AAAAAQMYi9AIAAAAAMhahFwAAAACQoYz5/wDZ/Smg4k2mAAAAAElFTkSuQmCC",
+                                    "width": "907",
+                                    "height": "415"
+                                }
+                            }
+                        ]
+                    }
                 ]
             }
         ],
         "SupportingAsset": [
+            {
+                "supportingAssetId": [
+                    "1"
+                ],
+                "supportingAssetHLDId": [
+                    ""
+                ],
+                "supportingAssetName": [
+                    "Local client storage"
+                ],
+                "supportingAssetType": [
+                    "Database"
+                ],
+                "supportingAssetSecurityLevel": [
+                    "-1"
+                ],
+                "supportingAndBusinessAssetLink": [
+                    {
+                        "$": {
+                            "businessAssetRef": "1"
+                        }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": "1"
+                        }
+                    }
+                ]
+            },
+            {
+                "supportingAssetId": [
+                    "2"
+                ],
+                "supportingAssetHLDId": [
+                    ""
+                ],
+                "supportingAssetName": [
+                    "Internet connection (TLS)"
+                ],
+                "supportingAssetType": [
+                    "Network"
+                ],
+                "supportingAssetSecurityLevel": [
+                    "-1"
+                ],
+                "supportingAndBusinessAssetLink": [
+                    {
+                        "$": {
+                            "businessAssetRef": "4"
+                        }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": "2"
+                        }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": "3"
+                        }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": "1"
+                        }
+                    }
+                ]
+            },
             {
                 "supportingAssetId": [
                     "3"
@@ -151,7 +336,36 @@
                     ""
                 ],
                 "supportingAssetName": [
-                    "SA1"
+                    " User Interface"
+                ],
+                "supportingAssetType": [
+                    "Interface"
+                ],
+                "supportingAssetSecurityLevel": [
+                    "-1"
+                ],
+                "supportingAndBusinessAssetLink": [
+                    {
+                        "$": {
+                            "businessAssetRef": "1"
+                        }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": "3"
+                        }
+                    }
+                ]
+            },
+            {
+                "supportingAssetId": [
+                    "4"
+                ],
+                "supportingAssetHLDId": [
+                    ""
+                ],
+                "supportingAssetName": [
+                    "Device keyboard"
                 ],
                 "supportingAssetType": [
                     ""
@@ -164,6 +378,11 @@
                         "$": {
                             "businessAssetRef": "1"
                         }
+                    },
+                    {
+                        "$": {
+                            "businessAssetRef": ""
+                        }
                     }
                 ]
             }
@@ -171,47 +390,47 @@
         "Risk": [
             {
                 "projectName": [
-                    ""
+                    "Sample Mobile Application"
                 ],
                 "projectVersion": [
-                    ""
+                    "1.0"
                 ],
                 "riskId": [
                     "1"
                 ],
                 "riskName": [
-                    "As a Criminal, I can repudiate the  compromising the SA1 in order to sdfsdf"
+                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "threatAgent": [
-                    "Criminal"
+                    "Researcher"
                 ],
                 "threatAgentDetail": [
-                    ""
+                    "ta details"
                 ],
                 "threatVerb": [
-                    "repudiate"
+                    "tamper with"
                 ],
                 "threatVerbDetail": [
-                    ""
+                    "t details"
                 ],
                 "motivation": [
-                    "sdfsdf"
+                    "get the user credentials to be able to login through the web interface and do financial transactions"
                 ],
                 "motivationDetail": [
-                    ""
+                    "motivation details fdsf"
                 ],
                 "businessAssetRef": [
-                    "1"
+                    "2"
                 ],
                 "supportingAssetRef": [
-                    "3"
+                    "2"
                 ],
                 "RiskName": [
                     {
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Criminal, I can repudiate the  compromising the SA1 in order to sdfsdf"
+                                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
                                 ]
                             }
                         ]
@@ -228,6 +447,218 @@
                                     "0"
                                 ],
                                 "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            "fdgdfg"
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "SimpleLikelihoodEvaluation": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "1",
+                                "$": {
+                                    "score": "7",
+                                    "name": "Man in the middle attack through network interception"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Man in the middle attack through network interception"
+                        ],
+                        "attackPathScore": [
+                            "7"
+                        ]
+                    },
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "3",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Shoulder surfing attack"
+                                }
+                            },
+                            {
+                                "char": "16",
+                                "$": {
+                                    "score": "",
+                                    "name": "Phone backup data analysis of a non-encrypted backup"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup"
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    "(Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    ""
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            "Additional proprietary encryption."
+                        ],
+                        "benefits": [
+                            "0.5"
+                        ],
+                        "cost": [
+                            "11.1"
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    "Accepted"
+                                ],
+                                "decisionDetail": [
+                                    "DEcision coment"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0.1"
+                        ],
+                        "cost": [
+                            "10"
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "0.5"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    ""
+                ],
+                "riskManagementDecision": [
+                    "Mitigate"
+                ],
+                "riskManagementDetail": [
+                    "Security control implemented by adding proprietary encryption on top of TLS communication layer."
+                ],
+                "residualRiskScore": [
+                    ""
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "2"
+                ],
+                "riskName": [
+                    "Manual"
+                ],
+                "threatAgent": [
+                    "Criminal"
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    "steal"
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    "get the user credentials to be able to login through the web interface and do financial transactions"
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    "4"
+                ],
+                "supportingAssetRef": [
+                    "4"
+                ],
+                "RiskName": [
+                    {
+                        "ManualRiskName": [
+                            {
+                                "manualRiskName": [
+                                    "Manual"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            "2"
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
                                     "0"
                                 ],
                                 "businessAssetAvailabilityFlag": [
@@ -238,6 +669,1020 @@
                                 ],
                                 "businessAssetAuthorizationFlag": [
                                     "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "2"
+                        ],
+                        "riskLikelihoodDetail": [
+                            "dfgfdgdg"
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    "3"
+                                                ],
+                                                "reward": [
+                                                    "4"
+                                                ],
+                                                "accessResources": [
+                                                    "4"
+                                                ],
+                                                "size": [
+                                                    "9"
+                                                ],
+                                                "intrusionDetection": [
+                                                    "9"
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            "5.8"
+                                        ],
+                                        "threatFactorLevel": [
+                                            "High"
+                                        ],
+                                        "occurrence": [
+                                            "3"
+                                        ],
+                                        "occurrenceLevel": [
+                                            "Medium"
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "5",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Keystroke logging attack by malware"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Keystroke logging attack by malware"
+                        ],
+                        "attackPathScore": [
+                            "6"
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    "Keystroke logging attack by malware"
+                ],
+                "allAttackPathsScore": [
+                    "6"
+                ],
+                "inherentRiskScore": [
+                    "6"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            {
+                                "div": [
+                                    {
+                                        "char": "TEST",
+                                        "$": {
+                                            "xmlns": "http://www.w3.org/1999/xhtml"
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "benefits": [
+                            "0.9"
+                        ],
+                        "cost": [
+                            "10"
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    "Accepted"
+                                ],
+                                "decisionDetail": [
+                                    "gdfg"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "0.10000000000000009"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "1"
+                ],
+                "riskManagementDecision": [
+                    "Mitigate"
+                ],
+                "riskManagementDetail": [
+                    "Risk accepted by Product Owner on 2020-11-24."
+                ],
+                "residualRiskScore": [
+                    "6"
+                ],
+                "residualRiskLevel": [
+                    "Medium"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "3"
+                ],
+                "riskName": [
+                    "As a Criminal, I can steal the  compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
+                ],
+                "threatAgent": [
+                    "Criminal"
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    "steal"
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    "get the user credentials to be able to login through the web interface and do financial transactions"
+                ],
+                "motivationDetail": [
+                    "The threat agent looks over the shoulder while the person is entering their credentials."
+                ],
+                "businessAssetRef": [
+                    "1"
+                ],
+                "supportingAssetRef": [
+                    "3"
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a Criminal, I can steal the  compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "SimpleLikelihoodEvaluation": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "3",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Shoulder surfing attack"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Shoulder surfing attack"
+                        ],
+                        "attackPathScore": [
+                            "6"
+                        ]
+                    },
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    "(Shoulder surfing attack) OR ()"
+                ],
+                "allAttackPathsScore": [
+                    "6"
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    "Transfer"
+                ],
+                "riskManagementDetail": [
+                    "Risk transferred to users, with application help  indicating that displaying of sensitive information should be protected from prying eyes and users should be aware of their surroundings."
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "4"
+                ],
+                "riskName": [
+                    "As a Script Kiddy, I can steal the  compromising the  in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                ],
+                "threatAgent": [
+                    "Script Kiddy"
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    "steal"
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    "get account information and balance of specific users"
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a Script Kiddy, I can steal the  compromising the  in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "2"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    "3"
+                                                ],
+                                                "reward": [
+                                                    "1"
+                                                ],
+                                                "accessResources": [
+                                                    "4"
+                                                ],
+                                                "size": [
+                                                    "9"
+                                                ],
+                                                "intrusionDetection": [
+                                                    "9"
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            "5.2"
+                                        ],
+                                        "threatFactorLevel": [
+                                            "High"
+                                        ],
+                                        "occurrence": [
+                                            "3"
+                                        ],
+                                        "occurrenceLevel": [
+                                            "Medium"
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "2",
+                                "$": {
+                                    "score": "5",
+                                    "name": "Dumping of the local storage from a rooted device"
+                                }
+                            },
+                            {
+                                "char": "3",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Shoulder surfing attack"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Dumping of the local storage from a rooted device AND Shoulder surfing attack"
+                        ],
+                        "attackPathScore": [
+                            "5"
+                        ]
+                    },
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "16",
+                                "$": {
+                                    "score": "",
+                                    "name": "Phone backup data analysis of a non-encrypted backup"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Phone backup data analysis of a non-encrypted backup"
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    "(Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    ""
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            "Encrypt the local storage on the device by using a diversified key from a random generated on the device."
+                        ],
+                        "benefits": [
+                            "0.25"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": [
+                            "Use hardware-backed encryption available on the device."
+                        ],
+                        "benefits": [
+                            "0.75"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    "Done"
+                                ],
+                                "decisionDetail": [
+                                    "Usage of secure enclave on iOS and hardware backed keystore on Android."
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "0.25"
+                ],
+                "mitigationsDoneBenefits": [
+                    "0.25"
+                ],
+                "mitigatedRiskScore": [
+                    ""
+                ],
+                "riskManagementDecision": [
+                    "Mitigate"
+                ],
+                "riskManagementDetail": [
+                    "Risk reduced through implementation of hardware backed storage."
+                ],
+                "residualRiskScore": [
+                    ""
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "5"
+                ],
+                "riskName": [
+                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg, exploiting the  AND "
+                ],
+                "threatAgent": [
+                    "Researcher"
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    "disclose"
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    "gfhg"
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    "2"
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg, exploiting the  AND "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "2"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    "5"
+                                                ],
+                                                "reward": [
+                                                    "1"
+                                                ],
+                                                "accessResources": [
+                                                    "0"
+                                                ],
+                                                "size": [
+                                                    "4"
+                                                ],
+                                                "intrusionDetection": [
+                                                    "3"
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            "2.6"
+                                        ],
+                                        "threatFactorLevel": [
+                                            "Low"
+                                        ],
+                                        "occurrence": [
+                                            "9"
+                                        ],
+                                        "occurrenceLevel": [
+                                            "Very High"
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            },
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            " AND "
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    " AND "
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "8"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "1"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "SimpleLikelihoodEvaluation": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "9"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
                                 ],
                                 "businessAssetNonRepudiationFlag": [
                                     "1"
@@ -323,7 +1768,7 @@
                     ""
                 ],
                 "inherentRiskScore": [
-                    "11"
+                    "0"
                 ],
                 "Mitigation": [
                     {
@@ -355,7 +1800,7 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "11"
+                    "0"
                 ],
                 "riskManagementDecision": [
                     ""
@@ -364,47 +1809,716 @@
                     ""
                 ],
                 "residualRiskScore": [
-                    "11"
+                    "0"
                 ],
                 "residualRiskLevel": [
-                    "High"
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "10"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to , exploiting the  AND "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to , exploiting the  AND "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            },
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            " AND "
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    " AND "
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "11"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
                 ]
             }
         ],
         "Vulnerability": [
             {
                 "projectName": [
-                    ""
+                    "Enter your project name"
                 ],
                 "projectVersion": [
-                    ""
+                    "1.0"
                 ],
                 "vulnerabilityId": [
                     "1"
                 ],
                 "vulnerabilityName": [
-                    "hh"
+                    "Man in the middle attack through network interception"
                 ],
                 "vulnerabilityFamily": [
-                    ""
+                    "Password Management Vulnerability‎"
                 ],
                 "vulnerabilityTrackingID": [
-                    "uuu"
+                    "123"
                 ],
                 "vulnerabilityTrackingURI": [
-                    ""
+                    "https://www.google.com/"
                 ],
                 "vulnerabilityCVE": [
-                    "https:///"
+                    ""
                 ],
                 "vulnerabilityDescription": [
-                    "kkk"
+                    {
+                        "div": [
+                            {
+                                "char": "Assumptions for this attack:",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "In all cases, TLS is required for all mobile deployments today on the official stores. The two use-cases possible are :",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "We are taking the highest CVSS3 scoring between the two use cases above.",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSSV3 Score: 5.9",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            }
+                        ],
+                        "ul": [
+                            {
+                                "$": {
+                                    "style": "MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px",
+                                    "type": "disc",
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                },
+                                "li": [
+                                    "TLS is used."
+                                ]
+                            }
+                        ],
+                        "ol": [
+                            {
+                                "$": {
+                                    "style": "MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px",
+                                    "type": "1",
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                },
+                                "li": [
+                                    {
+                                        "div": [
+                                            "A Trusted CA is compromised"
+                                        ]
+                                    },
+                                    {
+                                        "div": [
+                                            "Installing a custom CA using social engineering or malware"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 ],
                 "vulnerabilityDescriptionAttachment": [
                     ""
                 ],
                 "supportingAssetRef": [
+                    "",
+                    "2",
+                    "1",
+                    "3"
+                ],
+                "vulnerabilityCVSS": [
+                    {
+                        "vulnerabilityBaseScoreMetrics": [
+                            {
+                                "vulnerabilityExploitabilityMetrics": [
+                                    {
+                                        "accessVector": [
+                                            "1"
+                                        ],
+                                        "accessComplexity": [
+                                            "0.61"
+                                        ],
+                                        "authentication": [
+                                            "0.704"
+                                        ]
+                                    }
+                                ],
+                                "vulnerabilityImpactMetrics": [
+                                    {
+                                        "confidentialityImpact": [
+                                            "0.660"
+                                        ],
+                                        "integrityImpact": [
+                                            "0"
+                                        ],
+                                        "availabilityImpact": [
+                                            "0"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "vulnerabilityTemporalScoreMetrics": [
+                            {
+                                "exploitability": [
+                                    "0.95"
+                                ],
+                                "remediationLevel": [
+                                    "1"
+                                ],
+                                "reportConfidence": [
+                                    "1.00"
+                                ]
+                            }
+                        ],
+                        "impactScore": [
+                            "6.8706000000000005"
+                        ],
+                        "exploitabilityScore": [
+                            "8.588799999999999"
+                        ],
+                        "baseScore": [
+                            "7.124066880000001"
+                        ],
+                        "temporalScore": [
+                            "6.767863536"
+                        ]
+                    }
+                ],
+                "vulnerabilityCVEScoring": [
+                    {
+                        "cveScore": [
+                            "0"
+                        ]
+                    }
+                ],
+                "overallScore": [
+                    "7"
+                ],
+                "overallLevel": [
+                    "High"
+                ]
+            },
+            {
+                "projectName": [
+                    "Enter your project name"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "vulnerabilityId": [
+                    "2"
+                ],
+                "vulnerabilityName": [
+                    "Dumping of the local storage from a rooted device"
+                ],
+                "vulnerabilityFamily": [
+                    "Logging and Auditing Vulnerability‎"
+                ],
+                "vulnerabilityTrackingID": [
                     ""
+                ],
+                "vulnerabilityTrackingURI": [
+                    ""
+                ],
+                "vulnerabilityCVE": [
+                    "http:///"
+                ],
+                "vulnerabilityDescription": [
+                    {
+                        "div": [
+                            {
+                                "char": "When a device is rooted it is possible to completely dump data anywhere on the devices, bypassing the platform's sandbox mechanisms.",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSSV3 Score: 4.6",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "Assumptions:",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            }
+                        ],
+                        "ul": [
+                            {
+                                "$": {
+                                    "style": "MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px",
+                                    "type": "disc",
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                },
+                                "li": [
+                                    "Physical access to the device"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "vulnerabilityDescriptionAttachment": [
+                    "x0lGQRQAAAABAAAAAAAAAMERAAAKAAAAdABlAHMAdAAuAGoAcwBvAG4AAAB7CiAgICAiSVNSQW1ldGEiOiB7CiAgICAgICAgImFwcFZlcnNpb24iOiAxLAogICAgICAgICJwcm9qZWN0TmFtZSI6ICIiLAogICAgICAgICJwcm9qZWN0T3JnYW5pemF0aW9uIjogIiIsCiAgICAgICAgInByb2plY3RWZXJzaW9uIjogIiIsCiAgICAgICAgIklTUkF0cmFja2luZyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgInRyYWNraW5nSXRlcmF0aW9uIjogMSwKICAgICAgICAgICAgICAgICJ0cmFja2luZ1NlY3VyaXR5T2ZmaWNlciI6ICJ0MDI2Mzc3NCIsCiAgICAgICAgICAgICAgICAidHJhY2tpbmdEYXRlIjogIjIwMjItMDktMDUiLAogICAgICAgICAgICAgICAgInRyYWNraW5nQ29tbWVudCI6ICIiCiAgICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJidXNpbmVzc0Fzc2V0c0NvdW50IjogMCwKICAgICAgICAic3VwcG9ydGluZ0Fzc2V0c0NvdW50IjogMSwKICAgICAgICAicmlza3NDb3VudCI6IDEsCiAgICAgICAgInZ1bG5lcmFiaWxpdGllc0NvdW50IjogMQogICAgfSwKICAgICJQcm9qZWN0Q29udGV4dCI6IHsKICAgICAgICAicHJvamVjdERlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgInByb2plY3RVUkwiOiAiIiwKICAgICAgICAicHJvamVjdERlc2NyaXB0aW9uQXR0YWNobWVudCI6ICIiLAogICAgICAgICJzZWN1cml0eVByb2plY3RPYmplY3RpdmVzIjogIiIsCiAgICAgICAgInNlY3VyaXR5T2ZmaWNlck9iamVjdGl2ZXMiOiAiIiwKICAgICAgICAic2VjdXJpdHlBc3N1bXB0aW9ucyI6ICIiCiAgICB9LAogICAgIkJ1c2luZXNzQXNzZXQiOiBbXSwKICAgICJTdXBwb3J0aW5nQXNzZXRzRGVzYyI6ICIiLAogICAgIlN1cHBvcnRpbmdBc3NldCI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRJZCI6IDEsCiAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRITERJZCI6ICIiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0TmFtZSI6ICJTQTEiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0VHlwZSI6ICIiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0U2VjdXJpdHlMZXZlbCI6IC0xLAogICAgICAgICAgICAiYnVzaW5lc3NBc3NldFJlZiI6IFtdCiAgICAgICAgfQogICAgXSwKICAgICJSaXNrIjogWwogICAgICAgIHsKICAgICAgICAgICAgInJpc2tJZCI6IDEsCiAgICAgICAgICAgICJwcm9qZWN0TmFtZVJlZiI6ICIiLAogICAgICAgICAgICAicHJvamVjdFZlcnNpb25SZWYiOiAiIiwKICAgICAgICAgICAgInJpc2tOYW1lIjogewogICAgICAgICAgICAgICAgInJpc2tJZFJlZiI6IDEsCiAgICAgICAgICAgICAgICAicmlza05hbWUiOiAiQXMgYSAsIEkgY2FuICB0aGUgQkExIGNvbXByb21pc2luZyB0aGUgU0ExIGluIG9yZGVyIHRvICIsCiAgICAgICAgICAgICAgICAidGhyZWF0QWdlbnQiOiAiIiwKICAgICAgICAgICAgICAgICJ0aHJlYXRBZ2VudERldGFpbCI6ICIiLAogICAgICAgICAgICAgICAgInRocmVhdFZlcmIiOiAiIiwKICAgICAgICAgICAgICAgICJ0aHJlYXRWZXJiRGV0YWlsIjogIiIsCiAgICAgICAgICAgICAgICAibW90aXZhdGlvbiI6ICIiLAogICAgICAgICAgICAgICAgIm1vdGl2YXRpb25EZXRhaWwiOiAiIiwKICAgICAgICAgICAgICAgICJidXNpbmVzc0Fzc2V0UmVmIjogMSwKICAgICAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRSZWYiOiAxCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICJyaXNrTGlrZWxpaG9vZCI6IHsKICAgICAgICAgICAgICAgICJyaXNrSWRSZWYiOiAxLAogICAgICAgICAgICAgICAgInJpc2tMaWtlbGlob29kIjogMywKICAgICAgICAgICAgICAgICJyaXNrTGlrZWxpaG9vZERldGFpbCI6ICIiLAogICAgICAgICAgICAgICAgInNraWxsTGV2ZWwiOiBudWxsLAogICAgICAgICAgICAgICAgInJld2FyZCI6IG51bGwsCiAgICAgICAgICAgICAgICAiYWNjZXNzUmVzb3VyY2VzIjogbnVsbCwKICAgICAgICAgICAgICAgICJzaXplIjogbnVsbCwKICAgICAgICAgICAgICAgICJpbnRydXNpb25EZXRlY3Rpb24iOiBudWxsLAogICAgICAgICAgICAgICAgInRocmVhdEZhY3RvclNjb3JlIjogbnVsbCwKICAgICAgICAgICAgICAgICJ0aHJlYXRGYWN0b3JMZXZlbCI6ICIiLAogICAgICAgICAgICAgICAgIm9jY3VycmVuY2UiOiBudWxsLAogICAgICAgICAgICAgICAgIm9jY3VycmVuY2VMZXZlbCI6ICIiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICJyaXNrSW1wYWN0IjogewogICAgICAgICAgICAgICAgInJpc2tJZFJlZiI6IDEsCiAgICAgICAgICAgICAgICAicmlza0ltcGFjdCI6IDMsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldENvbmZpZGVudGlhbGl0eUZsYWciOiAwLAogICAgICAgICAgICAgICAgImJ1c2luZXNzQXNzZXRJbnRlZ3JpdHlGbGFnIjogMSwKICAgICAgICAgICAgICAgICJidXNpbmVzc0Fzc2V0QXZhaWxhYmlsaXR5RmxhZyI6IDEsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldEF1dGhlbnRpY2l0eUZsYWciOiAwLAogICAgICAgICAgICAgICAgImJ1c2luZXNzQXNzZXRBdXRob3JpemF0aW9uRmxhZyI6IDEsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldE5vblJlcHVkaWF0aW9uRmxhZyI6IDEKICAgICAgICAgICAgfSwKICAgICAgICAgICAgInJpc2tBdHRhY2tQYXRocyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAicmlza0lkUmVmIjogMSwKICAgICAgICAgICAgICAgICAgICAicmlza0F0dGFja1BhdGhJZCI6IDEsCiAgICAgICAgICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlSZWYiOiBbCiAgICAgICAgICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5SWRSZWYiOiBudWxsLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgInNjb3JlIjogbnVsbCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICJuYW1lIjogIiIKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIF0sCiAgICAgICAgICAgICAgICAgICAgImF0dGFja1BhdGhOYW1lIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImF0dGFja1BhdGhTY29yZSI6IG51bGwKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgXSwKICAgICAgICAgICAgImFsbEF0dGFja1BhdGhzTmFtZSI6ICIiLAogICAgICAgICAgICAiYWxsQXR0YWNrUGF0aHNTY29yZSI6IG51bGwsCiAgICAgICAgICAgICJpbmhlcmVudFJpc2tTY29yZSI6IDAsCiAgICAgICAgICAgICJyaXNrTWl0aWdhdGlvbiI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAicmlza0lkUmVmIjogMSwKICAgICAgICAgICAgICAgICAgICAicmlza01pdGlnYXRpb25JZCI6IDEsCiAgICAgICAgICAgICAgICAgICAgImRlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImJlbmVmaXRzIjogMCwKICAgICAgICAgICAgICAgICAgICAiY29zdCI6IG51bGwsCiAgICAgICAgICAgICAgICAgICAgImRlY2lzaW9uIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImRlY2lzaW9uRGV0YWlsIjogIiIsCiAgICAgICAgICAgICAgICAgICAgIm1pdGlnYXRpb25zQmVuZWZpdHMiOiAxLAogICAgICAgICAgICAgICAgICAgICJtaXRpZ2F0aW9uc0RvbmVCZW5lZml0cyI6IDEKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgXSwKICAgICAgICAgICAgIm1pdGlnYXRlZFJpc2tTY29yZSI6IDAsCiAgICAgICAgICAgICJyaXNrTWFuYWdlbWVudERlY2lzaW9uIjogIiIsCiAgICAgICAgICAgICJyaXNrTWFuYWdlbWVudERldGFpbCI6ICIiLAogICAgICAgICAgICAicmVzaWR1YWxSaXNrU2NvcmUiOiAwLAogICAgICAgICAgICAicmVzaWR1YWxSaXNrTGV2ZWwiOiAiTG93IgogICAgICAgIH0KICAgIF0sCiAgICAiVnVsbmVyYWJpbGl0eSI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJwcm9qZWN0TmFtZVJlZiI6ICIiLAogICAgICAgICAgICAicHJvamVjdFZlcnNpb25SZWYiOiAiIiwKICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlJZCI6IDEsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5TmFtZSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eUZhbWlseSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eVRyYWNraW5nSUQiOiAiIiwKICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlUcmFja2luZ1VSSSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eURlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5RGVzY3JpcHRpb25BdHRhY2htZW50IjogIiIsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5Q1ZFIjogIkNWU1M6Mi4wL0FWOkwvQUM6TS9BdTpOL0M6UC9JOlAvQTpQL0U6TkQvUkw6TkQvUkM6TkQiLAogICAgICAgICAgICAiY3ZlU2NvcmUiOiA0LjM3ODAzMjEyMzE1LAogICAgICAgICAgICAib3ZlcmFsbFNjb3JlIjogNCwKICAgICAgICAgICAgIm92ZXJhbGxMZXZlbCI6ICJNZWRpdW0iLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0UmVmIjogW10KICAgICAgICB9CiAgICBdCn0="
+                ],
+                "supportingAssetRef": [
+                    "",
+                    "1"
                 ],
                 "vulnerabilityCVSS": [
                     {
@@ -426,13 +2540,13 @@
                                 "vulnerabilityImpactMetrics": [
                                     {
                                         "confidentialityImpact": [
-                                            "0.275"
+                                            "0.660"
                                         ],
                                         "integrityImpact": [
-                                            "0.275"
+                                            "0"
                                         ],
                                         "availabilityImpact": [
-                                            "0.275"
+                                            "0"
                                         ]
                                     }
                                 ]
@@ -441,71 +2555,130 @@
                         "vulnerabilityTemporalScoreMetrics": [
                             {
                                 "exploitability": [
-                                    "1"
+                                    "1.0"
                                 ],
                                 "remediationLevel": [
-                                    "1"
+                                    "1.0"
                                 ],
                                 "reportConfidence": [
-                                    "1"
+                                    "1.00"
                                 ]
                             }
                         ],
                         "impactScore": [
-                            "6.442976718750001"
+                            "6.8706000000000005"
                         ],
                         "exploitabilityScore": [
                             "3.3925759999999996"
                         ],
                         "baseScore": [
-                            "4.37803212315"
+                            "4.679763110400001"
                         ],
                         "temporalScore": [
-                            "4.37803212315"
+                            "4.679763110400001"
                         ]
                     }
                 ],
                 "vulnerabilityCVEScoring": [
                     {
                         "cveScore": [
-                            "10"
+                            "4.6"
                         ]
                     }
                 ],
                 "overallScore": [
-                    "10"
+                    "5"
                 ],
                 "overallLevel": [
-                    "High"
+                    "Medium"
                 ]
             },
             {
                 "projectName": [
-                    ""
+                    "Enter your project name"
                 ],
                 "projectVersion": [
-                    ""
+                    "1.0"
                 ],
                 "vulnerabilityId": [
-                    "2"
+                    "3"
                 ],
                 "vulnerabilityName": [
-                    "Random"
+                    "Shoulder surfing attack"
                 ],
                 "vulnerabilityFamily": [
-                    "Environmental Vulnerability‎"
+                    ""
                 ],
                 "vulnerabilityTrackingID": [
-                    "sdf"
+                    ""
                 ],
                 "vulnerabilityTrackingURI": [
                     ""
                 ],
                 "vulnerabilityCVE": [
-                    ""
+                    "http:///"
                 ],
                 "vulnerabilityDescription": [
-                    "sad"
+                    {
+                        "div": [
+                            {
+                                "char": "Attacker peeks at the user's screen to discover the assets.",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSS:3.0/AV:A/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSSV3: 5.7",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "Assumption:",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            }
+                        ],
+                        "ul": [
+                            {
+                                "$": {
+                                    "style": "MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px",
+                                    "type": "disc",
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                },
+                                "li": [
+                                    "User interaction required by using the application and accessing / showing confidential data"
+                                ]
+                            }
+                        ]
+                    }
                 ],
                 "vulnerabilityDescriptionAttachment": [
                     ""
@@ -521,6 +2694,294 @@
                                 "vulnerabilityExploitabilityMetrics": [
                                     {
                                         "accessVector": [
+                                            "0.646"
+                                        ],
+                                        "accessComplexity": [
+                                            "0.71"
+                                        ],
+                                        "authentication": [
+                                            "0.704"
+                                        ]
+                                    }
+                                ],
+                                "vulnerabilityImpactMetrics": [
+                                    {
+                                        "confidentialityImpact": [
+                                            "0.660"
+                                        ],
+                                        "integrityImpact": [
+                                            "0"
+                                        ],
+                                        "availabilityImpact": [
+                                            "0"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "vulnerabilityTemporalScoreMetrics": [
+                            {
+                                "exploitability": [
+                                    "1.0"
+                                ],
+                                "remediationLevel": [
+                                    "0.95"
+                                ],
+                                "reportConfidence": [
+                                    "1.00"
+                                ]
+                            }
+                        ],
+                        "impactScore": [
+                            "6.8706000000000005"
+                        ],
+                        "exploitabilityScore": [
+                            "6.457932799999999"
+                        ],
+                        "baseScore": [
+                            "6.12170694912"
+                        ],
+                        "temporalScore": [
+                            "5.815621601664"
+                        ]
+                    }
+                ],
+                "vulnerabilityCVEScoring": [
+                    {
+                        "cveScore": [
+                            "5.7"
+                        ]
+                    }
+                ],
+                "overallScore": [
+                    "6"
+                ],
+                "overallLevel": [
+                    "Medium"
+                ]
+            },
+            {
+                "projectName": [
+                    "Enter your project name"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "vulnerabilityId": [
+                    "5"
+                ],
+                "vulnerabilityName": [
+                    "Keystroke logging attack by malware"
+                ],
+                "vulnerabilityFamily": [
+                    ""
+                ],
+                "vulnerabilityTrackingID": [
+                    ""
+                ],
+                "vulnerabilityTrackingURI": [
+                    ""
+                ],
+                "vulnerabilityCVE": [
+                    "http:///"
+                ],
+                "vulnerabilityDescription": [
+                    {
+                        "div": [
+                            {
+                                "char": "Attacker logs all the key inputs done by the user, for example a fake keyboard application.",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSSV3: 5.5",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "vulnerabilityDescriptionAttachment": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    "",
+                    "4"
+                ],
+                "vulnerabilityCVSS": [
+                    {
+                        "vulnerabilityBaseScoreMetrics": [
+                            {
+                                "vulnerabilityExploitabilityMetrics": [
+                                    {
+                                        "accessVector": [
+                                            "1"
+                                        ],
+                                        "accessComplexity": [
+                                            "0.35"
+                                        ],
+                                        "authentication": [
+                                            "0.56"
+                                        ]
+                                    }
+                                ],
+                                "vulnerabilityImpactMetrics": [
+                                    {
+                                        "confidentialityImpact": [
+                                            "0.660"
+                                        ],
+                                        "integrityImpact": [
+                                            "0"
+                                        ],
+                                        "availabilityImpact": [
+                                            "0"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "vulnerabilityTemporalScoreMetrics": [
+                            {
+                                "exploitability": [
+                                    "0.9"
+                                ],
+                                "remediationLevel": [
+                                    "0.95"
+                                ],
+                                "reportConfidence": [
+                                    "1.00"
+                                ]
+                            }
+                        ],
+                        "impactScore": [
+                            "6.8706000000000005"
+                        ],
+                        "exploitabilityScore": [
+                            "3.9200000000000003"
+                        ],
+                        "baseScore": [
+                            "4.927863360000001"
+                        ],
+                        "temporalScore": [
+                            "4.213323172800001"
+                        ]
+                    }
+                ],
+                "vulnerabilityCVEScoring": [
+                    {
+                        "cveScore": [
+                            "5.5"
+                        ]
+                    }
+                ],
+                "overallScore": [
+                    "6"
+                ],
+                "overallLevel": [
+                    "Medium"
+                ]
+            },
+            {
+                "projectName": [
+                    "Enter your project name"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "vulnerabilityId": [
+                    "16"
+                ],
+                "vulnerabilityName": [
+                    "Phone backup data analysis of a non-encrypted backup"
+                ],
+                "vulnerabilityFamily": [
+                    ""
+                ],
+                "vulnerabilityTrackingID": [
+                    ""
+                ],
+                "vulnerabilityTrackingURI": [
+                    ""
+                ],
+                "vulnerabilityCVE": [
+                    "https:///"
+                ],
+                "vulnerabilityDescription": [
+                    {
+                        "div": [
+                            {
+                                "char": "Attacker makes a backup of the data on the devices or has access to this data and attacks the data backup blob. ",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSS:3.0/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "char": "CVSS3: 6.2",
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            },
+                            {
+                                "$": {
+                                    "xmlns": "http://www.w3.org/1999/xhtml"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "vulnerabilityDescriptionAttachment": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    "",
+                    "1"
+                ],
+                "vulnerabilityCVSS": [
+                    {
+                        "vulnerabilityBaseScoreMetrics": [
+                            {
+                                "vulnerabilityExploitabilityMetrics": [
+                                    {
+                                        "accessVector": [
                                             "0.395"
                                         ],
                                         "accessComplexity": [
@@ -549,13 +3010,13 @@
                         "vulnerabilityTemporalScoreMetrics": [
                             {
                                 "exploitability": [
-                                    "1"
+                                    "1.0"
                                 ],
                                 "remediationLevel": [
-                                    "1"
+                                    "0.95"
                                 ],
                                 "reportConfidence": [
-                                    "1"
+                                    "1.00"
                                 ]
                             }
                         ],
@@ -569,22 +3030,22 @@
                             "4.37803212315"
                         ],
                         "temporalScore": [
-                            "4.37803212315"
+                            "4.1591305169925"
                         ]
                     }
                 ],
                 "vulnerabilityCVEScoring": [
                     {
                         "cveScore": [
-                            "0"
+                            ""
                         ]
                     }
                 ],
                 "overallScore": [
-                    "4"
+                    ""
                 ],
                 "overallLevel": [
-                    "Medium"
+                    "High"
                 ]
             }
         ],

@@ -36,6 +36,11 @@ section {
     margin-bottom: 5%;
 }
 
+#isra-report > p {
+    text-align: center;
+    font-weight: bold;
+}
+
 #isra-report section:nth-of-type(1) h1 {
  background-color: #b789fb;
 }

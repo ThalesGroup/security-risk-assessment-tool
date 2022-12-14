@@ -68,7 +68,8 @@
 
         $(document).ready(function () {
             window.project.load(async (event, data) => {
-                const { Vulnerability, Risk } = await JSON.parse(data);
+                const { Vulnerability, Risk, ISRAmeta } = await JSON.parse(data);
+                const { projectName, projectVersion, appVersion, iteration } = ISRAmeta;
                 const sortedVulnerability = {
                     high: [],
                     medium: [],
@@ -82,6 +83,10 @@
                 $('#risks tbody').empty();
                 $('#vulnerabilites tbody').empty();
                 $('#riskmanagement tbody').empty();
+                $('#name').text(projectName);
+                $('#version').text(projectVersion);
+                $('#app').text(appVersion);
+                $('#iteration').text(iteration);
 
                 let totalCost = 0;
                 Risk.forEach((risk) => {

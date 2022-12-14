@@ -118,6 +118,8 @@ const saveAs = async () => {
   * override data in existing json file (save)
 */
 const save = () => {
+  israProject.iteration += 1;
+  console.log(israProject.iteration)
   getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
 };
 
