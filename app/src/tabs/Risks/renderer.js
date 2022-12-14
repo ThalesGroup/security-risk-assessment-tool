@@ -791,7 +791,7 @@
       const [risk, risks] = await window.risks.addRisk();
       // update risksData
       if(risksData.length === 0) $('#risks section').show();
-      risksData = risks;
+      risksData.push(risk);
       addRisk(risk);
       if (risksData.length === 1) {
         risksTable.selectRow(risk.riskId);
