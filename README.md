@@ -55,12 +55,6 @@ Executes all test files within test folder in lib
 npm run test
 ```
 
-Executes all test files within test folder in app
-
-```
-npx playwright test
-```
-
 ### API documentation ###
 
 Generate api documentation for lib
