@@ -73,9 +73,10 @@ npm run jsdoc
     * (Window) electron-vXX.X.X-win32-x64.zip
     * (MacOs) electron-vXX.X.X-darwin-x64.zip
     * (Linux) electron-vXX.X.X-linux-x64.zip
-2. Open 'resources' folder in zip file and create new 'app' folder
-3. Copy your code, including modules, into 'app' folder
-4. Execute `Electron.app` on macOS, `electron` on Linux, or `electron.exe` on Windows, and Electron will start as your app. The electron directory will then be your distribution to deliver to users.
+2. Open 'resources' folder in zip file
+3. Delete 'default_app.asar'
+4. Copy your code, including modules, into 'resources' folder
+5. Execute `Electron.app` on macOS, `electron` on Linux, or `electron.exe` on Windows, and Electron will start as your app. The electron directory will then be your distribution to deliver to users.
 
 [With an app source code archive](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-an-app-source-code-archive)
 
