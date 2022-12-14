@@ -119,7 +119,7 @@ const saveAs = async () => {
 */
 const save = () => {
   israProject.iteration += 1;
-  console.log(israProject.iteration)
+  getMainWindow().webContents.send('project:iteration', israProject.iteration);
   getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
 };
 

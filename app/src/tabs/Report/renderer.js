@@ -129,8 +129,11 @@
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
             });
-        });
 
+            window.project.iteration(async (event, iteration) => {
+                $('#iteration').text(iteration);
+            });
+        });
     } catch (err) {
         alert('Failed to load report tab');
     }

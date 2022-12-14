@@ -31,6 +31,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('project', {
   load: (data) => ipcRenderer.on('project:load', data),
+  iteration: (iteration) => ipcRenderer.on('project:iteration', iteration)
   // validationErrors: (state) => ipcRenderer.on('project:validationErrors', state),
 });
 
