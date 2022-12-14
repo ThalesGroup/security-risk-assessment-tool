@@ -105,8 +105,48 @@
           min_height: 300,
           verify_html: true,
           statusbar: false,
-          plugins: 'link lists',
+          plugins: 'link lists image',
           toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+          file_picker_callback: function (callback, value, meta) {
+            // Provide image and alt text for the image dialog
+            if (meta.filetype == 'image') {
+              var input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/*');
+
+              /*
+                Note: In modern browsers input[type="file"] is functional without
+                even adding it to the DOM, but that might not be the case in some older
+                or quirky browsers like IE, so you might want to add it to the DOM
+                just in case, and visually hide it. And do not forget do remove it
+                once you do not need it anymore.
+              */
+
+              input.onchange = function () {
+                var file = this.files[0];
+
+                var reader = new FileReader();
+                reader.onload = function () {
+                  /*
+                    Note: Now we need to register the blob in TinyMCEs image blob
+                    registry. In the next release this part hopefully won't be
+                    necessary, as we are looking to handle it internally.
+                  */
+                  var id = 'blobid' + (new Date()).getTime();
+                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var base64 = reader.result.split(',')[1];
+                  var blobInfo = blobCache.create(id, file, base64);
+                  blobCache.add(blobInfo);
+
+                  /* call the callback and populate the Title field with the file name */
+                  callback(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+              };
+
+              input.click();
+            }
+          }
         });
 
         updateProjectContextFields(await JSON.parse(data).ProjectContext);
