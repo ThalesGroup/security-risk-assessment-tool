@@ -55,10 +55,24 @@
         <div class="contentWrapper">
             <div class="content active" id="isra-report">
                 <header>ISRA Report</header>
-                <p>Iteration: <span id="iteration"></span></p>
-                <p>App Version: <span id="app"></span></p>
-                <p>Project Name: <span id="name"></span></p>
-                <p>Project Version: <span id="version"></span></p>
+                <div>
+                    <table id="report">
+                        <thead>
+                            <th>App Version</th>
+                            <th>Iteration</th>
+                            <th>Project Name</th>
+                            <th>Project Version</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="iteration"></td>
+                                <td id="app"></td>
+                                <td id="name"></td>
+                                <td id="version"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <section>
                     <h1>Project security risks</h1>
                     <table id="risks">

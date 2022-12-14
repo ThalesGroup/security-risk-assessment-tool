@@ -117,3 +117,16 @@ strong {
 #riskmanagement tbody tr td:nth-of-type(3){
     text-align: right;
 }
+
+#report tbody {
+    text-align: center;
+}
+
+#report tbody tr td:nth-of-type(3), 
+#report tbody tr td:nth-of-type(4) {
+    text-align: left;
+}
+
+#isra-report>div{
+    margin-bottom: 2%;
+}
