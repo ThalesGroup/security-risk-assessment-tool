@@ -95,8 +95,8 @@ const newISRAProject = (win, app) => {
 */
 let jsonFilePath = '', electronApp = null;
 
-const savetoPath = async (filePath) => {
-  if (jsonFilePath === '') {
+const savetoPath = async (filePath, saveAs = false) => {
+  if (jsonFilePath === '' || saveAs) {
     // save as new project in selected directory (save as)
     try {
       await DataStore(israProject, filePath);
@@ -138,7 +138,7 @@ const saveAs = async () => {
   const fileName = await dialog.showSaveDialog(options);
   if (!fileName.canceled) {
     const { filePath } = fileName;
-    savetoPath(filePath);
+    savetoPath(filePath, true);
     // getMainWindow().webContents.send('validate:allTabs', filePath);
   }
 };
@@ -247,8 +247,10 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
         buttons: ['Yes', 'No', 'Cancel'], // Yes returns 0, No returns 1, Cancel returns 2
       });
 
-      if (result === 0) validation();
-      else if (result === 1) electronApp.exit([0]);
+      if (result === 0) {
+        validation();
+        electronApp.exit([0])
+      } else if (result === 1) electronApp.exit([0]);
     } else electronApp.exit([0]);
     electronApp = null;
   } else {
