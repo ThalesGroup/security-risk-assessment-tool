@@ -42,7 +42,7 @@ const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-pro
 /**
   * israProject: holds current class for project
 */
-let israProject, browserTitle = 'ISRA Risk Assessment';
+let israProject, browserTitle = 'ISRA Risk Assessment', oldIsraProject;
 
 /**
   * every time you want the main window, call this function.
@@ -62,6 +62,7 @@ const newISRAProject = (win, app) => {
     if(!israProject) {
       israProject = new ISRAProject();
       DataNew(israProject);
+      oldIsraProject = israProject.toJSON();
     };
     getMainWindow().title = browserTitle;
     win.webContents.send('project:load', israProject.toJSON());
@@ -92,7 +93,7 @@ const newISRAProject = (win, app) => {
   * jsonFilePath: tracks if file opened is json file type (save/saveAs)
   * labelSelected: tracks if 'Save' or 'Save As' menu item is selected
 */
-let jsonFilePath = '';
+let jsonFilePath = '', electronApp = null;
 
 /**
   * save as new project in selected directory (save as)
@@ -140,8 +141,10 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
     try {
       await DataStore(israProject, filePath);
       jsonFilePath = filePath;
+      browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
       dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${filePath}` });
+      if (electronApp) electronApp.exit(0);
     } catch (err) {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
@@ -151,6 +154,7 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
     try {
       await DataStore(israProject, jsonFilePath);
       dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
+      if (electronApp) electronApp.exit(0);
     } catch (err) {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
@@ -165,11 +169,13 @@ const validateClasses = () => {
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
+    console.log('validate welcome')
     if (!ISRAmeta.projectOrganization) return false;
     return true;
   };
 
   const validateSupportingAssetsTab = () =>{
+    console.log('validate SA')
     for(let i=0; i<SupportingAsset.length; i++){
       const { businessAssetRef } = SupportingAsset[i];
       const uniqueRefs = new Set();
@@ -183,18 +189,21 @@ const validateClasses = () => {
   };
 
   const validateRisksTab = () => {
+    console.log('validate risk')
     for (let i = 0; i < Risk.length; i++) {
       const { riskName, riskMitigation } = Risk[i];
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
-     for(let i=0; i<riskMitigation.length; i++){
-      if(!Number.isInteger(riskMitigation.cost)) return false;
-     }
+    //  for(let i=0; i<riskMitigation.length; i++){
+    //   console.log(riskMitigation[i])
+    //    if (riskMitigation[i].cost !== null || !Number.isInteger(riskMitigation[i].cost)) return false;
+    //  }
     }
     return true;
   };
 
   const validateVulnerabilitiesTab = () => {
+    console.log('validate Vulnerability')
     for(let i=0; i<Vulnerability.length; i++) {
       const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
       if (cveScore < 0 || cveScore > 10 || cveScore === null || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return false;
@@ -250,6 +259,27 @@ const validationErrors = (labelSelected) => {
 //     if (result === 0) saveOrSaveAs();
 //   }
 // });
+
+/**
+  * Exit button is pressed
+*/
+const exit = (e, app) => {
+  if(israProject.toJSON() !== oldIsraProject){
+    const result = dialog.showMessageBoxSync(null, {
+      type: 'warning',
+      message: 'Do you want to save the changes?',
+      title: 'Save project?',
+      buttons: ['Yes', 'No', 'Cancel'], // Yes returns 0, No returns 1, cancel returns 2
+    });
+
+    if (result === 0) {
+      e.preventDefault();
+      validationErrors('Save');
+      electronApp = app;
+    }
+    else if (result === 2) e.preventDefault();
+  }
+};
 
 /**
   * Load JSON file
@@ -370,7 +400,8 @@ module.exports = {
   validationErrors,
   loadFile,
   newISRAProject,
-  downloadReport
+  downloadReport,
+  exit
 };
 
 /**

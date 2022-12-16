@@ -30,7 +30,8 @@ const {
   validationErrors,
   loadFile,
   newISRAProject,
-  downloadReport
+  downloadReport,
+  exit
 } = require('./request-handlers');
 
 app.disableHardwareAcceleration();
@@ -51,6 +52,10 @@ function createWindow() {
   // send data to populate into dom fields
   win.webContents.on('dom-ready', () => {
     newISRAProject(win, app);
+  });
+
+  win.on('close', (e) => {
+    exit(e, app);
   });
 
   // save current window at runtime
