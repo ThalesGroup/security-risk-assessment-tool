@@ -103,8 +103,8 @@ const savetoPath = async (filePath) => {
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
+      oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${filePath}` });
-      if (electronApp) electronApp.exit(0);
     } catch (err) {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
@@ -113,8 +113,8 @@ const savetoPath = async (filePath) => {
     // override data in existing json file (save)
     try {
       await DataStore(israProject, jsonFilePath);
+      oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
-      if (electronApp) electronApp.exit(0);
     } catch (err) {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
@@ -237,6 +237,9 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       *  exit button pressed
     */
     if (israProject.toJSON() !== oldIsraProject){
+      /**
+        *  changes are made to current project
+      */
       const result = dialog.showMessageBoxSync(null, {
         type: 'warning',
         message: 'Do you want to save the changes?',

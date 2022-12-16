@@ -17,7 +17,7 @@
                     ""
                 ],
                 "projectOrganization": [
-                    "MCS"
+                    ""
                 ],
                 "projectVersion": [
                     ""
@@ -31,7 +31,7 @@
                             "t0263774"
                         ],
                         "trackingDate": [
-                            "2022-10-19"
+                            "2022-11-15"
                         ],
                         "trackingComment": [
                             ""
@@ -42,13 +42,13 @@
                     "2"
                 ],
                 "supportingAssetsCount": [
-                    "4"
+                    "2"
                 ],
                 "risksCount": [
                     "2"
                 ],
                 "vulnerabilitiesCount": [
-                    "3"
+                    "2"
                 ]
             }
         ],
@@ -145,13 +145,13 @@
         "SupportingAsset": [
             {
                 "supportingAssetId": [
-                    "3"
+                    "1"
                 ],
                 "supportingAssetHLDId": [
                     ""
                 ],
                 "supportingAssetName": [
-                    "SA1"
+                    ""
                 ],
                 "supportingAssetType": [
                     ""
@@ -162,7 +162,7 @@
                 "supportingAndBusinessAssetLink": [
                     {
                         "$": {
-                            "businessAssetRef": "1"
+                            "businessAssetRef": ""
                         }
                     }
                 ]
@@ -180,38 +180,38 @@
                     "1"
                 ],
                 "riskName": [
-                    "As a Criminal, I can repudiate the  compromising the SA1 in order to sdfsdf"
+                    "As a , I can  the  compromising the  in order to "
                 ],
                 "threatAgent": [
-                    "Criminal"
+                    ""
                 ],
                 "threatAgentDetail": [
                     ""
                 ],
                 "threatVerb": [
-                    "repudiate"
+                    ""
                 ],
                 "threatVerbDetail": [
                     ""
                 ],
                 "motivation": [
-                    "sdfsdf"
+                    ""
                 ],
                 "motivationDetail": [
                     ""
                 ],
                 "businessAssetRef": [
-                    "1"
+                    ""
                 ],
                 "supportingAssetRef": [
-                    "3"
+                    ""
                 ],
                 "RiskName": [
                     {
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Criminal, I can repudiate the  compromising the SA1 in order to sdfsdf"
+                                    "As a , I can  the  compromising the  in order to "
                                 ]
                             }
                         ]
@@ -220,24 +220,24 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            "3"
+                            ""
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
                                 "businessAssetConfidentialityFlag": [
-                                    "0"
+                                    "1"
                                 ],
                                 "businessAssetIntegrityFlag": [
-                                    "0"
+                                    "1"
                                 ],
                                 "businessAssetAvailabilityFlag": [
-                                    "0"
+                                    "1"
                                 ],
                                 "businessAssetAuthenticityFlag": [
-                                    "0"
+                                    "1"
                                 ],
                                 "businessAssetAuthorizationFlag": [
-                                    "0"
+                                    "1"
                                 ],
                                 "businessAssetNonRepudiationFlag": [
                                     "1"
@@ -323,7 +323,7 @@
                     ""
                 ],
                 "inherentRiskScore": [
-                    "11"
+                    "0"
                 ],
                 "Mitigation": [
                     {
@@ -355,7 +355,7 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "11"
+                    "0"
                 ],
                 "riskManagementDecision": [
                     ""
@@ -364,10 +364,10 @@
                     ""
                 ],
                 "residualRiskScore": [
-                    "11"
+                    "0"
                 ],
                 "residualRiskLevel": [
-                    "High"
+                    "Low"
                 ]
             }
         ],
@@ -383,120 +383,13 @@
                     "1"
                 ],
                 "vulnerabilityName": [
-                    "hh"
+                    ""
                 ],
                 "vulnerabilityFamily": [
                     ""
                 ],
                 "vulnerabilityTrackingID": [
-                    "uuu"
-                ],
-                "vulnerabilityTrackingURI": [
                     ""
-                ],
-                "vulnerabilityCVE": [
-                    "https:///"
-                ],
-                "vulnerabilityDescription": [
-                    "kkk"
-                ],
-                "vulnerabilityDescriptionAttachment": [
-                    ""
-                ],
-                "supportingAssetRef": [
-                    ""
-                ],
-                "vulnerabilityCVSS": [
-                    {
-                        "vulnerabilityBaseScoreMetrics": [
-                            {
-                                "vulnerabilityExploitabilityMetrics": [
-                                    {
-                                        "accessVector": [
-                                            "0.395"
-                                        ],
-                                        "accessComplexity": [
-                                            "0.61"
-                                        ],
-                                        "authentication": [
-                                            "0.704"
-                                        ]
-                                    }
-                                ],
-                                "vulnerabilityImpactMetrics": [
-                                    {
-                                        "confidentialityImpact": [
-                                            "0.275"
-                                        ],
-                                        "integrityImpact": [
-                                            "0.275"
-                                        ],
-                                        "availabilityImpact": [
-                                            "0.275"
-                                        ]
-                                    }
-                                ]
-                            }
-                        ],
-                        "vulnerabilityTemporalScoreMetrics": [
-                            {
-                                "exploitability": [
-                                    "1"
-                                ],
-                                "remediationLevel": [
-                                    "1"
-                                ],
-                                "reportConfidence": [
-                                    "1"
-                                ]
-                            }
-                        ],
-                        "impactScore": [
-                            "6.442976718750001"
-                        ],
-                        "exploitabilityScore": [
-                            "3.3925759999999996"
-                        ],
-                        "baseScore": [
-                            "4.37803212315"
-                        ],
-                        "temporalScore": [
-                            "4.37803212315"
-                        ]
-                    }
-                ],
-                "vulnerabilityCVEScoring": [
-                    {
-                        "cveScore": [
-                            "10"
-                        ]
-                    }
-                ],
-                "overallScore": [
-                    "10"
-                ],
-                "overallLevel": [
-                    "High"
-                ]
-            },
-            {
-                "projectName": [
-                    ""
-                ],
-                "projectVersion": [
-                    ""
-                ],
-                "vulnerabilityId": [
-                    "2"
-                ],
-                "vulnerabilityName": [
-                    "Random"
-                ],
-                "vulnerabilityFamily": [
-                    "Environmental Vulnerability‎"
-                ],
-                "vulnerabilityTrackingID": [
-                    "sdf"
                 ],
                 "vulnerabilityTrackingURI": [
                     ""
@@ -505,14 +398,13 @@
                     ""
                 ],
                 "vulnerabilityDescription": [
-                    "sad"
+                    ""
                 ],
                 "vulnerabilityDescriptionAttachment": [
                     ""
                 ],
                 "supportingAssetRef": [
-                    "",
-                    "3"
+                    ""
                 ],
                 "vulnerabilityCVSS": [
                     {

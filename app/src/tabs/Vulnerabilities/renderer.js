@@ -86,7 +86,8 @@
     }
 
     const validateVulnerabilityName = (vulnerability) => {
-        const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability;
+        console.log(vulnerability)
+        const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
             || vulnerabilityDescription === '' 
@@ -204,9 +205,15 @@
             checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
             checkbox.name = 'refs__checkboxes';
             checkbox.addEventListener('change', async (e) =>{
-                let vulnerability;
-                if (e.target.checked) vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
-                else vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
+                let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+                if (e.target.checked) {
+                    const v = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
+                    vulnerability.supportingAssetRef = v.supportingAssetRef;
+                }
+                else {
+                    const v = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
+                    vulnerability.supportingAssetRef = v.supportingAssetRef;
+                }
                 validateVulnerabilityName(vulnerability);
             })
             div.append(checkbox);
