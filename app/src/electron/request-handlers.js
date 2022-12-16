@@ -95,47 +95,7 @@ const newISRAProject = (win, app) => {
 */
 let jsonFilePath = '', electronApp = null;
 
-/**
-  * save as new project in selected directory (save as)
-*/
-const saveAs = async () => {
-  const options = {
-  // Placeholders
-    title: 'Save file - Electron ISRA Project',
-    defaultPath: os.homedir(),
-    buttonLabel: 'Save JSON File',
-    filters: [
-      { name: 'JSON', extensions: ['json'] },
-    ],
-  };
-  const fileName = await dialog.showSaveDialog(options);
-  if (!fileName.canceled) {
-    const { filePath } = fileName;
-    getMainWindow().webContents.send('validate:allTabs', filePath);
-  }
-};
-
-/**
-  * override data in existing json file (save)
-*/
-const save = () => {
-  israProject.iteration += 1;
-  getMainWindow().webContents.send('project:iteration', israProject.iteration);
-  getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
-};
-
-/**
-  * save current project (save/save as)
-*/
-const saveProject = () => {
-  if (jsonFilePath !== '') save();
-  else saveAs();
-};
-
-/**
-  *  @param {string} filePath path of current file
-*/
-ipcMain.on('validate:allTabs', async (event, filePath) => {
+const savetoPath = async (filePath) => {
   if (jsonFilePath === '') {
     // save as new project in selected directory (save as)
     try {
@@ -160,7 +120,46 @@ ipcMain.on('validate:allTabs', async (event, filePath) => {
       dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
     }
   }
-});
+}
+
+/**
+  * save as new project in selected directory (save as)
+*/
+const saveAs = async () => {
+  const options = {
+  // Placeholders
+    title: 'Save file - Electron ISRA Project',
+    defaultPath: os.homedir(),
+    buttonLabel: 'Save JSON File',
+    filters: [
+      { name: 'JSON', extensions: ['json'] },
+    ],
+  };
+  const fileName = await dialog.showSaveDialog(options);
+  if (!fileName.canceled) {
+    const { filePath } = fileName;
+    savetoPath(filePath);
+    // getMainWindow().webContents.send('validate:allTabs', filePath);
+  }
+};
+
+/**
+  * override data in existing json file (save)
+*/
+const save = () => {
+  israProject.iteration += 1;
+  getMainWindow().webContents.send('project:iteration', israProject.iteration);
+  savetoPath(jsonFilePath);
+  // getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
+};
+
+/**
+  * save current project (save/save as)
+*/
+const saveProject = () => {
+  if (jsonFilePath !== '') save();
+  else saveAs();
+};
 
 /**
   * validation instantly fails when one of the validation methods fails
@@ -169,13 +168,11 @@ const validateClasses = () => {
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
-    console.log('validate welcome')
     if (!ISRAmeta.projectOrganization) return false;
     return true;
   };
 
   const validateSupportingAssetsTab = () =>{
-    console.log('validate SA')
     for(let i=0; i<SupportingAsset.length; i++){
       const { businessAssetRef } = SupportingAsset[i];
       const uniqueRefs = new Set();
@@ -189,21 +186,18 @@ const validateClasses = () => {
   };
 
   const validateRisksTab = () => {
-    console.log('validate risk')
     for (let i = 0; i < Risk.length; i++) {
       const { riskName, riskMitigation } = Risk[i];
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
-    //  for(let i=0; i<riskMitigation.length; i++){
-    //   console.log(riskMitigation[i])
-    //    if (riskMitigation[i].cost !== null || !Number.isInteger(riskMitigation[i].cost)) return false;
-    //  }
+     for(let i=0; i<riskMitigation.length; i++){
+       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) return false;
+     }
     }
     return true;
   };
 
   const validateVulnerabilitiesTab = () => {
-    console.log('validate Vulnerability')
     for(let i=0; i<Vulnerability.length; i++) {
       const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
       if (cveScore < 0 || cveScore > 10 || cveScore === null || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return false;
@@ -215,27 +209,59 @@ const validateClasses = () => {
 };
 
 /**
+  *  @param {string} filePath path of current file
+*/
+ipcMain.on('validate:allTabs', async (event, labelSelected) => {
+  const validation = () => {
+    const saveOrSaveAs = () => {
+      if (labelSelected === 'Save As') saveAs();
+      else if (labelSelected === 'Save') saveProject();
+    };
+
+    if (validateClasses()) saveOrSaveAs();
+    else {
+      const result = dialog.showMessageBoxSync(null, {
+        type: 'warning',
+        message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
+        title: 'Validation Errors',
+        buttons: ['Yes', 'No'], // Yes returns 0, No returns 1
+      });
+      if (result === 0) saveOrSaveAs();
+    }
+    // labelSelected = label;
+    // getMainWindow().webContents.send('project:validationErrors');
+  };
+
+  if (electronApp) {
+    /**
+      *  exit button pressed
+    */
+    if (israProject.toJSON() !== oldIsraProject){
+      const result = dialog.showMessageBoxSync(null, {
+        type: 'warning',
+        message: 'Do you want to save the changes?',
+        title: 'Save project?',
+        buttons: ['Yes', 'No', 'Cancel'], // Yes returns 0, No returns 1, Cancel returns 2
+      });
+
+      if (result === 0) validation();
+      else if (result === 1) electronApp.exit([0]);
+    } else electronApp.exit([0]);
+    electronApp = null;
+  } else {
+    /**
+      *  save/saveAs button pressed
+    */
+    validation();
+  };
+});
+
+/**
   * check for validation errors in dom (save/save as)
   * @param {string} labelSelected either 'Save' or 'Save As' menu item is selected
 */
 const validationErrors = (labelSelected) => {
-  const saveOrSaveAs = () => {
-    if (labelSelected === 'Save As') saveAs();
-    else if (labelSelected === 'Save') saveProject();
-  };
-
-  if (validateClasses()) saveOrSaveAs();
-  else {
-    const result = dialog.showMessageBoxSync(null, {
-      type: 'warning',
-      message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
-      title: 'Validation Errors',
-      buttons: ['Yes', 'No'], // Yes returns 0, No returns 1
-    });
-    if (result === 0) saveOrSaveAs();
-  }
-  // labelSelected = label;
-  // getMainWindow().webContents.send('project:validationErrors');
+  getMainWindow().webContents.send('validate:allTabs', labelSelected);
 };
 
 /** After checking for validation errors in dom,
@@ -264,21 +290,9 @@ const validationErrors = (labelSelected) => {
   * Exit button is pressed
 */
 const exit = (e, app) => {
-  if(israProject.toJSON() !== oldIsraProject){
-    const result = dialog.showMessageBoxSync(null, {
-      type: 'warning',
-      message: 'Do you want to save the changes?',
-      title: 'Save project?',
-      buttons: ['Yes', 'No', 'Cancel'], // Yes returns 0, No returns 1, cancel returns 2
-    });
-
-    if (result === 0) {
-      e.preventDefault();
-      validationErrors('Save');
-      electronApp = app;
-    }
-    else if (result === 2) e.preventDefault();
-  }
+  e.preventDefault();
+  validationErrors('Save');
+  electronApp = app;
 };
 
 /**

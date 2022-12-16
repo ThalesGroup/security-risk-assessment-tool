@@ -146,10 +146,10 @@ const validateTabs = (tab) => {
 /**
  * get & validate data of current tab
  */
-window.validate.allTabs((event, filePath) => {
+window.validate.allTabs((event, labelSelected) => {
   const currentActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
   validateTabs(currentActiveTab);
-  event.sender.send('validate:allTabs', filePath);
+  event.sender.send('validate:allTabs', labelSelected);
 });
 
 /**
