@@ -86,7 +86,6 @@
     }
 
     const validateVulnerabilityName = (vulnerability) => {
-        console.log(vulnerability)
         const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
