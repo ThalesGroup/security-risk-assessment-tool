@@ -311,6 +311,7 @@ const loadJSONFile = async (win, filePath) => {
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
+    oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
