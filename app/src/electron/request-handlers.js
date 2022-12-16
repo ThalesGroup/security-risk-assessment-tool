@@ -105,6 +105,7 @@ const savetoPath = async (filePath, saveAs = false) => {
       getMainWindow().title = browserTitle;
       oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${filePath}` });
+      if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
@@ -115,6 +116,7 @@ const savetoPath = async (filePath, saveAs = false) => {
       await DataStore(israProject, jsonFilePath);
       oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
+      if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
       dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
@@ -249,10 +251,9 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
 
       if (result === 0) {
         validation();
-        electronApp.exit([0])
       } else if (result === 1) electronApp.exit([0]);
+      else if (result === 2) electronApp = null;
     } else electronApp.exit([0]);
-    electronApp = null;
   } else {
     /**
       *  save/saveAs button pressed
