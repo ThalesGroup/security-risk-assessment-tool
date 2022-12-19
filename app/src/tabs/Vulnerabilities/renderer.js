@@ -391,7 +391,9 @@
     $('input[name="vulnerability__name"]').on('change', async (e)=> {
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'vulnerabilityName', e.target.value);
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
-        validateVulnerabilityName(vulnerability);
+        let updatedVulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+        updatedVulnerability.vulnerabilityName = vulnerability.vulnerabilityName;
+        validateVulnerabilityName(updatedVulnerability);
     });
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
