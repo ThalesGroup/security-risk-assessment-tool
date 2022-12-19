@@ -456,6 +456,7 @@ const {
   addTrackingRow,
   deleteTrackingRow,
   updateTrackingRow,
+  updateProjectNameAndVersionRef,
   validateISRAmeta,
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
@@ -465,6 +466,9 @@ ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
 ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
 ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
   updateTrackingRow(israProject, rowData);
+});
+ipcMain.on('welcome:updateProjectNameAndVersionRef', (event, field, value) => {
+  updateProjectNameAndVersionRef(israProject, field, value);
 });
 ipcMain.on('validate:welcome', (event, arr) => {
   validateISRAmeta(israProject, arr);

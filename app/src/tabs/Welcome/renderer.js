@@ -143,6 +143,16 @@
       const checkboxes = document.getElementsByName('welcome__isra-meta-tracking-checkbox');
       deleteTrackingRow(checkboxes);
     });
+
+    $('input[id="welcome__isra-meta--project-name"]').on('change', async(e) => {
+      const { value } = e.target;
+      await window.welcome.updateProjectNameAndVersionRef('projectNameRef', value);
+    });
+
+    $('input[id="welcome__isra-meta--project-version"]').on('change', async (e) => {
+      const { value } = e.target;
+      await window.welcome.updateProjectNameAndVersionRef('projectVersionRef', value);
+    });
   } catch (err) {
     alert('Failed to load welcome tab');
   }

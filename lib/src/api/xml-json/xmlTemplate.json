@@ -14,7 +14,7 @@
                     "44"
                 ],
                 "projectName": [
-                    "Sample Mobile Application :)"
+                    "Sample Mobile Application"
                 ],
                 "projectOrganization": [
                     "ITE"
@@ -45,7 +45,7 @@
                     "5"
                 ],
                 "risksCount": [
-                    "12"
+                    "6"
                 ],
                 "vulnerabilitiesCount": [
                     "52"
@@ -91,7 +91,7 @@
                     ""
                 ],
                 "projectDescriptionAttachment": [
-                    "x0lGQRQAAAABAAAAAAAAAPkAAAAJAAAAbQBhAGkAbAAuAHQAeAB0AAAAbWVnYW4ubGlvd0B0aGFsZXNncm91cC5jb20gDQoNCldpbmRvd3MgUFcgLSBUaGFsZXMxMjM0DQoNClRHSSAtIFQwMjYzNzc0DQoNClRHSSBQVyAtIFdlbGNvbWUmMTIzDQoNCkNvc3QgQ2VudGVyIC0gUkRNT0ItSFEtQ0VOMDMNCg0KSklSQSAmIENvbmZsdWVuY2UgbGlua3M6DQpodHRwczovL2ppcmEuZ2VtYWx0by5jb20vc2VjdXJlL0Rhc2hib2FyZC5qc3BhDQpodHRwczovL2NvbmZsdWVuY2UuZ2VtYWx0by5jb20vI2FsbC11cGRhdGVz"
+                    ""
                 ],
                 "securityAssumptions": [
                     {
@@ -176,6 +176,38 @@
         "BusinessAsset": [
             {
                 "businessAssetId": [
+                    "1"
+                ],
+                "businessAssetName": [
+                    "User credentials"
+                ],
+                "businessAssetType": [
+                    "Data"
+                ],
+                "businessAssetDescription": [
+                    "Presents the user credential to login to the payment application"
+                ],
+                "businessAssetConfidentiality": [
+                    "3"
+                ],
+                "businessAssetIntegrity": [
+                    "3"
+                ],
+                "businessAssetAvailability": [
+                    "1"
+                ],
+                "businessAssetAuthenticity": [
+                    "1"
+                ],
+                "businessAssetAuthorization": [
+                    "1"
+                ],
+                "businessAssetNonRepudiation": [
+                    "1"
+                ]
+            },
+            {
+                "businessAssetId": [
                     "2"
                 ],
                 "businessAssetName": [
@@ -204,6 +236,38 @@
                 ],
                 "businessAssetNonRepudiation": [
                     "3"
+                ]
+            },
+            {
+                "businessAssetId": [
+                    "3"
+                ],
+                "businessAssetName": [
+                    "Account information"
+                ],
+                "businessAssetType": [
+                    "Data"
+                ],
+                "businessAssetDescription": [
+                    "Account information of the user"
+                ],
+                "businessAssetConfidentiality": [
+                    "3"
+                ],
+                "businessAssetIntegrity": [
+                    "0"
+                ],
+                "businessAssetAvailability": [
+                    "2"
+                ],
+                "businessAssetAuthenticity": [
+                    "1"
+                ],
+                "businessAssetAuthorization": [
+                    "3"
+                ],
+                "businessAssetNonRepudiation": [
+                    "1"
                 ]
             },
             {
@@ -279,12 +343,7 @@
                 "supportingAndBusinessAssetLink": [
                     {
                         "$": {
-                            "businessAssetRef": "1"
-                        }
-                    },
-                    {
-                        "$": {
-                            "businessAssetRef": "1"
+                            "businessAssetRef": "3"
                         }
                     }
                 ]
@@ -378,11 +437,6 @@
                         "$": {
                             "businessAssetRef": "1"
                         }
-                    },
-                    {
-                        "$": {
-                            "businessAssetRef": ""
-                        }
                     }
                 ]
             }
@@ -399,7 +453,7 @@
                     "1"
                 ],
                 "riskName": [
-                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
+                    "As a Researcher, I can tamper with the Server URL compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -417,23 +471,10 @@
                     "get the user credentials to be able to login through the web interface and do financial transactions"
                 ],
                 "motivationDetail": [
-                    {
-                        "char": "motivation details fdsf",
-                        "img": [
-                            {
-                                "$": {
-                                    "xmlns": "http://www.w3.org/1999/xhtml",
-                                    "tabIndex": "-1",
-                                    "style": "HEIGHT: 91px; WIDTH: 836px",
-                                    "src": "msoinline/84162c58e2ed4ce5",
-                                    "inline": "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"
-                                }
-                            }
-                        ]
-                    }
+                    "motivation details"
                 ],
                 "businessAssetRef": [
-                    "2"
+                    "4"
                 ],
                 "supportingAssetRef": [
                     "2"
@@ -443,7 +484,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Researcher, I can tamper with the Financial transactions compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
+                                    "As a Researcher, I can tamper with the Server URL compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
                                 ]
                             }
                         ]
@@ -484,12 +525,47 @@
                             "3"
                         ],
                         "riskLikelihoodDetail": [
-                            "fdgdfg"
+                            ""
                         ],
                         "LikelihoodRiskEvaluationMethod": [
                             {
-                                "SimpleLikelihoodEvaluation": [
-                                    ""
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    "3"
+                                                ],
+                                                "reward": [
+                                                    "9"
+                                                ],
+                                                "accessResources": [
+                                                    "7"
+                                                ],
+                                                "size": [
+                                                    "9"
+                                                ],
+                                                "intrusionDetection": [
+                                                    "9"
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            "7.4"
+                                        ],
+                                        "threatFactorLevel": [
+                                            "Very High"
+                                        ],
+                                        "occurrence": [
+                                            "5"
+                                        ],
+                                        "occurrenceLevel": [
+                                            "Medium"
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
                                 ]
                             }
                         ]
@@ -501,7 +577,7 @@
                             {
                                 "char": "1",
                                 "$": {
-                                    "score": "7",
+                                    "score": "6",
                                     "name": "Man in the middle attack through network interception"
                                 }
                             }
@@ -510,42 +586,18 @@
                             "Man in the middle attack through network interception"
                         ],
                         "attackPathScore": [
-                            "7"
-                        ]
-                    },
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "char": "3",
-                                "$": {
-                                    "score": "6",
-                                    "name": "Shoulder surfing attack"
-                                }
-                            },
-                            {
-                                "char": "16",
-                                "$": {
-                                    "score": "",
-                                    "name": "Phone backup data analysis of a non-encrypted backup"
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            "Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup"
-                        ],
-                        "attackPathScore": [
-                            ""
+                            "6"
                         ]
                     }
                 ],
                 "allAttackPathsName": [
-                    "(Man in the middle attack through network interception) OR (Shoulder surfing attack AND Phone backup data analysis of a non-encrypted backup)"
+                    "Man in the middle attack through network interception"
                 ],
                 "allAttackPathsScore": [
-                    ""
+                    "6"
                 ],
                 "inherentRiskScore": [
-                    ""
+                    "10"
                 ],
                 "Mitigation": [
                     {
@@ -556,33 +608,12 @@
                             "0.5"
                         ],
                         "cost": [
-                            "11.1"
-                        ],
-                        "mitigationDecision": [
-                            {
-                                "decision": [
-                                    "Accepted"
-                                ],
-                                "decisionDetail": [
-                                    "DEcision coment"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": [
                             ""
                         ],
-                        "benefits": [
-                            "0.1"
-                        ],
-                        "cost": [
-                            "10"
-                        ],
                         "mitigationDecision": [
                             {
                                 "decision": [
-                                    ""
+                                    "Done"
                                 ],
                                 "decisionDetail": [
                                     ""
@@ -595,10 +626,10 @@
                     "0.5"
                 ],
                 "mitigationsDoneBenefits": [
-                    "1"
+                    "0.5"
                 ],
                 "mitigatedRiskScore": [
-                    ""
+                    "5"
                 ],
                 "riskManagementDecision": [
                     "Mitigate"
@@ -607,7 +638,7 @@
                     "Security control implemented by adding proprietary encryption on top of TLS communication layer."
                 ],
                 "residualRiskScore": [
-                    ""
+                    "5"
                 ],
                 "residualRiskLevel": [
                     "Low"
@@ -624,7 +655,7 @@
                     "2"
                 ],
                 "riskName": [
-                    "Manual"
+                    "As a Criminal, I can steal the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Keystroke logging attack by malware"
                 ],
                 "threatAgent": [
                     "Criminal"
@@ -645,17 +676,17 @@
                     ""
                 ],
                 "businessAssetRef": [
-                    "4"
+                    "1"
                 ],
                 "supportingAssetRef": [
                     "4"
                 ],
                 "RiskName": [
                     {
-                        "ManualRiskName": [
+                        "ComputedRiskName": [
                             {
-                                "manualRiskName": [
-                                    "Manual"
+                                "computedRiskName": [
+                                    "As a Criminal, I can steal the User credentials compromising the Device keyboard in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Keystroke logging attack by malware"
                                 ]
                             }
                         ]
@@ -664,7 +695,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            "2"
+                            "3"
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -696,7 +727,7 @@
                             "2"
                         ],
                         "riskLikelihoodDetail": [
-                            "dfgfdgdg"
+                            ""
                         ],
                         "LikelihoodRiskEvaluationMethod": [
                             {
@@ -768,199 +799,7 @@
                     "6"
                 ],
                 "inherentRiskScore": [
-                    "6"
-                ],
-                "Mitigation": [
-                    {
-                        "description": [
-                            {
-                                "div": [
-                                    {
-                                        "char": "TEST",
-                                        "$": {
-                                            "xmlns": "http://www.w3.org/1999/xhtml"
-                                        }
-                                    }
-                                ]
-                            }
-                        ],
-                        "benefits": [
-                            "0.9"
-                        ],
-                        "cost": [
-                            "10"
-                        ],
-                        "mitigationDecision": [
-                            {
-                                "decision": [
-                                    "Accepted"
-                                ],
-                                "decisionDetail": [
-                                    "gdfg"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "mitigationsBenefits": [
-                    "0.10000000000000009"
-                ],
-                "mitigationsDoneBenefits": [
-                    "1"
-                ],
-                "mitigatedRiskScore": [
-                    "1"
-                ],
-                "riskManagementDecision": [
-                    "Mitigate"
-                ],
-                "riskManagementDetail": [
-                    "Risk accepted by Product Owner on 2020-11-24."
-                ],
-                "residualRiskScore": [
-                    "6"
-                ],
-                "residualRiskLevel": [
-                    "Medium"
-                ]
-            },
-            {
-                "projectName": [
-                    "Sample Mobile Application"
-                ],
-                "projectVersion": [
-                    "1.0"
-                ],
-                "riskId": [
-                    "3"
-                ],
-                "riskName": [
-                    "As a Criminal, I can steal the  compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
-                ],
-                "threatAgent": [
-                    "Criminal"
-                ],
-                "threatAgentDetail": [
-                    ""
-                ],
-                "threatVerb": [
-                    "steal"
-                ],
-                "threatVerbDetail": [
-                    ""
-                ],
-                "motivation": [
-                    "get the user credentials to be able to login through the web interface and do financial transactions"
-                ],
-                "motivationDetail": [
-                    "The threat agent looks over the shoulder while the person is entering their credentials."
-                ],
-                "businessAssetRef": [
-                    "1"
-                ],
-                "supportingAssetRef": [
-                    "3"
-                ],
-                "RiskName": [
-                    {
-                        "ComputedRiskName": [
-                            {
-                                "computedRiskName": [
-                                    "As a Criminal, I can steal the  compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the (Shoulder surfing attack) OR ()"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "ImpactRiskEvaluation": [
-                    {
-                        "riskImpact": [
-                            ""
-                        ],
-                        "BusinessAssetSelectedProperties": [
-                            {
-                                "businessAssetConfidentialityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetIntegrityFlag": [
-                                    "0"
-                                ],
-                                "businessAssetAvailabilityFlag": [
-                                    "0"
-                                ],
-                                "businessAssetAuthenticityFlag": [
-                                    "0"
-                                ],
-                                "businessAssetAuthorizationFlag": [
-                                    "0"
-                                ],
-                                "businessAssetNonRepudiationFlag": [
-                                    "0"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "LikelihoodRiskEvaluation": [
-                    {
-                        "riskLikelihood": [
-                            "3"
-                        ],
-                        "riskLikelihoodDetail": [
-                            ""
-                        ],
-                        "LikelihoodRiskEvaluationMethod": [
-                            {
-                                "SimpleLikelihoodEvaluation": [
-                                    ""
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "VulnerabilityRiskEvaluation": [
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "char": "3",
-                                "$": {
-                                    "score": "6",
-                                    "name": "Shoulder surfing attack"
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            "Shoulder surfing attack"
-                        ],
-                        "attackPathScore": [
-                            "6"
-                        ]
-                    },
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            ""
-                        ],
-                        "attackPathScore": [
-                            ""
-                        ]
-                    }
-                ],
-                "allAttackPathsName": [
-                    "(Shoulder surfing attack) OR ()"
-                ],
-                "allAttackPathsScore": [
-                    "6"
-                ],
-                "inherentRiskScore": [
-                    "0"
+                    "8"
                 ],
                 "Mitigation": [
                     {
@@ -992,7 +831,209 @@
                     "1"
                 ],
                 "mitigatedRiskScore": [
-                    "0"
+                    "8"
+                ],
+                "riskManagementDecision": [
+                    "Accept"
+                ],
+                "riskManagementDetail": [
+                    "Risk accepted by Product Owner on 2020-11-24."
+                ],
+                "residualRiskScore": [
+                    "8"
+                ],
+                "residualRiskLevel": [
+                    "Medium"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "3"
+                ],
+                "riskName": [
+                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack"
+                ],
+                "threatAgent": [
+                    "Criminal"
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    "steal"
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    "get the user credentials to be able to login through the web interface and do financial transactions"
+                ],
+                "motivationDetail": [
+                    "The threat agent looks over the shoulder while the person is entering their credentials."
+                ],
+                "businessAssetRef": [
+                    "1"
+                ],
+                "supportingAssetRef": [
+                    "3"
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            "3"
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "0"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "0"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "0"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "2"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    "9"
+                                                ],
+                                                "reward": [
+                                                    "4"
+                                                ],
+                                                "accessResources": [
+                                                    "4"
+                                                ],
+                                                "size": [
+                                                    "9"
+                                                ],
+                                                "intrusionDetection": [
+                                                    "9"
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            "7"
+                                        ],
+                                        "threatFactorLevel": [
+                                            "High"
+                                        ],
+                                        "occurrence": [
+                                            "5"
+                                        ],
+                                        "occurrenceLevel": [
+                                            "Medium"
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "char": "3",
+                                "$": {
+                                    "score": "6",
+                                    "name": "Shoulder surfing attack"
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            "Shoulder surfing attack"
+                        ],
+                        "attackPathScore": [
+                            "6"
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    "Shoulder surfing attack"
+                ],
+                "allAttackPathsScore": [
+                    "6"
+                ],
+                "inherentRiskScore": [
+                    "8"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "8"
                 ],
                 "riskManagementDecision": [
                     "Transfer"
@@ -1001,10 +1042,10 @@
                     "Risk transferred to users, with application help  indicating that displaying of sensitive information should be protected from prying eyes and users should be aware of their surroundings."
                 ],
                 "residualRiskScore": [
-                    "0"
+                    "8"
                 ],
                 "residualRiskLevel": [
-                    "Low"
+                    "Medium"
                 ]
             },
             {
@@ -1018,7 +1059,7 @@
                     "4"
                 ],
                 "riskName": [
-                    "As a Script Kiddy, I can steal the  compromising the  in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                    "As a Script Kiddy, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "threatAgent": [
                     "Script Kiddy"
@@ -1039,17 +1080,17 @@
                     ""
                 ],
                 "businessAssetRef": [
-                    ""
+                    "3"
                 ],
                 "supportingAssetRef": [
-                    ""
+                    "1"
                 ],
                 "RiskName": [
                     {
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Script Kiddy, I can steal the  compromising the  in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
+                                    "As a Script Kiddy, I can steal the Account information compromising the Local client storage in order to get account information and balance of specific users, exploiting the (Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                                 ]
                             }
                         ]
@@ -1058,7 +1099,7 @@
                 "ImpactRiskEvaluation": [
                     {
                         "riskImpact": [
-                            ""
+                            "3"
                         ],
                         "BusinessAssetSelectedProperties": [
                             {
@@ -1166,7 +1207,7 @@
                             {
                                 "char": "16",
                                 "$": {
-                                    "score": "",
+                                    "score": "6",
                                     "name": "Phone backup data analysis of a non-encrypted backup"
                                 }
                             }
@@ -1175,7 +1216,7 @@
                             "Phone backup data analysis of a non-encrypted backup"
                         ],
                         "attackPathScore": [
-                            ""
+                            "6"
                         ]
                     }
                 ],
@@ -1183,10 +1224,10 @@
                     "(Dumping of the local storage from a rooted device AND Shoulder surfing attack) OR (Phone backup data analysis of a non-encrypted backup)"
                 ],
                 "allAttackPathsScore": [
-                    ""
+                    "6"
                 ],
                 "inherentRiskScore": [
-                    ""
+                    "8"
                 ],
                 "Mitigation": [
                     {
@@ -1239,7 +1280,7 @@
                     "0.25"
                 ],
                 "mitigatedRiskScore": [
-                    ""
+                    "2"
                 ],
                 "riskManagementDecision": [
                     "Mitigate"
@@ -1248,7 +1289,7 @@
                     "Risk reduced through implementation of hardware backed storage."
                 ],
                 "residualRiskScore": [
-                    ""
+                    "2"
                 ],
                 "residualRiskLevel": [
                     "Low"
@@ -1265,7 +1306,7 @@
                     "5"
                 ],
                 "riskName": [
-                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg, exploiting the  AND "
+                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg"
                 ],
                 "threatAgent": [
                     "Researcher"
@@ -1296,7 +1337,7 @@
                         "ComputedRiskName": [
                             {
                                 "computedRiskName": [
-                                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg, exploiting the  AND "
+                                    "As a Researcher, I can disclose the  compromising the Internet connection (TLS) in order to gfhg"
                                 ]
                             }
                         ]
@@ -1326,787 +1367,6 @@
                                 ],
                                 "businessAssetNonRepudiationFlag": [
                                     "0"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "LikelihoodRiskEvaluation": [
-                    {
-                        "riskLikelihood": [
-                            "2"
-                        ],
-                        "riskLikelihoodDetail": [
-                            ""
-                        ],
-                        "LikelihoodRiskEvaluationMethod": [
-                            {
-                                "OWASPLikelihoodEvaluation": [
-                                    {
-                                        "ThreatFactor": [
-                                            {
-                                                "skillLevel": [
-                                                    "5"
-                                                ],
-                                                "reward": [
-                                                    "1"
-                                                ],
-                                                "accessResources": [
-                                                    "0"
-                                                ],
-                                                "size": [
-                                                    "4"
-                                                ],
-                                                "intrusionDetection": [
-                                                    "3"
-                                                ]
-                                            }
-                                        ],
-                                        "threatFactorScore": [
-                                            "2.6"
-                                        ],
-                                        "threatFactorLevel": [
-                                            "Low"
-                                        ],
-                                        "occurrence": [
-                                            "9"
-                                        ],
-                                        "occurrenceLevel": [
-                                            "Very High"
-                                        ],
-                                        "OWASPLikelihoodScore": [
-                                            ""
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "VulnerabilityRiskEvaluation": [
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            },
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            " AND "
-                        ],
-                        "attackPathScore": [
-                            ""
-                        ]
-                    }
-                ],
-                "allAttackPathsName": [
-                    " AND "
-                ],
-                "allAttackPathsScore": [
-                    ""
-                ],
-                "inherentRiskScore": [
-                    "0"
-                ],
-                "Mitigation": [
-                    {
-                        "description": [
-                            ""
-                        ],
-                        "benefits": [
-                            "0"
-                        ],
-                        "cost": [
-                            ""
-                        ],
-                        "mitigationDecision": [
-                            {
-                                "decision": [
-                                    ""
-                                ],
-                                "decisionDetail": [
-                                    ""
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "mitigationsBenefits": [
-                    "1"
-                ],
-                "mitigationsDoneBenefits": [
-                    "1"
-                ],
-                "mitigatedRiskScore": [
-                    "0"
-                ],
-                "riskManagementDecision": [
-                    ""
-                ],
-                "riskManagementDetail": [
-                    ""
-                ],
-                "residualRiskScore": [
-                    "0"
-                ],
-                "residualRiskLevel": [
-                    "Low"
-                ]
-            },
-            {
-                "projectName": [
-                    "Sample Mobile Application"
-                ],
-                "projectVersion": [
-                    "1.0"
-                ],
-                "riskId": [
-                    "8"
-                ],
-                "riskName": [
-                    "As a , I can  the  compromising the  in order to "
-                ],
-                "threatAgent": [
-                    ""
-                ],
-                "threatAgentDetail": [
-                    ""
-                ],
-                "threatVerb": [
-                    ""
-                ],
-                "threatVerbDetail": [
-                    ""
-                ],
-                "motivation": [
-                    ""
-                ],
-                "motivationDetail": [
-                    ""
-                ],
-                "businessAssetRef": [
-                    ""
-                ],
-                "supportingAssetRef": [
-                    ""
-                ],
-                "RiskName": [
-                    {
-                        "ComputedRiskName": [
-                            {
-                                "computedRiskName": [
-                                    "As a , I can  the  compromising the  in order to "
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "ImpactRiskEvaluation": [
-                    {
-                        "riskImpact": [
-                            ""
-                        ],
-                        "BusinessAssetSelectedProperties": [
-                            {
-                                "businessAssetConfidentialityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetIntegrityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAvailabilityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthenticityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthorizationFlag": [
-                                    "1"
-                                ],
-                                "businessAssetNonRepudiationFlag": [
-                                    "1"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "LikelihoodRiskEvaluation": [
-                    {
-                        "riskLikelihood": [
-                            "1"
-                        ],
-                        "riskLikelihoodDetail": [
-                            ""
-                        ],
-                        "LikelihoodRiskEvaluationMethod": [
-                            {
-                                "SimpleLikelihoodEvaluation": [
-                                    ""
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "VulnerabilityRiskEvaluation": [
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            ""
-                        ],
-                        "attackPathScore": [
-                            ""
-                        ]
-                    }
-                ],
-                "allAttackPathsName": [
-                    ""
-                ],
-                "allAttackPathsScore": [
-                    ""
-                ],
-                "inherentRiskScore": [
-                    "0"
-                ],
-                "Mitigation": [
-                    {
-                        "description": [
-                            ""
-                        ],
-                        "benefits": [
-                            "0"
-                        ],
-                        "cost": [
-                            ""
-                        ],
-                        "mitigationDecision": [
-                            {
-                                "decision": [
-                                    ""
-                                ],
-                                "decisionDetail": [
-                                    ""
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "mitigationsBenefits": [
-                    "1"
-                ],
-                "mitigationsDoneBenefits": [
-                    "1"
-                ],
-                "mitigatedRiskScore": [
-                    "0"
-                ],
-                "riskManagementDecision": [
-                    ""
-                ],
-                "riskManagementDetail": [
-                    ""
-                ],
-                "residualRiskScore": [
-                    "0"
-                ],
-                "residualRiskLevel": [
-                    "Low"
-                ]
-            },
-            {
-                "projectName": [
-                    "Sample Mobile Application"
-                ],
-                "projectVersion": [
-                    "1.0"
-                ],
-                "riskId": [
-                    "9"
-                ],
-                "riskName": [
-                    "As a , I can  the  compromising the  in order to "
-                ],
-                "threatAgent": [
-                    ""
-                ],
-                "threatAgentDetail": [
-                    ""
-                ],
-                "threatVerb": [
-                    ""
-                ],
-                "threatVerbDetail": [
-                    ""
-                ],
-                "motivation": [
-                    ""
-                ],
-                "motivationDetail": [
-                    ""
-                ],
-                "businessAssetRef": [
-                    ""
-                ],
-                "supportingAssetRef": [
-                    ""
-                ],
-                "RiskName": [
-                    {
-                        "ComputedRiskName": [
-                            {
-                                "computedRiskName": [
-                                    "As a , I can  the  compromising the  in order to "
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "ImpactRiskEvaluation": [
-                    {
-                        "riskImpact": [
-                            ""
-                        ],
-                        "BusinessAssetSelectedProperties": [
-                            {
-                                "businessAssetConfidentialityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetIntegrityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAvailabilityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthenticityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthorizationFlag": [
-                                    "1"
-                                ],
-                                "businessAssetNonRepudiationFlag": [
-                                    "1"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "LikelihoodRiskEvaluation": [
-                    {
-                        "riskLikelihood": [
-                            "3"
-                        ],
-                        "riskLikelihoodDetail": [
-                            ""
-                        ],
-                        "LikelihoodRiskEvaluationMethod": [
-                            {
-                                "OWASPLikelihoodEvaluation": [
-                                    {
-                                        "ThreatFactor": [
-                                            {
-                                                "skillLevel": [
-                                                    ""
-                                                ],
-                                                "reward": [
-                                                    ""
-                                                ],
-                                                "accessResources": [
-                                                    ""
-                                                ],
-                                                "size": [
-                                                    ""
-                                                ],
-                                                "intrusionDetection": [
-                                                    ""
-                                                ]
-                                            }
-                                        ],
-                                        "threatFactorScore": [
-                                            ""
-                                        ],
-                                        "threatFactorLevel": [
-                                            ""
-                                        ],
-                                        "occurrence": [
-                                            ""
-                                        ],
-                                        "occurrenceLevel": [
-                                            ""
-                                        ],
-                                        "OWASPLikelihoodScore": [
-                                            ""
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "VulnerabilityRiskEvaluation": [
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            ""
-                        ],
-                        "attackPathScore": [
-                            ""
-                        ]
-                    }
-                ],
-                "allAttackPathsName": [
-                    ""
-                ],
-                "allAttackPathsScore": [
-                    ""
-                ],
-                "inherentRiskScore": [
-                    "0"
-                ],
-                "Mitigation": [
-                    {
-                        "description": [
-                            ""
-                        ],
-                        "benefits": [
-                            "0"
-                        ],
-                        "cost": [
-                            ""
-                        ],
-                        "mitigationDecision": [
-                            {
-                                "decision": [
-                                    ""
-                                ],
-                                "decisionDetail": [
-                                    ""
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "mitigationsBenefits": [
-                    "1"
-                ],
-                "mitigationsDoneBenefits": [
-                    "1"
-                ],
-                "mitigatedRiskScore": [
-                    "0"
-                ],
-                "riskManagementDecision": [
-                    ""
-                ],
-                "riskManagementDetail": [
-                    ""
-                ],
-                "residualRiskScore": [
-                    "0"
-                ],
-                "residualRiskLevel": [
-                    "Low"
-                ]
-            },
-            {
-                "projectName": [
-                    "Sample Mobile Application"
-                ],
-                "projectVersion": [
-                    "1.0"
-                ],
-                "riskId": [
-                    "10"
-                ],
-                "riskName": [
-                    "As a , I can  the  compromising the  in order to , exploiting the  AND "
-                ],
-                "threatAgent": [
-                    ""
-                ],
-                "threatAgentDetail": [
-                    ""
-                ],
-                "threatVerb": [
-                    ""
-                ],
-                "threatVerbDetail": [
-                    ""
-                ],
-                "motivation": [
-                    ""
-                ],
-                "motivationDetail": [
-                    ""
-                ],
-                "businessAssetRef": [
-                    ""
-                ],
-                "supportingAssetRef": [
-                    ""
-                ],
-                "RiskName": [
-                    {
-                        "ComputedRiskName": [
-                            {
-                                "computedRiskName": [
-                                    "As a , I can  the  compromising the  in order to , exploiting the  AND "
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "ImpactRiskEvaluation": [
-                    {
-                        "riskImpact": [
-                            ""
-                        ],
-                        "BusinessAssetSelectedProperties": [
-                            {
-                                "businessAssetConfidentialityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetIntegrityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAvailabilityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthenticityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthorizationFlag": [
-                                    "1"
-                                ],
-                                "businessAssetNonRepudiationFlag": [
-                                    "1"
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "LikelihoodRiskEvaluation": [
-                    {
-                        "riskLikelihood": [
-                            "3"
-                        ],
-                        "riskLikelihoodDetail": [
-                            ""
-                        ],
-                        "LikelihoodRiskEvaluationMethod": [
-                            {
-                                "OWASPLikelihoodEvaluation": [
-                                    {
-                                        "ThreatFactor": [
-                                            {
-                                                "skillLevel": [
-                                                    ""
-                                                ],
-                                                "reward": [
-                                                    ""
-                                                ],
-                                                "accessResources": [
-                                                    ""
-                                                ],
-                                                "size": [
-                                                    ""
-                                                ],
-                                                "intrusionDetection": [
-                                                    ""
-                                                ]
-                                            }
-                                        ],
-                                        "threatFactorScore": [
-                                            ""
-                                        ],
-                                        "threatFactorLevel": [
-                                            ""
-                                        ],
-                                        "occurrence": [
-                                            ""
-                                        ],
-                                        "occurrenceLevel": [
-                                            ""
-                                        ],
-                                        "OWASPLikelihoodScore": [
-                                            ""
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "VulnerabilityRiskEvaluation": [
-                    {
-                        "vulnerabilityRef": [
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            },
-                            {
-                                "$": {
-                                    "score": "",
-                                    "name": ""
-                                }
-                            }
-                        ],
-                        "attackPathName": [
-                            " AND "
-                        ],
-                        "attackPathScore": [
-                            ""
-                        ]
-                    }
-                ],
-                "allAttackPathsName": [
-                    " AND "
-                ],
-                "allAttackPathsScore": [
-                    ""
-                ],
-                "inherentRiskScore": [
-                    "0"
-                ],
-                "Mitigation": [
-                    {
-                        "description": [
-                            ""
-                        ],
-                        "benefits": [
-                            "0"
-                        ],
-                        "cost": [
-                            ""
-                        ],
-                        "mitigationDecision": [
-                            {
-                                "decision": [
-                                    ""
-                                ],
-                                "decisionDetail": [
-                                    ""
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "mitigationsBenefits": [
-                    "1"
-                ],
-                "mitigationsDoneBenefits": [
-                    "1"
-                ],
-                "mitigatedRiskScore": [
-                    "0"
-                ],
-                "riskManagementDecision": [
-                    ""
-                ],
-                "riskManagementDetail": [
-                    ""
-                ],
-                "residualRiskScore": [
-                    "0"
-                ],
-                "residualRiskLevel": [
-                    "Low"
-                ]
-            },
-            {
-                "projectName": [
-                    "Sample Mobile Application"
-                ],
-                "projectVersion": [
-                    "1.0"
-                ],
-                "riskId": [
-                    "11"
-                ],
-                "riskName": [
-                    "As a , I can  the  compromising the  in order to "
-                ],
-                "threatAgent": [
-                    ""
-                ],
-                "threatAgentDetail": [
-                    ""
-                ],
-                "threatVerb": [
-                    ""
-                ],
-                "threatVerbDetail": [
-                    ""
-                ],
-                "motivation": [
-                    ""
-                ],
-                "motivationDetail": [
-                    ""
-                ],
-                "businessAssetRef": [
-                    ""
-                ],
-                "supportingAssetRef": [
-                    ""
-                ],
-                "RiskName": [
-                    {
-                        "ComputedRiskName": [
-                            {
-                                "computedRiskName": [
-                                    "As a , I can  the  compromising the  in order to "
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "ImpactRiskEvaluation": [
-                    {
-                        "riskImpact": [
-                            ""
-                        ],
-                        "BusinessAssetSelectedProperties": [
-                            {
-                                "businessAssetConfidentialityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetIntegrityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAvailabilityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthenticityFlag": [
-                                    "1"
-                                ],
-                                "businessAssetAuthorizationFlag": [
-                                    "1"
-                                ],
-                                "businessAssetNonRepudiationFlag": [
-                                    "1"
                                 ]
                             }
                         ]
@@ -2252,16 +1512,16 @@
                     "Man in the middle attack through network interception"
                 ],
                 "vulnerabilityFamily": [
-                    "Password Management Vulnerability‎"
+                    ""
                 ],
                 "vulnerabilityTrackingID": [
-                    "123"
+                    ""
                 ],
                 "vulnerabilityTrackingURI": [
-                    "https://www.google.com/"
+                    ""
                 ],
                 "vulnerabilityCVE": [
-                    ""
+                    "http:///"
                 ],
                 "vulnerabilityDescription": [
                     {
@@ -2357,9 +1617,7 @@
                 ],
                 "supportingAssetRef": [
                     "",
-                    "2",
-                    "1",
-                    "3"
+                    "2"
                 ],
                 "vulnerabilityCVSS": [
                     {
@@ -2423,15 +1681,15 @@
                 "vulnerabilityCVEScoring": [
                     {
                         "cveScore": [
-                            "0"
+                            "5.9"
                         ]
                     }
                 ],
                 "overallScore": [
-                    "7"
+                    "6"
                 ],
                 "overallLevel": [
-                    "High"
+                    "Medium"
                 ]
             },
             {
@@ -2448,7 +1706,7 @@
                     "Dumping of the local storage from a rooted device"
                 ],
                 "vulnerabilityFamily": [
-                    "Logging and Auditing Vulnerability‎"
+                    ""
                 ],
                 "vulnerabilityTrackingID": [
                     ""
@@ -2527,7 +1785,7 @@
                     }
                 ],
                 "vulnerabilityDescriptionAttachment": [
-                    "x0lGQRQAAAABAAAAAAAAAMERAAAKAAAAdABlAHMAdAAuAGoAcwBvAG4AAAB7CiAgICAiSVNSQW1ldGEiOiB7CiAgICAgICAgImFwcFZlcnNpb24iOiAxLAogICAgICAgICJwcm9qZWN0TmFtZSI6ICIiLAogICAgICAgICJwcm9qZWN0T3JnYW5pemF0aW9uIjogIiIsCiAgICAgICAgInByb2plY3RWZXJzaW9uIjogIiIsCiAgICAgICAgIklTUkF0cmFja2luZyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgInRyYWNraW5nSXRlcmF0aW9uIjogMSwKICAgICAgICAgICAgICAgICJ0cmFja2luZ1NlY3VyaXR5T2ZmaWNlciI6ICJ0MDI2Mzc3NCIsCiAgICAgICAgICAgICAgICAidHJhY2tpbmdEYXRlIjogIjIwMjItMDktMDUiLAogICAgICAgICAgICAgICAgInRyYWNraW5nQ29tbWVudCI6ICIiCiAgICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJidXNpbmVzc0Fzc2V0c0NvdW50IjogMCwKICAgICAgICAic3VwcG9ydGluZ0Fzc2V0c0NvdW50IjogMSwKICAgICAgICAicmlza3NDb3VudCI6IDEsCiAgICAgICAgInZ1bG5lcmFiaWxpdGllc0NvdW50IjogMQogICAgfSwKICAgICJQcm9qZWN0Q29udGV4dCI6IHsKICAgICAgICAicHJvamVjdERlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgInByb2plY3RVUkwiOiAiIiwKICAgICAgICAicHJvamVjdERlc2NyaXB0aW9uQXR0YWNobWVudCI6ICIiLAogICAgICAgICJzZWN1cml0eVByb2plY3RPYmplY3RpdmVzIjogIiIsCiAgICAgICAgInNlY3VyaXR5T2ZmaWNlck9iamVjdGl2ZXMiOiAiIiwKICAgICAgICAic2VjdXJpdHlBc3N1bXB0aW9ucyI6ICIiCiAgICB9LAogICAgIkJ1c2luZXNzQXNzZXQiOiBbXSwKICAgICJTdXBwb3J0aW5nQXNzZXRzRGVzYyI6ICIiLAogICAgIlN1cHBvcnRpbmdBc3NldCI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRJZCI6IDEsCiAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRITERJZCI6ICIiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0TmFtZSI6ICJTQTEiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0VHlwZSI6ICIiLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0U2VjdXJpdHlMZXZlbCI6IC0xLAogICAgICAgICAgICAiYnVzaW5lc3NBc3NldFJlZiI6IFtdCiAgICAgICAgfQogICAgXSwKICAgICJSaXNrIjogWwogICAgICAgIHsKICAgICAgICAgICAgInJpc2tJZCI6IDEsCiAgICAgICAgICAgICJwcm9qZWN0TmFtZVJlZiI6ICIiLAogICAgICAgICAgICAicHJvamVjdFZlcnNpb25SZWYiOiAiIiwKICAgICAgICAgICAgInJpc2tOYW1lIjogewogICAgICAgICAgICAgICAgInJpc2tJZFJlZiI6IDEsCiAgICAgICAgICAgICAgICAicmlza05hbWUiOiAiQXMgYSAsIEkgY2FuICB0aGUgQkExIGNvbXByb21pc2luZyB0aGUgU0ExIGluIG9yZGVyIHRvICIsCiAgICAgICAgICAgICAgICAidGhyZWF0QWdlbnQiOiAiIiwKICAgICAgICAgICAgICAgICJ0aHJlYXRBZ2VudERldGFpbCI6ICIiLAogICAgICAgICAgICAgICAgInRocmVhdFZlcmIiOiAiIiwKICAgICAgICAgICAgICAgICJ0aHJlYXRWZXJiRGV0YWlsIjogIiIsCiAgICAgICAgICAgICAgICAibW90aXZhdGlvbiI6ICIiLAogICAgICAgICAgICAgICAgIm1vdGl2YXRpb25EZXRhaWwiOiAiIiwKICAgICAgICAgICAgICAgICJidXNpbmVzc0Fzc2V0UmVmIjogMSwKICAgICAgICAgICAgICAgICJzdXBwb3J0aW5nQXNzZXRSZWYiOiAxCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICJyaXNrTGlrZWxpaG9vZCI6IHsKICAgICAgICAgICAgICAgICJyaXNrSWRSZWYiOiAxLAogICAgICAgICAgICAgICAgInJpc2tMaWtlbGlob29kIjogMywKICAgICAgICAgICAgICAgICJyaXNrTGlrZWxpaG9vZERldGFpbCI6ICIiLAogICAgICAgICAgICAgICAgInNraWxsTGV2ZWwiOiBudWxsLAogICAgICAgICAgICAgICAgInJld2FyZCI6IG51bGwsCiAgICAgICAgICAgICAgICAiYWNjZXNzUmVzb3VyY2VzIjogbnVsbCwKICAgICAgICAgICAgICAgICJzaXplIjogbnVsbCwKICAgICAgICAgICAgICAgICJpbnRydXNpb25EZXRlY3Rpb24iOiBudWxsLAogICAgICAgICAgICAgICAgInRocmVhdEZhY3RvclNjb3JlIjogbnVsbCwKICAgICAgICAgICAgICAgICJ0aHJlYXRGYWN0b3JMZXZlbCI6ICIiLAogICAgICAgICAgICAgICAgIm9jY3VycmVuY2UiOiBudWxsLAogICAgICAgICAgICAgICAgIm9jY3VycmVuY2VMZXZlbCI6ICIiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICJyaXNrSW1wYWN0IjogewogICAgICAgICAgICAgICAgInJpc2tJZFJlZiI6IDEsCiAgICAgICAgICAgICAgICAicmlza0ltcGFjdCI6IDMsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldENvbmZpZGVudGlhbGl0eUZsYWciOiAwLAogICAgICAgICAgICAgICAgImJ1c2luZXNzQXNzZXRJbnRlZ3JpdHlGbGFnIjogMSwKICAgICAgICAgICAgICAgICJidXNpbmVzc0Fzc2V0QXZhaWxhYmlsaXR5RmxhZyI6IDEsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldEF1dGhlbnRpY2l0eUZsYWciOiAwLAogICAgICAgICAgICAgICAgImJ1c2luZXNzQXNzZXRBdXRob3JpemF0aW9uRmxhZyI6IDEsCiAgICAgICAgICAgICAgICAiYnVzaW5lc3NBc3NldE5vblJlcHVkaWF0aW9uRmxhZyI6IDEKICAgICAgICAgICAgfSwKICAgICAgICAgICAgInJpc2tBdHRhY2tQYXRocyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAicmlza0lkUmVmIjogMSwKICAgICAgICAgICAgICAgICAgICAicmlza0F0dGFja1BhdGhJZCI6IDEsCiAgICAgICAgICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlSZWYiOiBbCiAgICAgICAgICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5SWRSZWYiOiBudWxsLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgInNjb3JlIjogbnVsbCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICJuYW1lIjogIiIKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIF0sCiAgICAgICAgICAgICAgICAgICAgImF0dGFja1BhdGhOYW1lIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImF0dGFja1BhdGhTY29yZSI6IG51bGwKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgXSwKICAgICAgICAgICAgImFsbEF0dGFja1BhdGhzTmFtZSI6ICIiLAogICAgICAgICAgICAiYWxsQXR0YWNrUGF0aHNTY29yZSI6IG51bGwsCiAgICAgICAgICAgICJpbmhlcmVudFJpc2tTY29yZSI6IDAsCiAgICAgICAgICAgICJyaXNrTWl0aWdhdGlvbiI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgICAicmlza0lkUmVmIjogMSwKICAgICAgICAgICAgICAgICAgICAicmlza01pdGlnYXRpb25JZCI6IDEsCiAgICAgICAgICAgICAgICAgICAgImRlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImJlbmVmaXRzIjogMCwKICAgICAgICAgICAgICAgICAgICAiY29zdCI6IG51bGwsCiAgICAgICAgICAgICAgICAgICAgImRlY2lzaW9uIjogIiIsCiAgICAgICAgICAgICAgICAgICAgImRlY2lzaW9uRGV0YWlsIjogIiIsCiAgICAgICAgICAgICAgICAgICAgIm1pdGlnYXRpb25zQmVuZWZpdHMiOiAxLAogICAgICAgICAgICAgICAgICAgICJtaXRpZ2F0aW9uc0RvbmVCZW5lZml0cyI6IDEKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgXSwKICAgICAgICAgICAgIm1pdGlnYXRlZFJpc2tTY29yZSI6IDAsCiAgICAgICAgICAgICJyaXNrTWFuYWdlbWVudERlY2lzaW9uIjogIiIsCiAgICAgICAgICAgICJyaXNrTWFuYWdlbWVudERldGFpbCI6ICIiLAogICAgICAgICAgICAicmVzaWR1YWxSaXNrU2NvcmUiOiAwLAogICAgICAgICAgICAicmVzaWR1YWxSaXNrTGV2ZWwiOiAiTG93IgogICAgICAgIH0KICAgIF0sCiAgICAiVnVsbmVyYWJpbGl0eSI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJwcm9qZWN0TmFtZVJlZiI6ICIiLAogICAgICAgICAgICAicHJvamVjdFZlcnNpb25SZWYiOiAiIiwKICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlJZCI6IDEsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5TmFtZSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eUZhbWlseSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eVRyYWNraW5nSUQiOiAiIiwKICAgICAgICAgICAgInZ1bG5lcmFiaWxpdHlUcmFja2luZ1VSSSI6ICIiLAogICAgICAgICAgICAidnVsbmVyYWJpbGl0eURlc2NyaXB0aW9uIjogIiIsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5RGVzY3JpcHRpb25BdHRhY2htZW50IjogIiIsCiAgICAgICAgICAgICJ2dWxuZXJhYmlsaXR5Q1ZFIjogIkNWU1M6Mi4wL0FWOkwvQUM6TS9BdTpOL0M6UC9JOlAvQTpQL0U6TkQvUkw6TkQvUkM6TkQiLAogICAgICAgICAgICAiY3ZlU2NvcmUiOiA0LjM3ODAzMjEyMzE1LAogICAgICAgICAgICAib3ZlcmFsbFNjb3JlIjogNCwKICAgICAgICAgICAgIm92ZXJhbGxMZXZlbCI6ICJNZWRpdW0iLAogICAgICAgICAgICAic3VwcG9ydGluZ0Fzc2V0UmVmIjogW10KICAgICAgICB9CiAgICBdCn0="
+                    ""
                 ],
                 "supportingAssetRef": [
                     "",
@@ -3050,15 +2308,15 @@
                 "vulnerabilityCVEScoring": [
                     {
                         "cveScore": [
-                            ""
+                            "6.2"
                         ]
                     }
                 ],
                 "overallScore": [
-                    ""
+                    "6"
                 ],
                 "overallLevel": [
-                    "High"
+                    "Medium"
                 ]
             }
         ],
