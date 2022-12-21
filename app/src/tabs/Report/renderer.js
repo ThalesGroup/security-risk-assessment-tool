@@ -83,8 +83,8 @@
                 $('#risks tbody').empty();
                 $('#vulnerabilites tbody').empty();
                 $('#riskmanagement tbody').empty();
-                $('#name').text(projectName);
-                $('#version').text(projectVersion);
+                $('#name').text(projectName === '' ? '[Project Name]' : projectName);
+                $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
                 $('#app').text(appVersion);
                 $('#iteration').text(iteration);
 
