@@ -33,7 +33,7 @@ article {
 
 div[class='content active'] {
     background-color: #c0dc8c;
-    padding: 0 2%;
+    padding: 2%;
 }
 
 .business-assets__sections-description{
@@ -52,4 +52,5 @@ div[class='content active'] {
 #business-assets section{
     background-color: #f8f4f4;;
 }
+
 
