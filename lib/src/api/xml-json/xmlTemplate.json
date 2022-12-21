@@ -45,7 +45,7 @@
                     "5"
                 ],
                 "risksCount": [
-                    "6"
+                    "9"
                 ],
                 "vulnerabilitiesCount": [
                     "52"
@@ -525,7 +525,7 @@
                             "3"
                         ],
                         "riskLikelihoodDetail": [
-                            ""
+                            "fdgdfg"
                         ],
                         "LikelihoodRiskEvaluationMethod": [
                             {
@@ -557,7 +557,7 @@
                                             "Very High"
                                         ],
                                         "occurrence": [
-                                            "5"
+                                            ""
                                         ],
                                         "occurrenceLevel": [
                                             "Medium"
@@ -727,7 +727,7 @@
                             "2"
                         ],
                         "riskLikelihoodDetail": [
-                            ""
+                            "dfgfdgdg"
                         ],
                         "LikelihoodRiskEvaluationMethod": [
                             {
@@ -1375,7 +1375,7 @@
                 "LikelihoodRiskEvaluation": [
                     {
                         "riskLikelihood": [
-                            "3"
+                            "2"
                         ],
                         "riskLikelihoodDetail": [
                             ""
@@ -1387,38 +1387,204 @@
                                         "ThreatFactor": [
                                             {
                                                 "skillLevel": [
-                                                    ""
+                                                    "5"
                                                 ],
                                                 "reward": [
-                                                    ""
+                                                    "1"
                                                 ],
                                                 "accessResources": [
-                                                    ""
+                                                    "0"
                                                 ],
                                                 "size": [
-                                                    ""
+                                                    "4"
                                                 ],
                                                 "intrusionDetection": [
-                                                    ""
+                                                    "3"
                                                 ]
                                             }
                                         ],
                                         "threatFactorScore": [
-                                            ""
+                                            "2.6"
                                         ],
                                         "threatFactorLevel": [
-                                            ""
+                                            "Low"
                                         ],
                                         "occurrence": [
-                                            ""
+                                            "9"
                                         ],
                                         "occurrenceLevel": [
-                                            ""
+                                            "Very High"
                                         ],
                                         "OWASPLikelihoodScore": [
                                             ""
                                         ]
                                     }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "8"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "1"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "SimpleLikelihoodEvaluation": [
+                                    ""
                                 ]
                             }
                         ]

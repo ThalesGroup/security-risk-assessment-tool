@@ -34,6 +34,9 @@ const contents = document.querySelectorAll('.content');
  */
 window.project.load(async (event, data) => {
   console.log(await JSON.parse(data));
+  const { projectName } = await JSON.parse(data).ISRAmeta;
+  if (projectName !== '') $('footer').text(`THALES GROUP CONFIDENTIAL {${projectName}}`);
+  else $('footer').text('THALES GROUP CONFIDENTIAL {PROJECT}');
 });
 
 /**

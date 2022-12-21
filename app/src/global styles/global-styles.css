@@ -107,14 +107,14 @@ button[class="tab-button"] {
 footer{
     text-align: center;
     margin-top: 10px;
-}
-
-footer::before{
-    content: "THALES GROUP CONFIDENTIAL {PROJECT}";
     font-weight: bold;
     font-size: 16px;
-    color: red;
+    color: rgb(255, 141, 0);
 }
+
+/* footer::before{
+    content: "THALES GROUP CONFIDENTIAL {PROJECT}";
+} */
 
 header {
     text-align: center;

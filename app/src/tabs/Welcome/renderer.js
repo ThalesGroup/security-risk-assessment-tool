@@ -147,6 +147,7 @@
     $('input[id="welcome__isra-meta--project-name"]').on('change', async(e) => {
       const { value } = e.target;
       await window.welcome.updateProjectNameAndVersionRef('projectNameRef', value);
+      if (value !== '') $('footer').text(`THALES GROUP CONFIDENTIAL {${value}}`);
     });
 
     $('input[id="welcome__isra-meta--project-version"]').on('change', async (e) => {
