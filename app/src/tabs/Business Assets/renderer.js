@@ -76,7 +76,7 @@
         min_height: 200,
         verify_html: true,
         statusbar: false,
-        plugins: 'link lists image',
+        plugins: 'link lists image autoresize',
         toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
         file_picker_callback: function (callback, value, meta) {
           // Provide image and alt text for the image dialog
