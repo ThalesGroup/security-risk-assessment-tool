@@ -43,7 +43,7 @@ app & lib:
 npm install
 npm update
 
-lib:
+app:
 npm start
 ```
 
