@@ -24,13 +24,18 @@
 
 /* global $ Tabulator tinymce */
 
+function updateBusinessAssetName(id, field){
+  const value = document.querySelector(`textarea[id="${id}"][name="businessAssetName"]`).value;  
+  window.businessAssets.updateBusinessAsset(id, field, value);   
+}
+
 (async () => {
   try {
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
     // update businessAssets & risk
-    const updateOtherTabs = (tableOptions) => {
+    const updateOtherTabs = (tableOptions, businessAssetName) => {
       const options = tableOptions;
 
       const update = (cell) => {
@@ -39,9 +44,18 @@
       };
 
       // name
-      options.columns[0].cellEdited = (cell) => {
-        update(cell);
+      // options.columns[0].cellEdited = (cell) => {
+      //   update(cell);
+      // };
+      options.columns[0].formatter = (cell) => {
+        const id = cell.getRow().getIndex();
+        if (id) {
+          return `
+            <textarea id="${id}" rows="4" cols="7" name="businessAssetName" onchange="updateBusinessAssetName(${id}, 'businessAssetName')">${businessAssetName}</textarea>
+          `;
+        }
       };
+
       // asset values
       options.columns[1].columns.forEach((column) => {
         const c = column;
@@ -150,7 +164,7 @@
       const options = JSON.parse(JSON.stringify(result[1]));
       const businessAssetsTable = new Tabulator(`#business-assets__section-table__${id}`, options);
       addTableData(businessAssetsTable, asset);
-      updateOtherTabs(options);
+      updateOtherTabs(options, asset.businessAssetName);
 
       // add rich text box
       section.append('<p class="business-assets__sections-description">Description</p>');
@@ -196,6 +210,12 @@
       const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
       deleteBusinessAsset(checkboxIds);
     });
+    // document.querySelectorAll('textarea').forEach((textarea) => {
+    //   textarea.addEventListener('change', (e) => {
+        
+    //   // window.businessAssets.updateBusinessAsset(id, name, value);
+    //   });
+    // })
   } catch (err) {
     alert('Failed to load business assets tab');
   }
