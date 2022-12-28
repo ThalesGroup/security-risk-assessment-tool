@@ -101,10 +101,10 @@
                             $('#riskmanagement tbody').append(`<tr>
                             <td>${description}</td>
                             <td>${decisionDetail}</td>
-                            <td>${cost}</td>
+                            <td>${!cost ? '' : cost}</td>
                             </td>`);
 
-                            totalCost += cost;
+                            if(cost !== null) totalCost += cost;
                         };
                     });
                 });
@@ -113,7 +113,7 @@
                 <tr style="border: 0">
                     <td></td>
                     <td><strong>Total accepted security control cost:</strong></td>
-                    <td>${totalCost === 0 ? '' : totalCost}</td>
+                    <td>${totalCost}</td>
                 </tr>`);
                 renderRisk(sortedRisk, 'high');
                 renderRisk(sortedRisk, 'medium');
