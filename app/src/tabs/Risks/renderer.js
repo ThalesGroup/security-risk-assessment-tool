@@ -1210,7 +1210,7 @@
 
   $(`input[type='radio'][name='risk__management__decision']`).change(async (e) => {
     const { value } = e.target;
-    if (value === 'Mitigate') $('.bottom:hidden').css('display', 'flex');
+    if (value === 'Mitigate') $('.bottom:hidden').css('display', 'grid');
     else $('.bottom').css('display', 'none');
 
     await validatePreviousRisk(getCurrentRiskId());
