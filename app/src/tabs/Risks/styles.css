@@ -242,7 +242,7 @@ input[name="risks__attack__path__checkboxes"]{
 }
 
 select[name='risk__likelihood'] {
-    width: 10%;
+    width: 15%;
 }
 
 label[name='Not defined'],

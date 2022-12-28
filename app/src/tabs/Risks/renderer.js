@@ -919,6 +919,7 @@
       risksData[riskIndex] = risk;
       risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: risk.riskName.riskName, residualRiskLevel: risk.residualRiskLevel }]);
       if(risk.inherentRiskScore != null){
+        $('#inherent_risk_score').text(risk.inherentRiskScore);
         $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
         $('#residual_risk_score').text(risk.residualRiskScore);
         $('#residual_risk_level').text(risk.residualRiskLevel);
@@ -1031,6 +1032,7 @@
       $('#risk__likehood__table').hide();
 
       const id = getCurrentRiskId();
+      const prevRisk = await window.risks.updateRiskLikelihood(id, 'isOWASPLikelihood', false);
       await window.risks.updateRiskLikelihood(id, 'threatFactorScore', {
         skillLevel: 'null',
         reward: 'null',
@@ -1040,13 +1042,14 @@
       });
       await window.risks.updateRiskLikelihood(id, 'occurrence', 'null');
 
-      const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
+      // const riskLikelihoodPrevValue = $('#risk__likelihood').find(":selected").val();
       await validatePreviousRisk(getCurrentRiskId());
-      const risk = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', riskLikelihoodPrevValue);
+      const risk = await window.risks.updateRiskLikelihood(id, 'riskLikelihood', prevRisk.riskLikelihood.riskLikelihood);
       // reloadCurrentRisk(risk);
       // setSecurityPropertyValues(risk.riskLikelihood);
       updateScoresAndLevel(risk);
       updateOccurrenceThreatFactorTable(risk.riskLikelihood.threatFactorLevel, risk.riskLikelihood.occurrenceLevel);
+      $('select[id="risk__likelihood"]').val(!risk.riskLikelihood.riskLikelihood ? 'null' : risk.riskLikelihood.riskLikelihood);
     });
 
     $('#risk__likelihood').on('change', async ()=>{
@@ -1068,6 +1071,14 @@
       const risk = await window.risks.updateRiskLikelihood(getCurrentRiskId(), 'isOWASPLikelihood', true);
       // reloadCurrentRisk(risk);
       updateScoresAndLevel(risk);
+      const { riskLikelihood } = risk;
+      const { skillLevel, reward, accessResources, size, intrusionDetection, occurrence } = riskLikelihood;
+      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
+      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
+      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
+      $('select[id="risk__size"]').val(!size ? 'null' : size);
+      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
+      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
     });
 
     $('#risk__skillLevel').on('change', ()=>{
@@ -1090,7 +1101,7 @@
       calculateThreatFactorScore();
     });
 
-    $('#risk__occurrence').on('change', async ()=>{
+    const calculateOccurrence = async () => {
       const selected = $('#risk__occurrence').find(":selected").val();
       const id = getCurrentRiskId();
       await validatePreviousRisk(getCurrentRiskId());
@@ -1098,6 +1109,10 @@
       // reloadCurrentRisk(risk);
       updateScoresAndLevel(risk);
       updateOccurrenceThreatFactorTable(risk.riskLikelihood.threatFactorLevel, risk.riskLikelihood.occurrenceLevel);
+    };
+
+    $('#risk__occurrence').on('change', async ()=>{
+      await calculateOccurrence();
     });
 
     // Risk Impact
