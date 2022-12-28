@@ -48,15 +48,18 @@ section {
 }
 
 #isra-report section:nth-of-type(1) h1 {
- background-color: #b789fb;
+    background-color: #b789fb;
+    margin-bottom: 2%;
 }
 
 #isra-report section:nth-of-type(2) h1 {
- background-color: #f1778b;
+    background-color: #f1778b;
+    margin-bottom: 2%;
 }
 
 #isra-report section:nth-of-type(3) h1 {
- background-color: #c4d6cb;
+    background-color: #c4d6cb;
+    margin-bottom: 2%;
 }
 
 #isra-report section:nth-of-type(1) {
