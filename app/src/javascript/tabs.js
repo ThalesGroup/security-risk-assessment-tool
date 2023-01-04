@@ -32,11 +32,11 @@ const contents = document.querySelectorAll('.content');
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
  */
-window.project.load(async (event, data) => {
+window.project.load(async (event, data, classification) => {
   console.log(await JSON.parse(data));
   const { projectName } = await JSON.parse(data).ISRAmeta;
-  if (projectName !== '') $('footer').text(`THALES GROUP CONFIDENTIAL {${projectName}}`);
-  else $('footer').text('THALES GROUP CONFIDENTIAL {PROJECT}');
+  if(projectName === '') $('footer').text(classification);
+  else $('footer').text(classification.substring(0, classification.indexOf('{') + 1) + projectName + classification[classification.length - 1]);
 });
 
 /**

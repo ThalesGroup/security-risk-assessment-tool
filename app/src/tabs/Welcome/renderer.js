@@ -36,6 +36,7 @@
         `;
       }
     };
+    let classificationLabel;
 
     // result[1]['columnDefaults'] = {
     //   tooltip: function(e, cell, onRendered) {
@@ -105,8 +106,9 @@
     };
 
     $(document).ready(function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (event, data, classification) => {
         updateWelcomeFields(await JSON.parse(data).ISRAmeta);
+        classificationLabel = classification;
       });
     });
 
@@ -147,7 +149,9 @@
     $('input[id="welcome__isra-meta--project-name"]').on('change', async(e) => {
       const { value } = e.target;
       await window.welcome.updateProjectNameAndVersionRef('projectNameRef', value);
-      if (value !== '') $('footer').text(`THALES GROUP CONFIDENTIAL {${value}}`);
+      if (value === '') $('footer').text(classificationLabel);
+      else $('footer').text(classificationLabel.substring(0, classificationLabel.indexOf('{') + 1) + value + classificationLabel[classificationLabel.length - 1]);
+
     });
 
     $('input[id="welcome__isra-meta--project-version"]').on('change', async (e) => {
