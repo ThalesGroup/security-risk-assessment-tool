@@ -450,7 +450,7 @@
                     "1.0"
                 ],
                 "riskId": [
-                    "1"
+                    ""
                 ],
                 "riskName": [
                     "As a Researcher, I can tamper with the Server URL compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Man in the middle attack through network interception"
