@@ -114,9 +114,9 @@ thead {
     background-color: #f8f4f4;
 }
 
-strong {
+/* strong {
     float: right;
-}
+} */
 
 #riskmanagement,
 #riskmanagement tbody tr:last-child td {
