@@ -117,7 +117,9 @@
 
     // add vulnerability ref
     const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
+      let refLength = refs.length;
       refs.forEach((ref, i) => {
+        refLength--;
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
@@ -142,7 +144,9 @@
           // else setNaNValues();
         });
         vulnerabilityDiv.append(select);
-        vulnerabilityDiv.append('<span style="margin-left: 2%; margin-right: 2%" class="and">AND<span>')
+        let visibility = 'visible';
+        if (refLength === 0) visibility = 'hidden';
+        vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
 
         div.append(vulnerabilityDiv);
         select.val(!ref.vulnerabilityIdRef ? '' : ref.vulnerabilityIdRef);

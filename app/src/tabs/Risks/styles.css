@@ -162,9 +162,9 @@ input[name="risks__attack__path__checkboxes"]{
     position: absolute;
 }
 
-.risk_attack_paths div:nth-child(3) .and {
+/* .risk_attack_paths .and:nth-last-of-type() {
     visibility: hidden;
-}
+} */
 
 .bottom,
 .top {
