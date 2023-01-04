@@ -39,31 +39,39 @@
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
 
     // filter
-    $('input[id="filter-value"]').on('change', (e)=> {
-        const { value } = e.target;
-        const filterOptions = [
-            [
-                { field: "vulnerabilityId", type: "like", value: value },
-                { field: "projectVersionRef", type: "like", value: value },
-                { field: "vulnerabilityName", type: "like", value: value },
-                { field: "overallLevel", type: "like", value: value },
-            ]
-        ];
-        vulnerabilitiesTable.setFilter(filterOptions);
-        const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
-        if (filteredRows[0]) {
-            vulnerabilitiesData.forEach((v) => {
-                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-            });
-            vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
-            addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
-        } else $('#vulnerabilities section').hide();
-    });
-
-    $('button[id="filter-clear"]').on('click', () => { 
+    const clearFunction = () => {
         vulnerabilitiesTable.clearFilter();
         $('input[id="filter-value"]').val('');
         if (vulnerabilitiesData.length > 0) $('#vulnerabilities section').show();
+    };
+
+    $('input[id="filter-value"]').on('change', (e)=> {
+        const { value } = e.target;
+        if(value === ''){
+            clearFunction();
+        }else {
+            const filterOptions = [
+                [
+                    { field: "vulnerabilityId", type: "like", value: value },
+                    { field: "projectVersionRef", type: "like", value: value },
+                    { field: "vulnerabilityName", type: "like", value: value },
+                    { field: "overallLevel", type: "like", value: value },
+                ]
+            ];
+            vulnerabilitiesTable.setFilter(filterOptions);
+            const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
+            if (filteredRows[0]) {
+                vulnerabilitiesData.forEach((v) => {
+                    vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+                });
+                vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
+                addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
+            } else $('#vulnerabilities section').hide();
+        }
+    });
+
+    $('button[id="filter-clear"]').on('click', () => { 
+        clearFunction();
     });
 
     const getCurrentVulnerabilityId = () => {

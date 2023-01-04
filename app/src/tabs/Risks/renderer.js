@@ -41,32 +41,40 @@
     let assetsRelationship = {};
 
     // filter
-    $('input[id="filter-value"]').on('change', (e) => {
-      const { value } = e.target;
-      const filterOptions = [
-        [
-          { field: "riskId", type: "like", value: value },
-          { field: "projectVersionRef", type: "like", value: value },
-          { field: "riskName", type: "like", value: value },
-          { field: "residualRiskLevel", type: "like", value: value },
-          { field: "riskManagementDecision", type: "like", value: value },
-        ]
-      ];
-      risksTable.setFilter(filterOptions);
-      const filteredRows = risksTable.searchData(filterOptions);
-      if (filteredRows[0]) {
-        risksData.forEach((r) => {
-          risksTable.deselectRow(r.riskId);
-        });
-        risksTable.selectRow(filteredRows[0].riskId);
-        addSelectedRowData(filteredRows[0].riskId);
-      } else $('#risks section').hide();
-    });
-
-    $('button[id="filter-clear"]').on('click', () => {
+    const clearFunction = () => {
       risksTable.clearFilter();
       $('input[id="filter-value"]').val('');
       if (risksData.length > 0) $('#risks section').show();
+    };
+
+    $('input[id="filter-value"]').on('change', (e) => {
+      const { value } = e.target;
+      if(value === ''){
+        clearFunction();
+      }else {
+        const filterOptions = [
+          [
+            { field: "riskId", type: "like", value: value },
+            { field: "projectVersionRef", type: "like", value: value },
+            { field: "riskName", type: "like", value: value },
+            { field: "residualRiskLevel", type: "like", value: value },
+            { field: "riskManagementDecision", type: "like", value: value },
+          ]
+        ];
+        risksTable.setFilter(filterOptions);
+        const filteredRows = risksTable.searchData(filterOptions);
+        if (filteredRows[0]) {
+          risksData.forEach((r) => {
+            risksTable.deselectRow(r.riskId);
+          });
+          risksTable.selectRow(filteredRows[0].riskId);
+          addSelectedRowData(filteredRows[0].riskId);
+        } else $('#risks section').hide();
+      }
+    });
+
+    $('button[id="filter-clear"]').on('click', () => {
+      clearFunction();
     });
 
     /**
