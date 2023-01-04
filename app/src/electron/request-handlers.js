@@ -508,6 +508,8 @@ const projectContextAttachmentOptions = () => {
         }
       } catch (err) {
         console.log(err);
+        israProject.israProjectContext.projectDescriptionAttachment = '';
+        israProject.israProjectContext.useNewDecode = true;
         dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
         getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
       }
@@ -553,6 +555,8 @@ ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
     return projectContextFileName;
   } catch (err) {
     console.log(err);
+    israProject.israProjectContext.projectDescriptionAttachment = '';
+    israProject.israProjectContext.useNewDecode = true;
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
     return 'Click here to attach a file';
   }
