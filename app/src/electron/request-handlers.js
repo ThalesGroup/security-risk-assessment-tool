@@ -36,7 +36,7 @@ const {
   DataLoad,
   DataNew,
 } = require('../../../lib/src/api/index');
-const classification = require('../../../lib/src/model/schema/json-schema').description;
+const classification = require('../../../lib/src/model/schema/json-schema').classification;
 
 const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-project');
 
