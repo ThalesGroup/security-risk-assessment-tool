@@ -215,6 +215,34 @@ const validateClasses = () => {
   *  @param {string} filePath path of current file
 */
 ipcMain.on('validate:allTabs', async (event, labelSelected) => {
+  const saveChangesDialog = () => {
+    return dialog.showMessageBoxSync(null, {
+      type: 'warning',
+      message: 'Do you want to save the changes?',
+      title: 'Save project?',
+      buttons: ['Yes', 'No', 'Cancel'], // Yes returns 0, No returns 1, Cancel returns 2
+    });
+  };
+
+  const openFileDialog = () => {
+    const options = {
+      title: 'Open file - Electron ISRA Project',
+      buttonLabel: 'Open File',
+      filters: [
+        { name: 'JSON/XML', extensions: ['json', 'xml'] },
+      ],
+    };
+    const filePathArr = dialog.showOpenDialogSync(options);
+
+    if (filePathArr !== undefined) {
+      const filePath = filePathArr[0];
+      const fileType = filePath.split('.').pop();
+
+      if (fileType === 'json') loadJSONFile(getMainWindow(), filePath);
+      else loadXMLFile(getMainWindow(), filePath);
+    }
+  };
+
   const validation = () => {
     const saveOrSaveAs = () => {
       if (labelSelected === 'Save As') saveAs();
@@ -235,7 +263,16 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
     // getMainWindow().webContents.send('project:validationErrors');
   };
 
-  if (electronApp) {
+  if (labelSelected === 'Load File') {
+    /**
+      *  loading/opening xml/json file
+    */
+    let result;
+    if (israProject.toJSON() !== oldIsraProject) result = saveChangesDialog();
+
+    if (result === 0) validationErrors('Save');
+    else if (result === 1 || !result) openFileDialog();
+  } else if (electronApp) {
     /**
       *  exit button pressed
     */
@@ -243,12 +280,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       /**
         *  changes are made to current project
       */
-      const result = dialog.showMessageBoxSync(null, {
-        type: 'warning',
-        message: 'Do you want to save the changes?',
-        title: 'Save project?',
-        buttons: ['Yes', 'No', 'Cancel'], // Yes returns 0, No returns 1, Cancel returns 2
-      });
+      const result = saveChangesDialog();
 
       if (result === 0) {
         validation();
@@ -346,22 +378,7 @@ const loadXMLFile = (win, filePath) => {
   * @param {string} win Browser window
 */
 const loadFile = (win) => {
-  const options = {
-    title: 'Open file - Electron ISRA Project',
-    buttonLabel: 'Open File',
-    filters: [
-      { name: 'JSON/XML', extensions: ['json', 'xml'] },
-    ],
-  };
-  const filePathArr = dialog.showOpenDialogSync(options);
-
-  if (filePathArr !== undefined) {
-    const filePath = filePathArr[0];
-    const fileType = filePath.split('.').pop();
-
-    if (fileType === 'json') loadJSONFile(win, filePath);
-    else loadXMLFile(win, filePath);
-  }
+  validationErrors('Load File');
 };
 
 const downloadReport = async (app) => {
