@@ -51,7 +51,7 @@ function updateBusinessAssetName(id, field){
         const id = cell.getRow().getIndex();
         if (id) {
           return `
-            <textarea id="${id}" rows="4" cols="7" name="businessAssetName" onchange="updateBusinessAssetName(${id}, 'businessAssetName')">${businessAssetName}</textarea>
+            <textarea id="${id}" rows="4" cols="16" name="businessAssetName" onchange="updateBusinessAssetName(${id}, 'businessAssetName')">${businessAssetName}</textarea>
           `;
         }
       };

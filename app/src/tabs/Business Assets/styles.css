@@ -53,4 +53,10 @@ div[class='content active'] {
     background-color: #f8f4f4;;
 }
 
+.tabulator .tabulator-header {
+    font-size: smaller;
+}
 
+/* .tabulator .tabulator-col-content:first-of-type .tabulator-col-title:first-of-type {
+    font-size: small;
+} */

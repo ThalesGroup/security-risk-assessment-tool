@@ -42,10 +42,10 @@
                     "7"
                 ],
                 "supportingAssetsCount": [
-                    "5"
+                    "6"
                 ],
                 "risksCount": [
-                    "14"
+                    "15"
                 ],
                 "vulnerabilitiesCount": [
                     "52"
@@ -353,6 +353,30 @@
                     {
                         "$": {
                             "businessAssetRef": "3"
+                        }
+                    }
+                ]
+            },
+            {
+                "supportingAssetId": [
+                    "5"
+                ],
+                "supportingAssetHLDId": [
+                    ""
+                ],
+                "supportingAssetName": [
+                    ""
+                ],
+                "supportingAssetType": [
+                    ""
+                ],
+                "supportingAssetSecurityLevel": [
+                    "-1"
+                ],
+                "supportingAndBusinessAssetLink": [
+                    {
+                        "$": {
+                            "businessAssetRef": ""
                         }
                     }
                 ]
@@ -1983,6 +2007,207 @@
                 ],
                 "allAttackPathsName": [
                     " AND "
+                ],
+                "allAttackPathsScore": [
+                    ""
+                ],
+                "inherentRiskScore": [
+                    "0"
+                ],
+                "Mitigation": [
+                    {
+                        "description": [
+                            ""
+                        ],
+                        "benefits": [
+                            "0"
+                        ],
+                        "cost": [
+                            ""
+                        ],
+                        "mitigationDecision": [
+                            {
+                                "decision": [
+                                    ""
+                                ],
+                                "decisionDetail": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "mitigationsBenefits": [
+                    "1"
+                ],
+                "mitigationsDoneBenefits": [
+                    "1"
+                ],
+                "mitigatedRiskScore": [
+                    "0"
+                ],
+                "riskManagementDecision": [
+                    ""
+                ],
+                "riskManagementDetail": [
+                    ""
+                ],
+                "residualRiskScore": [
+                    "0"
+                ],
+                "residualRiskLevel": [
+                    "Low"
+                ]
+            },
+            {
+                "projectName": [
+                    "Sample Mobile Application :)"
+                ],
+                "projectVersion": [
+                    "1.0"
+                ],
+                "riskId": [
+                    "14"
+                ],
+                "riskName": [
+                    "As a , I can  the  compromising the  in order to "
+                ],
+                "threatAgent": [
+                    ""
+                ],
+                "threatAgentDetail": [
+                    ""
+                ],
+                "threatVerb": [
+                    ""
+                ],
+                "threatVerbDetail": [
+                    ""
+                ],
+                "motivation": [
+                    ""
+                ],
+                "motivationDetail": [
+                    ""
+                ],
+                "businessAssetRef": [
+                    ""
+                ],
+                "supportingAssetRef": [
+                    ""
+                ],
+                "RiskName": [
+                    {
+                        "ComputedRiskName": [
+                            {
+                                "computedRiskName": [
+                                    "As a , I can  the  compromising the  in order to "
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "ImpactRiskEvaluation": [
+                    {
+                        "riskImpact": [
+                            ""
+                        ],
+                        "BusinessAssetSelectedProperties": [
+                            {
+                                "businessAssetConfidentialityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetIntegrityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAvailabilityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthenticityFlag": [
+                                    "1"
+                                ],
+                                "businessAssetAuthorizationFlag": [
+                                    "1"
+                                ],
+                                "businessAssetNonRepudiationFlag": [
+                                    "1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "LikelihoodRiskEvaluation": [
+                    {
+                        "riskLikelihood": [
+                            "3"
+                        ],
+                        "riskLikelihoodDetail": [
+                            ""
+                        ],
+                        "LikelihoodRiskEvaluationMethod": [
+                            {
+                                "OWASPLikelihoodEvaluation": [
+                                    {
+                                        "ThreatFactor": [
+                                            {
+                                                "skillLevel": [
+                                                    ""
+                                                ],
+                                                "reward": [
+                                                    ""
+                                                ],
+                                                "accessResources": [
+                                                    ""
+                                                ],
+                                                "size": [
+                                                    ""
+                                                ],
+                                                "intrusionDetection": [
+                                                    ""
+                                                ]
+                                            }
+                                        ],
+                                        "threatFactorScore": [
+                                            ""
+                                        ],
+                                        "threatFactorLevel": [
+                                            ""
+                                        ],
+                                        "occurrence": [
+                                            ""
+                                        ],
+                                        "occurrenceLevel": [
+                                            ""
+                                        ],
+                                        "OWASPLikelihoodScore": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "VulnerabilityRiskEvaluation": [
+                    {
+                        "vulnerabilityRef": [
+                            {
+                                "$": {
+                                    "score": "",
+                                    "name": ""
+                                }
+                            }
+                        ],
+                        "attackPathName": [
+                            ""
+                        ],
+                        "attackPathScore": [
+                            ""
+                        ]
+                    }
+                ],
+                "allAttackPathsName": [
+                    ""
                 ],
                 "allAttackPathsScore": [
                     ""
