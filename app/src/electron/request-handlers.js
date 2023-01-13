@@ -527,7 +527,6 @@ const projectContextAttachmentOptions = () => {
       } catch (err) {
         console.log(err);
         israProject.israProjectContext.projectDescriptionAttachment = '';
-        israProject.israProjectContext.useNewDecode = true;
         dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
         getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
       }
@@ -567,14 +566,13 @@ ipcMain.on('projectContext:attachment', () => {
 
 ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   try {
-    const [fileName, base64data] = decodeFile(base64, israProject.israProjectContext);
+    const [fileName, base64data] = decodeFile(base64);
     projectContextFileName = fileName;
     israProject.israProjectContext.projectDescriptionAttachment = base64data;
     return projectContextFileName;
   } catch (err) {
     console.log(err);
     israProject.israProjectContext.projectDescriptionAttachment = '';
-    israProject.israProjectContext.useNewDecode = true;
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
     return 'Click here to attach a file';
   }
@@ -706,7 +704,6 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         console.log(err);
         const fileName = 'Click here to attach a file';
         israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
-        israProject.getVulnerability(id).useNewDecode = true;
         dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
         getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
       }
@@ -750,13 +747,12 @@ ipcMain.on('vulnerabilities:attachment', (event, id) => {
 ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => {
   try {
     const vulnerability = israProject.getVulnerability(id);
-    const [fileName, base64data] = decodeFile(base64, vulnerability);
+    const [fileName, base64data] = decodeFile(base64);
     vulnerability.vulnerabilityDescriptionAttachment = base64data;
     return fileName;
   } catch (err) {
     console.log(err);
     israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
-    israProject.getVulnerability(id).useNewDecode = true;
     dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
     return 'Click here to attach a file';
   }
