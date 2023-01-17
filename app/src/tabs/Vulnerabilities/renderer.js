@@ -138,7 +138,9 @@
         $('#vulnerability__CVE').val(vulnerabilityCVE);
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
-        $('#vulnerability__scoring').val(cveScore);
+        if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 9) {
+            $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(9));
+        }else $('#vulnerability__scoring').val(cveScore);
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
 
         $('#vulnerability__level').removeClass();
@@ -406,13 +408,17 @@
     });
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
-        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
+        const { value } = e.target;
+        if (value.length !== 1 && value.split('.')[1].length > 9) {
+            $('#vulnerability__scoring').val(Number.parseFloat(value).toFixed(9)); 
+        };
+        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', value);
         const { overallLevel, cveScore } = vulnerability;
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
         styleTable(getCurrentVulnerabilityId(), overallLevel);
-        validateCVEScore(e.target.value);
+        validateCVEScore(value);
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
     });
 
