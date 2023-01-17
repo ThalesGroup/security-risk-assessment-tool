@@ -139,6 +139,7 @@
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         $('#vulnerability__scoring').val(cveScore);
+        $('#vulnerability__scoring__round').text(Math.round(cveScore));
 
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
@@ -406,12 +407,13 @@
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', e.target.value);
-        const { overallLevel } = vulnerability;
+        const { overallLevel, cveScore } = vulnerability;
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
         styleTable(getCurrentVulnerabilityId(), overallLevel);
         validateCVEScore(e.target.value);
+        $('#vulnerability__scoring__round').text(Math.round(cveScore));
     });
 
     $('input[name="vulnerability__trackingID"]').on('change', (e)=> {
