@@ -69,7 +69,7 @@
         $(document).ready(function () {
             window.project.load(async (event, data) => {
                 const { Vulnerability, Risk, ISRAmeta } = await JSON.parse(data);
-                const { projectName, projectVersion, appVersion, iteration } = ISRAmeta;
+                const { projectName, projectVersion, iteration } = ISRAmeta;
                 const sortedVulnerability = {
                     high: [],
                     medium: [],
@@ -85,7 +85,7 @@
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
-                $('#app').text(appVersion);
+                $('#app').text('1.0.0');
                 $('#iteration').text(iteration);
 
                 let totalCost = 0;

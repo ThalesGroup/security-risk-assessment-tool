@@ -1237,3 +1237,7 @@
     alert('Failed to load Risks Tab: ' + err);
   }
 })();
+
+// window.onload = setTimeout(function () {
+//   alert('This is an alert');
+// }, 3000);

@@ -150,10 +150,12 @@ const saveAs = async () => {
   * override data in existing json file (save)
 */
 const save = () => {
-  israProject.iteration += 1;
-  getMainWindow().webContents.send('project:iteration', israProject.iteration);
-  savetoPath(jsonFilePath);
-  // getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
+  if (israProject.toJSON() !== oldIsraProject){
+    israProject.iteration += 1;
+    getMainWindow().webContents.send('project:iteration', israProject.iteration);
+    savetoPath(jsonFilePath);
+    // getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
+  }
 };
 
 /**
@@ -395,12 +397,40 @@ const downloadReport = async (app) => {
     const fileName = await dialog.showSaveDialog(options);
     if (!fileName.canceled) {
       const { filePath } = fileName;
+
+      const cssHeader = [], cssFooter = [];
+      cssHeader.push('<style>');
+      cssHeader.push('div { margin: 0px; padding: 0px; display: flex; justify-content: center; }');
+      cssHeader.push('header { font-size:8px; font-weight:normal; }');
+      cssHeader.push('</style>');
+      const cssH = cssHeader.join('');
+
+      cssFooter.push('<style>');
+      cssFooter.push('h1 { font-weight: bold; font-size: 8px; color:rgb(255, 141, 0); text-align: center; margin: 0px; }');
+      cssFooter.push('h2 { font-size:8px; font-weight:normal; margin: 0px; }');
+      cssFooter.push('</style>');
+      const cssF = cssFooter.join('');
+      
+      let name = '';
+      const { projectName } = israProject;
+      const { classification } = jsonSchema;
+      if (projectName === '') name = 'Project';
+      else name = projectName;
+
       const pdfOptions = {
-        marginsType: 0,
         pageSize: 'A4',
         printBackground: true,
         printSelectionOnly: true,
-        landscape: false
+        landscape: false,
+        displayHeaderFooter: true,
+        headerTemplate: cssH + `<div><header>ISRA Report - ${projectName === '' ? '[Project Name]' : projectName}<header/></div>`,
+        footerTemplate: cssF + 
+        `<div>
+            <h1>${classification.substring(0, classification.indexOf('{') + 1) + name + classification[classification.length - 1]}</h1><br>
+            <h2><span class="pageNumber"></span>/<span class="totalPages"></span></h2>
+        </div>
+       `,
+        marginBottom: 100  
       };
 
       let win = new BrowserWindow({

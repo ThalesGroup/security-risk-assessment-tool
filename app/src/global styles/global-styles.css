@@ -116,10 +116,6 @@ footer{
     color: rgb(255, 141, 0);
 }
 
-/* footer::before{
-    content: "THALES GROUP CONFIDENTIAL {PROJECT}";
-} */
-
 header {
     text-align: center;
     font-size: 24px;
