@@ -140,7 +140,7 @@
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 9) {
             $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(9));
-        }else $('#vulnerability__scoring').val(cveScore);
+        } else $('#vulnerability__scoring').val(cveScore);
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
 
         $('#vulnerability__level').removeClass();
@@ -164,7 +164,7 @@
         if(isVulnerabilityExist){
             const vulnerabilities = await window.validate.vulnerabilities(vulnerability);
             vulnerabilitiesData = vulnerabilities;
-        }  
+        };  
     };
 
     vulnerabilitiesTable.on("rowDeselected", (row) => {

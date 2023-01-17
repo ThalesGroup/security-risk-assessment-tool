@@ -383,6 +383,11 @@ const loadFile = (win) => {
   validationErrors('Load File');
 };
 
+/**
+  * Download pdf file to selected path
+  * @module downloadReport
+  * @param {App} app Curent Application
+*/
 const downloadReport = async (app) => {
   try{
     const options = {
