@@ -401,13 +401,13 @@ const downloadReport = async (app) => {
       const cssHeader = [], cssFooter = [];
       cssHeader.push('<style>');
       cssHeader.push('div { margin: 0px; padding: 0px; display: flex; justify-content: center; }');
-      cssHeader.push('header { font-size:8px; font-weight:normal; }');
+      cssHeader.push('header { font-size:11px; font-weight:normal; }');
       cssHeader.push('</style>');
       const cssH = cssHeader.join('');
 
       cssFooter.push('<style>');
-      cssFooter.push('h1 { font-weight: bold; font-size: 8px; color:rgb(255, 141, 0); text-align: center; margin: 0px; }');
-      cssFooter.push('h2 { font-size:8px; font-weight:normal; margin: 0px; }');
+      cssFooter.push('h1 { font-weight: bold; font-size: 11px; color:rgb(255, 141, 0); text-align: center; margin: 0px; }');
+      cssFooter.push('h2 { font-size:11px; font-weight:normal; margin: 0px; }');
       cssFooter.push('</style>');
       const cssF = cssFooter.join('');
       
@@ -427,10 +427,16 @@ const downloadReport = async (app) => {
         footerTemplate: cssF + 
         `<div>
             <h1>${classification.substring(0, classification.indexOf('{') + 1) + name + classification[classification.length - 1]}</h1><br>
-            <h2><span class="pageNumber"></span>/<span class="totalPages"></span></h2>
+            <h2 style="position: absolute; left: 10px; "><span class="pageNumber"></span>/<span class="totalPages"></span></h2>
         </div>
-       `,
-        marginBottom: 100  
+       `, 
+       // in inches (1 inch = 2.54 cm)
+        margins: {
+          top: 0.5,
+          bottom: 0.5,
+          // right: 0,
+          // left: 0
+        } 
       };
 
       let win = new BrowserWindow({
