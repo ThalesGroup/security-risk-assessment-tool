@@ -43,3 +43,11 @@ html {
 .subheading:first-of-type {
     color: #944538;
 }
+
+ /* .tabulator-row .tabulator-cell a {
+     white-space: pre-wrap;
+ } */
+
+ .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
+     white-space: normal !important;
+ }
