@@ -53,7 +53,7 @@
             const filterOptions = [
                 [
                     { field: "vulnerabilityId", type: "like", value: value },
-                    { field: "projectVersionRef", type: "like", value: value },
+                    { field: "projectVersion", type: "like", value: value },
                     { field: "vulnerabilityName", type: "like", value: value },
                     { field: "overallLevel", type: "like", value: value },
                 ]

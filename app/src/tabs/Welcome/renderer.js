@@ -148,7 +148,7 @@
 
     $('input[id="welcome__isra-meta--project-name"]').on('change', async(e) => {
       const { value } = e.target;
-      await window.welcome.updateProjectNameAndVersionRef('projectNameRef', value);
+      await window.welcome.updateProjectNameAndVersionRef('projectName', value);
       if (value === '') $('footer').text(classificationLabel);
       else $('footer').text(classificationLabel.substring(0, classificationLabel.indexOf('{') + 1) + value + classificationLabel[classificationLabel.length - 1]);
 
@@ -156,7 +156,7 @@
 
     $('input[id="welcome__isra-meta--project-version"]').on('change', async (e) => {
       const { value } = e.target;
-      await window.welcome.updateProjectNameAndVersionRef('projectVersionRef', value);
+      await window.welcome.updateProjectNameAndVersionRef('projectVersion', value);
     });
   } catch (err) {
     alert('Failed to load welcome tab');

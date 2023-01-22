@@ -55,7 +55,7 @@
         const filterOptions = [
           [
             { field: "riskId", type: "like", value: value },
-            { field: "projectVersionRef", type: "like", value: value },
+            { field: "projectVersion", type: "like", value: value },
             { field: "riskName", type: "like", value: value },
             { field: "residualRiskLevel", type: "like", value: value },
             { field: "riskManagementDecision", type: "like", value: value },
@@ -736,11 +736,11 @@
       $('input[id="filter-value"]').val('');
       if (risksData.length > 0) $('#risks section').show();
 
-      const { riskId, projectVersionRef, residualRiskLevel, riskName, riskManagementDecision } = risk;
+      const { riskId, projectVersion, residualRiskLevel, riskName, riskManagementDecision } = risk;
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       const tableData = {
         riskId,
-        projectVersionRef,
+        projectVersion,
         riskName: riskName.riskName,
         residualRiskLevel,
         riskManagementDecision
