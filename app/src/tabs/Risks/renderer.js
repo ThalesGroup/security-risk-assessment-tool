@@ -407,7 +407,7 @@
     // add Mitigation evaluation section
     const addMitigationSection = (riskMitigations, riskManagementDecision)=> {
       riskMitigations.forEach(async (mitigation)=> {
-        const { description, benefits, cost, decision, decisionDetail, riskMitigationId, riskIdRef } = mitigation;
+        const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
         const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
 
         const mainSection = $('<section>');
@@ -440,7 +440,7 @@
         securityControlDescSection.css('padding', '5px');
         const textArea1 = $('<textArea>');
         textArea1.attr('class', 'rich-text');
-        textArea1.attr('id', `security__control__desc__rich-text__${riskIdRef}__${riskMitigationId}`);
+        textArea1.attr('id', `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`);
         textArea1.attr('name', `security__control__desc__rich-text__${riskMitigationId}`);
         securityControlDescSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Security control Description</p>');
         securityControlDescSection.append(textArea1);
@@ -449,7 +449,7 @@
         section.append(topSection);
         mainSection.append(section);
         mitigationSections.append(mainSection);
-        addRichTextArea(`#security__control__desc__rich-text__${riskIdRef}__${riskMitigationId}`, description, '100%', riskMitigationId);
+        addRichTextArea(`#security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, description, '100%', riskMitigationId);
 
         // expected benefits
         const benefitsSection = $('<section>');
@@ -482,7 +482,7 @@
           input.on('change', async (e)=> {
             const { value } = e.target;
             await validatePreviousRisk(getCurrentRiskId());
-            const risk = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'benefits', Number(value));
+            const risk = await window.risks.updateRiskMitigation(getCurrentRiskId(), riskMitigationId, 'benefits', Number(value));
             updateScoresAndLevel(risk);
             // reloadCurrentRisk(risk);
           })
@@ -559,7 +559,7 @@
           input.on('change', async (e) => {
             const { value } = e.target;
             await validatePreviousRisk(getCurrentRiskId());
-            const risk = await window.risks.updateRiskMitigation(riskIdRef, riskMitigationId, 'decision', value);
+            const risk = await window.risks.updateRiskMitigation(getCurrentRiskId(), riskMitigationId, 'decision', value);
             updateScoresAndLevel(risk);
             // reloadCurrentRisk(risk);
           })
@@ -576,7 +576,7 @@
 
         const textArea2 = $('<textArea>');
         textArea2.attr('class', 'rich-text');
-        textArea2.attr('id', `comment__desc__rich-text__${riskIdRef}__${riskMitigationId}`);
+        textArea2.attr('id', `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`);
         textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
         decisionSection.append(textArea2);
 
@@ -584,7 +584,7 @@
         section.append(bottomSection);
         mainSection.append(section);
         mitigationSections.append(mainSection);
-        addRichTextArea(`#comment__desc__rich-text__${riskIdRef}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
+        addRichTextArea(`#comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
       });
     };
 
