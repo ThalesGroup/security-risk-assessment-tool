@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?mso-infoPathSolution PIVersion="1.0.0.0" name="urn:schemas-microsoft-com:office:infopath:ISRA:-myXSD-2015-02-04T09-20-12" solutionVersion="1.0.0.2065" href="https://vaultshare.gemalto.com/sites/isra/ISRA/Forms/template.xsn" productVersion="15.0.0" ?><?mso-application progid="InfoPath.Document" versionProgid="InfoPath.Document.3"?><?mso-infoPath-file-attachment-present?><my:ISRA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:pc="http://schemas.microsoft.com/office/infopath/2007/PartnerControls" xmlns:my="http://schemas.microsoft.com/office/infopath/2003/myXSD/2015-02-04T09:20:12" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003" xml:lang="en-us">
+<?xml version="1.0" encoding="UTF-8"?><?mso-infoPathSolution PIVersion="1.0.0.0" name="urn:schemas-microsoft-com:office:infopath:ISRA:-myXSD-2015-02-04T09-20-12" solutionVersion="1.0.0.2065" productVersion="14.0.0" href="https://vaultshare.gemalto.com/sites/isra/ISRA/Forms/template.xsn" ?><?mso-application progid="InfoPath.Document" versionProgid="InfoPath.Document.3"?><?mso-infoPath-file-attachment-present?><my:ISRA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:pc="http://schemas.microsoft.com/office/infopath/2007/PartnerControls" xmlns:my="http://schemas.microsoft.com/office/infopath/2003/myXSD/2015-02-04T09:20:12" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003" xml:lang="en-us">
 <my:ISRAmeta>
 	<my:templateVersion>44</my:templateVersion>
 	<my:projectName>Sample Mobile Application</my:projectName>
@@ -129,9 +129,9 @@
 								</my:SupportingAsset>
 								<my:Risk><my:projectName>Sample Mobile Application</my:projectName>
 									<my:projectVersion>1.0</my:projectVersion>
-									<my:riskId></my:riskId>
-									<my:riskName>As a Operationnal Employee, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:riskName>
-									<my:threatAgent>Operationnal Employee</my:threatAgent>
+									<my:riskId>1</my:riskId>
+									<my:riskName>As a Activist, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:riskName>
+									<my:threatAgent>Activist</my:threatAgent>
 									<my:threatAgentDetail><div xmlns="http://www.w3.org/1999/xhtml">fddh</div>
 <div xmlns="http://www.w3.org/1999/xhtml">fh</div></my:threatAgentDetail>
 									<my:threatVerb>steal</my:threatVerb>
@@ -144,7 +144,7 @@
 									<my:supportingAssetRef>2</my:supportingAssetRef>
 									<my:RiskName>
 										<my:ComputedRiskName>
-									<my:computedRiskName>As a Operationnal Employee, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:computedRiskName>
+									<my:computedRiskName>As a Activist, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:computedRiskName>
 								</my:ComputedRiskName>
 									</my:RiskName>
 									<my:ImpactRiskEvaluation>
@@ -270,7 +270,7 @@
 								</my:Risk><my:Risk>
 									<my:projectName>Sample Mobile Application</my:projectName>
 									<my:projectVersion>1.0</my:projectVersion>
-									<my:riskId>2</my:riskId>
+									<my:riskId>3</my:riskId>
 									<my:riskName>As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack</my:riskName>
 									<my:threatAgent>Criminal</my:threatAgent>
 									<my:threatAgentDetail></my:threatAgentDetail>

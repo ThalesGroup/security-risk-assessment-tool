@@ -1,6 +1,5 @@
 {
     "ISRAmeta": {
-        "appVersion": 1,
         "iteration": 1,
         "projectName": "",
         "projectOrganization": "",
@@ -9,7 +8,11 @@
         "businessAssetsCount": 0,
         "supportingAssetsCount": 0,
         "risksCount": 0,
-        "vulnerabilitiesCount": 0
+        "vulnerabilitiesCount": 0,
+        "latestBusinessAssetId": null,
+        "latestSupportingAssetId": null,
+        "latestRiskId": null,
+        "latestVulnerabilityId": null
     },
     "ProjectContext": {
         "projectDescription": "",
@@ -17,8 +20,7 @@
         "projectDescriptionAttachment": "",
         "securityProjectObjectives": "",
         "securityOfficerObjectives": "",
-        "securityAssumptions": "",
-        "useNewDecode": true
+        "securityAssumptions": ""
     },
     "BusinessAsset": [],
     "SupportingAssetsDesc": "",
