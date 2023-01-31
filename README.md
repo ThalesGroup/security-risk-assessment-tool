@@ -14,15 +14,16 @@ Each Thales OSS project repository **MUST** contain the following files at the r
 
 Below is an example of the common structure and information expected in a README.
 
-**Please keep this structure as is and only fill the content for each section according to your project.**
-
-If you need assistance or have question, please contact oss@thalesgroup.com 
-
-
 
 ## Get started
 
-The ISRA software-risk-assessment-tool project is an Electron application created based on the current ISRA risk assessment tool using InfoPath
+The ISRA software-risk-assessment-tool project is an Electron based application used internally in Thales to evaluate security risks of engineering projects. 
+
+It permits to define the primary assets, called the business assets, the associated supporting assets, the threat agents, the vulnerabilities and calculate associated risks ad potential risk treatment options. This process is fully compliant with ISO 27005 risk management standard.
+
+Just download the zip file for your platform and unzip it and executre sratool or SRATool, depending on your platform.
+
+
 
 ### Prerequisites ###
 
