@@ -406,13 +406,13 @@ const downloadReport = async (app) => {
       const cssHeader = [], cssFooter = [];
       cssHeader.push('<style>');
       cssHeader.push('div { margin: 0px; padding: 0px; display: flex; justify-content: center; }');
-      cssHeader.push('header { font-size:11px; font-weight:normal; }');
+      cssHeader.push('header { font-size:11px; font-weight:normal; font-family: Arial, Helvetica, sans-serif; }');
       cssHeader.push('</style>');
       const cssH = cssHeader.join('');
 
       cssFooter.push('<style>');
-      cssFooter.push('h1 { font-weight: bold; font-size: 11px; color:rgb(255, 141, 0); text-align: center; margin: 0px; }');
-      cssFooter.push('h2 { font-size:11px; font-weight:normal; margin: 0px; }');
+      cssFooter.push('h1 { font-weight: bold; font-size: 11px; color:rgb(255, 141, 0); text-align: center; margin: 0px; font-family: Arial, Helvetica, sans-serif; }');
+      cssFooter.push('h2 { font-size:11px; font-weight:normal; margin: 0px; font-family: Arial, Helvetica, sans-serif; }');
       cssFooter.push('</style>');
       const cssF = cssFooter.join('');
       
