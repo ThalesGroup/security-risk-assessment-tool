@@ -1,10 +1,11 @@
 # Security Risk Assessment tool
 
-The ISRA software-risk-assessment-tool project is an Electron based application used internally in Thales to evaluate security risks of engineering projects. 
+The ISRA or Security risk ssessment tool project is an Electron based application used internally in Thales DIS to evaluate security risks of engineering projects. 
 
 It permits to define the primary assets, called the business assets, the associated supporting assets, the threat agents, the vulnerabilities and calculate associated risks ad potential risk treatment options. This process is fully compliant with ISO 27005 risk management standard.
 
-Just download the zip file for your platform and unzip it and executre sratool or SRATool, depending on your platform.
+Just download the zip file for your platform and unzip it and executre sratool or SRATool, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs, especially the `Organization`property.
+
 
 # Development information
 
