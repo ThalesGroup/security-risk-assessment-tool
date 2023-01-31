@@ -1,21 +1,4 @@
-# Thales Open Source Template Project
-
-Template for creating a new project in the [Thales GitHub organization](https://github.com/ThalesGroup). 
-
-Each Thales OSS project repository **MUST** contain the following files at the root:
-
-- a `LICENSE` which has been chosen in accordance with legal department depending on your needs 
-
-- a `README.md` outlining the project goals, sponsoring sig, and community contact information, [GitHub tips about README.md](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-readmes)
-
-- a `CONTRIBUTING.md` outlining how to contribute to the project, how to submit a pull request and an issue
-
-- a `SECURITY.md` outlining how the security concerns are handled, [GitHub tips about SECURITY.md](https://docs.github.com/en/github/managing-security-vulnerabilities/adding-a-security-policy-to-your-repository)
-
-Below is an example of the common structure and information expected in a README.
-
-
-## Get started
+# Security Risk Assessment tool
 
 The ISRA software-risk-assessment-tool project is an Electron based application used internally in Thales to evaluate security risks of engineering projects. 
 
@@ -23,15 +6,15 @@ It permits to define the primary assets, called the business assets, the associa
 
 Just download the zip file for your platform and unzip it and executre sratool or SRATool, depending on your platform.
 
+# Development information
 
-
-### Prerequisites ###
+# Prerequisites ##
 
 To install and use the tool, the following prerequisites are required:
 
 1. [Node.js](https://nodejs.org/en/) (required for Electron, recommended to download the latest LTS version available)
 
-### Developer installation ###
+## Developer installation ##
 
 1. Clone repository
 ```
@@ -48,7 +31,7 @@ app:
 npm start
 ```
 
-### Test ###
+## Test ##
 
 Executes all test files within test folder in lib
 
@@ -56,7 +39,7 @@ Executes all test files within test folder in lib
 npm run test
 ```
 
-### API documentation ###
+## API documentation ##
 
 Generate api documentation for lib
 
@@ -64,9 +47,9 @@ Generate api documentation for lib
 npm run jsdoc
 ```
 
-### Package and distribute ###
+## Package and distribute ##
 
-#### Manual distribution ####
+### Manual distribution ###
 
 [With prebuilt binaries](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-prebuilt-binaries)
 
