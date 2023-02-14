@@ -17,14 +17,16 @@
                 "from": "../lib",
                 "to": "lib",
                 "filter": [
-                    "**/*"
+                    "**/*",
+                    "!**/node_modules/.bin"
                 ]
             }
         ],
         "mac": {
+            "mergeASARs" : false,
             "category": "public.app-category.business",
             "target": [ 
-                { 
+                {
                     "target" : "7z",
                     "arch" : "x64"
                 },
