@@ -8,7 +8,7 @@
     "scripts": {
         "start": "electron .",
         "pack": "electron-builder --dir",
-        "dist": "electron-builder"
+        "dist": "electron-builder",
         "dist-all": "electron-builder -mwl"
     },
 
@@ -31,7 +31,7 @@
         "linux": {
             "target": "tar.gz"
         },
-        "appId": "com.thalesgroup.dis.sratool",
+        "appId": "com.thalesgroup.dis.sratool"
     },
     "postinstall": "electron-builder install-app-deps",
 
