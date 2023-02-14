@@ -23,13 +23,32 @@
         ],
         "mac": {
             "category": "public.app-category.business",
-            "target": "7z"
+            "target": [ 
+                { 
+                    "target" : "7z",
+                    "arch" : "x64"
+                },
+                {
+                    "target" : "7z",
+                    "arch" : "arm64"
+                }
+             ]
         },
         "win": {
-            "target": "zip"
+            "target": [
+                {
+                    "target" : "7z",
+                    "arch" : "x64"
+                }
+            ]
         },
         "linux": {
-            "target": "tar.gz"
+            "target" : [
+                {
+                    "target": "tar.gz",
+                    "arch" : "x64"
+                }
+            ]
         },
         "appId": "com.thalesgroup.dis.sratool"
     },
