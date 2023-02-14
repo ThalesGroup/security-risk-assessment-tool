@@ -4,7 +4,7 @@ The ISRA or Security risk assessment tool project is an Electron based applicati
 
 It permits to define the primary assets, called the business assets, the associated supporting assets, the threat agents, the vulnerabilities and calculate associated risks ad potential risk treatment options. This process is fully compliant with ISO 27005 risk management standard.
 
-Just download the zip file for your platform and unzip it and executre `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs, especially the `Organization`property.
+Just download the zip file for your platform and unzip it and executre `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
 
 
 # Development information
@@ -48,34 +48,42 @@ Generate api documentation for lib
 npm run jsdoc
 ```
 
-## Package and distribute ##
+## Packaging and distribution ##
 
-### Manual distribution ###
+The packaging for distribution uses `electron-builder`. 
 
-[With prebuilt binaries](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-prebuilt-binaries)
+### Prerequisites
 
-1. [Download](https://github.com/electron/electron/releases) Electron prebuilt binaries zip file
-    * (Window) electron-vXX.X.X-win32-x64.zip
-    * (MacOs) electron-vXX.X.X-darwin-x64.zip
-    * (Linux) electron-vXX.X.X-linux-x64.zip
-2. Open 'resources' folder in zip file
-3. Delete 'default_app.asar'
-4. Copy your code, including modules, into 'resources' folder
-5. Execute `Electron.app` on macOS, `electron` on Linux, or `electron.exe` on Windows, and Electron will start as your app. The electron directory will then be your distribution to deliver to users.
+You need to have prepared your development environment beforehand by following the developer installation steps. You also need to ensure that the directory  `dist` under `app` does not exist.
 
-[With an app source code archive](https://www.electronjs.org/docs/latest/tutorial/application-distribution#with-an-app-source-code-archive)
+You then need to run in the `app` directory the following command:
 
-Rename archive to 'app.asar'
+``` 
+npm install electron-builder
+```
+
+To create packages for linux, MacOS and Windows, you must create the packages on an Apple Mac machine, otherwise only the host platform target will be created.
+
+### Packaging
+
+To create the packages for the host platform, you can run from the `app` directory:
+
+``` 
+npm run dist
+```
+For all platform packaging, from the `app` directory, run :
+
+``` 
+npm run dist-all
+```
+
+The output files should find themselves in the `dist` directory.
+
 
 ## Documentation
 
 Documentation for lib is available at [lib/doc/index.html](lib/doc/index.html).
 
-You can use [GitHub pages](https://guides.github.com/features/pages/) to create your documentation.
-
-See an example here : https://github.com/ThalesGroup/ThalesGroup.github.io
-
-**Please also add the documentation URL into the About section (Website field)**
 
 ## Contributing
 
