@@ -1,22 +1,50 @@
 {
-  "name": "isra-web-app",
-  "version": "1.0.0",
-  "description": "Web-based application of ISRA (app)",
-  "main": "./src/electron/main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "author": "ThalesDIS",
-  "license": "Apache-2.0 License",
-  "dependencies": {
-    "jquery": "^3.6.1",
-    "tabulator-tables": "^5.3.4",
-    "tinymce": "^6.2.0"
-  },
-  "devDependencies": {
-    "electron": "^22.0.0"
-  },
-  "overrides": {
-    "got": "^11.8.5"
-  }
+    "name": "sratool",
+    "version": "1.0.0",
+    "author": "Thales DIS",
+    "license": "BSD-4-Clause",
+    "description": "Security Risk Assessment tool",
+    "main": "./src/electron/main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder"
+        "dist-all": "electron-builder -mwl"
+    },
+
+    "build": {
+        "extraResources": [{
+                "from": "../lib",
+                "to": "lib",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "mac": {
+            "category": "public.app-category.business",
+            "target": "7z"
+        },
+        "win": {
+            "target": "zip"
+        },
+        "linux": {
+            "target": "tar.gz"
+        },
+        "appId": "com.thalesgroup.dis.sratool",
+    },
+    "postinstall": "electron-builder install-app-deps",
+
+    "dependencies": {
+        "jquery": "^3.6.1",
+        "tabulator-tables": "^5.3.4",
+        "tinymce": "^6.2.0"
+    },
+    "devDependencies": {
+        "electron-builder": "^23.6.0",
+        "electron": "^22.0.0"
+    },
+    "overrides": {
+        "got": "^11.8.5"
+    }
 }
