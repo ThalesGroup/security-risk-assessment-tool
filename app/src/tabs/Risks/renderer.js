@@ -134,10 +134,11 @@
         vulnerabilityDiv.css('margin-bottom', '1%');
         vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`);
 
+        const checkboxRef = !ref.score ? null : '1';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.value = `${ref.vulnerabilityIdRef}`;
-        checkbox.id = `risks__vulnerability__checkboxes__${ref.vulnerabilityIdRef}`;
+        checkbox.value = `${checkboxRef}`;
+        checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
         checkbox.name = 'risks__vulnerability__checkboxes';
         checkbox.setAttribute('data-row-id', ref.rowId);
         vulnerabilityDiv.append(checkbox);
@@ -146,7 +147,7 @@
         select.on('change', async (e)=> {
           const { value } = e.target;
           await validatePreviousRisk(getCurrentRiskId());
-          const risk = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'vulnerabilityIdRef', value);
+          const risk = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'selectedVulnerability', value);
           reloadCurrentRisk(risk);
           // if (id) setNaNValues(id);
           // else setNaNValues();
@@ -157,7 +158,8 @@
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
 
         div.append(vulnerabilityDiv);
-        select.val(!ref.vulnerabilityIdRef ? '' : ref.vulnerabilityIdRef);
+        const selectedOption = select.find(`option:contains(${ref.name})`)
+        select.val(selectedOption.val());
       });
     };
 
@@ -213,6 +215,7 @@
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
+          console.log('Triggered add vulref button')
           await validatePreviousRisk(getCurrentRiskId());
           const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
           reloadCurrentRisk(risk);
@@ -702,7 +705,8 @@
       riskAttackPaths.forEach((path) => {
         const { vulnerabilityRef, riskAttackPathId } = path;
         for(let i=0; i<vulnerabilityRef.length; i++){
-          if (vulnerabilityRef[i].vulnerabilityIdRef !== null && vulnerabilityRef[i].score === null) {
+          console.log(vulnerabilityRef)
+          if (vulnerabilityRef[i].name !== '' && vulnerabilityRef[i].score === null) {
             setNaNValues(riskAttackPathId);
             break;
           } else setNaNValues();
