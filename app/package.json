@@ -62,7 +62,7 @@
         "tinymce": "^6.2.0"
     },
     "devDependencies": {
-        "electron-builder": "^23.6.0",
+        "electron-builder": "^24.4.0",
         "electron": "^22.0.0"
     },
     "overrides": {
