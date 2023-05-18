@@ -69,7 +69,7 @@ const newISRAProject = (win, app) => {
     win.webContents.send('project:load', israProject.toJSON(), classification);
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(null, { message: 'Failed to create new project' });
+    dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
     app.quit();
   }
 };
@@ -105,22 +105,22 @@ const savetoPath = async (filePath, saveAs = false) => {
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
       oldIsraProject = israProject.toJSON();
-      dialog.showMessageBoxSync(null, { message: `Successfully saved form to ${filePath}` });
+      dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved form to ${filePath}` });
       if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
-      dialog.showMessageBoxSync(null, { message: `Error in saving form to ${filePath}` });
+      dialog.showMessageBoxSync(getMainWindow(), { message: `Error in saving form to ${filePath}` });
     }
   } else {
     // override data in existing json file (save)
     try {
       await DataStore(israProject, jsonFilePath);
       oldIsraProject = israProject.toJSON();
-      dialog.showMessageBoxSync(null, { message: 'Successfully saved form' });
+      dialog.showMessageBoxSync(getMainWindow(), { message: 'Successfully saved form' });
       if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
-      dialog.showMessageBoxSync(null, { message: 'Error in saving form' });
+      dialog.showMessageBoxSync(getMainWindow(), { message: 'Error in saving form' });
     }
   }
 }
@@ -218,7 +218,7 @@ const validateClasses = () => {
 */
 ipcMain.on('validate:allTabs', async (event, labelSelected) => {
   const saveChangesDialog = () => {
-    return dialog.showMessageBoxSync(null, {
+    return dialog.showMessageBoxSync(getMainWindow(), {
       type: 'warning',
       message: 'Do you want to save the changes?',
       title: 'Save project?',
@@ -253,7 +253,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
 
     if (validateClasses()) saveOrSaveAs();
     else {
-      const result = dialog.showMessageBoxSync(null, {
+      const result = dialog.showMessageBoxSync(getMainWindow(), {
         type: 'warning',
         message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
         title: 'Validation Errors',
@@ -352,7 +352,7 @@ const loadJSONFile = async (win, filePath) => {
     oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
   }
 };
 
@@ -370,7 +370,7 @@ const loadXMLFile = (win, filePath) => {
     getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
   }
 };
 
@@ -461,18 +461,18 @@ const downloadReport = async (app) => {
             if (err) {
               throw err; 
             } else {
-              dialog.showMessageBoxSync(null, { message: `Successfully saved current ISRA report to ${filePath}.` });
+              dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
             }
           });
         }).catch((err) => {
           console.log(err);
-          dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
+          dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
         });
       });
     }
   } catch(err){
     console.log(err);
-    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });
   }
 };
 
@@ -568,7 +568,7 @@ const projectContextAttachmentOptions = () => {
       } catch (err) {
         console.log(err);
         israProject.israProjectContext.projectDescriptionAttachment = '';
-        dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
+        dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
         getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
       }
     },
@@ -614,7 +614,7 @@ ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   } catch (err) {
     console.log(err);
     israProject.israProjectContext.projectDescriptionAttachment = '';
-    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
     return 'Click here to attach a file';
   }
 });
@@ -745,7 +745,7 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         console.log(err);
         const fileName = 'Click here to attach a file';
         israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
-        dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
+        dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
         getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
       }
     },
@@ -794,7 +794,7 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
   } catch (err) {
     console.log(err);
     israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
-    dialog.showMessageBoxSync(null, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
     return 'Click here to attach a file';
   }
 });
