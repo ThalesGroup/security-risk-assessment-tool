@@ -156,7 +156,6 @@
         let visibility = 'visible';
         if (refLength === 0) visibility = 'hidden';
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
-
         div.append(vulnerabilityDiv);
         const selectedOption = select.find(`option:contains(${ref.name})`)
         select.val(selectedOption.val());
@@ -215,7 +214,6 @@
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
-          console.log('Triggered add vulref button')
           await validatePreviousRisk(getCurrentRiskId());
           const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
           reloadCurrentRisk(risk);
@@ -705,7 +703,6 @@
       riskAttackPaths.forEach((path) => {
         const { vulnerabilityRef, riskAttackPathId } = path;
         for(let i=0; i<vulnerabilityRef.length; i++){
-          console.log(vulnerabilityRef)
           if (vulnerabilityRef[i].name !== '' && vulnerabilityRef[i].score === null) {
             setNaNValues(riskAttackPathId);
             break;
