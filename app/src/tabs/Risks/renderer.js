@@ -98,7 +98,7 @@
     const addSupportingAssetOptions = (businessAssetRef) =>{
       let supportingAssetOptions = '';
       $('#risk__supportingAsset').empty();
-      supportingAssets.forEach((sa) =>{
+      supportingAssets.filter(uncheckedSA => uncheckedSA.supportingAssetName).forEach((sa) =>{
         if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef)){
           supportingAssetOptions += `<option value="${sa.supportingAssetId}">${sa.supportingAssetName}</option>`;
         }
@@ -165,7 +165,7 @@
     // add Vulnerabilities evaluation section
     const addVulnerabilitySection = (riskAttackPaths) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
-      vulnerabilities.forEach((v)=>{
+      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName).forEach((v)=>{
         vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
       });
 
@@ -828,7 +828,7 @@
 
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '';
-      businessAssets.forEach((ba)=>{
+      businessAssets.filter(uncheckedBA => uncheckedBA.businessAssetName).forEach((ba)=>{
         businessAssetsOptions += `<option value="${ba.businessAssetId}">${ba.businessAssetName}</option>`;
       });
       businessAssetsOptions += '<option value="null">Select...</option>'
