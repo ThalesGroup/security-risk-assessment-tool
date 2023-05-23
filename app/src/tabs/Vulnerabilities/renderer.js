@@ -204,7 +204,7 @@
     const updateSupportingAssets = (supportingAssets) =>{
         $('.refs').empty();
 
-        supportingAssets.forEach((sa)=>{
+        supportingAssets.filter(unfilteredSA => unfilteredSA.supportingAssetName).forEach((sa)=>{
             // add div
             const div = document.createElement('div');
 
