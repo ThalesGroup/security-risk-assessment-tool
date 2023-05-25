@@ -23,7 +23,7 @@
 */
 
 const {
-  app, BrowserWindow, Menu,
+  app, BrowserWindow, Menu, dialog
 } = require('electron');
 const path = require('path');
 const {
@@ -48,6 +48,7 @@ function createWindow() {
 
   win.maximize();
   win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
+ 
 
   // send data to populate into dom fields
   win.webContents.on('dom-ready', () => {
@@ -130,3 +131,7 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+module.exports = {
+  app, BrowserWindow, Menu, dialog
+}

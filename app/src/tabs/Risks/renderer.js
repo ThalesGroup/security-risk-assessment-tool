@@ -25,10 +25,12 @@
 /* global $ tinymce Tabulator */
 (async () => {
   try {
+    const startTime = performance.now();
     const result = await window.render.risks();
+    console.log(result)
     $('#risks').append(result[0]);
-
-    result[1].columns[0].formatter = (cell) => {
+    const tableOptions = result[1];
+    tableOptions.columns[0].formatter = (cell) => {
       const riskId = cell.getRow().getIndex();
       if (riskId) {
         return `
@@ -36,7 +38,47 @@
         `;
       }
     };
+
+    tableOptions.columns[3].formatter = (cell) => {
+      const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
+      const threatAgent = cell.getValue().threatAgent;
+      const threatVerb = cell.getValue().threatVerb;
+      const businessAssetRef = cell.getValue().businessAssetRef;
+      const supportingAssetRef = cell.getValue().supportingAssetRef;
+      const motivation = cell.getValue().motivation;
+      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
+        cell.getElement().style.color = '#FF0000';
+      } else cell.getElement().style.color = '#000000';
+
+      const currentColour = cell.getElement().style.color;
+      if (riskManagementDecision === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') cell.getElement().style['text-decoration'] = 'line-through';
+      else cell.getElement().style['text-decoration'] = 'none';
+
+      return cell.getValue().riskName;
+    
+    }
+    
+    tableOptions.columns[4].formatter = (cell) => {
+      const residualRiskLevel = cell.getValue()
+      if (residualRiskLevel === 'Critical') cell.getElement().style.color = '#FF0000';
+      else if (residualRiskLevel === 'High') cell.getElement().style.color = '#E73927';
+      else if (residualRiskLevel === 'Medium') cell.getElement().style.color = '#FFA500';
+      else cell.getElement().style.color = '#000000';
+    
+      
+      return residualRiskLevel;
+    
+    }
+    
+
+
+
+    const l1 = performance.now();
     const risksTable = new Tabulator('#risks__table', result[1]);
+    console.log(risksTable)
+    const l2 = performance.now();
+    const duration = l2 - l1;
+    console.log(`Loading took ${duration}`)
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
 
@@ -736,19 +778,8 @@
       $('input[id="filter-value"]').val('');
       if (risksData.length > 0) $('#risks section').show();
 
-      const { riskId, projectVersion, residualRiskLevel, riskName, riskManagementDecision } = risk;
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
-      const tableData = {
-        riskId,
-        projectVersion,
-        riskName: riskName.riskName,
-        residualRiskLevel,
-        riskManagementDecision
-      };
-      risksTable.addData([tableData]);
-      validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation);
-      styleResidualRiskLevelTable(riskId, residualRiskLevel);
-      styleRiskName(riskManagementDecision, riskId);
+      risksTable.addData([risk]);
+
     };
 
     const deleteRisks = async (checkboxes) =>{
@@ -787,15 +818,15 @@
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
+      console.log(fetchedData)
+      risksTable.addData(fetchedData);
+      risksTable.selectRow(fetchedData[0].riskId);
+      addSelectedRowData(fetchedData[0].riskId);
       
-      fetchedData.forEach((risk, i) => {
+      /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
-        if (i === 0) {
-          const { riskId } = risk;
-          risksTable.selectRow(riskId);
-          addSelectedRowData(riskId)
-        }
-      });
+
+      }); */
     };
 
     // add Risk button
@@ -836,6 +867,24 @@
 
     $(document).ready(async function () {
       window.project.load(async (event, data) => {
+        const f1 = performance.now();
+        const fetchedData = await JSON.parse(data);
+        const f2 = performance.now();
+        const f3= f2 - f1;
+        console.log(`Getting data took ${f3}`)
+        risksData = fetchedData.Risk;
+        if (risksData.length === 0) $('#risks section').hide();
+        else $('#risks section').show();
+        vulnerabilities = fetchedData.Vulnerability;
+        const a1 = performance.now();
+        assetsRelationshipSetUp(fetchedData);
+        const a2 = performance.now();
+        const a3= a2 - a1;
+        console.log(`Setup took ${a3}`)
+
+        const t1 = performance.now();
+        
+        
         await tinymce.init({
           selector: '.rich-text',
           promotion: false,
@@ -900,14 +949,19 @@
             });
           }
         });
+        const t2 = performance.now();
+        const t3= t2 - t1;
+        console.log(`Tinymce took ${t3}`)
 
-        const fetchedData = await JSON.parse(data);
-        risksData = fetchedData.Risk;
-        if (risksData.length === 0) $('#risks section').hide();
-        else $('#risks section').show();
-        vulnerabilities = fetchedData.Vulnerability;
-        assetsRelationshipSetUp(fetchedData);
+        const r1 = performance.now();
         updateRisksFields(risksData);
+        const r2 = performance.now();
+        const r3= r2 - r1;
+        console.log(`Updating risks took ${r3}`)
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        console.log(`Loading took ${duration}`)
+        
       });
     });
 
@@ -1239,5 +1293,5 @@
 })();
 
 // window.onload = setTimeout(function () {
-//   alert('This is an alert');
+//   alert('Loading...');
 // }, 3000);

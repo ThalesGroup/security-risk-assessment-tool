@@ -25,10 +25,17 @@
 
 (async () => {
     try {
+    const startTime = performance.now();
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
+    const rt1 = performance.now();
     $('#vulnerabilities').append(result[0]);
-    result[1].columns[0].formatter = (cell) => {
+    const tableOptions = result[1];
+    const checkBoxIndex = 0
+    const vulNameIndex = 3
+    const overallLevelIndex = 4
+
+    tableOptions.columns[checkBoxIndex].formatter = (cell) => {
         const vulnerabililityId = cell.getRow().getIndex();
         if (vulnerabililityId) {
             return `
@@ -36,7 +43,34 @@
     `;
         }
     };
+
+    tableOptions.columns[vulNameIndex].formatter = (cell) => {
+        const rowData = cell.getRow().getData();
+        const supportingAssetRef = rowData.supportingAssetRef
+        const vulnerabilityDescription = rowData.vulnerabilityDescription
+        const vulnerabilityName = rowData.vulnerabilityName
+
+        if (supportingAssetsData.length === 0 
+            || supportingAssetRef.length === 0
+            || vulnerabilityDescription === '' 
+            || vulnerabilityName === '') cell.getElement().style.color = '#FF0000';
+        else cell.getElement().style.color = '#000000';
+        return cell.getValue()
+    }
+
+    tableOptions.columns[overallLevelIndex].formatter = (cell) => {
+        const overallLevel = cell.getValue()
+        if (overallLevel === 'High') cell.getElement().style.color = '#FF0000';
+        else if (overallLevel === 'Medium') cell.getElement().style.color = '#FFA500';
+        else cell.getElement().style.color = '#000000';
+        return overallLevel;
+    }
+
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
+    
+    const rt2 = performance.now();
+    const rt3= rt2 - rt1;
+    console.log(`Rendering time took ${rt3}`)
 
     // filter
     const clearFunction = () => {
@@ -82,37 +116,18 @@
         return vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
     };
 
-    const styleTable = (id, overallLevel) => {
-        if (overallLevel === 'High') vulnerabilitiesTable.getRow(id).getCell('overallLevel').getElement().style.color = '#FF0000';
-        else if (overallLevel === 'Medium') vulnerabilitiesTable.getRow(id).getCell('overallLevel').getElement().style.color = '#FFA500';
-        else vulnerabilitiesTable.getRow(id).getCell('overallLevel').getElement().style.color = '#000000';
-    };
-
     const validateCVEScore = (cveScore) => {
         if (cveScore < 0 || cveScore > 10) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
 
-    const validateVulnerabilityName = (vulnerability) => {
-        const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
-        if (supportingAssetsData.length === 0 
-            || supportingAssetRef.length === 0
-            || vulnerabilityDescription === '' 
-            || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#FF0000';
-        else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#000000';
-    };
-
     const updateVulnerabilityFields = (vulnerabilities) => {
         vulnerabilitiesTable.clearData();
         $('#vulnerabilties__table__checkboxes').empty();
+        vulnerabilitiesTable.addData(vulnerabilities);
+        vulnerabilitiesTable.selectRow(vulnerabilities[0].vulnerabilityId);
+        addSelectedVulnerabilityRowData(vulnerabilities[0].vulnerabilityId);
 
-        vulnerabilities.forEach((v, i) => {
-            addVulnerability(v);
-            if (i === 0) {
-                vulnerabilitiesTable.selectRow(v.vulnerabilityId);
-                addSelectedVulnerabilityRowData(v.vulnerabilityId);
-            }
-        });
     };
     
 
@@ -145,7 +160,6 @@
 
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        styleTable(vulnerabilityId, overallLevel);
         validateCVEScore(cveScore);
 
         $('input[name="refs__checkboxes"]').prop('checked', false);
@@ -185,8 +199,8 @@
 
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
-        styleTable(vulnerability.vulnerabilityId, vulnerability.overallLevel);
-        validateVulnerabilityName(vulnerability);
+        vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
+        addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
         // add checkbox
         // const checkbox = document.createElement('input');
         // checkbox.type = 'checkbox';
@@ -195,13 +209,18 @@
         // checkbox.name = 'vulnerabilties__table__checkboxes';
         // $('#vulnerabilties__table__checkboxes').append(checkbox);
 
-        if (vulnerabilitiesData.length === 1) {
+        /* if (vulnerabilitiesData.length === 1) {
             vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
+            
             addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
-        }
+            
+                
+                
+        } */
     };
 
     const updateSupportingAssets = (supportingAssets) =>{
+        const sa1 = performance.now();
         $('.refs').empty();
 
         supportingAssets.filter(unfilteredSA => unfilteredSA.supportingAssetName).forEach((sa)=>{
@@ -224,7 +243,7 @@
                     const v = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
                     vulnerability.supportingAssetRef = v.supportingAssetRef;
                 }
-                validateVulnerabilityName(vulnerability);
+                
             })
             div.append(checkbox);
 
@@ -234,21 +253,41 @@
             div.append(label);
 
             $('.refs').append(div);
+            
+        
         });
+        const sa2 = performance.now();
+        const sa3= sa2 - sa1;
+        console.log(`Updating SA took ${sa3}`)
     }
 
-    const loadVulnerabilities = async (data) =>{
-        const fetchedData = await JSON.parse(data);
-        vulnerabilitiesData = fetchedData.Vulnerability;
-        supportingAssetsData = fetchedData.SupportingAsset;
+    const loadVulnerabilities = (data) =>{
+        
+        vulnerabilitiesData = data.Vulnerability;
+        supportingAssetsData = data.SupportingAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
         else $('#vulnerabilities section').show();
-        updateSupportingAssets(fetchedData.SupportingAsset);
+        
+        updateSupportingAssets(data.SupportingAsset);
+        
+        const vf1 = performance.now();
         updateVulnerabilityFields(vulnerabilitiesData);
+        const vf2 = performance.now();
+        const vf3= vf2 - vf1;
+        console.log(`Updating VF took ${vf3}`)
     };
 
     $(document).ready(async function () {
+        const w1 = performance.now(); 
+        console.log(`Window start time ${w1-rt2}`)  
         window.project.load(async (event, data) => {
+        const f1 = performance.now(); 
+        console.log(`Tinymce start time ${f1-rt2}`)  
+        const fetchedData = await JSON.parse(data);
+        const f2 = performance.now();
+        const f3= f2 - f1;
+        console.log(`Getting data took ${f3}`)
+            const t1 = performance.now();
             await tinymce.init({
                 selector: '.rich-text',
                 promotion: false,
@@ -303,11 +342,20 @@
                         //console.log(e.target.id)
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
-                        validateVulnerabilityName(vulnerability);
+                        
                     });
                 }
             });
-            loadVulnerabilities(data);
+            const t2 = performance.now();
+            const t3= t2 - t1;
+            console.log(`Tinymce took ${t3}`)
+            
+
+            loadVulnerabilities(fetchedData);
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            console.log(`Loading took ${duration}`)
+            
         });
     });
 
@@ -404,7 +452,7 @@
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
         let updatedVulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         updatedVulnerability.vulnerabilityName = vulnerability.vulnerabilityName;
-        validateVulnerabilityName(updatedVulnerability);
+        
     });
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
@@ -417,7 +465,6 @@
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        styleTable(getCurrentVulnerabilityId(), overallLevel);
         validateCVEScore(value);
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
     });
@@ -438,6 +485,7 @@
     });
 
     } catch (err) {
-      alert('Failed to load vulnerabilities tab');
+        console.log(err)
+        alert('Failed to load vulnerabilities tab');
     }
 })();
