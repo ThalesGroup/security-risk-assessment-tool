@@ -517,10 +517,14 @@ const {
   updateTrackingRow,
   updateProjectNameAndVersionRef,
   validateISRAmeta,
+  showLoading,
+  closeLoading
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
 
 ipcMain.handle('render:welcome', () => renderWelcome());
+ipcMain.handle('render:showLoading', () => showLoading());
+ipcMain.handle('render:closeLoading', () => closeLoading());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
 ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
 ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {

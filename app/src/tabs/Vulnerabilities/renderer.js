@@ -25,6 +25,7 @@
 
 (async () => {
     try {
+    window.render.showLoading()
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
     $('#vulnerabilities').append(result[0]);
@@ -308,6 +309,7 @@
                 }
             });
             loadVulnerabilities(data);
+            window.render.closeLoading()
         });
     });
 

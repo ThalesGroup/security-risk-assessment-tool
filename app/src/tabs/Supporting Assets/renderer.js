@@ -26,6 +26,7 @@
 
 (async () => {
   try {
+    window.render.showLoading()
     const result = await window.render.supportingAssets();
     $('#supporting-assets').append(result[0]);
 
@@ -278,6 +279,7 @@
 
         const fetchedData = await JSON.parse(data);
         updateSupportingAssetFields(fetchedData);
+        window.render.closeLoading()
       });
     });
 

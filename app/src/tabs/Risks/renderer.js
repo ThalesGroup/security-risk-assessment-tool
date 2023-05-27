@@ -25,6 +25,7 @@
 /* global $ tinymce Tabulator */
 (async () => {
   try {
+    window.render.showLoading()
     const result = await window.render.risks();
     $('#risks').append(result[0]);
 
@@ -908,6 +909,7 @@
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
         updateRisksFields(risksData);
+        window.render.closeLoading()
       });
     });
 
