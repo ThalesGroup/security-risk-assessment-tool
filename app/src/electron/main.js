@@ -36,6 +36,13 @@ const {
 
 app.disableHardwareAcceleration();
 
+const lock = app.requestSingleInstanceLock()
+
+const getMainWindow = () => {
+  const ID = process.env.MAIN_WINDOW_ID * 1;
+  return BrowserWindow.fromId(ID);
+};
+
 function createWindow() {
   const win = new BrowserWindow({
     // width: 850,
@@ -48,6 +55,8 @@ function createWindow() {
 
   win.maximize();
   win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
+
+
 
   // send data to populate into dom fields
   win.webContents.on('dom-ready', () => {
@@ -113,6 +122,22 @@ function createWindow() {
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
+}
+
+if (!lock) {
+  app.quit()
+} else {
+  app.on('second-instance', () => {
+
+
+    if (getMainWindow()) {
+      if (getMainWindow().isMinimized()) getMainWindow().restore()
+      getMainWindow().focus()
+    }
+
+    createWindow();
+
+  })
 }
 
 app.whenReady().then(() => {
