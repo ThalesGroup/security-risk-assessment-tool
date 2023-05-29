@@ -50,8 +50,13 @@ let israProject, browserTitle = 'ISRA Risk Assessment', oldIsraProject;
 */
 const getMainWindow = () => {
   const ID = process.env.MAIN_WINDOW_ID * 1;
+  console.log(ID);
   return BrowserWindow.fromId(ID);
 };
+
+const currentWin = BrowserWindow.getFocusedWindow();
+
+
 
 /**
   * Create new project
@@ -65,11 +70,11 @@ const newISRAProject = (win, app) => {
       DataNew(israProject);
       oldIsraProject = israProject.toJSON();
     };
-    getMainWindow().title = browserTitle;
+    win.title = browserTitle;
     win.webContents.send('project:load', israProject.toJSON(), classification);
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
+    dialog.showMessageBox(currentWin, { message: 'Failed to create new project' });
     app.quit();
   }
 };
@@ -103,24 +108,24 @@ const savetoPath = async (filePath, saveAs = false) => {
       await DataStore(israProject, filePath);
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
-      getMainWindow().title = browserTitle;
+      currentWin.title = browserTitle;
       oldIsraProject = israProject.toJSON();
-      dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved form to ${filePath}` });
+      dialog.showMessageBox(currentWin, { message: `Successfully saved form to ${filePath}` });
       if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
-      dialog.showMessageBoxSync(getMainWindow(), { message: `Error in saving form to ${filePath}` });
+      dialog.showMessageBox(currentWin, { message: `Error in saving form to ${filePath}` });
     }
   } else {
     // override data in existing json file (save)
     try {
       await DataStore(israProject, jsonFilePath);
       oldIsraProject = israProject.toJSON();
-      dialog.showMessageBoxSync(getMainWindow(), { message: 'Successfully saved form' });
+      dialog.showMessageBox(currentWin, { message: 'Successfully saved form' });
       if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
-      dialog.showMessageBoxSync(getMainWindow(), { message: 'Error in saving form' });
+      dialog.showMessageBox(currentWin, { message: 'Error in saving form' });
     }
   }
 }
@@ -142,7 +147,7 @@ const saveAs = async () => {
   if (!fileName.canceled) {
     const { filePath } = fileName;
     savetoPath(filePath, true);
-    // getMainWindow().webContents.send('validate:allTabs', filePath);
+    // currentWin.webContents.send('validate:allTabs', filePath);
   }
 };
 
@@ -152,9 +157,9 @@ const saveAs = async () => {
 const save = () => {
   if (israProject.toJSON() !== oldIsraProject){
     israProject.iteration += 1;
-    getMainWindow().webContents.send('project:iteration', israProject.iteration);
+    currentWin.webContents.send('project:iteration', israProject.iteration);
     savetoPath(jsonFilePath);
-    // getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
+    // currentWin.webContents.send('validate:allTabs', jsonFilePath);
   }
 };
 
@@ -218,7 +223,7 @@ const validateClasses = () => {
 */
 ipcMain.on('validate:allTabs', async (event, labelSelected) => {
   const saveChangesDialog = () => {
-    return dialog.showMessageBoxSync(getMainWindow(), {
+    return dialog.showMessageBox(currentWin, {
       type: 'warning',
       message: 'Do you want to save the changes?',
       title: 'Save project?',
@@ -240,8 +245,8 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       const filePath = filePathArr[0];
       const fileType = filePath.split('.').pop();
 
-      if (fileType === 'json') loadJSONFile(getMainWindow(), filePath);
-      else loadXMLFile(getMainWindow(), filePath);
+      if (fileType === 'json') loadJSONFile(currentWin, filePath);
+      else loadXMLFile(currentWin, filePath);
     }
   };
 
@@ -253,7 +258,8 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
 
     if (validateClasses()) saveOrSaveAs();
     else {
-      const result = dialog.showMessageBoxSync(getMainWindow(), {
+      
+      const result = dialog.showMessageBox(currentWin, {
         type: 'warning',
         message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
         title: 'Validation Errors',
@@ -262,7 +268,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       if (result === 0) saveOrSaveAs();
     }
     // labelSelected = label;
-    // getMainWindow().webContents.send('project:validationErrors');
+    // currentWin.webContents.send('project:validationErrors');
   };
 
   if (labelSelected === 'Load File') {
@@ -302,7 +308,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
   * @param {string} labelSelected either 'Save' or 'Save As' menu item is selected
 */
 const validationErrors = (labelSelected) => {
-  getMainWindow().webContents.send('validate:allTabs', labelSelected);
+  BrowserWindow.getFocusedWindow().webContents.send('validate:allTabs', labelSelected);
 };
 
 /** After checking for validation errors in dom,
@@ -317,7 +323,7 @@ const validationErrors = (labelSelected) => {
 
 //   if (state) saveOrSaveAs();
 //   else {
-//     const result = dialog.showMessageBoxSync(null, {
+//     const result = dialog.showMessageBox(null, {
 //       type: 'warning',
 //       message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
 //       title: 'Validation Errors',
@@ -348,11 +354,11 @@ const loadJSONFile = async (win, filePath) => {
     win.webContents.send('project:load', israProject.toJSON(), classification);
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
-    getMainWindow().title = browserTitle;
+    currentWin.title = browserTitle;
     oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+    dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
   }
 };
 
@@ -367,10 +373,10 @@ const loadXMLFile = (win, filePath) => {
     win.webContents.send('project:load', israProject.toJSON(), classification);
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
-    getMainWindow().title = browserTitle;
+    currentWin.title = browserTitle;
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
+    dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
   }
 };
 
@@ -461,18 +467,18 @@ const downloadReport = async (app) => {
             if (err) {
               throw err; 
             } else {
-              dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
+              dialog.showMessageBox(currentWin, { message: `Successfully saved current ISRA report to ${filePath}.` });
             }
           });
         }).catch((err) => {
           console.log(err);
-          dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
+          dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
         });
       });
     }
   } catch(err){
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });
+    dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });
   }
 };
 
@@ -563,13 +569,13 @@ const projectContextAttachmentOptions = () => {
         if (fileName !== '') {
           projectContextFileName = fileName;
           israProject.israProjectContext.projectDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('projectContext:fileName', projectContextFileName);
+          currentWin.webContents.send('projectContext:fileName', projectContextFileName);
         }
       } catch (err) {
         console.log(err);
         israProject.israProjectContext.projectDescriptionAttachment = '';
-        dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
-        getMainWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
+        dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
+        currentWin.webContents.send('projectContext:fileName', 'Click here to attach a file');
       }
     },
   };
@@ -590,7 +596,7 @@ const projectContextAttachmentOptions = () => {
           const [fileName, base64data] = removeFile();
           projectContextFileName = fileName;
           israProject.israProjectContext.projectDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('projectContext:fileName', projectContextFileName);
+          currentWin.webContents.send('projectContext:fileName', projectContextFileName);
         },
       },
     ];
@@ -614,7 +620,7 @@ ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   } catch (err) {
     console.log(err);
     israProject.israProjectContext.projectDescriptionAttachment = '';
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
+    dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
     return 'Click here to attach a file';
   }
 });
@@ -630,12 +636,12 @@ const {
 const { renderBusinessAssets } = require('../../../lib/src/api/Business Asset/render-business-assets');
 
 ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
-ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject, getMainWindow()));
+ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject, currentWin));
 ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
-  deleteBusinessAsset(israProject, ids, getMainWindow());
+  deleteBusinessAsset(israProject, ids, currentWin);
 });
 ipcMain.on('businessAssets:updateBusinessAsset', (event, id, field, value) => {
-  updateBusinessAsset(israProject, getMainWindow(), id, field, value);
+  updateBusinessAsset(israProject, currentWin, id, field, value);
 });
 ipcMain.on('validate:businessAssets', (event, arr) => {
   validateBusinessAsset(israProject, arr);
@@ -650,17 +656,17 @@ const { renderSupportingAssets } = require('../../../lib/src/api/Supporting Asse
 ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
 ipcMain.handle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
 ipcMain.on('supportingAssets:deleteSupportingAsset', (event, ids) => {
-  deleteSupportingAsset(israProject, ids, getMainWindow());
+  deleteSupportingAsset(israProject, ids, currentWin);
 });
 ipcMain.on('supportingAssets:updateSupportingAsset', (event, id, field, value) => {
-  updateSupportingAsset(israProject, getMainWindow(), id, field, value);
+  updateSupportingAsset(israProject, currentWin, id, field, value);
 });
 ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
   validateSupportingAssets(israProject, arr, desc);
 });
 ipcMain.on('supportingAssets:addBusinessAssetRef', (event, id, value) => addBusinessAssetRef(israProject, id, value));
-ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => deleteBusinessAssetRef(israProject, id, indexes, getMainWindow()));
-ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index, getMainWindow()));
+ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => deleteBusinessAssetRef(israProject, id, indexes, currentWin));
+ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index, currentWin));
 
 // Risks Tab
 const { 
@@ -689,7 +695,7 @@ ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
 ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
 ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
-  return updateRiskName(israProject, getMainWindow(), id, field, value);
+  return updateRiskName(israProject, currentWin, id, field, value);
 });
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
@@ -713,7 +719,7 @@ const { addVulnerability, deleteVulnerability, updateVulnerability, validateVuln
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
-ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));
+ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, currentWin));
 ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
   return updateVulnerability(israProject, id, field, value);
 });
@@ -739,14 +745,14 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         if (fileName !== '') {
           vulnerabilityFileName = fileName;
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
+          currentWin.webContents.send('vulnerabilities:fileName', fileName);
         }
       } catch (err) {
         console.log(err);
         const fileName = 'Click here to attach a file';
         israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
-        dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
-        getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
+        dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
+        currentWin.webContents.send('vulnerabilities:fileName', fileName);
       }
     },
   };
@@ -770,7 +776,7 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         click: () => {
           const [fileName, base64data] = removeFile();
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          getMainWindow().webContents.send('vulnerabilities:fileName', fileName);
+          currentWin.webContents.send('vulnerabilities:fileName', fileName);
         },
       },
     ];
@@ -794,7 +800,7 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
   } catch (err) {
     console.log(err);
     israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
+    dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
     return 'Click here to attach a file';
   }
 });

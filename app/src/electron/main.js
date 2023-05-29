@@ -23,7 +23,7 @@
 */
 
 const {
-  app, BrowserWindow, Menu,
+  app, BrowserWindow, Menu
 } = require('electron');
 const path = require('path');
 const {
@@ -37,6 +37,7 @@ const {
 app.disableHardwareAcceleration();
 
 const lock = app.requestSingleInstanceLock()
+const windows = {}
 
 const getMainWindow = () => {
   const ID = process.env.MAIN_WINDOW_ID * 1;
@@ -63,8 +64,10 @@ function createWindow() {
     newISRAProject(win, app);
   });
 
+
   win.on('close', (e) => {
-    exit(e, app);
+    //exit(e, app);
+    win.close()
   });
 
   // save current window at runtime
