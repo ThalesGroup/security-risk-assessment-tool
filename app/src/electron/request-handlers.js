@@ -569,13 +569,13 @@ const projectContextAttachmentOptions = () => {
         if (fileName !== '') {
           projectContextFileName = fileName;
           israProject.israProjectContext.projectDescriptionAttachment = base64data;
-          currentWin.webContents.send('projectContext:fileName', projectContextFileName);
+          BrowserWindow.getFocusedWindow().webContents.send('projectContext:fileName', projectContextFileName);
         }
       } catch (err) {
         console.log(err);
         israProject.israProjectContext.projectDescriptionAttachment = '';
         dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid Attachment', message: 'Invalid Project Descriptive Document' });
-        currentWin.webContents.send('projectContext:fileName', 'Click here to attach a file');
+        BrowserWindow.getFocusedWindow().webContents.send('projectContext:fileName', 'Click here to attach a file');
       }
     },
   };
@@ -745,14 +745,14 @@ const vulnerabilitiesAttachmentOptions = (id) => {
         if (fileName !== '') {
           vulnerabilityFileName = fileName;
           israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = base64data;
-          currentWin.webContents.send('vulnerabilities:fileName', fileName);
+          BrowserWindow.getFocusedWindow().webContents.send('vulnerabilities:fileName', fileName);
         }
       } catch (err) {
         console.log(err);
         const fileName = 'Click here to attach a file';
         israProject.getVulnerability(id).vulnerabilityDescriptionAttachment = '';
         dialog.showMessageBox(currentWin, { type: 'error', title: 'Invalid Attachment', message: `Vulnerability ${id}: Invalid Vulnerability Document` });
-        currentWin.webContents.send('vulnerabilities:fileName', fileName);
+        BrowserWindow.getFocusedWindow().webContents.send('vulnerabilities:fileName', fileName);
       }
     },
   };
