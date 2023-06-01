@@ -73,7 +73,17 @@
       setSessionStorage();
     })
 
-    const organization = (value) => {
+    const organization = async (value) => {
+      const config = await window.welcome.getConfig();
+  
+      if (!config.organizations.includes(value) && value !== '') {
+        window.welcome.updateConfigOrg(value);
+        var newOrg = document.createElement('option');
+        newOrg.text = value;
+        newOrg.value = value;
+        document.getElementById('welcome__isra-meta--organization').appendChild(newOrg);
+      }
+      
       $('#welcome__isra-meta--organization').val(value);
       setSessionStorage();
     };
