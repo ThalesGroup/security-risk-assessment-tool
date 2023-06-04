@@ -25,10 +25,8 @@
 
 (async () => {
     try {
-    const startTime = performance.now();
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
-    const rt1 = performance.now();
     $('#vulnerabilities').append(result[0]);
     const tableOptions = result[1];
     const checkBoxIndex = 0

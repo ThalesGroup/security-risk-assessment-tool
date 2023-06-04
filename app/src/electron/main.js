@@ -23,7 +23,7 @@
 */
 
 const {
-  app, BrowserWindow, Menu, dialog
+  app, BrowserWindow, Menu
 } = require('electron');
 const path = require('path');
 const {
@@ -133,5 +133,5 @@ app.on('window-all-closed', () => {
 });
 
 module.exports = {
-  app, BrowserWindow, Menu, dialog
+  app, BrowserWindow, Menu
 }

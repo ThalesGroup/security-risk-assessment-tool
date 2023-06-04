@@ -25,12 +25,13 @@
 /* global $ tinymce Tabulator */
 (async () => {
   try {
-    const startTime = performance.now();
     const result = await window.render.risks();
-    console.log(result)
     $('#risks').append(result[0]);
     const tableOptions = result[1];
-    tableOptions.columns[0].formatter = (cell) => {
+    const checkBoxIndex = 0
+    const riskNameIndex = 3
+    const riskLevelIndex = 4
+    tableOptions.columns[checkBoxIndex].formatter = (cell) => {
       const riskId = cell.getRow().getIndex();
       if (riskId) {
         return `
@@ -39,7 +40,7 @@
       }
     };
 
-    tableOptions.columns[3].formatter = (cell) => {
+    tableOptions.columns[riskNameIndex].formatter = (cell) => {
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
       const threatAgent = cell.getValue().threatAgent;
       const threatVerb = cell.getValue().threatVerb;
@@ -58,7 +59,7 @@
     
     }
     
-    tableOptions.columns[4].formatter = (cell) => {
+    tableOptions.columns[riskLevelIndex].formatter = (cell) => {
       const residualRiskLevel = cell.getValue()
       if (residualRiskLevel === 'Critical') cell.getElement().style.color = '#FF0000';
       else if (residualRiskLevel === 'High') cell.getElement().style.color = '#E73927';
@@ -73,12 +74,7 @@
 
 
 
-    const l1 = performance.now();
     const risksTable = new Tabulator('#risks__table', result[1]);
-    console.log(risksTable)
-    const l2 = performance.now();
-    const duration = l2 - l1;
-    console.log(`Loading took ${duration}`)
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
 
@@ -818,7 +814,6 @@
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
-      console.log(fetchedData)
       risksTable.addData(fetchedData);
       risksTable.selectRow(fetchedData[0].riskId);
       addSelectedRowData(fetchedData[0].riskId);
@@ -867,22 +862,12 @@
 
     $(document).ready(async function () {
       window.project.load(async (event, data) => {
-        const f1 = performance.now();
         const fetchedData = await JSON.parse(data);
-        const f2 = performance.now();
-        const f3= f2 - f1;
-        console.log(`Getting data took ${f3}`)
         risksData = fetchedData.Risk;
         if (risksData.length === 0) $('#risks section').hide();
         else $('#risks section').show();
         vulnerabilities = fetchedData.Vulnerability;
-        const a1 = performance.now();
         assetsRelationshipSetUp(fetchedData);
-        const a2 = performance.now();
-        const a3= a2 - a1;
-        console.log(`Setup took ${a3}`)
-
-        const t1 = performance.now();
         
         
         await tinymce.init({
@@ -949,18 +934,8 @@
             });
           }
         });
-        const t2 = performance.now();
-        const t3= t2 - t1;
-        console.log(`Tinymce took ${t3}`)
 
-        const r1 = performance.now();
         updateRisksFields(risksData);
-        const r2 = performance.now();
-        const r3= r2 - r1;
-        console.log(`Updating risks took ${r3}`)
-        const endTime = performance.now();
-        const duration = endTime - startTime;
-        console.log(`Loading took ${duration}`)
         
       });
     });
