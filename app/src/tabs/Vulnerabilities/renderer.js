@@ -66,9 +66,6 @@
 
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
     
-    const rt2 = performance.now();
-    const rt3= rt2 - rt1;
-    console.log(`Rendering time took ${rt3}`)
 
     // filter
     const clearFunction = () => {
@@ -218,7 +215,6 @@
     };
 
     const updateSupportingAssets = (supportingAssets) =>{
-        const sa1 = performance.now();
         $('.refs').empty();
 
         supportingAssets.filter(unfilteredSA => unfilteredSA.supportingAssetName).forEach((sa)=>{
@@ -254,9 +250,6 @@
             
         
         });
-        const sa2 = performance.now();
-        const sa3= sa2 - sa1;
-        console.log(`Updating SA took ${sa3}`)
     }
 
     const loadVulnerabilities = (data) =>{
@@ -268,24 +261,14 @@
         
         updateSupportingAssets(data.SupportingAsset);
         
-        const vf1 = performance.now();
+
         updateVulnerabilityFields(vulnerabilitiesData);
-        const vf2 = performance.now();
-        const vf3= vf2 - vf1;
-        console.log(`Updating VF took ${vf3}`)
+
     };
 
     $(document).ready(async function () {
-        const w1 = performance.now(); 
-        console.log(`Window start time ${w1-rt2}`)  
         window.project.load(async (event, data) => {
-        const f1 = performance.now(); 
-        console.log(`Tinymce start time ${f1-rt2}`)  
         const fetchedData = await JSON.parse(data);
-        const f2 = performance.now();
-        const f3= f2 - f1;
-        console.log(`Getting data took ${f3}`)
-            const t1 = performance.now();
             await tinymce.init({
                 selector: '.rich-text',
                 promotion: false,
@@ -344,15 +327,10 @@
                     });
                 }
             });
-            const t2 = performance.now();
-            const t3= t2 - t1;
-            console.log(`Tinymce took ${t3}`)
             
 
             loadVulnerabilities(fetchedData);
-            const endTime = performance.now();
-            const duration = endTime - startTime;
-            console.log(`Loading took ${duration}`)
+
             
         });
     });
