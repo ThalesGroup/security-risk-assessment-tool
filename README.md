@@ -44,6 +44,18 @@ The defaults for the application can be configured as shown and described below:
 
 </details>
 
+<details>
+  <summary>Override default organization options for project</summary>
+
+```js
+  const config = {
+    appVersion: '1.0.0',
+    organizations: ['Governance division','IT division', 'FinTech division']
+};
+```
+
+</details>
+
 ## Developer installation ##
 
 1. Clone repository
