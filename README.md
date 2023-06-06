@@ -6,6 +6,46 @@ It permits to define the primary assets, called the business assets, the associa
 
 Just download the zip file for your platform and unzip it and executre `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
 
+# Configuration information
+
+## Usage ##
+
+```js
+    const config = {
+    appVersion: '1.0.0',
+    classification: '',
+    organizations: ''
+};
+
+```
+
+## Examples ##
+
+<details>
+  <summary>Override default security classification for project</summary>
+
+```js
+  const config = {
+    appVersion: '1.0.0',
+    classification: 'COMPANY CONFIDENTIAL {PROJECT}'
+};
+
+```
+
+</details>
+
+<details>
+  <summary>Override default organization options for project</summary>
+
+```js
+  const config = {
+    appVersion: '1.0.0',
+    organizations: ['Governance division','IT division', 'FinTech division']
+};
+
+```
+
+</details>
 
 # Development information
 
@@ -93,4 +133,3 @@ If you are interested in contributing to the ISRA software-risk-assesssment-tool
 
 The chosen license in accordance with legal department must be defined into an explicit [LICENSE](https://github.com/ThalesGroup/template-project/blob/master/LICENSE) file at the root of the repository
 You can also link this file in this README section.
-
