@@ -41,6 +41,7 @@ function createWindow() {
     // width: 850,
     // height: 600,
     minWidth: 850,
+    icon: path.join(__dirname, '../asset/isra-app-icon-512.png'),
     webPreferences: {
       preload: path.join(__dirname, './preload.js'),
     },
