@@ -6,7 +6,17 @@ It permits to define the primary assets, called the business assets, the associa
 
 Just download the zip file for your platform and unzip it and executre `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
 
-# Configuration information
+# Development information
+
+# Prerequisites ##
+
+To install and use the tool, the following prerequisites are required:
+
+1. [Node.js](https://nodejs.org/en/) (required for Electron, recommended to download the latest LTS version available)
+
+# Configurating the defaults ##
+
+The defaults for the application can be configured as shown and described below:
 
 ## Usage ##
 
@@ -33,27 +43,6 @@ Just download the zip file for your platform and unzip it and executre `sratool`
 ```
 
 </details>
-
-<details>
-  <summary>Override default organization options for project</summary>
-
-```js
-  const config = {
-    appVersion: '1.0.0',
-    organizations: ['Governance division','IT division', 'FinTech division']
-};
-
-```
-
-</details>
-
-# Development information
-
-# Prerequisites ##
-
-To install and use the tool, the following prerequisites are required:
-
-1. [Node.js](https://nodejs.org/en/) (required for Electron, recommended to download the latest LTS version available)
 
 ## Developer installation ##
 
