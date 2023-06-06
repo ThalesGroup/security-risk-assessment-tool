@@ -27,8 +27,11 @@
   try {
     const result = await window.render.risks();
     $('#risks').append(result[0]);
-
-    result[1].columns[0].formatter = (cell) => {
+    const tableOptions = result[1];
+    const checkBoxIndex = 0
+    const riskNameIndex = 3
+    const riskLevelIndex = 4
+    tableOptions.columns[checkBoxIndex].formatter = (cell) => {
       const riskId = cell.getRow().getIndex();
       if (riskId) {
         return `
@@ -36,6 +39,41 @@
         `;
       }
     };
+
+    tableOptions.columns[riskNameIndex].formatter = (cell) => {
+      const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
+      const threatAgent = cell.getValue().threatAgent;
+      const threatVerb = cell.getValue().threatVerb;
+      const businessAssetRef = cell.getValue().businessAssetRef;
+      const supportingAssetRef = cell.getValue().supportingAssetRef;
+      const motivation = cell.getValue().motivation;
+      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
+        cell.getElement().style.color = '#FF0000';
+      } else cell.getElement().style.color = '#000000';
+
+      const currentColour = cell.getElement().style.color;
+      if (riskManagementDecision === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') cell.getElement().style['text-decoration'] = 'line-through';
+      else cell.getElement().style['text-decoration'] = 'none';
+
+      return cell.getValue().riskName;
+    
+    }
+    
+    tableOptions.columns[riskLevelIndex].formatter = (cell) => {
+      const residualRiskLevel = cell.getValue()
+      if (residualRiskLevel === 'Critical') cell.getElement().style.color = '#FF0000';
+      else if (residualRiskLevel === 'High') cell.getElement().style.color = '#E73927';
+      else if (residualRiskLevel === 'Medium') cell.getElement().style.color = '#FFA500';
+      else cell.getElement().style.color = '#000000';
+    
+      
+      return residualRiskLevel;
+    
+    }
+    
+
+
+
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
@@ -736,19 +774,8 @@
       $('input[id="filter-value"]').val('');
       if (risksData.length > 0) $('#risks section').show();
 
-      const { riskId, projectVersion, residualRiskLevel, riskName, riskManagementDecision } = risk;
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
-      const tableData = {
-        riskId,
-        projectVersion,
-        riskName: riskName.riskName,
-        residualRiskLevel,
-        riskManagementDecision
-      };
-      risksTable.addData([tableData]);
-      validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation);
-      styleResidualRiskLevelTable(riskId, residualRiskLevel);
-      styleRiskName(riskManagementDecision, riskId);
+      risksTable.addData([risk]);
+
     };
 
     const deleteRisks = async (checkboxes) =>{
@@ -787,15 +814,14 @@
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
+      risksTable.addData(fetchedData);
+      risksTable.selectRow(fetchedData[0].riskId);
+      addSelectedRowData(fetchedData[0].riskId);
       
-      fetchedData.forEach((risk, i) => {
+      /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
-        if (i === 0) {
-          const { riskId } = risk;
-          risksTable.selectRow(riskId);
-          addSelectedRowData(riskId)
-        }
-      });
+
+      }); */
     };
 
     // add Risk button
@@ -836,6 +862,14 @@
 
     $(document).ready(async function () {
       window.project.load(async (event, data) => {
+        const fetchedData = await JSON.parse(data);
+        risksData = fetchedData.Risk;
+        if (risksData.length === 0) $('#risks section').hide();
+        else $('#risks section').show();
+        vulnerabilities = fetchedData.Vulnerability;
+        assetsRelationshipSetUp(fetchedData);
+        
+        
         await tinymce.init({
           selector: '.rich-text',
           promotion: false,
@@ -901,13 +935,8 @@
           }
         });
 
-        const fetchedData = await JSON.parse(data);
-        risksData = fetchedData.Risk;
-        if (risksData.length === 0) $('#risks section').hide();
-        else $('#risks section').show();
-        vulnerabilities = fetchedData.Vulnerability;
-        assetsRelationshipSetUp(fetchedData);
         updateRisksFields(risksData);
+        
       });
     });
 
@@ -1239,5 +1268,5 @@
 })();
 
 // window.onload = setTimeout(function () {
-//   alert('This is an alert');
+//   alert('Loading...');
 // }, 3000);
