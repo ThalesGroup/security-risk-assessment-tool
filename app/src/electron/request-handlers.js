@@ -345,6 +345,7 @@ const loadJSONFile = async (win, filePath) => {
   try {
     israProject = new ISRAProject();
     await DataLoad(israProject, filePath);
+
     const classification = israProject.properties.ISRAmeta.classification
     win.webContents.send('project:load', israProject.toJSON(), classification);
     jsonFilePath = filePath;
@@ -522,11 +523,15 @@ const {
   updateTrackingRow,
   updateProjectNameAndVersionRef,
   validateISRAmeta,
+  getConfig,
+  updateConfigOrg
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
 
 ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
+ipcMain.handle('welcome:getConfig', () => getConfig());
+ipcMain.handle('welcome:updateConfigOrg', (event, data) => updateConfigOrg(data));
 ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
 ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
   updateTrackingRow(israProject, rowData);

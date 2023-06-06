@@ -34,6 +34,21 @@ Just download the zip file for your platform and unzip it and executre `sratool`
 
 </details>
 
+
+<details>
+  <summary>Override default organization options for project</summary>
+
+```js
+  const config = {
+    appVersion: '1.0.0',
+    organizations: ['Governance division','IT division', 'FinTech division']
+};
+
+```
+
+</details>
+
+
 # Development information
 
 # Prerequisites ##
@@ -120,4 +135,3 @@ If you are interested in contributing to the ISRA software-risk-assesssment-tool
 
 The chosen license in accordance with legal department must be defined into an explicit [LICENSE](https://github.com/ThalesGroup/template-project/blob/master/LICENSE) file at the root of the repository
 You can also link this file in this README section.
-

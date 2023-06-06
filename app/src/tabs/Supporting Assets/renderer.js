@@ -45,8 +45,20 @@
     }
 
     const updateSupportingAsset = (id, field, value) => {
-      if (field === 'businessAssetRef') validate(id, value);
-      else window.supportingAssets.updateSupportingAsset(id, field, value);
+      if (field === 'businessAssetRef') {
+        validate(id, value);
+      }
+      else {
+        if (field === 'supportingAssetName' && value) {
+          if (!document.getElementById(`supporting-asset-business-assets__table-${id}`)) {
+            addMatrixRow(id, value);
+            addBusinessAsset(id, null, 0);
+            validate(id, $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get());
+          } 
+        }
+
+        window.supportingAssets.updateSupportingAsset(id, field, value);
+      } 
     };
 
     // cell edited callback function
@@ -165,12 +177,12 @@
         // checkbox.value = `${id}`;
         // checkbox.id = `supporting-assets__section-checkbox${id}`;
         // checkbox.name = 'supporting-assets__section-checkbox';
-        // $('#supporting-assets__section-checkboxes').append(checkbox);
-
-        addMatrixRow(id, asset.supportingAssetName);
-        asset.businessAssetRef.forEach((ref, index) => {
-          addBusinessAsset(id, ref, index);
-        });
+        if (asset.supportingAssetName) {
+          addMatrixRow(id, asset.supportingAssetName);
+          asset.businessAssetRef.forEach((ref, index) => {
+            addBusinessAsset(id, ref, index);
+          });       
+        }
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
@@ -186,7 +198,7 @@
       $(`${matrixTable} tbody`).empty();
       selectOptions = {};
       selectOptions[null] = 'Select...';
-      businessAssets.forEach((asset) => {
+      businessAssets.filter(uncheckedAsset => uncheckedAsset.businessAssetName).forEach((asset) => {
         selectOptions[asset.businessAssetId] = asset.businessAssetName;
       });
 
