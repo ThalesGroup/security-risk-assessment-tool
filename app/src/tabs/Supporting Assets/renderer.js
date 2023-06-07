@@ -26,6 +26,7 @@
 
 (async () => {
   try {
+    window.render.showLoading()
     const result = await window.render.supportingAssets();
     $('#supporting-assets').append(result[0]);
 
@@ -44,23 +45,17 @@
       }
     }
 
-    const updateSupportingAsset = (id, field, value, asset) => {
-      console.log(id,field,value,asset);
+    const updateSupportingAsset = (id, field, value) => {
       if (field === 'businessAssetRef') {
-
         validate(id, value);
       }
       else {
         if (field === 'supportingAssetName' && value) {
-          addMatrixRow(id, field);
-          if (asset && 'businessAssetRef' in asset) {
-            asset.businessAssetRef.forEach((ref, index) => {
-              addBusinessAsset(id, ref, index);
-            });
-          } else {
-            addBusinessAsset(id, ref, index);
-          }
-
+          if (!document.getElementById(`supporting-asset-business-assets__table-${id}`)) {
+            addMatrixRow(id, value);
+            addBusinessAsset(id, null, 0);
+            validate(id, $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get());
+          } 
         }
 
         window.supportingAssets.updateSupportingAsset(id, field, value);
@@ -183,8 +178,6 @@
         // checkbox.value = `${id}`;
         // checkbox.id = `supporting-assets__section-checkbox${id}`;
         // checkbox.name = 'supporting-assets__section-checkbox';
-        // $('#supporting-assets__section-checkboxes').append(checkbox);
-
         if (asset.supportingAssetName) {
           addMatrixRow(id, asset.supportingAssetName);
           asset.businessAssetRef.forEach((ref, index) => {
@@ -193,7 +186,7 @@
         }
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
-        updateSupportingAsset(id, 'businessAssetRef', selected, asset);
+        updateSupportingAsset(id, 'businessAssetRef', selected);
       });
     };
 
@@ -278,6 +271,7 @@
 
         const fetchedData = await JSON.parse(data);
         updateSupportingAssetFields(fetchedData);
+        window.render.closeLoading()
       });
     });
 

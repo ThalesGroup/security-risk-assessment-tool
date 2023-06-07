@@ -25,6 +25,7 @@
 
 (async () => {
   try {
+    window.render.showLoading()
     const result = await window.render.projectContext();
     $('#project-context').append(result[0]);
 
@@ -150,6 +151,7 @@
         });
 
         updateProjectContextFields(await JSON.parse(data).ProjectContext);
+        window.render.closeLoading()
       });
     });
 

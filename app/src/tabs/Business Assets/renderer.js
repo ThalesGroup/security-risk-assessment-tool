@@ -31,6 +31,7 @@ function updateBusinessAssetName(id, field){
 
 (async () => {
   try {
+    window.render.showLoading()
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
@@ -139,6 +140,7 @@ function updateBusinessAssetName(id, field){
           });
         },
       });
+      window.render.closeLoading()
     };
 
     const addSection = (id, asset) => {

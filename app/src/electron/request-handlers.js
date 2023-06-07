@@ -523,11 +523,15 @@ const {
   updateProjectNameAndVersionRef,
   validateISRAmeta,
   getConfig,
-  updateConfigOrg
+  updateConfigOrg,
+  showLoading,
+  closeLoading
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
 
 ipcMain.handle('render:welcome', () => renderWelcome());
+ipcMain.handle('render:showLoading', () => showLoading());
+ipcMain.handle('render:closeLoading', () => closeLoading());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
 ipcMain.handle('welcome:getConfig', () => getConfig());
 ipcMain.handle('welcome:updateConfigOrg', (event, data) => updateConfigOrg(data));
