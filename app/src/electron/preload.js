@@ -61,6 +61,8 @@ contextBridge.exposeInMainWorld('welcome', {
   deleteTrackingRow: (iterations) => ipcRenderer.invoke('welcome:deleteTrackingRow', iterations),
   updateTrackingRow: (rowData) => ipcRenderer.send('welcome:updateTrackingRow', rowData),
   updateProjectNameAndVersionRef: (field, value) => ipcRenderer.send('welcome:updateProjectNameAndVersionRef', field, value),
+  getConfig: () => ipcRenderer.invoke('welcome:getConfig'),
+  updateConfigOrg: (data) => ipcRenderer.invoke('welcome:updateConfigOrg', data),
 });
 
 contextBridge.exposeInMainWorld('projectContext', {
