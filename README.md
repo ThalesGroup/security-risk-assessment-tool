@@ -44,6 +44,7 @@ The defaults for the application can be configured as shown and described below:
 
 </details>
 
+
 <details>
   <summary>Override default organization options for project</summary>
 
@@ -55,6 +56,7 @@ The defaults for the application can be configured as shown and described below:
 ```
 
 </details>
+
 
 ## Developer installation ##
 
