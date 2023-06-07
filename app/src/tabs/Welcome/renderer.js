@@ -49,7 +49,6 @@
     //   },
     // };
 
-    console.log(result[1])
 
     const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
 
