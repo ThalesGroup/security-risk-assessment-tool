@@ -41,7 +41,9 @@ contextBridge.exposeInMainWorld('render', {
   businessAssets: () => ipcRenderer.invoke('render:businessAssets'),
   supportingAssets: () => ipcRenderer.invoke('render:supportingAssets'),
   risks: () => ipcRenderer.invoke('render:risks'),
-  vulnerabilities: () => ipcRenderer.invoke('render:vulnerabilities')
+  vulnerabilities: () => ipcRenderer.invoke('render:vulnerabilities'),
+  showLoading: () => ipcRenderer.invoke('render:showLoading'),
+  closeLoading: () => ipcRenderer.invoke('render:closeLoading'),
 });
 
 contextBridge.exposeInMainWorld('validate', {
