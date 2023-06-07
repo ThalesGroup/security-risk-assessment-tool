@@ -73,7 +73,21 @@
       setSessionStorage();
     })
 
-    const organization = (value) => {
+    const organization = async (value) => {
+      const config = await window.welcome.getConfig();
+      const orgOptions = document.getElementById('welcome__isra-meta--organization');
+      const numberOfOrgs = orgOptions.options.length - 1
+      if (!config.organizations.includes(value) && value !== '') {
+        var newOrg = document.createElement('option');
+        newOrg.text = value;
+        newOrg.value = value;
+        orgOptions.appendChild(newOrg);
+      } else if (numberOfOrgs > config.organizations.length ) {
+        const addedOrgIndex = orgOptions.options.length - 1
+        orgOptions.options[addedOrgIndex].remove()
+
+      }
+
       $('#welcome__isra-meta--organization').val(value);
       setSessionStorage();
     };
