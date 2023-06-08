@@ -23,6 +23,7 @@
             }
         ],
         "mac": {
+            "icon": "src/asset/isra-app-icon-512.png",
             "mergeASARs" : false,
             "category": "public.app-category.business",
             "target": [ 
@@ -37,6 +38,7 @@
              ]
         },
         "win": {
+            "icon": "src/asset/isra-app-icon-512.png",
             "target": [
                 {
                     "target" : "7z",
@@ -45,6 +47,7 @@
             ]
         },
         "linux": {
+            "icon": "src/asset/isra-app-icon-512.png",
             "target" : [
                 {
                     "target": "tar.gz",
