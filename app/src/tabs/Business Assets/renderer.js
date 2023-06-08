@@ -83,8 +83,8 @@ function updateBusinessAssetName(id, field){
       });
     };
 
-    const addDesc = (id, desc) => {
-      tinymce.init({
+    const addDesc = async (id, desc) => {
+      await tinymce.init({
         selector: `#business-assets__section-text-${id}`,
         promotion: false,
         height: 200,
