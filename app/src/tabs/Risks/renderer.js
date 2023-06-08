@@ -43,11 +43,12 @@
 
     tableOptions.columns[riskNameIndex].formatter = (cell) => {
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
-      const threatAgent = cell.getValue().threatAgent;
-      const threatVerb = cell.getValue().threatVerb;
-      const businessAssetRef = cell.getValue().businessAssetRef;
-      const supportingAssetRef = cell.getValue().supportingAssetRef;
-      const motivation = cell.getValue().motivation;
+      const riskNameMeta = cell.getRow().getData().nameMeta
+      const threatAgent = riskNameMeta.threatAgent;
+      const threatVerb = riskNameMeta.threatVerb;
+      const businessAssetRef = riskNameMeta.businessAssetRef;
+      const supportingAssetRef = riskNameMeta.supportingAssetRef;
+      const motivation = riskNameMeta.motivation;
       if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
         cell.getElement().style.color = '#FF0000';
       } else cell.getElement().style.color = '#000000';
@@ -56,7 +57,7 @@
       if (riskManagementDecision === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') cell.getElement().style['text-decoration'] = 'line-through';
       else cell.getElement().style['text-decoration'] = 'none';
 
-      return cell.getValue().riskName;
+      return cell.getValue();
     
     }
     
@@ -775,8 +776,10 @@
       risksTable.clearFilter();
       $('input[id="filter-value"]').val('');
       if (risksData.length > 0) $('#risks section').show();
-
-      risksTable.addData([risk]);
+      const rowData = {
+        ...risk, riskName: risk.riskName.riskName, nameMeta: risk.riskName
+      }
+      risksTable.addData([rowData]);
 
     };
 
@@ -816,7 +819,10 @@
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
-      risksTable.addData(fetchedData);
+      const tableData = fetchedData.map(risk => ( {
+        ...risk, riskName: risk.riskName.riskName, nameMeta: risk.riskName
+      }))
+      risksTable.addData(tableData);
       risksTable.selectRow(fetchedData[0].riskId);
       addSelectedRowData(fetchedData[0].riskId);
       
