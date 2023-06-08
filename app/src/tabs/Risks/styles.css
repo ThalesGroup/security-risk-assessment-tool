@@ -250,3 +250,8 @@ label[name='Discarded'] {
     font-style: italic;
     font-size: small;
 }
+
+.tabulator .tabulator-row .tabulator-cell {
+    white-space: normal;
+    overflow: visible;
+}
