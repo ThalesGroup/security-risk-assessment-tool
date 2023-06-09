@@ -1,6 +1,6 @@
 {
   "name": "isra-web-app",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha01",
   "description": "Web-based application of ISRA (lib)",
   "main": "./api/index.js",
   "scripts": {

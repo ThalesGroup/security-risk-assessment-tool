@@ -85,7 +85,7 @@
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
-                $('#app').text('1.0.0');
+                $('#app').text('1.0.0-alpha01');
                 $('#iteration').text(iteration);
 
                 let totalCost = 0;
