@@ -48,12 +48,12 @@
         const supportingAssetRef = rowData.supportingAssetRef
         const vulnerabilityDescription = rowData.vulnerabilityDescription
         const vulnerabilityName = rowData.vulnerabilityName
-
-        if (supportingAssetsData.length === 0 
-            || supportingAssetRef.length === 0
-            || vulnerabilityDescription === '' 
-            || vulnerabilityName === '') cell.getElement().style.color = '#FF0000';
-        else cell.getElement().style.color = '#000000';
+        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '')  {
+                cell.getElement().style.color = '#FF0000';
+            }
+        else  {
+            cell.getElement().style.color = '#000000';
+        }
         return cell.getValue()
     }
 
@@ -116,6 +116,15 @@
         if (cveScore < 0 || cveScore > 10) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
+
+    const validateVulnerabilityName = (vulnerability) => {
+        const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
+        if (supportingAssetsData.length === 0 
+            || supportingAssetRef.length === 0
+            || vulnerabilityDescription === '' 
+            || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#FF0000';
+        else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#000000';
+    };
 
     const updateVulnerabilityFields = (vulnerabilities) => {
         vulnerabilitiesTable.clearData();
@@ -238,6 +247,7 @@
                     const v = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
                     vulnerability.supportingAssetRef = v.supportingAssetRef;
                 }
+                validateVulnerabilityName(vulnerability);
                 
             })
             div.append(checkbox);
@@ -324,7 +334,7 @@
                         //console.log(e.target.id)
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
-                        
+                        validateVulnerabilityName(vulnerability);
                     });
                 }
             });
@@ -428,7 +438,7 @@
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
         let updatedVulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         updatedVulnerability.vulnerabilityName = vulnerability.vulnerabilityName;
-        
+        validateVulnerabilityName(updatedVulnerability);
     });
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
