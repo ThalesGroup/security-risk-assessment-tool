@@ -204,8 +204,10 @@
 
         // add vulnerability data
         vulnerabilitiesTable.addData([vulnerability]);
-        vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
-        addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
+        if (vulnerabilitiesData.length === 1) {
+            vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
+            addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
+        }
         // add checkbox
         // const checkbox = document.createElement('input');
         // checkbox.type = 'checkbox';
