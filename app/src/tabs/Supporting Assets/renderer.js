@@ -34,7 +34,7 @@
     let selectOptions = {};
 
     const validate = (id, value) =>{
-      if ((value.length === 0 && $(`${matrixTable}-${id} select`).length)
+      if ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
         || value.length !== new Set(value).size
         || value.includes('null')) {
         $(`${matrixTable}-${id} td`).first().css('color', 'red');
