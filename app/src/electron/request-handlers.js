@@ -67,8 +67,7 @@ const newISRAProject = (win, app) => {
       oldIsraProject = israProject.toJSON();
     };
     getMainWindow().title = browserTitle;
-    const classification = israProject.properties.ISRAmeta.classification
-    win.webContents.send('project:load', israProject.toJSON(), classification);
+    win.webContents.send('project:load', israProject.toJSON());
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
@@ -347,8 +346,7 @@ const loadJSONFile = async (win, filePath) => {
   try {
     israProject = new ISRAProject();
     await DataLoad(israProject, filePath);
-    const classification = config.classification
-    win.webContents.send('project:load', israProject.toJSON(), classification);
+    win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
@@ -367,8 +365,7 @@ const loadJSONFile = async (win, filePath) => {
 const loadXMLFile = (win, filePath) => {
   try {
     israProject = XML2JSON(filePath);
-    const classification = config.classification
-    win.webContents.send('project:load', israProject.toJSON(), classification);
+    win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
