@@ -30,6 +30,7 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
+
 const {
   DataStore,
   XML2JSON,
@@ -38,6 +39,7 @@ const {
 } = require('../../../lib/src/api/index');
 
 const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-project');
+const config = require('../../../lib/src/config')
 
 /**
   * israProject: holds current class for project
@@ -345,7 +347,7 @@ const loadJSONFile = async (win, filePath) => {
   try {
     israProject = new ISRAProject();
     await DataLoad(israProject, filePath);
-    const classification = israProject.properties.ISRAmeta.classification
+    const classification = config.classification
     win.webContents.send('project:load', israProject.toJSON(), classification);
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
@@ -365,7 +367,7 @@ const loadJSONFile = async (win, filePath) => {
 const loadXMLFile = (win, filePath) => {
   try {
     israProject = XML2JSON(filePath);
-    const classification = israProject.properties.ISRAmeta.classification
+    const classification = config.classification
     win.webContents.send('project:load', israProject.toJSON(), classification);
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
