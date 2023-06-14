@@ -147,6 +147,7 @@
             vulnerabilityDescription,
             vulnerabilityDescriptionAttachment,
             cveScore,
+            overallScore,
             overallLevel,
             supportingAssetRef
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
@@ -161,7 +162,7 @@
         if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 9) {
             $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(9));
         } else $('#vulnerability__scoring').val(cveScore);
-        $('#vulnerability__scoring__round').text(Math.round(cveScore));
+        $('#vulnerability__scoring__round').text(overallScore);
 
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
