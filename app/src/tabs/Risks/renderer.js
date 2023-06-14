@@ -25,7 +25,7 @@
 /* global $ tinymce Tabulator */
 (async () => {
   try {
-    window.render.showLoading()
+    //window.render.showLoading()
     const result = await window.render.risks();
     $('#risks').append(result[0]);
     const tableOptions = result[1];
@@ -944,7 +944,7 @@
         });
 
         updateRisksFields(risksData);
-        window.render.closeLoading()
+        //window.render.closeLoading()
 
       });
     });
