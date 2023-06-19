@@ -197,7 +197,9 @@
         if (refLength === 0) visibility = 'hidden';
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
         div.append(vulnerabilityDiv);
-        const selectedOption = select.find(`option:contains(${ref.name})`)
+        const selectedOption = select.find('option').filter(function() {
+          return $(this).text() === ref.name
+        })
         select.val(selectedOption.val());
       });
     };
