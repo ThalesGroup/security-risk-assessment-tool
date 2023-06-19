@@ -147,6 +147,19 @@
 
               input.click();
             }
+          },
+          // Remove the validation from the tab and use this instead
+          setup: function (ed) {
+            ed.on('change', function (e) {
+              window.validate.projectContext([
+                tinymce.get('project-description__text').getContent(),
+                tinymce.get('project-objectives__text').getContent(),
+                tinymce.get('officer-objectives__text').getContent(),
+                tinymce.get('assumptions__text').getContent(),
+              ]);
+
+
+            });
           }
         });
 

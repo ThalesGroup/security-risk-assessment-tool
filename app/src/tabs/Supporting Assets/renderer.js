@@ -267,6 +267,16 @@
               input.click();
             }
           },
+
+          setup: function (ed) {
+            ed.on('change', function (e) {
+              const desc = tinymce.get('product-architecture-diagram__text').getContent()
+              const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
+              window.validate.supportingAssets(tableData, desc);
+
+            });
+          }
+
         });
 
         const fetchedData = await JSON.parse(data);

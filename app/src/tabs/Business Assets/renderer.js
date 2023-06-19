@@ -133,12 +133,20 @@ function updateBusinessAssetName(id, field){
             input.click();
           }
         },
-        setup: (editor) => {
+        setup: function (editor)  {
           editor.on('init', () => {
             const content = desc;
             editor.setContent(content);
           });
+          editor.on('change', function (e) {
+            let richText = tinymce.get(e.target.id).getContent();
+            const id = e.target.id.replace(/\D/g,'')
+            const tableData = Tabulator.findTable(`#business-assets__section-table__${id}`)[0].getData()[0];
+            tableData.businessAssetDescription = richText
+            window.validate.businessAssets(tableData)
+          });
         },
+        
       });
       //window.render.closeLoading()
     };
