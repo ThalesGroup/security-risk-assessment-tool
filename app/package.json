@@ -11,9 +11,9 @@
         "dist": "electron-builder",
         "dist-all": "electron-builder -mwl"
     },
-
     "build": {
-        "extraResources": [{
+        "extraResources": [
+            {
                 "from": "../lib",
                 "to": "lib",
                 "filter": [
@@ -24,49 +24,48 @@
         ],
         "mac": {
             "icon": "src/asset/isra-app-icon-512.png",
-            "mergeASARs" : false,
+            "mergeASARs": false,
             "category": "public.app-category.business",
-            "target": [ 
+            "target": [
                 {
-                    "target" : "7z",
-                    "arch" : "x64"
+                    "target": "7z",
+                    "arch": "x64"
                 },
                 {
-                    "target" : "7z",
-                    "arch" : "arm64"
+                    "target": "7z",
+                    "arch": "arm64"
                 }
-             ]
+            ]
         },
         "win": {
             "icon": "src/asset/isra-app-icon-512.png",
             "target": [
                 {
-                    "target" : "7z",
-                    "arch" : "x64"
+                    "target": "7z",
+                    "arch": "x64"
                 }
             ]
         },
         "linux": {
             "icon": "src/asset/isra-app-icon-512.png",
-            "target" : [
+            "target": [
                 {
                     "target": "tar.gz",
-                    "arch" : "x64"
+                    "arch": "x64"
                 }
             ]
         },
         "appId": "com.thalesgroup.dis.sratool"
     },
     "postinstall": "electron-builder install-app-deps",
-
     "dependencies": {
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
         "tinymce": "^6.2.0"
     },
     "devDependencies": {
-        "electron-builder": "^24.4.0",
-        "electron": "^22.0.0"
+        "electron": "^22.0.0",
+        "electron-builder": "^24.4.0"
     },
     "overrides": {
         "got": "^11.8.5"
