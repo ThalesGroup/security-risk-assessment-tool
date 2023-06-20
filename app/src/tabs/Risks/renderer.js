@@ -26,7 +26,13 @@
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
     document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.risks();
     $('#risks').append(result[0]);
     const tableOptions = result[1];
@@ -949,7 +955,7 @@
         updateRisksFields(risksData);
         //window.render.closeLoading()
         document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
-
+        window.removeEventListener('keydown', handleReload);
       });
     });
 

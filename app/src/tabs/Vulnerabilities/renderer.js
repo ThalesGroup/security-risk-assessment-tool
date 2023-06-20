@@ -26,7 +26,13 @@
 (async () => {
     try {
     //window.render.showLoading()
+    function handleReload(event) {
+        if (event.ctrlKey && event.key === 'r') {
+          event.preventDefault();
+        }
+      }
     document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
     $('#vulnerabilities').append(result[0]);
@@ -346,7 +352,7 @@
             loadVulnerabilities(fetchedData);
             //window.render.closeLoading()
             document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
-
+            window.removeEventListener('keydown', handleReload);
         });
     });
 

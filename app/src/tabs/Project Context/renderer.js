@@ -26,8 +26,13 @@
 (async () => {
   try {
     //window.render.showLoading()
-    console.log(document.querySelector('.wrapper'))
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
     document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.projectContext();
     $('#project-context').append(result[0]);
 
@@ -168,6 +173,7 @@
         updateProjectContextFields(await JSON.parse(data).ProjectContext);
         //window.render.closeLoading()
         document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+        window.removeEventListener('keydown', handleReload);
       });
     });
 

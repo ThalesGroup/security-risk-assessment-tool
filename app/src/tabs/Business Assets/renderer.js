@@ -32,7 +32,13 @@ function updateBusinessAssetName(id, field){
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
     document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
@@ -151,6 +157,7 @@ function updateBusinessAssetName(id, field){
       });
       //window.render.closeLoading()
       document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+      window.removeEventListener('keydown', handleReload);
     };
 
     const addSection = (id, asset) => {

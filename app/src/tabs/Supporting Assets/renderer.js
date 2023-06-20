@@ -27,7 +27,13 @@
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
     document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.supportingAssets();
     $('#supporting-assets').append(result[0]);
 
@@ -284,6 +290,7 @@
         updateSupportingAssetFields(fetchedData);
         //window.render.closeLoading()
         document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+        window.removeEventListener('keydown', handleReload);
       });
     });
 
