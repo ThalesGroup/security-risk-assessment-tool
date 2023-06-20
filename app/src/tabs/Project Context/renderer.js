@@ -26,6 +26,8 @@
 (async () => {
   try {
     //window.render.showLoading()
+    console.log(document.querySelector('.wrapper'))
+    document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
     const result = await window.render.projectContext();
     $('#project-context').append(result[0]);
 
@@ -165,6 +167,7 @@
 
         updateProjectContextFields(await JSON.parse(data).ProjectContext);
         //window.render.closeLoading()
+        document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
       });
     });
 

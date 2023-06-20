@@ -26,6 +26,7 @@
 (async () => {
   try {
     //window.render.showLoading()
+    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
     const result = await window.render.risks();
     $('#risks').append(result[0]);
     const tableOptions = result[1];
@@ -947,6 +948,7 @@
 
         updateRisksFields(risksData);
         //window.render.closeLoading()
+        document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
 
       });
     });

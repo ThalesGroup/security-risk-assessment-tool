@@ -26,6 +26,7 @@
 (async () => {
     try {
     //window.render.showLoading()
+    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
     $('#vulnerabilities').append(result[0]);
@@ -344,6 +345,7 @@
 
             loadVulnerabilities(fetchedData);
             //window.render.closeLoading()
+            document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
 
         });
     });

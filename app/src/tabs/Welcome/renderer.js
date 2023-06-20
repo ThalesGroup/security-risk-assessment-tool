@@ -26,6 +26,7 @@
 
 (async () => {
   try {
+    document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
     const result = await window.render.welcome();
     $('#welcome').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
@@ -123,6 +124,7 @@
         updateWelcomeFields(await JSON.parse(data).ISRAmeta);
         classificationLabel = classification;
       });
+      document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
     });
 
     // events

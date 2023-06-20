@@ -57,6 +57,31 @@ const validateTabs = (tab) => {
     ]);
   };
 
+  const validateProjectContext = () => {
+    window.validate.projectContext([
+      tinymce.get('project-description__text').getContent(),
+      tinymce.get('project-objectives__text').getContent(),
+      tinymce.get('officer-objectives__text').getContent(),
+      tinymce.get('assumptions__text').getContent(),
+    ]);
+  };
+
+  const validateBusinessAsset = () => {
+    const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
+    checkboxIds.forEach((id) => {
+      console.log(id)
+      const tableData = Tabulator.findTable(`#business-assets__section-table__${id.value}`)[0].getData()[0];
+      tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
+      window.validate.businessAssets(tableData);
+    });
+  };
+
+  const validateSupportingAsset = () => {
+    const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
+    const desc = tinymce.get('product-architecture-diagram__text').getContent();
+    window.validate.supportingAssets(tableData, desc);
+  };
+
   const validateRisks = () => {
     let data = {
       riskName: {},
@@ -102,10 +127,13 @@ const validateTabs = (tab) => {
       validateWelcome();
       break;
     case 'project-context':
+      validateProjectContext();
       break;
     case 'business-assets':
+      validateBusinessAsset();
       break;
     case 'supporting-assets':
+      validateSupportingAsset();
       break;
     case 'risks':
       validateRisks();

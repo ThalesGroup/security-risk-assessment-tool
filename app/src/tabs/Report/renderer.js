@@ -25,6 +25,7 @@
 
 (async () => {
     try {
+        document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
         const renderVulnerability = (sortedVulnerability, overallLevel) => {
             sortedVulnerability[overallLevel].forEach((vulnerability) => {
                 const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
@@ -133,6 +134,7 @@
             window.project.iteration(async (event, iteration) => {
                 $('#iteration').text(iteration);
             });
+            document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
         });
     } catch (err) {
         alert('Failed to load report tab');

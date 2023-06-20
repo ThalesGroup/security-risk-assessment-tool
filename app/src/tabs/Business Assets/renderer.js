@@ -32,6 +32,7 @@ function updateBusinessAssetName(id, field){
 (async () => {
   try {
     //window.render.showLoading()
+    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
@@ -149,6 +150,7 @@ function updateBusinessAssetName(id, field){
         
       });
       //window.render.closeLoading()
+      document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
     };
 
     const addSection = (id, asset) => {

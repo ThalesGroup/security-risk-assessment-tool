@@ -27,6 +27,7 @@
 (async () => {
   try {
     //window.render.showLoading()
+    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
     const result = await window.render.supportingAssets();
     $('#supporting-assets').append(result[0]);
 
@@ -282,6 +283,7 @@
         const fetchedData = await JSON.parse(data);
         updateSupportingAssetFields(fetchedData);
         //window.render.closeLoading()
+        document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
       });
     });
 
