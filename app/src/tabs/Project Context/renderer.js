@@ -26,6 +26,13 @@
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
+    document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.projectContext();
     $('#project-context').append(result[0]);
 
@@ -147,11 +154,26 @@
 
               input.click();
             }
+          },
+          // Remove the validation from the tab and use this instead
+          setup: function (ed) {
+            ed.on('change', function (e) {
+              window.validate.projectContext([
+                tinymce.get('project-description__text').getContent(),
+                tinymce.get('project-objectives__text').getContent(),
+                tinymce.get('officer-objectives__text').getContent(),
+                tinymce.get('assumptions__text').getContent(),
+              ]);
+
+
+            });
           }
         });
 
         updateProjectContextFields(await JSON.parse(data).ProjectContext);
         //window.render.closeLoading()
+        document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+        window.removeEventListener('keydown', handleReload);
       });
     });
 

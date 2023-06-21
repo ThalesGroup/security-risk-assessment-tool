@@ -25,6 +25,13 @@
 
 (async () => {
     try {
+        function handleReload(event) {
+            if (event.ctrlKey && event.key === 'r') {
+              event.preventDefault();
+            }
+          }
+        document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+        window.addEventListener('keydown', handleReload);
         const renderVulnerability = (sortedVulnerability, overallLevel) => {
             sortedVulnerability[overallLevel].forEach((vulnerability) => {
                 const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
@@ -133,6 +140,8 @@
             window.project.iteration(async (event, iteration) => {
                 $('#iteration').text(iteration);
             });
+            document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+            window.removeEventListener('keydown', handleReload);
         });
     } catch (err) {
         alert('Failed to load report tab');
