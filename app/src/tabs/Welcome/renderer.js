@@ -26,6 +26,13 @@
 
 (async () => {
   try {
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
+    document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.welcome();
     $('#welcome').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
@@ -123,6 +130,8 @@
         updateWelcomeFields(await JSON.parse(data).ISRAmeta);
         classificationLabel = classification;
       });
+      document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
+      window.removeEventListener('keydown', handleReload);
     });
 
     // events

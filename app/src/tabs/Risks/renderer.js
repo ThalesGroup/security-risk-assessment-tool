@@ -26,6 +26,13 @@
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
+    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.risks();
     $('#risks').append(result[0]);
     const tableOptions = result[1];
@@ -437,11 +444,13 @@
           editor.on('change', function (e) {
             const { id } = e.target;
             let richText = tinymce.get(id).getContent();
-            const { riskMitigation } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+            const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+            const { riskMitigation } = risk;
             const mitigation = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
          
             if (id === `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.description = richText;
             else if (id === `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.decisionDetail = richText;
+            validatePreviousRisk(getCurrentRiskId());
           });
         },
       });
@@ -535,8 +544,11 @@
        
         // cost
         const validateCost = (input, cost) => {
-          if (!Number.isInteger(cost)) input.css('border', '1px solid red');
-          else input.css('border', 'none');
+          if (!Number.isInteger(cost))  input.css('border', '1px solid red');
+          else {
+            input.css('border', 'none');
+            validatePreviousRisk(getCurrentRiskId());
+          } 
         }
 
         const costSection = $('<section>');
@@ -553,10 +565,12 @@
         validateCost(input, Number(cost));
         input.on('change', (e) => {
           const { value } = e.target;
-          const { riskMitigation } = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+          const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+          const { riskMitigation } = risk
           const rm = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
           rm.cost = Number(value);
           validateCost(input, Number(value));
+          
         });
         costSection.append(input);
         
@@ -941,13 +955,15 @@
               else if (id === 'risk__motivation__rich-text') riskName.motivationDetail = richText;
               else if (id === 'risk__likelihood__details') riskLikelihood.riskLikelihoodDetail = richText;
               else if (id === 'risk__management__detail__rich-text') risk.riskManagementDetail = richText;
+              validatePreviousRisk(getCurrentRiskId());
             });
           }
         });
 
         updateRisksFields(risksData);
         //window.render.closeLoading()
-
+        document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+        window.removeEventListener('keydown', handleReload);
       });
     });
 

@@ -27,6 +27,13 @@
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
+    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.supportingAssets();
     $('#supporting-assets').append(result[0]);
 
@@ -267,11 +274,23 @@
               input.click();
             }
           },
+
+          setup: function (ed) {
+            ed.on('change', function (e) {
+              const desc = tinymce.get('product-architecture-diagram__text').getContent()
+              const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
+              window.validate.supportingAssets(tableData, desc);
+
+            });
+          }
+
         });
 
         const fetchedData = await JSON.parse(data);
         updateSupportingAssetFields(fetchedData);
         //window.render.closeLoading()
+        document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+        window.removeEventListener('keydown', handleReload);
       });
     });
 

@@ -32,6 +32,13 @@ function updateBusinessAssetName(id, field){
 (async () => {
   try {
     //window.render.showLoading()
+    function handleReload(event) {
+      if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();
+      }
+    }
+    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
 
@@ -133,14 +140,24 @@ function updateBusinessAssetName(id, field){
             input.click();
           }
         },
-        setup: (editor) => {
+        setup: function (editor)  {
           editor.on('init', () => {
             const content = desc;
             editor.setContent(content);
           });
+          editor.on('change', function (e) {
+            let richText = tinymce.get(e.target.id).getContent();
+            const id = e.target.id.replace(/\D/g,'')
+            const tableData = Tabulator.findTable(`#business-assets__section-table__${id}`)[0].getData()[0];
+            tableData.businessAssetDescription = richText
+            window.validate.businessAssets(tableData)
+          });
         },
+        
       });
       //window.render.closeLoading()
+      document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+      window.removeEventListener('keydown', handleReload);
     };
 
     const addSection = (id, asset) => {

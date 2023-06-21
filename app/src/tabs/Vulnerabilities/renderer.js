@@ -26,6 +26,13 @@
 (async () => {
     try {
     //window.render.showLoading()
+    function handleReload(event) {
+        if (event.ctrlKey && event.key === 'r') {
+          event.preventDefault();
+        }
+      }
+    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+    window.addEventListener('keydown', handleReload);
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
     $('#vulnerabilities').append(result[0]);
@@ -337,13 +344,15 @@
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
                         validateVulnerabilityName(vulnerability);
+                        validatePreviousVulnerability(getCurrentVulnerabilityId());
                     });
                 }
             });
 
             loadVulnerabilities(fetchedData);
             //window.render.closeLoading()
-
+            document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+            window.removeEventListener('keydown', handleReload);
         });
     });
 
@@ -462,16 +471,19 @@
     $('input[name="vulnerability__trackingID"]').on('change', (e)=> {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         vulnerability.vulnerabilityTrackingID = e.target.value;
+        validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
     $('input[name="vulnerability__CVE"]').on('change', (e) => {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         vulnerability.vulnerabilityCVE = e.target.value;
+        validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
     $('select[name="vulnerability__family"]').on('change', (e) => {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         vulnerability.vulnerabilityFamily = e.target.value;
+        validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
     } catch (err) {
