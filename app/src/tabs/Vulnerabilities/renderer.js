@@ -445,15 +445,17 @@
 
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
         const { value } = e.target;
-        if (value.length !== 1 && value.split('.')[1].length > 9) {
-            $('#vulnerability__scoring').val(Number.parseFloat(value).toFixed(9)); 
+        let fixedValue = value;
+        if (value.includes('.') && value.split('.')[1].length > 9) {
+            fixedValue = Number.parseFloat(value).toFixed(9); 
         };
-        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', value);
+        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', fixedValue);
         const { overallLevel, cveScore } = vulnerability;
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        validateCVEScore(value);
+        validateCVEScore(fixedValue);
+        $('#vulnerability__scoring').val(cveScore); 
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
     });
 
