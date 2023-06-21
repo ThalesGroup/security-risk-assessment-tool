@@ -345,6 +345,7 @@
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
                         validateVulnerabilityName(vulnerability);
+                        validatePreviousVulnerability(getCurrentVulnerabilityId());
                     });
                 }
             });
@@ -469,16 +470,19 @@
     $('input[name="vulnerability__trackingID"]').on('change', (e)=> {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         vulnerability.vulnerabilityTrackingID = e.target.value;
+        validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
     $('input[name="vulnerability__CVE"]').on('change', (e) => {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         vulnerability.vulnerabilityCVE = e.target.value;
+        validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
     $('select[name="vulnerability__family"]').on('change', (e) => {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
         vulnerability.vulnerabilityFamily = e.target.value;
+        validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
     } catch (err) {
