@@ -463,7 +463,7 @@
         vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
         $('#vulnerability__level').removeClass();
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        validateCVEScore(fixedValue);
+        validateCVEScore(cveScore);
         $('#vulnerability__scoring').val(cveScore); 
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
     });
