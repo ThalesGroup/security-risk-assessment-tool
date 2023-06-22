@@ -28,11 +28,11 @@
             "category": "public.app-category.business",
             "target": [
                 {
-                    "target": "7z",
+                    "target": "zip",
                     "arch": "x64"
                 },
                 {
-                    "target": "7z",
+                    "target": "zip",
                     "arch": "arm64"
                 }
             ]
@@ -41,7 +41,7 @@
             "icon": "src/asset/isra-app-icon-512.png",
             "target": [
                 {
-                    "target": "7z",
+                    "target": "zip",
                     "arch": "x64"
                 }
             ]
