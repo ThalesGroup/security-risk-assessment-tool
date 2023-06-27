@@ -1,7 +1,7 @@
 name: Bug Report
 description: File a bug report
 title: "[Bug]: "
-labels: ["bug"]
+labels: ["bug", "triage"]
 assignees:
   - octocat
 body:
@@ -27,7 +27,7 @@ body:
       # value: "A bug happened!"
     validations:
       required: true
-   - type: textarea
+  - type: textarea
     id: expected-results
     attributes:
       label: Expected Results
