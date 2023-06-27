@@ -5,7 +5,6 @@ labels: ["bug"]
 assignees:
   - octocat
 body:
-  - type: markdown
   - type: textarea
     id: issue-description 
     attributes:
