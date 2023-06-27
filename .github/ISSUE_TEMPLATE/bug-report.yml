@@ -1,0 +1,74 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+  - type: textarea
+    id: issue-description 
+    attributes:
+      label: Issue Description
+      description: Describe the issue encountered
+      placeholder: Tell us what you see!
+      # value: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    id: duplicate-steps
+    attributes:
+      label: Duplicate Steps 
+      description: Describe the actions that triggered the issue
+      placeholder: Tell us what you did!
+      # value: "A bug happened!"
+    validations:
+      required: true
+   - type: textarea
+    id: expected-results
+    attributes:
+      label: Expected Results
+      description: Describe what it supposed to happen instead
+      placeholder: Tell us what you expect!
+      # value: "A bug happened!"
+    validations:
+      required: true
+  - type: dropdown
+    id: version-detected
+    attributes:
+      label: Version Detected
+      description: What version of SRA tool are you running?
+      options:
+        - 1.0.1 (Default)
+    validations:
+      required: true
+  - type: dropdown
+    id: version-corrected
+    attributes:
+      label: Version Corrected
+      description: What version of SRA tool was this fixed?
+      options:
+        - 1.0.1 (Default)
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: How severe are the bugs with regards to the functionality of SRA tool?
+      multiple: false
+      options:
+        - Critical
+        - Major
+        - Minor
+        - Trivial
+  - type: dropdown
+    id: root-cause
+    attributes:
+      label: What could have caused the issue?
+      multiple: true
+      options:
+        - Requirements
+        - Design
+        - Coding
+        - Configuration
+        - Documentation
