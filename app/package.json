@@ -1,6 +1,6 @@
 {
     "name": "sratool",
-    "version": "1.0.1-alpha01",
+    "version": "1.0.1",
     "author": "Thales DIS",
     "license": "BSD-4-Clause",
     "description": "Security Risk Assessment tool",
