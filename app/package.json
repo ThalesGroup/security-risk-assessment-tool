@@ -12,6 +12,7 @@
         "dist-all": "electron-builder -mwl"
     },
     "build": {
+        "artifactName": "${name}-${version}-${platform}-${arch}.${ext}",
         "extraResources": [
             {
                 "from": "../lib",
