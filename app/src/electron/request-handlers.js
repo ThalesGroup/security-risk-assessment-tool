@@ -372,7 +372,26 @@ const loadXMLFile = (win, filePath) => {
     getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
+    let message = ""
+    const JSON_START_INDEX = 42;
+    if (err.message.slice(0,JSON_START_INDEX) === "Failed to validate json against schema at:") {
+      
+      const errorJSON = JSON.parse(err.message.slice("Failed to validate json against schema at:".length, ));
+      const affectedField = errorJSON[0]['instancePath'].split("/").filter(element => isNaN(element));
+
+      message += "Invalid data input in " + affectedField[0] + " Tab, \n`"
+      for (const subCategory in affectedField) {
+        if (subCategory > 0) {
+          message +=  " " + affectedField[subCategory]
+        }
+      }
+      message += "` field: " + errorJSON[0]['message']
+    } else {
+      message = err.message;
+    }
+    
+    
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${message}` });
   }
 };
 
