@@ -38,3 +38,5 @@ In the case where automated testing is not possible, please add some new test ca
 Ensure to add unit tests that successfully run when applicable for any added functionality, especially in the backend.
 
 ### Issues management
+
+Anyone can provide ideas of improvements and bugs through the issue tracker. Please provide information so that issues can be reproduced. Please specifically add the label *improvement* for improvements and *bug* for defects.
