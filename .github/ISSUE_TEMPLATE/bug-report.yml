@@ -44,16 +44,9 @@ body:
         - 1.0.1 (Default)
     validations:
       required: true
-  - type: dropdown
-    id: root-cause
+  - type: textarea
+    id: attachments
     attributes:
-      label: What could have caused the issue?
-      multiple: true
-      options:
-        - Requirements
-        - Design
-        - Coding
-        - Configuration
-        - Documentation
-    validations:
-      required: true
+      label: Attachments
+      description: Upload attachments to show the issue
+      placeholder: Show us what happened
