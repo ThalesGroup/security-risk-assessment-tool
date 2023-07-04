@@ -170,6 +170,7 @@ const saveProject = () => {
   * validation instantly fails when one of the validation methods fails
 */
 const validateClasses = () => {
+  console.log(israProject.properties)
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
@@ -385,6 +386,168 @@ const loadFile = (win) => {
   validationErrors('Load File');
 };
 
+
+const loadData = (win) => {
+
+  console.log(israProject.properties)
+  const openFileDialog = () => {
+    const options = {
+      title: 'Open file - Electron ISRA Project',
+      buttonLabel: 'Open File',
+      filters: [
+        { name: 'JSON/XML', extensions: ['json', 'xml'] },
+      ],
+    };
+    const filePathArr = dialog.showOpenDialogSync(options);
+
+    if (filePathArr !== undefined) {
+      
+      function activateImportDialog() {
+        let dialogWindow = new BrowserWindow({
+          width: 400,
+          height: 200,
+          autoHideMenuBar: true,
+          menuBarVisibility: 'hidden',
+          parent: getMainWindow(),
+          modal: true,
+          show: false,
+          webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+          },
+        });
+        dialogWindow.loadFile(path.join(__dirname,'import_dialog.html'));
+        dialogWindow.show()
+      }
+
+      const filePath = filePathArr[0];
+      const fileType = filePath.split('.').pop();
+      activateImportDialog()
+
+      //NEW FUNCTION PLEASE
+      const currentISRA = israProject.properties
+
+      if (fileType === 'json') {
+        try {
+          
+          // NEW FUNCTION TO EXTRACT DATA FROM JSON AND XML
+          const XML2JSON = (filePath) => {
+            const xmlData = fs.readFileSync(filePath, 'utf8');
+          
+            const resultJSON = parser(xmlData);
+          
+            // writeFile(resultJSON);
+          
+            const israJSONData = alterISRA(resultJSON.ISRA, xmlData);
+            const iterations = israJSONData.ISRAmeta.ISRAtracking
+            const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
+            + '|(^$)')
+            for (var index = 0; index < iterations.length; index++) {
+              const currentDate = iterations[index].trackingDate
+              const validFormat = dateFormat.test(currentDate)
+              const isValidDate = !isNaN(new Date(currentDate));
+              if (!validFormat) {
+                if (isValidDate) {
+                  // convert to correct format
+                  const date = new Date(currentDate);
+                  const year = date.getFullYear();
+                  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                  const day = date.getDate().toString().padStart(2, '0');
+                  const newDate = year + '-' + month + '-' + day;
+                  israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
+                } else {
+                  israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = '';
+                }
+              }
+            }
+          
+            const israValidJSONData = validateJsonSchema(israJSONData);
+           
+            
+          };
+
+          function insertISRA(currentISRA, importedISRA, tabs) {
+            // tabs = [1,2,3,4] wher each id represents the 4 tabs respectively
+
+            // insert BA data
+            // if(tabs.contains(1)) {}
+
+            // insert SA data
+            // if(tabs.contains(2))
+
+            // insert Risks data
+            // if(tabs.contains(3))
+
+            // insert 
+
+          }
+          
+          /* DataLoad(oldIsraProjectsraProject, filePath);
+          const DataLoad = (israProject, filePath) => new Promise((resolve, reject) => {
+            // read contents of file
+            fs.readFile(filePath, 'utf8', (err, data) => {
+              if (err) {
+                // reject the promise in case of error
+                reject(new Error('Failed to open file'));
+              }
+          
+              try {
+                const jsonData = JSON.parse(data);
+                const iterations = jsonData.ISRAmeta.ISRAtracking
+                const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
+                + '|(^$)')
+                for (var index = 0; index < iterations.length; index++) {
+                  const currentDate = iterations[index].trackingDate
+                  const validFormat = dateFormat.test(currentDate)
+                  const isValidDate = !isNaN(new Date(currentDate));
+                  if (!validFormat) {
+                    if (isValidDate) {
+                      // convert to correct format
+                      const date = new Date(currentDate);
+                      const year = date.getFullYear();
+                      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                      const day = date.getDate().toString().padStart(2, '0');
+                      const newDate = year + '-' + month + '-' + day;
+                      jsonData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
+                    } else {
+                      jsonData.ISRAmeta.ISRAtracking[index].trackingDate = '';
+                    }
+                  }
+                }
+          
+          
+                //console.log(jsonData.ISRAmeta.ISRAtracking)
+                const validJSONData = validateJSONschema(jsonData);
+                populateClass(validJSONData, israProject);
+                resolve('Done load');
+              } catch (error) {
+                reject(error);
+              }
+            });
+          }); */
+          const classification = israProject.properties.ISRAmeta.classification
+          win.webContents.send('project:load', israProject.toJSON(), classification);
+          jsonFilePath = filePath;
+          browserTitle = `ISRA Risk Assessment - ${filePath}`;
+          getMainWindow().title = browserTitle;
+          oldIsraProject = israProject.toJSON();
+        } catch (err) {
+          console.log(err);
+          dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+        }
+      } else { 
+        loadXMLFile(getMainWindow(), filePath);
+      }
+    }
+  };
+
+  openFileDialog();
+
+  
+
+  
+};
+
 /**
   * Download pdf file to selected path
   * @module downloadReport
@@ -484,6 +647,7 @@ const downloadReport = async (app) => {
 module.exports = {
   validationErrors,
   loadFile,
+  loadData,
   newISRAProject,
   downloadReport,
   exit
