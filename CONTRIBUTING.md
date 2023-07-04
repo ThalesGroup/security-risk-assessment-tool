@@ -31,7 +31,7 @@ All third party contributions will go through pull request reviews to make sure 
 
 #### Running sanity check
 
-In the case where automated testing is not possible, please add some new test cases to the test plan that will be reviewed internally and run to ensure new functionalty meets basic quality standards.
+In the case where automated testing is not possible, please add some new test cases to the test plan that will be reviewed internally and run to ensure new functionality meets basic quality standards.
 
 #### Running unit tests
 
