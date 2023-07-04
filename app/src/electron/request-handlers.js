@@ -173,44 +173,187 @@ const validateClasses = () => {
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
-    if (!ISRAmeta.projectOrganization) return false;
-    return true;
+    let valid = true;
+    let message = '';
+    if (!ISRAmeta.projectOrganization) {
+      valid = false
+      message += 'Welcome Tab:\n- Project Organization is blank\n'
+    } 
+    if (valid) {
+      message = '';
+    }
+    return {status: valid, error: message};
   };
 
   const validateSupportingAssetsTab = () =>{
+    let valid = true;
+    let message = 'Supporting Assets Tab:\n';
     for(let i=0; i<SupportingAsset.length; i++){
       const { businessAssetRef } = SupportingAsset[i];
       const uniqueRefs = new Set();
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
-        if (!ref || uniqueRefs.has(ref)) return false;
+        if (!ref) {
+          valid = false
+          message += `- Business Asset Reference ${j} for Supporting Asset ID ${i} is null\n`
+        } else if (uniqueRefs.has(ref)) {
+          valid = false;
+          message += `- Business Asset Reference ${j} for Supporting Asset ID ${i} is duplicated\n`
+        }
         uniqueRefs.add(ref);
       }
     }
-    return true;
+
+    if (valid) {
+      message = '';
+    }
+    return {status: valid, error: message};
   };
 
   const validateRisksTab = () => {
+    let valid = true;
+    let message = 'Risks Tab:\n';
     for (let i = 0; i < Risk.length; i++) {
+      let sameRiskSection = false;
+      message += `- Risk ID ${i}'s `;
       const { riskName, riskMitigation } = Risk[i];
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
+      //if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return [false];
+      if (threatAgent === '') {
+        valid = false;
+        
+        message += 'Threat Agent is empty'
+        sameRiskSection = true;
+      }
+      if (threatVerb === '') {
+        valid = false;
+        if (sameRiskSection) {
+          message += ',Threat Verb is empty'
+        } else {
+          sameRiskSection = true;
+          message += ' Threat Verb is empty'
+        }
+      }
+      if (businessAssetRef === null) {
+        valid = false;
+        if (sameRiskSection) {
+          message += ',Business Asset is empty'
+        } else {
+          sameRiskSection = true;
+          message += ' Business Asset is empty'
+        }
+      }
+      if (supportingAssetRef === null) {
+        valid = false;
+        if (sameRiskSection) {
+          message += ',Supporting Asset is empty'
+        } else {
+          sameRiskSection = true;
+          message += ' Supporting Asset is empty'
+        }
+      }
+      if (motivation === '') {
+        valid = false;
+        if (sameRiskSection) {
+          message += ',Threat Motivation is empty'
+        } else {
+          sameRiskSection = true;
+          message += ' Threat Motivation is empty'
+        }
+      }
+      if (sameRiskSection) {
+        message += "\n"
+      }
+      
      for(let i=0; i<riskMitigation.length; i++){
-       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) return false;
+       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
+          valid = false;
+          message += `- Risk ID ${1}'s Risk Mitigation Cost is not an integer\n`;
+       }
      }
     }
-    return true;
+    if (valid) {
+      message = '';
+    }
+    return {status: valid, error: message};
   };
 
   const validateVulnerabilitiesTab = () => {
+    let valid = true;
+    let message = 'Vulnerabilities Tab:\n';
     for(let i=0; i<Vulnerability.length; i++) {
+      let sameVulSection = false;
+      message += `- Vulnerability ID ${i}'s `;
       const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
-      if (cveScore < 0 || cveScore > 10 || cveScore === null || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return false;
+      //if (cveScore < 0 || cveScore > 10 || cveScore === null || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return [false];
+      if (cveScore === null) {
+
+        valid = false;
+        message += 'CVE Score is empty'
+        sameVulSection = true;
+
+      } else if (cveScore < 0) {
+
+        valid = false;
+        message += 'CVE Score is below 0'
+        sameVulSection = true;
+
+      } else if (cveScore > 10) {
+
+        valid = false;
+        message += 'CVE Score is above 10'
+        sameVulSection = true;
+
+      }
+      if (supportingAssetRef.length === 0) {
+        valid = false;
+        if (sameVulSection) {
+          message += ',Supporting Assets is empty'
+        } else {
+          sameVulSection = true;
+          message += ' Supporting Assets is empty'
+        }
+      }
+
+      if (vulnerabilityDescription === '') {
+        valid = false;
+        if (sameVulSection) {
+          message += ',Vulnerability Description is empty'
+        } else {
+          sameVulSection = true;
+          message += ' Vulnerability Description is empty'
+        }
+      }
+
+      if (vulnerabilityName === '') {
+        valid = false;
+        if (sameVulSection) {
+          message += ',Vulnerability Name is empty'
+        } else {
+          sameVulSection = true;
+          message += ' Vulnerability Name is empty'
+        }
+      }
+
+      if (sameVulSection) {
+        message += "\n"
+      }
+
     }
-    return true;
+    if (valid) {
+      message = '';
+    }
+    return {status: valid, error: message};
   };
 
-  return validateWelcomeTab() && validateSupportingAssetsTab() && validateRisksTab() && validateVulnerabilitiesTab();
+  const {status: welcomeStatus, error: welcomeError} = validateWelcomeTab();
+  const {status: saStatus, error: saError} = validateSupportingAssetsTab();
+  const {status: riskStatus, error: riskError} = validateRisksTab();
+  const {status: vulStatus, error: vulError} = validateVulnerabilitiesTab();
+  console.log(welcomeError)
+  const valid = welcomeStatus && saStatus && riskStatus && vulStatus;
+  const message = welcomeError + "\n\n" + saError + "\n\n" + riskError + "\n\n" + vulError;
+  return {status: valid, error: message}
 };
 
 /**
@@ -250,12 +393,12 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       if (labelSelected === 'Save As') saveAs();
       else if (labelSelected === 'Save') saveProject();
     };
-
-    if (validateClasses()) saveOrSaveAs();
+    const {status, error} = validateClasses();
+    if (status) saveOrSaveAs();
     else {
       const result = dialog.showMessageBoxSync(getMainWindow(), {
         type: 'warning',
-        message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
+        message: `The form contains validation errors. Errors are marked with red border/color (required fields/invalid values).\n\n${error} \nDo you still want to save it?`,
         title: 'Validation Errors',
         buttons: ['Yes', 'No'], // Yes returns 0, No returns 1
       });
@@ -326,6 +469,28 @@ const validationErrors = (labelSelected) => {
 //     if (result === 0) saveOrSaveAs();
 //   }
 // });
+function getError(err) {
+  let message = ""
+    const JSON_START_INDEX = 42;
+    if (err.message.slice(0,JSON_START_INDEX) === "Failed to validate json against schema at:") {
+      
+      const errorJSON = JSON.parse(err.message.slice("Failed to validate json against schema at:".length, ));
+      const affectedField = errorJSON[0]['instancePath'].split("/").filter(element => isNaN(element));
+
+      message += "Invalid data input in " + affectedField[0] + " Tab, \n`"
+      for (const subCategory in affectedField) {
+        if (subCategory > 0) {
+          message +=  " " + affectedField[subCategory]
+        }
+      }
+      message += "` field: " + errorJSON[0]['message']
+    } else {
+      message = err.message;
+    }
+
+  return message
+}
+
 
 /**
   * Exit button is pressed
@@ -353,7 +518,8 @@ const loadJSONFile = async (win, filePath) => {
     oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+    const errorMessage = getError(err)
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
   }
 };
 
@@ -372,26 +538,8 @@ const loadXMLFile = (win, filePath) => {
     getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
-    let message = ""
-    const JSON_START_INDEX = 42;
-    if (err.message.slice(0,JSON_START_INDEX) === "Failed to validate json against schema at:") {
-      
-      const errorJSON = JSON.parse(err.message.slice("Failed to validate json against schema at:".length, ));
-      const affectedField = errorJSON[0]['instancePath'].split("/").filter(element => isNaN(element));
-
-      message += "Invalid data input in " + affectedField[0] + " Tab, \n`"
-      for (const subCategory in affectedField) {
-        if (subCategory > 0) {
-          message +=  " " + affectedField[subCategory]
-        }
-      }
-      message += "` field: " + errorJSON[0]['message']
-    } else {
-      message = err.message;
-    }
-    
-    
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${message}` });
+    const errorMessage = getError(err)
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${errorMessage}` });
   }
 };
 
