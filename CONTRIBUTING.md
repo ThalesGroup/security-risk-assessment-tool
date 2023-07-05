@@ -1,42 +1,40 @@
 # Contributing guidelines
 
-Thales DIS is open to contributions which enhances functionality of the tool as well as bug corrections. On the other hand, breaking changes or changes that significantly change the way risk calculations are done may require discussions and may be rejected, because this could impact significantly internal ways of working. 
+Thales DIS appreciates contributions aimed at enhancing the functionality of the tool, addressing bugs, and enabling performance improvements. However, significant changes that modify the approach to risk calculations may necessitate discussions and could potentially be declined. It is important to consider that such alterations can have a significant impact on the internal workings of the tool.
 
 ## Team organization
 
 ### Roles
 
-* Project Manager: Responsible to decide the schedule of releases as well as what is be included in the release. The project manager will take into account the needs of different stakeholders to prioritize issues and functionalities.
-* SRA Workgroup: Internal Thales DIS working group that represents the interests of internal Thales DIS stakeholders. They provide feedback on improvements and potential future needs of the tools.
-* Internal contributor is the main person doing development and testing in Thales DIS that meets our needs. This is usually done part-time.
+* *Project Manager*: Responsible for determining the release schedule and the content to be included in each release. The project manager considers the needs of various stakeholders to prioritize issues and functionalities.
+* *SRA Workgroup*: An internal Thales DIS working group that represents the interests of internal Thales DIS stakeholders. They provide feedback on improvements and potential future requirements of the tools.
+* *Internal contributor*: The primary person responsible for development and testing in Thales DIS, tailored to meet our specific needs. This role is typically part-time.
 
 
 ## How to become a contributor
 
 ### Contributor License Agreements
 
-Any contribution to this project will require to abide the BSD Clause-4 license. We are open to other types of licenses as needed, please contact us to discuss the topic.
+Any contribution to this project requires compliance with the BSD 4-Clause license. We are open to discussing other types of licenses as needed, so please contact us to initiate a conversation.
 
 ### Contributing code
 
-All third party contributions will go through pull request reviews to make sure that it meets our quality standards. 
+All third-party contributions will undergo pull request reviews to ensure they meet our quality standards.
 
 ## Pull Request Checklist
 
-### License
+* License
+* Coding style
+* Testing
+* Running sanity check
 
-### Coding style
+If automated testing is not feasible, please add new test cases to the test plan. These will be reviewed internally and executed to ensure that the new functionality meets basic quality standards.
 
-### Testing
 
-#### Running sanity check
+## Running unit tests
 
-In the case where automated testing is not possible, please add some new test cases to the test plan that will be reviewed internally and run to ensure new functionality meets basic quality standards.
+For any added functionality, especially in the backend, please ensure that applicable unit tests are added and run successfully.
 
-#### Running unit tests
+## Issues management
 
-Ensure to add unit tests that successfully run when applicable for any added functionality, especially in the backend.
-
-### Issues management
-
-Anyone can provide ideas of improvements and bugs through the issue tracker. Please provide information so that issues can be reproduced. Please specifically add the label *improvement* for improvements and *bug* for defects.
+Anyone can suggest improvements or report bugs through the issue tracker. Please provide sufficient information to reproduce the issues. Specifically, label improvements as "improvement" and defects as "bug."
