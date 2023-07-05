@@ -1,38 +1,37 @@
-name: Bug Report
-description: File a bug report
-title: "[Bug]: "
-labels: ["bug"]
+name: Report an Issue
+description: File an issue
+title: "[Issue]: "
+labels: []
 
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        Thanks for taking the time to fill out this issue!
   - type: textarea
     id: issue-description 
     attributes:
       label: Issue Description
       description: Describe the issue encountered
       placeholder: Tell us what you see!
-      # value: "A bug happened!"
+
     validations:
       required: true
   - type: textarea
     id: duplicate-steps
     attributes:
       label: Duplicate Steps 
-      description: Describe the actions that triggered the issue
+      description: How to reproduce the issue
       placeholder: Tell us what you did!
-      # value: "A bug happened!"
-    validations:
-      required: true
+
+
   - type: textarea
     id: expected-results
     attributes:
       label: Expected Results
       description: Describe what it supposed to happen instead
       placeholder: Tell us what you expect!
-      # value: "A bug happened!"
+
     validations:
       required: true
   - type: dropdown
