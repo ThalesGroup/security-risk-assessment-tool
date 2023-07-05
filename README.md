@@ -1,3 +1,4 @@
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ThalesGroup/security-risk-assessment-tool/badge)](https://securityscorecards.dev/viewer/?uri=github.com/ThalesGroup/security-risk-assessment-tool)
 # Security Risk Assessment tool
 
 The ISRA or Security risk assessment tool project is an Electron based application used internally in Thales Digital Identity and Security Business Unit (Thales DIS) to evaluate security risks of engineering projects. 
