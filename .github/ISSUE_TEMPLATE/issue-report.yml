@@ -40,7 +40,8 @@ body:
       label: Version Detected
       description: What version of SRA tool are you running?
       options:
-        - 1.0.1 (Default)
+        - 1.0.1 
+        - 1.0.2 (Default)
     validations:
       required: true
   - type: textarea
