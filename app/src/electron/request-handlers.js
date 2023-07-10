@@ -29,6 +29,7 @@ const {
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
+const yaml = require('yaml');
 
 const {
   DataStore,
@@ -231,7 +232,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       title: 'Open file - Electron ISRA Project',
       buttonLabel: 'Open File',
       filters: [
-        { name: 'JSON/XML', extensions: ['json', 'xml'] },
+        { name: 'JSON/XML', extensions: ['json', 'xml','yaml'] },
       ],
     };
     const filePathArr = dialog.showOpenDialogSync(options);
@@ -241,7 +242,8 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       const fileType = filePath.split('.').pop();
 
       if (fileType === 'json') loadJSONFile(getMainWindow(), filePath);
-      else loadXMLFile(getMainWindow(), filePath);
+      else if (fileType === 'xml') loadXMLFile(getMainWindow(), filePath);
+      // else loadYAMLFile(getMainWindow(), filePath) 
     }
   };
 
@@ -354,6 +356,26 @@ const loadJSONFile = async (win, filePath) => {
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+  }
+};
+
+/**
+  * Load XML file
+  * @param {string} win Browser window
+  * @param {string} filePath path of selected xml file
+*/
+const loadYAMLFile = async (win, filePath) => {
+  try {
+    israProject = new ISRAProject();
+    await DataLoad(israProject, filePath);
+    const classification = israProject.properties.ISRAmeta.classification
+    win.webContents.send('project:load', israProject.toJSON(), classification);
+    jsonFilePath = '';
+    browserTitle = `ISRA Risk Assessment - ${filePath}`;
+    getMainWindow().title = browserTitle;
+  } catch (err) {
+    console.log(err);
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid XML File' });
   }
 };
 
