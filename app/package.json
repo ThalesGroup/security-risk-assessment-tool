@@ -45,6 +45,9 @@
                 {
                     "target": "zip",
                     "arch": "x64"
+                },
+                {
+                    "target": "nsis"
                 }
             ]
         },
