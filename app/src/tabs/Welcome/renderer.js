@@ -126,8 +126,9 @@
     };
 
     $(document).ready(function () {
-      window.project.load(async (event, data, classification) => {
-        updateWelcomeFields(await JSON.parse(data).ISRAmeta);
+      window.project.load(async (event, data) => {
+        isra= await JSON.parse(data).ISRAmeta
+        updateWelcomeFields(isra);
         classificationLabel = classification;
       });
       document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;

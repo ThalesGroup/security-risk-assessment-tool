@@ -30,6 +30,7 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
+
 const {
   DataStore,
   XML2JSON,
@@ -38,6 +39,7 @@ const {
 } = require('../../../lib/src/api/index');
 
 const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-project');
+const config = require('../../../lib/src/config')
 
 /**
   * israProject: holds current class for project
@@ -65,8 +67,7 @@ const newISRAProject = (win, app) => {
       oldIsraProject = israProject.toJSON();
     };
     getMainWindow().title = browserTitle;
-    const classification = israProject.properties.ISRAmeta.classification
-    win.webContents.send('project:load', israProject.toJSON(), classification);
+    win.webContents.send('project:load', israProject.toJSON());
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
@@ -345,8 +346,7 @@ const loadJSONFile = async (win, filePath) => {
   try {
     israProject = new ISRAProject();
     await DataLoad(israProject, filePath);
-    const classification = israProject.properties.ISRAmeta.classification
-    win.webContents.send('project:load', israProject.toJSON(), classification);
+    win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
@@ -365,8 +365,7 @@ const loadJSONFile = async (win, filePath) => {
 const loadXMLFile = (win, filePath) => {
   try {
     israProject = XML2JSON(filePath);
-    const classification = israProject.properties.ISRAmeta.classification
-    win.webContents.send('project:load', israProject.toJSON(), classification);
+    win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
