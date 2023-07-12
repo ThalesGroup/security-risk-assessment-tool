@@ -193,8 +193,7 @@ const validateClasses = () => {
 
   const validateRisksTab = () => {
     for (let i = 0; i < Risk.length; i++) {
-      const { riskName, riskMitigation } = Risk[i];
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
+      const { riskName,threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation, riskMitigation } = Risk[i];
       if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
      for(let i=0; i<riskMitigation.length; i++){
        if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) return false;

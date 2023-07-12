@@ -84,7 +84,6 @@ const validateTabs = (tab) => {
 
   const validateRisks = () => {
     let data = {
-      riskName: {},
       riskLikelihood: {}
     };
     const selectedTableData = Tabulator.findTable('#risks__table')[0].getSelectedData()[0];
