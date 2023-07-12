@@ -947,7 +947,7 @@
               let richText = tinymce.get(id).getContent();
               const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
               const { riskLikelihood } = risk;
-
+              console.log(richText)
               if (id === 'risk__threatAgent__rich-text') risk.threatAgentDetail = richText;
               else if (id === 'risk__threat__rich-text') risk.threatVerbDetail = richText;
               else if (id === 'risk__motivation__rich-text') risk.motivationDetail = richText;
