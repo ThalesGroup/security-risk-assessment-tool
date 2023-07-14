@@ -29,6 +29,15 @@ const {
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
+// eslint-disable-next-line no-unused-vars
+
+const parser = require('../../../lib/src/api/xml-json/parser');
+const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra');
+const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
+const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
+const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
+//const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
+//const populateClass = require('./populate-class');
 
 const {
   DataStore,
@@ -389,7 +398,6 @@ const loadFile = (win) => {
 
 const loadData = (win) => {
 
-  console.log(israProject.properties)
   const openFileDialog = () => {
     const options = {
       title: 'Open file - Electron ISRA Project',
@@ -401,9 +409,92 @@ const loadData = (win) => {
     const filePathArr = dialog.showOpenDialogSync(options);
 
     if (filePathArr !== undefined) {
+
+      let importedISRA = null;
+
+      const filePath = filePathArr[0];
+      const fileType = filePath.split('.').pop();
+
+      if (fileType === 'json') {
+
+        fs.readFile(filePath, 'utf8', (err, data) => {
+          if (err) {
+            // reject the promise in case of error
+            reject(new Error('Failed to open file'));
+          }
       
+          try {
+            const jsonData = JSON.parse(data);
+            const iterations = jsonData.ISRAmeta.ISRAtracking
+            const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
+            + '|(^$)')
+            for (var index = 0; index < iterations.length; index++) {
+              const currentDate = iterations[index].trackingDate
+              const validFormat = dateFormat.test(currentDate)
+              const isValidDate = !isNaN(new Date(currentDate));
+              if (!validFormat) {
+                if (isValidDate) {
+                  // convert to correct format
+                  const date = new Date(currentDate);
+                  const year = date.getFullYear();
+                  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                  const day = date.getDate().toString().padStart(2, '0');
+                  const newDate = year + '-' + month + '-' + day;
+                  jsonData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
+                } else {
+                  jsonData.ISRAmeta.ISRAtracking[index].trackingDate = '';
+                }
+              }
+            }
+      
+      
+            //console.log(jsonData.ISRAmeta.ISRAtracking)
+            importedISRA = validateJSONschema(jsonData);
+          } catch (error) {
+            reject(error);
+          }
+        });
+
+      } else {
+
+        const xmlData = fs.readFileSync(filePath, 'utf8');
+        const resultJSON = parser(xmlData);
+
+        // writeFile(resultJSON);
+
+        const israJSONData = alterISRA(resultJSON.ISRA, xmlData);
+        const iterations = israJSONData.ISRAmeta.ISRAtracking
+        const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
+        + '|(^$)')
+
+        for (var index = 0; index < iterations.length; index++) {
+          const currentDate = iterations[index].trackingDate
+          const validFormat = dateFormat.test(currentDate)
+          const isValidDate = !isNaN(new Date(currentDate));
+          if (!validFormat) {
+            if (isValidDate) {
+              // convert to correct format
+              const date = new Date(currentDate);
+              const year = date.getFullYear();
+              const month = (date.getMonth() + 1).toString().padStart(2, '0');
+              const day = date.getDate().toString().padStart(2, '0');
+              const newDate = year + '-' + month + '-' + day;
+              israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
+            } else {
+              israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = '';
+            }
+          }
+        }
+      
+        importedISRA = validateJsonSchema(israJSONData);
+
+        
+      }
+      // For data selection 
+      // New dialog window with tabs + the table thing 
+      let dialogWindow = null;
       function activateImportDialog() {
-        let dialogWindow = new BrowserWindow({
+        dialogWindow = new BrowserWindow({
           width: 400,
           height: 200,
           autoHideMenuBar: true,
@@ -420,124 +511,110 @@ const loadData = (win) => {
         dialogWindow.show()
       }
 
-      const filePath = filePathArr[0];
-      const fileType = filePath.split('.').pop();
+      
       activateImportDialog()
-
-      //NEW FUNCTION PLEASE
-      const currentISRA = israProject.properties
-
-      if (fileType === 'json') {
-        try {
-          
-          // NEW FUNCTION TO EXTRACT DATA FROM JSON AND XML
-          const XML2JSON = (filePath) => {
-            const xmlData = fs.readFileSync(filePath, 'utf8');
-          
-            const resultJSON = parser(xmlData);
-          
-            // writeFile(resultJSON);
-          
-            const israJSONData = alterISRA(resultJSON.ISRA, xmlData);
-            const iterations = israJSONData.ISRAmeta.ISRAtracking
-            const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
-            + '|(^$)')
-            for (var index = 0; index < iterations.length; index++) {
-              const currentDate = iterations[index].trackingDate
-              const validFormat = dateFormat.test(currentDate)
-              const isValidDate = !isNaN(new Date(currentDate));
-              if (!validFormat) {
-                if (isValidDate) {
-                  // convert to correct format
-                  const date = new Date(currentDate);
-                  const year = date.getFullYear();
-                  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                  const day = date.getDate().toString().padStart(2, '0');
-                  const newDate = year + '-' + month + '-' + day;
-                  israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
-                } else {
-                  israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = '';
-                }
-              }
-            }
-          
-            const israValidJSONData = validateJsonSchema(israJSONData);
-           
-            
-          };
-
-          function insertISRA(currentISRA, importedISRA, tabs) {
-            // tabs = [1,2,3,4] wher each id represents the 4 tabs respectively
-
-            // insert BA data
-            // if(tabs.contains(1)) {}
-
-            // insert SA data
-            // if(tabs.contains(2))
-
-            // insert Risks data
-            // if(tabs.contains(3))
-
-            // insert 
-
-          }
-          
-          /* DataLoad(oldIsraProjectsraProject, filePath);
-          const DataLoad = (israProject, filePath) => new Promise((resolve, reject) => {
-            // read contents of file
-            fs.readFile(filePath, 'utf8', (err, data) => {
-              if (err) {
-                // reject the promise in case of error
-                reject(new Error('Failed to open file'));
-              }
-          
-              try {
-                const jsonData = JSON.parse(data);
-                const iterations = jsonData.ISRAmeta.ISRAtracking
-                const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
-                + '|(^$)')
-                for (var index = 0; index < iterations.length; index++) {
-                  const currentDate = iterations[index].trackingDate
-                  const validFormat = dateFormat.test(currentDate)
-                  const isValidDate = !isNaN(new Date(currentDate));
-                  if (!validFormat) {
-                    if (isValidDate) {
-                      // convert to correct format
-                      const date = new Date(currentDate);
-                      const year = date.getFullYear();
-                      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                      const day = date.getDate().toString().padStart(2, '0');
-                      const newDate = year + '-' + month + '-' + day;
-                      jsonData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
-                    } else {
-                      jsonData.ISRAmeta.ISRAtracking[index].trackingDate = '';
-                    }
-                  }
-                }
-          
-          
-                //console.log(jsonData.ISRAmeta.ISRAtracking)
-                const validJSONData = validateJSONschema(jsonData);
-                populateClass(validJSONData, israProject);
-                resolve('Done load');
-              } catch (error) {
-                reject(error);
-              }
-            });
-          }); */
-          const classification = israProject.properties.ISRAmeta.classification
-          win.webContents.send('project:load', israProject.toJSON(), classification);
-          jsonFilePath = filePath;
-          browserTitle = `ISRA Risk Assessment - ${filePath}`;
-          getMainWindow().title = browserTitle;
-          oldIsraProject = israProject.toJSON();
-        } catch (err) {
-          console.log(err);
-          dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+      
+      ipcMain.on('checkmate', (event,values) => {
+        const selectedOptions = values
+        if (dialogWindow) {
+          dialogWindow.close();
+          dialogWindow = null;
         }
-      } else { 
-        loadXMLFile(getMainWindow(), filePath);
-      }
+
+        
+
+
+        //NEW FUNCTION PLEASE
+        const currentISRA = israProject.properties
+        console.log(importedISRA)
+        selectedOptions.forEach ((option) => {
+          function importTab(option, currentISRA, importedISRA) {
+            if (option === '1') {
+              console.log(currentISRA.ISRAmeta.latestBusinessAssetId)
+              let highestBAId = currentISRA.ISRAmeta.latestBusinessAssetId;
+              const currentBusinessAssets = currentISRA.BusinessAsset
+              const importedBusinessAssets = importedISRA.BusinessAsset
+
+              // Compare the business assets name before adding
+
+              importedBusinessAssets.forEach ((importedBA) => {
+                let notSame = true;
+                currentBusinessAssets.forEach ((currentBA) => {
+                  if (importedBA.businessAssetName === currentBA.businessAssetName) {
+                    notSame = true;
+                  }
+                });
+
+                if (notSame) {
+                  highestBAId += 1;
+                  importedBA.businessAssetId = highestBAId
+                  console.log(importedBA)
+                  const newBusinessAsset = new BusinessAsset();
+                  const newBusinessAssetProperties = new BusinessAssetProperties();
+                  newBusinessAssetProperties.businessAssetConfidentiality = importedBA.businessAssetProperties.businessAssetConfidentiality;
+                  newBusinessAssetProperties.businessAssetIntegrity = importedBA.businessAssetProperties.businessAssetIntegrity
+                  newBusinessAssetProperties.businessAssetAvailability = importedBA.businessAssetProperties.businessAssetAvailability
+                  newBusinessAssetProperties.businessAssetAuthenticity = importedBA.businessAssetProperties.businessAssetAuthenticity
+                  newBusinessAssetProperties.businessAssetAuthorization = importedBA.businessAssetProperties.businessAssetAuthorization
+                  newBusinessAssetProperties.businessAssetNonRepudiation = importedBA.businessAssetProperties.businessAssetNonRepudiation
+
+                  newBusinessAsset.businessAssetId = highestBAId;
+                  newBusinessAsset.businessAssetName = importedBA.businessAssetName;
+                  newBusinessAsset.businessAssetType = importedBA.businessAssetType;
+                  newBusinessAsset.businessAssetDescription = importedBA.businessAssetDescription;
+                  newBusinessAsset.businessAssetProperties = newBusinessAssetProperties;
+                  israProject.addBusinessAsset(newBusinessAsset)
+                }
+                
+              });
+
+            } else if (option === '2') {
+              let highestSAId = currentISRA.ISRAmeta.latestSupportingAssetId;
+              const currentSupportingAssets = currentISRA.SupportingAsset
+              const importedSupportingAssets = importedISRA.SupportingAsset
+
+              importedSupportingAssets .forEach ((importedSA) => {
+                let notSame = true;
+                currentSupportingAssets.forEach ((currentSA) => {
+                  if (importedSA.supportingAssetName === currentSA.supportingAssetName) {
+                    notSame = true;
+                  }
+                });
+
+                if (notSame) {
+                  highestSAId += 1;
+                  console.log(importedBA)
+                  const newSupportingAsset = new SupportingAsset();
+                  newSupportingAsset.suppportingAssetId = highestSAId;
+                  newSupportingAsset.suppportingAssetName = importedSA.suppportingAssetName ;
+                  newSupportingAsset.suppportingAssetType = importedSA.suppportingAssetType;
+                  newSupportingAsset.suppportingAssetSecurityLevel = importedSA.suppportingAssetSecurityLevel;
+                  newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
+                  israProject.addSupportingAsset(newSupportingAsset)
+                }
+                
+              });
+
+            } else if (option === '3') {
+
+            } else if (option === '4') {
+
+            }
+          }
+
+          importedISRA = importTab(option, currentISRA, importedISRA)
+        });
+        const classification = israProject.properties.ISRAmeta.classification
+        win.webContents.send('project:load', israProject.toJSON(), classification);
+      });
+      
+
+      
+
+      
+
+  
+  
     }
   };
 
@@ -888,6 +965,7 @@ ipcMain.handle('risks:mitigationDecisionOptions', () => riskMitigationSchema.dec
 // Vulnerability Tab
 const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/api/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
+const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));
