@@ -36,6 +36,7 @@ const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra')
 const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
 const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
 const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
+const Vulnerability = require('../../../lib/src/model/classes/Vulnerability/vulnerability');
 //const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 //const populateClass = require('./populate-class');
 
@@ -451,7 +452,7 @@ const loadData = (win) => {
             //console.log(jsonData.ISRAmeta.ISRAtracking)
             importedISRA = validateJSONschema(jsonData);
           } catch (error) {
-            reject(error);
+            console.log(error);
           }
         });
 
@@ -541,7 +542,7 @@ const loadData = (win) => {
                 let notSame = true;
                 currentBusinessAssets.forEach ((currentBA) => {
                   if (importedBA.businessAssetName === currentBA.businessAssetName) {
-                    notSame = true;
+                    notSame = false;
                   }
                 });
 
@@ -569,16 +570,15 @@ const loadData = (win) => {
 
             } else if (option === '2') {
               let highestSAId = currentISRA.ISRAmeta.latestSupportingAssetId;
-              console.log(highestSAId)
               const currentSupportingAssets = currentISRA.SupportingAsset
               const importedSupportingAssets = importedISRA.SupportingAsset
 
-              importedSupportingAssets .forEach ((importedSA) => {
+              importedSupportingAssets.forEach ((importedSA) => {
                 
                 let notSame = true;
                 currentSupportingAssets.forEach ((currentSA) => {
                   if (importedSA.supportingAssetName === currentSA.supportingAssetName) {
-                    notSame = true;
+                    notSame = false;
                   }
                 });
 
@@ -592,8 +592,8 @@ const loadData = (win) => {
                   newSupportingAsset.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
 
                   // Only add BARefs if BA was selected
+                  // if (selectedOptions.includes("2X") || selectedOptions.includes("1"))
                   //newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
-                  console.log(newSupportingAsset)
                   israProject.addSupportingAsset(newSupportingAsset)
                 }
                 
@@ -601,7 +601,99 @@ const loadData = (win) => {
 
             } else if (option === '3') {
 
+              let highestRiskId = currentISRA.ISRAmeta.latestRiskId;
+              const currentRisks = currentISRA.Risk
+              const importedRisks = importedISRA.Risk
+
+              importedRisks.forEach ((importedRisk) => {
+                
+                let notSame = true;
+                currentRisks.forEach ((currentRisk) => {
+                  if (importedRisk.riskName === currentRisk.riskName) {
+                    notSame = false;
+                  }
+                });
+
+                if (notSame) {
+                  highestRiskId += 1;
+                  // Do an Id Map if Risk or VUL is selected 
+                  const newRisk = new Risk();
+                  // For the time-being we have cross-schema support
+                  newRisk.riskId = highestRiskId;
+                  newRisk.riskName  = mportedRisk.supportingAssetName;
+                  newRisk.supportingAssetType = importedSA.supportingAssetType;
+                  newRisk.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
+                  /* riskId: 14,
+      riskName: [Object],
+      allAttackPathsName: '(Reverse engineering of application attack to understand its security mechanisms AND Key recovery through 1st order DCA on an application on a diversified key through a malware) OR (Access the technical documentation and specifications to understand its security mechanism AND Key recovery through 1st order DCA on an application on a diversified key through a malware) OR (Access the source code to understand its security mechanisms AND Key recovery through 1st order DCA on an application on a diversified key through a malware)',
+      allAttackPathsScore: 5,
+      inherentRiskScore: 6,
+      mitigationsBenefits: 0.25,
+      mitigationsDoneBenefits: 1,
+      mitigatedRiskScore: 2,
+      riskManagementDecision: 'Mitigate',
+      riskManagementDetail: '',
+      residualRiskScore: 6,
+      residualRiskLevel: 'Medium',
+      riskLikelihood: [Object],
+      riskImpact: [Object],
+      riskAttackPaths: [Array],
+      riskMitigation: [Array] */
+
+                  /* const riskAttackPath = new RiskAttackPath();
+                  riskAttackPath.addVulnerability({
+                    rowId: 1,
+                    score: null,
+                    name: '',
+                  }); */
+                  //risk.addRiskAttackPath(riskAttackPath);
+                  //risk.addRiskMitigation(new RiskMitigation());
+
+                  // Only add BARefs if BA was selected
+                  // if (selectedOptions.includes("2X") || selectedOptions.includes("1"))
+                  //newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
+                  israProject.addSupportingAsset(newSupportingAsset)
+                }
+                
+              });
+
             } else if (option === '4') {
+
+              let highestVulId = currentISRA.ISRAmeta.latestVulnerabilityId;
+              const currentVuls = currentISRA.Vulnerability
+              const importedVuls = importedISRA.Vulnerability
+
+              importedVuls.forEach ((importedVul) => {
+                
+                let notSame = true;
+                currentVuls.forEach ((currentVul) => {
+                  if (importedVul.vulnerabilityName === currentVul.vulnerabilityName) {
+                    notSame = false;
+                  }
+                });
+
+                if (notSame) {
+                  highestVulId += 1;
+                  const newVulnerability = new Vulnerability();
+                  newVulnerability.vulnerabilityId = highestVulId;
+                  newVulnerability.vulnerabilityName = importedVul.vulnerabilityName;
+                  newVulnerability.vulnerabilityFamily = importedVul.vulnerabilityFamily;
+                  newVulnerability.vulnerabilityTrackingID = importedVul.vulnerabilityTrackingID;
+                  newVulnerability.vulnerabilityTrackingURI = importedVul.vulnerabilityTrackingURI;
+                  newVulnerability.vulnerabilityCVE = importedVul.vulnerabilityCVE;
+                  newVulnerability.vulnerabilityDescription = importedVul.vulnerabilityDescription;
+                  newVulnerability.vulnerabilityDescriptionAttachment = importedVul.vulnerabilityDescriptionAttachment;
+                  // Only add SARefs if SA was selected
+                  // if (selectedOptions.includes("4X") || selectedOptions.includes("2"))
+                  // newVulnerability.supportingAssetRef = importedVul.supportingAssetRef;
+                  newVulnerability.overallScore = importedVul.overallScore;
+                  newVulnerability.overallLevel = importedVul.overallLevel;
+                  newVulnerability.cveScore = importedVul.cveScore;
+
+                  israProject.addVulnerability(newVulnerability)
+                }
+                
+              });
 
             }
           }
