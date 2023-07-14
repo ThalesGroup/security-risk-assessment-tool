@@ -547,8 +547,7 @@ const loadData = (win) => {
 
                 if (notSame) {
                   highestBAId += 1;
-                  importedBA.businessAssetId = highestBAId
-                  console.log(importedBA)
+                  // Do an Id Map if SA or Risk is selected 
                   const newBusinessAsset = new BusinessAsset();
                   const newBusinessAssetProperties = new BusinessAssetProperties();
                   newBusinessAssetProperties.businessAssetConfidentiality = importedBA.businessAssetProperties.businessAssetConfidentiality;
@@ -570,10 +569,12 @@ const loadData = (win) => {
 
             } else if (option === '2') {
               let highestSAId = currentISRA.ISRAmeta.latestSupportingAssetId;
+              console.log(highestSAId)
               const currentSupportingAssets = currentISRA.SupportingAsset
               const importedSupportingAssets = importedISRA.SupportingAsset
 
               importedSupportingAssets .forEach ((importedSA) => {
+                
                 let notSame = true;
                 currentSupportingAssets.forEach ((currentSA) => {
                   if (importedSA.supportingAssetName === currentSA.supportingAssetName) {
@@ -583,13 +584,16 @@ const loadData = (win) => {
 
                 if (notSame) {
                   highestSAId += 1;
-                  console.log(importedBA)
+                  // Do an Id Map if Risk or VUL is selected 
                   const newSupportingAsset = new SupportingAsset();
-                  newSupportingAsset.suppportingAssetId = highestSAId;
-                  newSupportingAsset.suppportingAssetName = importedSA.suppportingAssetName ;
-                  newSupportingAsset.suppportingAssetType = importedSA.suppportingAssetType;
-                  newSupportingAsset.suppportingAssetSecurityLevel = importedSA.suppportingAssetSecurityLevel;
-                  newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
+                  newSupportingAsset.supportingAssetId = highestSAId;
+                  newSupportingAsset.supportingAssetName = importedSA.supportingAssetName;
+                  newSupportingAsset.supportingAssetType = importedSA.supportingAssetType;
+                  newSupportingAsset.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
+
+                  // Only add BARefs if BA was selected
+                  //newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
+                  console.log(newSupportingAsset)
                   israProject.addSupportingAsset(newSupportingAsset)
                 }
                 
@@ -602,7 +606,7 @@ const loadData = (win) => {
             }
           }
 
-          importedISRA = importTab(option, currentISRA, importedISRA)
+          importTab(option, currentISRA, importedISRA)
         });
         const classification = israProject.properties.ISRAmeta.classification
         win.webContents.send('project:load', israProject.toJSON(), classification);
