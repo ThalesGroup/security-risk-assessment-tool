@@ -375,7 +375,7 @@
 
       $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
       $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
-      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
+      $('select[id="risk__accessResources"]').val(accessResources == null? 'null' : accessResources);
       $('select[id="risk__size"]').val(!size ? 'null' : size);
       $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
       $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
