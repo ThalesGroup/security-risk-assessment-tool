@@ -37,6 +37,10 @@ const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-
 const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
 const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
 const Vulnerability = require('../../../lib/src/model/classes/Vulnerability/vulnerability');
+const Risk = require('../../../lib/src/model/classes/Risk/risk');
+const RiskName = require('../../../lib/src/model/classes/Risk/risk-name');
+const RiskLikelihood = require('../../../lib/src/model/classes/Risk/risk-likelihood');
+const RiskImpact = require('../../../lib/src/model/classes/Risk/risk-impact');
 //const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 //const populateClass = require('./populate-class');
 
@@ -180,7 +184,7 @@ const saveProject = () => {
   * validation instantly fails when one of the validation methods fails
 */
 const validateClasses = () => {
-  console.log(israProject.properties)
+  //console.log(israProject.properties)
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
@@ -523,15 +527,23 @@ const loadData = (win) => {
         }
 
         
-
+        console.log(selectedOptions)
 
         //NEW FUNCTION PLEASE
         const currentISRA = israProject.properties
-        console.log(importedISRA)
+        //console.log(importedISRA)
+        const importedSAMap = {}
+        const importedBAMap = {}
+        const importedVulMap = {}
         selectedOptions.forEach ((option) => {
+          
+
+          //function importBusinessAssets
+          
           function importTab(option, currentISRA, importedISRA) {
+            
             if (option === '1') {
-              console.log(currentISRA.ISRAmeta.latestBusinessAssetId)
+              //console.log(currentISRA.ISRAmeta.latestBusinessAssetId)
               let highestBAId = currentISRA.ISRAmeta.latestBusinessAssetId;
               const currentBusinessAssets = currentISRA.BusinessAsset
               const importedBusinessAssets = importedISRA.BusinessAsset
@@ -548,7 +560,12 @@ const loadData = (win) => {
 
                 if (notSame) {
                   highestBAId += 1;
-                  // Do an Id Map if SA or Risk is selected 
+                  
+                  if (selectedOptions.includes('2') || selectedOptions.includes('3') ) {
+                    importedBAMap[Number(importedBA.businessAssetId)] = highestBAId;
+                    
+                  }
+                  
                   const newBusinessAsset = new BusinessAsset();
                   const newBusinessAssetProperties = new BusinessAssetProperties();
                   newBusinessAssetProperties.businessAssetConfidentiality = importedBA.businessAssetProperties.businessAssetConfidentiality;
@@ -572,7 +589,6 @@ const loadData = (win) => {
               let highestSAId = currentISRA.ISRAmeta.latestSupportingAssetId;
               const currentSupportingAssets = currentISRA.SupportingAsset
               const importedSupportingAssets = importedISRA.SupportingAsset
-
               importedSupportingAssets.forEach ((importedSA) => {
                 
                 let notSame = true;
@@ -585,15 +601,57 @@ const loadData = (win) => {
                 if (notSame) {
                   highestSAId += 1;
                   // Do an Id Map if Risk or VUL is selected 
+                  if (selectedOptions.includes("3") || selectedOptions.includes("4") ) {
+                    importedSAMap[importedSA.supportingAssetId] = highestSAId;
+                  }
                   const newSupportingAsset = new SupportingAsset();
                   newSupportingAsset.supportingAssetId = highestSAId;
                   newSupportingAsset.supportingAssetName = importedSA.supportingAssetName;
                   newSupportingAsset.supportingAssetType = importedSA.supportingAssetType;
                   newSupportingAsset.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
 
+                  if (selectedOptions.includes('1')) {
+                      
+                    importedSA.businessAssetRef.forEach((ref) => {
+                      newSupportingAsset.addBusinessAssetRef(importedBAMap[ref]);
+
+                    });
+                    
+                  } else if (selectedOptions.includes("2X")) {
+                    // Add business assets 
+                    importedSA.businessAssetRef.forEach((ref) => {
+                      if (!Object.keys(importedBAMap).includes(ref)) {
+                        const importedBA = currentISRA.BusinessAsset[ref - 1]
+                        importedBAMap[importedBA.businessAssetId] = highestBAId;
+                        const newBusinessAsset = new BusinessAsset();
+                        const newBusinessAssetProperties = new BusinessAssetProperties();
+                        newBusinessAssetProperties.businessAssetConfidentiality = importedBA.businessAssetProperties.businessAssetConfidentiality;
+                        newBusinessAssetProperties.businessAssetIntegrity = importedBA.businessAssetProperties.businessAssetIntegrity
+                        newBusinessAssetProperties.businessAssetAvailability = importedBA.businessAssetProperties.businessAssetAvailability
+                        newBusinessAssetProperties.businessAssetAuthenticity = importedBA.businessAssetProperties.businessAssetAuthenticity
+                        newBusinessAssetProperties.businessAssetAuthorization = importedBA.businessAssetProperties.businessAssetAuthorization
+                        newBusinessAssetProperties.businessAssetNonRepudiation = importedBA.businessAssetProperties.businessAssetNonRepudiation
+  
+                        newBusinessAsset.businessAssetId = highestBAId;
+                        newBusinessAsset.businessAssetName = importedBA.businessAssetName;
+                        newBusinessAsset.businessAssetType = importedBA.businessAssetType;
+                        newBusinessAsset.businessAssetDescription = importedBA.businessAssetDescription;
+                        newBusinessAsset.businessAssetProperties = newBusinessAssetProperties;
+                        israProject.addBusinessAsset(newBusinessAsset)
+                        newSupportingAsset.addBusinessAssetRef(importedBAMap[ref]);
+                      }
+
+                    });
+
                   // Only add BARefs if BA was selected
-                  // if (selectedOptions.includes("2X") || selectedOptions.includes("1"))
-                  //newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
+
+                
+                  
+                    
+
+                    
+                  }
+                  //
                   israProject.addSupportingAsset(newSupportingAsset)
                 }
                 
@@ -618,41 +676,41 @@ const loadData = (win) => {
                   highestRiskId += 1;
                   // Do an Id Map if Risk or VUL is selected 
                   const newRisk = new Risk();
-                  // For the time-being we have cross-schema support
+                  const newRiskName = new RiskName();
+                  newRiskName.riskName = importedRisk.riskName.riskName;
+                  newRiskName.threatAgent = importedRisk.riskName.threatAgent;
+                  newRiskName.threatAgentDetail = importedRisk.riskName.threatAgentDetail;
+                  newRiskName.threatVerb  = importedRisk.riskName.threatVerb;
+                  newRiskName.threatVerbDetail = importedRisk.riskName.threatVerbDetail;
+                  newRiskName.motivation = importedRisk.riskName.motivation;
+                  newRiskName.motivationDetail = importedRisk.riskName.motivationDetail;
+                  // Only add BARefs and SARefs if BA,SA or Risk with assets was selected
+                  // if (selectedOptions.includes("3X") || selectedOptions.includes("1") && selectedOptions.includes("2"))
+                  //newRiskName.riskName.businessAssetRef = importedRisk.riskName.businessAssetRef;
+                  //newRiskName.riskName.supportingAssetRef = importedRisk.riskName.supportingAssetRef;
+                  newRiskName.riskName.isAutomaticRiskName = importedRisk.riskName.isAutomaticRiskName;
+
+                  // Need to change to account for schema update
                   newRisk.riskId = highestRiskId;
-                  newRisk.riskName  = mportedRisk.supportingAssetName;
-                  newRisk.supportingAssetType = importedSA.supportingAssetType;
-                  newRisk.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
-                  /* riskId: 14,
-      riskName: [Object],
-      allAttackPathsName: '(Reverse engineering of application attack to understand its security mechanisms AND Key recovery through 1st order DCA on an application on a diversified key through a malware) OR (Access the technical documentation and specifications to understand its security mechanism AND Key recovery through 1st order DCA on an application on a diversified key through a malware) OR (Access the source code to understand its security mechanisms AND Key recovery through 1st order DCA on an application on a diversified key through a malware)',
-      allAttackPathsScore: 5,
-      inherentRiskScore: 6,
-      mitigationsBenefits: 0.25,
-      mitigationsDoneBenefits: 1,
-      mitigatedRiskScore: 2,
-      riskManagementDecision: 'Mitigate',
-      riskManagementDetail: '',
-      residualRiskScore: 6,
-      residualRiskLevel: 'Medium',
-      riskLikelihood: [Object],
-      riskImpact: [Object],
-      riskAttackPaths: [Array],
-      riskMitigation: [Array] */
-
-                  /* const riskAttackPath = new RiskAttackPath();
-                  riskAttackPath.addVulnerability({
-                    rowId: 1,
-                    score: null,
-                    name: '',
-                  }); */
-                  //risk.addRiskAttackPath(riskAttackPath);
-                  //risk.addRiskMitigation(new RiskMitigation());
-
-                  // Only add BARefs if BA was selected
-                  // if (selectedOptions.includes("2X") || selectedOptions.includes("1"))
-                  //newSupportingAsset.businessAssetRefs = importedSA.businessAssetRefs;
-                  israProject.addSupportingAsset(newSupportingAsset)
+                  newRisk.riskName  = newRiskName;
+                  newRisk.allAttackPathsName = importedRisk.allAttackPathsName;
+                  newRisk.allAttackPathsScore = importedRisk.allAttackPathsScore;
+                  newRisk.mitigationsBenefits = importedRisk.mitigationsBenefits;
+                  newRisk.mitigationsDoneBenefits = importedRisk.mitigationsDoneBenefits;
+                  newRisk.mitigatedRiskScore = importedRisk.mitigatedRiskScore;
+                  newRisk.riskManagementDecision = importedRisk.riskManagementDecision;
+                  newRisk.riskManagementDetail = importedRisk.riskManagementDetail;
+                  newRisk.residualRiskScore = importedRisk.residualRiskScore;
+                  newRisk.residualRiskLevel = importedRisk.residualRiskLevel;
+                  const newRiskLikelihood = new RiskLikelihood();
+                  const newRiskImpact = new RiskImpact();
+                  newRisk.riskLikelihood = newRiskLikelihood;
+                  newRisk.riskImpact = newRiskImpact;
+                  newRisk.riskAttackPaths = importedRisk.riskAttackPaths
+                  newRisk.residualRiskLevel = importedRisk.residualRiskLevel;
+                  
+                 
+                  israProject.addRisk(newRisk)
                 }
                 
               });

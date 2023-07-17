@@ -6,7 +6,6 @@ document.getElementById('send').addEventListener('click', () => {
     checkboxes.forEach((checkbox) => {
       if (checkbox.checked) {
         values.push(checkbox.value)
-        console.log(checkbox.value)
       }
     });
 
