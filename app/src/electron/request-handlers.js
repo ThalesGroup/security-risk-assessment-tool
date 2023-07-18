@@ -676,11 +676,8 @@ const loadData = (win) => {
                   newRiskName.threatVerbDetail = importedRisk.riskName.threatVerbDetail;
                   newRiskName.motivation = importedRisk.riskName.motivation;
                   newRiskName.motivationDetail = importedRisk.riskName.motivationDetail;
-                  // Only add BARefs and SARefs if BA,SA or Risk with assets was selected
-                  // if (selectedOptions.includes("3X") || selectedOptions.includes("1") && selectedOptions.includes("2"))
-                  //newRiskName.riskName.businessAssetRef = importedRisk.riskName.businessAssetRef;
-                  //newRiskName.riskName.supportingAssetRef = importedRisk.riskName.supportingAssetRef;
 
+                  // Please rework this logic
                   if (selectedOptions.includes('1') && selectedOptions.includes('2') && selectedOptions.includes('4')) {
                       
                     newRiskName.businessAssetRef =importedBAMap[importedRisk.riskName.businessAssetRef];
@@ -691,33 +688,8 @@ const loadData = (win) => {
                     
                   } else if (selectedOptions.includes("3X")) {
                     // Add business assets 
-                    importedSA.businessAssetRef.forEach((ref) => {
-                      if (!Object.keys(importedBAMap).includes(importedRisk.riskName.businessAssetRef)) {
-                        const importedBA = currentISRA.BusinessAsset[importedRisk.riskName.businessAssetRef - 1]
-                        importedBAMap[importedBA.businessAssetId] = highestBAId;
-                        // Convert to function
-                        const newBusinessAsset = new BusinessAsset();
-                        const newBusinessAssetProperties = new BusinessAssetProperties();
-                        newBusinessAssetProperties.businessAssetConfidentiality = importedBA.businessAssetProperties.businessAssetConfidentiality;
-                        newBusinessAssetProperties.businessAssetIntegrity = importedBA.businessAssetProperties.businessAssetIntegrity
-                        newBusinessAssetProperties.businessAssetAvailability = importedBA.businessAssetProperties.businessAssetAvailability
-                        newBusinessAssetProperties.businessAssetAuthenticity = importedBA.businessAssetProperties.businessAssetAuthenticity
-                        newBusinessAssetProperties.businessAssetAuthorization = importedBA.businessAssetProperties.businessAssetAuthorization
-                        newBusinessAssetProperties.businessAssetNonRepudiation = importedBA.businessAssetProperties.businessAssetNonRepudiation
-  
-                        newBusinessAsset.businessAssetId = highestBAId;
-                        newBusinessAsset.businessAssetName = importedBA.businessAssetName;
-                        newBusinessAsset.businessAssetType = importedBA.businessAssetType;
-                        newBusinessAsset.businessAssetDescription = importedBA.businessAssetDescription;
-                        newBusinessAsset.businessAssetProperties = newBusinessAssetProperties;
-                        israProject.addBusinessAsset(newBusinessAsset)
-                        newSupportingAsset.addBusinessAssetRef(importedBAMap[ref]);
-                      }
-
-                    });
-
-                    if (!Object.keys(importedSAMap).includes(importedRisk.riskName.supportingAssetRef)) {
-                      const importedBA = currentISRA.BusinessAsset[ref - 1]
+                    if (!Object.keys(importedBAMap).includes(importedRisk.riskName.businessAssetRef)) {
+                      const importedBA = currentISRA.BusinessAsset[importedRisk.riskName.businessAssetRef - 1]
                       importedBAMap[importedBA.businessAssetId] = highestBAId;
                       // Convert to function
                       const newBusinessAsset = new BusinessAsset();
@@ -735,29 +707,36 @@ const loadData = (win) => {
                       newBusinessAsset.businessAssetDescription = importedBA.businessAssetDescription;
                       newBusinessAsset.businessAssetProperties = newBusinessAssetProperties;
                       israProject.addBusinessAsset(newBusinessAsset)
-                      newSupportingAsset.addBusinessAssetRef(importedBAMap[ref]);
+                      newRiskName.businessAssetRef =importedBAMap[importedRisk.riskName.businessAssetRef];
+                    }
+
+                    if (!Object.keys(importedSAMap).includes(importedRisk.riskName.supportingAssetRef)) {
+                      const importedSA = currentISRA.SupportingAsset[ref - 1]
+                        const newSupportingAsset = new SupportingAsset();
+                        newSupportingAsset.supportingAssetId = highestSAId;
+                        newSupportingAsset.supportingAssetName = importedSA.supportingAssetName;
+                        newSupportingAsset.supportingAssetType = importedSA.supportingAssetType;
+                        newSupportingAsset.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
+                        newSupportingAsset.addBusinessAssetRef(importedBAMap[importedRisk.riskName.businessAssetRef]);
+                        israProject.addSupportingAsset(newSupportingAsset)
+                        newRiskName.supportingAssetRef = importedVulMap[importedRisk.riskName.supportingAssetRef];
                     }
 
                     if (!Object.keys(importedVulMap).includes(importedRisk.riskName.supportingAssetRef)) {
-                      const importedBA = currentISRA.BusinessAsset[ref - 1]
-                      importedBAMap[importedBA.businessAssetId] = highestBAId;
-                      // Convert to function
-                      const newBusinessAsset = new BusinessAsset();
-                      const newBusinessAssetProperties = new BusinessAssetProperties();
-                      newBusinessAssetProperties.businessAssetConfidentiality = importedBA.businessAssetProperties.businessAssetConfidentiality;
-                      newBusinessAssetProperties.businessAssetIntegrity = importedBA.businessAssetProperties.businessAssetIntegrity
-                      newBusinessAssetProperties.businessAssetAvailability = importedBA.businessAssetProperties.businessAssetAvailability
-                      newBusinessAssetProperties.businessAssetAuthenticity = importedBA.businessAssetProperties.businessAssetAuthenticity
-                      newBusinessAssetProperties.businessAssetAuthorization = importedBA.businessAssetProperties.businessAssetAuthorization
-                      newBusinessAssetProperties.businessAssetNonRepudiation = importedBA.businessAssetProperties.businessAssetNonRepudiation
+                      // importedRisk.riskAttackPaths.forEach(() => {
 
-                      newBusinessAsset.businessAssetId = highestBAId;
-                      newBusinessAsset.businessAssetName = importedBA.businessAssetName;
-                      newBusinessAsset.businessAssetType = importedBA.businessAssetType;
-                      newBusinessAsset.businessAssetDescription = importedBA.businessAssetDescription;
-                      newBusinessAsset.businessAssetProperties = newBusinessAssetProperties;
-                      israProject.addBusinessAsset(newBusinessAsset)
-                      newSupportingAsset.addBusinessAssetRef(importedBAMap[ref]);
+                      //});
+                      const importedVul = currentISRA.Vulnerability //Need to update this to check for matching of vul name
+                      const newVulnerability = new Vulnerability();
+                      newVulnerability.vulnerabilityId = highestVulId;
+                      newVulnerability.vulnerabilityName = importedVul.vulnerabilityName;
+                      newVulnerability.vulnerabilityFamily = importedVul.vulnerabilityFamily;
+                      newVulnerability.vulnerabilityTrackingID = importedVul.vulnerabilityTrackingID;
+                      newVulnerability.vulnerabilityTrackingURI = importedVul.vulnerabilityTrackingURI;
+                      newVulnerability.vulnerabilityCVE = importedVul.vulnerabilityCVE;
+                      newVulnerability.vulnerabilityDescription = importedVul.vulnerabilityDescription;
+                      newVulnerability.vulnerabilityDescriptionAttachment = importedVul.vulnerabilityDescriptionAttachment;
+                      newVulnerability.addSupportingAssetRef(importedSAMap[importedRisk.riskName.supportingAssetRef]);
                     }
                     
                   }
@@ -819,8 +798,42 @@ const loadData = (win) => {
                   newVulnerability.vulnerabilityDescription = importedVul.vulnerabilityDescription;
                   newVulnerability.vulnerabilityDescriptionAttachment = importedVul.vulnerabilityDescriptionAttachment;
                   // Only add SARefs if SA was selected
-                  // if (selectedOptions.includes("4X") || selectedOptions.includes("2"))
-                  // newVulnerability.supportingAssetRef = importedVul.supportingAssetRef;
+                  if (selectedOptions.includes("2")) {
+                    importedVul.supportingAssetRef.forEach((ref) => {
+                      newVulnerability.addSupportingAssetRef(importedVulMap[ref]);
+
+                    });
+
+                  } else if (selectedOptions.includes("4X")) {
+
+                    importedVul.supportingAssetRef.forEach((ref) => {
+                      
+
+                      if (!Object.keys(importedVulMap).includes(ref)) {
+                        const importedSA = currentISRA.SupportingAsset[ref - 1]
+                        const newSupportingAsset = new SupportingAsset();
+                        newSupportingAsset.supportingAssetId = highestSAId;
+                        newSupportingAsset.supportingAssetName = importedSA.supportingAssetName;
+                        newSupportingAsset.supportingAssetType = importedSA.supportingAssetType;
+                        newSupportingAsset.supportingAssetSecurityLevel = importedSA.supportingAssetSecurityLevel;
+                        if (selectedOptions.includes('1')) {
+                      
+                          importedSA.businessAssetRef.forEach((ref) => {
+                            newSupportingAsset.addBusinessAssetRef(importedBAMap[ref]);
+      
+                          });
+                          
+                        }
+
+                        israProject.addSupportingAsset(newSupportingAsset)
+                        newVulnerability.addSupportingAssetRef(importedSAMap[ref]);
+
+                      }
+
+                    });
+                    
+
+                  }
                   newVulnerability.overallScore = importedVul.overallScore;
                   newVulnerability.overallLevel = importedVul.overallLevel;
                   newVulnerability.cveScore = importedVul.cveScore;
