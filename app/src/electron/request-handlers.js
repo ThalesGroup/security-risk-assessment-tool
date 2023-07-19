@@ -500,8 +500,8 @@ const loadData = (win) => {
       let dialogWindow = null;
       function activateImportDialog() {
         dialogWindow = new BrowserWindow({
-          width: 400,
-          height: 200,
+          width: 500,
+          height: 250,
           autoHideMenuBar: true,
           menuBarVisibility: 'hidden',
           parent: getMainWindow(),
@@ -681,7 +681,7 @@ const loadData = (win) => {
                   if (selectedOptions.includes('1') && selectedOptions.includes('2') && selectedOptions.includes('4')) {
                       
                     newRiskName.businessAssetRef =importedBAMap[importedRisk.riskName.businessAssetRef];
-                    newRiskName.supportingAssetRef = importedVulMap[importedRisk.riskName.supportingAssetRef];
+                    newRiskName.supportingAssetRef = importedSAMap[importedRisk.riskName.supportingAssetRef];
                     newRisk.allAttackPathsName = importedRisk.allAttackPathsName;
                     newRisk.allAttackPathsScore = importedRisk.allAttackPathsScore;
                     
@@ -745,8 +745,6 @@ const loadData = (win) => {
                   // Need to change to account for schema update
                   newRisk.riskId = highestRiskId;
                   newRisk.riskName  = newRiskName;
-                  //newRisk.allAttackPathsName = importedRisk.allAttackPathsName;
-                  //newRisk.allAttackPathsScore = importedRisk.allAttackPathsScore;
                   newRisk.mitigationsBenefits = importedRisk.mitigationsBenefits;
                   newRisk.mitigationsDoneBenefits = importedRisk.mitigationsDoneBenefits;
                   newRisk.mitigatedRiskScore = importedRisk.mitigatedRiskScore;
@@ -755,8 +753,26 @@ const loadData = (win) => {
                   newRisk.residualRiskScore = importedRisk.residualRiskScore;
                   newRisk.residualRiskLevel = importedRisk.residualRiskLevel;
                   const newRiskLikelihood = new RiskLikelihood();
-                  const newRiskImpact = new RiskImpact();
+                  newRiskLikelihood.riskLikelihood = importedRisk.riskLikelihood.riskLikelihood;
+                  newRiskLikelihood.riskLikelihoodDetail = importedRisk.riskLikelihood.riskLikelihoodDetail;
+                  newRiskLikelihood.skillLevel = importedRisk.riskLikelihood.skillLevel;
+                  newRiskLikelihood.reward = importedRisk.riskLikelihood.reward;
+                  newRiskLikelihood.accessResources = importedRisk.riskLikelihood.accessResources;
+                  newRiskLikelihood.intrusionDetection = importedRisk.riskLikelihood.intrusionDetection;
+                  newRiskLikelihood.size = importedRisk.riskLikelihood.size;
+                  newRiskLikelihood.threatFactorScore = importedRisk.riskLikelihood.threatFactorScore;
+                  newRiskLikelihood.threatFactorLevel = importedRisk.riskLikelihood.threatFactorLevel;
+                  newRiskLikelihood.occurrence = importedRisk.riskLikelihood.occurrence;
+                  newRiskLikelihood.occurrenceLevel = importedRisk.riskLikelihood.occurrenceLevel;
+                  newRiskLikelihood.isOWASPLikelihood = importedRisk.riskLikelihood.isOWASPLikelihood;
                   newRisk.riskLikelihood = newRiskLikelihood;
+                  const newRiskImpact = new RiskImpact();
+                  newRiskImpact.businessAssetConfidentialityFlag = importedRisk.riskImpact.businessAssetConfidentialityFlag;
+                  newRiskImpact.businessAssetIntegrityFlag = importedRisk.riskImpact.businessAssetIntegrityFlag;
+                  newRiskImpact.businessAssetAvailabilityFlag = importedRisk.riskImpact.businessAssetAvailabilityFlag;
+                  newRiskImpact.businessAssetAuthenticityFlag = importedRisk.riskImpact.businessAssetAuthenticityFlag;
+                  newRiskImpact.businessAssetAuthorizationFlag = importedRisk.riskImpact.businessAssetAuthorizationFlag;
+                  newRiskImpact.businessAssetNonRepudiationFlag = importedRisk.riskImpact.businessAssetNonRepudiationFlag;
                   newRisk.riskImpact = newRiskImpact;
                   //riskAttackPaths need to use new RiskAttackPaths()
                   newRisk.riskAttackPaths = importedRisk.riskAttackPaths
@@ -800,7 +816,7 @@ const loadData = (win) => {
                   // Only add SARefs if SA was selected
                   if (selectedOptions.includes("2")) {
                     importedVul.supportingAssetRef.forEach((ref) => {
-                      newVulnerability.addSupportingAssetRef(importedVulMap[ref]);
+                      newVulnerability.addSupportingAssetRef(importedSAMap[ref]);
 
                     });
 
