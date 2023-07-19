@@ -129,7 +129,7 @@
       window.project.load(async (event, data) => {
         isra= await JSON.parse(data).ISRAmeta
         updateWelcomeFields(isra);
-        classificationLabel = classification;
+        classificationLabel = isra.classification;
       });
       document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
       window.removeEventListener('keydown', handleReload);
