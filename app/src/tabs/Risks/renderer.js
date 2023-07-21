@@ -232,9 +232,9 @@ function enableAllTabs() {
     };
 
     // add Vulnerabilities evaluation section
-    const addVulnerabilitySection = (riskAttackPaths) =>{
+    const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
-      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName).forEach((v)=>{
+      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName && uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
         vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
       });
 
@@ -759,7 +759,18 @@ function enableAllTabs() {
 
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
-      addVulnerabilitySection(riskAttackPaths);
+      
+      if (businessAssetRef && supportingAssetRef && threatAgent && threatVerb && motivation) {
+        
+      
+        $('#risks__vulnerability__evaluation .add-delete-container').show()
+        addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
+        
+      } else {
+        $('#risks__vulnerability__evaluation .add-delete-container').hide()
+        //$('#risks__vulnerability__evaluation .add-delete-container:first-of-type button:nth-child(2)').hide()
+      }
+      
       $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
       $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
 
