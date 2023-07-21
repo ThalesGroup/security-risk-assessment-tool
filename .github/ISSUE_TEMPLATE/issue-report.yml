@@ -41,7 +41,8 @@ body:
       description: What version of SRA tool are you running?
       options:
         - 1.0.1 
-        - 1.0.2 (Default)
+        - 1.0.2 
+        - 1.0.3 (Default)
     validations:
       required: true
   - type: textarea
@@ -50,3 +51,4 @@ body:
       label: Attachments
       description: Upload attachments to show the issue
       placeholder: Show us what happened
+
