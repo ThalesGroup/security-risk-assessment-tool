@@ -112,7 +112,7 @@ function disableAllTabs() {
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
-                $('#app').text('1.0.2');
+                $('#app').text('1.0.3');
                 $('#iteration').text(iteration);
 
                 let totalCost = 0;
