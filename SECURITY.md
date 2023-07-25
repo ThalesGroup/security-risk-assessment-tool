@@ -11,11 +11,12 @@ Describe here all the security policies in place on this repository to help your
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are currently being supported with security updates.
+This is the currently supported versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
+| < 1.0.3 | :x:                |
+| 1.0.3   | :white_check_mark: |
 | 1.1.x   | :x:                |
 
 ## Reporting a Vulnerability
