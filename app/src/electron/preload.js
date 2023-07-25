@@ -80,7 +80,11 @@ contextBridge.exposeInMainWorld('businessAssets', {
 });
 
 contextBridge.exposeInMainWorld('supportingAssets', {
-  addSupportingAsset: () => ipcRenderer.invoke('supportingAssets:addSupportingAsset'),
+  addSupportingAsset: () => ipcRenderer.invoke('supportingAssets:addSupportingAsset').then((result) => {
+
+  }).catch((error) => {
+    
+  }),
   deleteSupportingAsset: (ids) => ipcRenderer.send('supportingAssets:deleteSupportingAsset', ids),
   updateSupportingAsset: (id, field, value) => ipcRenderer.send('supportingAssets:updateSupportingAsset', id, field, value),
   addBusinessAssetRef: (id, value) => ipcRenderer.send('supportingAssets:addBusinessAssetRef', id, value),
