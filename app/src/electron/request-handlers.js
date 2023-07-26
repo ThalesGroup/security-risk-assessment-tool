@@ -192,7 +192,7 @@ const validateClasses = () => {
     let invalidCount = 0;
     const invalidSAs = new Set() //Need to use set
     for(let i=0; i<SupportingAsset.length; i++){
-      const { businessAssetRef } = SupportingAsset[i];
+      const { businessAssetRef, supportingAssetId } = SupportingAsset[i];
       const uniqueRefs = new Set();
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
@@ -200,7 +200,7 @@ const validateClasses = () => {
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
         if (nullBusinessAssetRef || duplicateBusinessAssetRef) {
           invalidCount++
-          invalidSAs.add(i + 1)
+          invalidSAs.add(supportingAssetId)
         } 
 
         uniqueRefs.add(ref);
@@ -222,7 +222,7 @@ const validateClasses = () => {
     const invalidRisksMitigations = [];
     for (let i = 0; i < Risk.length; i++) {
       
-      const { riskName, riskMitigation } = Risk[i];
+      const { riskName, riskMitigation, riskId } = Risk[i];
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       const noThreatAgent = !threatAgent;
       const noThreatVerb = !threatVerb;
@@ -230,13 +230,13 @@ const validateClasses = () => {
       const noSupportingAssetRef = !supportingAssetRef;
       const noMotivation = !motivation;
       if (noThreatAgent || noThreatVerb || noBusinessAssetRef || noSupportingAssetRef || noMotivation) {
-        invalidRisks.push(i + 1);
+        invalidRisks.push(riskId);
       }
       
      
      for(let i=0; i<riskMitigation.length; i++){
        if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
-        invalidRisksMitigations.push(i + 1);
+        invalidRisksMitigations.push(riskId );
        }
      }
     }
@@ -261,14 +261,14 @@ const validateClasses = () => {
     let message = '';
     for(let i=0; i<Vulnerability.length; i++) {
     
-      const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
+      const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = Vulnerability[i];
       const invalidCVEScore = cveScore < 0 || cveScore > 10;
       const noCVEScore = cveScore === null;
       const noSupportingAssetRef = supportingAssetRef.length === 0;
       const noVulnerabilityDescription =  !vulnerabilityDescription;
       const noVulnerabilityName = !vulnerabilityName;
       if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName) {
-        invalidVuls.push(i + 1);
+        invalidVuls.push(vulnerabilityId);
       }
     }
 
