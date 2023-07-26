@@ -8,13 +8,11 @@ const RiskImpact = require('../../../lib/src/model/classes/Risk/risk-impact');
 const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 
 function importBA(currentISRA, importedISRA, importedBAMap, selectedOptions) {
-    let highestBAId = currentISRA.properties.ISRAmeta.latestBusinessAssetId;
+  let highestBAId = currentISRA.properties.ISRAmeta.latestBusinessAssetId;
               const currentBusinessAssets = currentISRA.properties.BusinessAsset
               const importedBusinessAssets = importedISRA.BusinessAsset
 
-        
               // Compare the business assets name before adding
-
               importedBusinessAssets.forEach ((importedBA) => {
                 let notSame = true;
                 currentBusinessAssets.forEach ((currentBA) => {
@@ -22,7 +20,7 @@ function importBA(currentISRA, importedISRA, importedBAMap, selectedOptions) {
                     notSame = false;
                   }
                 });
-
+                
                 if (notSame) {
 
                   highestBAId += 1;
@@ -90,7 +88,7 @@ function importSA(currentISRA, importedISRA, importedBAMap, importedSAMap, selec
                     importedSA.businessAssetRef.forEach((ref) => {
                       if (!Object.keys(importedBAMap).includes(ref)) {
                         const importedBA = currentISRA.properties.BusinessAsset[ref - 1]
-                        importedBAMap[importedBA.businessAssetId] = highestBAId;
+                        importedBAMap[importedBA.businessAssetId] = currentISRA.properties.ISRAmeta.latestBusinessAssetId;;
                         // Convert to function
                         const newBusinessAsset = new BusinessAsset();
                         const newBusinessAssetProperties = new BusinessAssetProperties();
@@ -101,7 +99,7 @@ function importSA(currentISRA, importedISRA, importedBAMap, importedSAMap, selec
                         newBusinessAssetProperties.businessAssetAuthorization = importedBA.businessAssetProperties.businessAssetAuthorization
                         newBusinessAssetProperties.businessAssetNonRepudiation = importedBA.businessAssetProperties.businessAssetNonRepudiation
   
-                        newBusinessAsset.businessAssetId = highestBAId;
+                        newBusinessAsset.businessAssetId = currentISRA.properties.ISRAmeta.latestBusinessAssetId;;
                         newBusinessAsset.businessAssetName = importedBA.businessAssetName;
                         newBusinessAsset.businessAssetType = importedBA.businessAssetType;
                         newBusinessAsset.businessAssetDescription = importedBA.businessAssetDescription;

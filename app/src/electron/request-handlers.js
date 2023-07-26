@@ -26,6 +26,8 @@ const {
   dialog, ipcMain, Menu, BrowserWindow
   // nativeTheme,
 } = require('electron');
+
+
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
@@ -53,10 +55,14 @@ const {
 
 const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-project');
 
+
+
 /**
   * israProject: holds current class for project
 */
 let israProject, browserTitle = 'ISRA Risk Assessment', oldIsraProject;
+
+let oldImport = null;
 
 /**
   * every time you want the main window, call this function.
@@ -403,11 +409,8 @@ const loadFile = (win) => {
 
 
 function getJSON(filePath){
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      // reject the promise in case of error
-      reject(new Error('Failed to open file'));
-    }
+  const data =fs.readFileSync(filePath, 'utf8') 
+    
 
     try {
       const jsonData = JSON.parse(data);
@@ -435,12 +438,12 @@ function getJSON(filePath){
 
 
       //console.log(jsonData.ISRAmeta.ISRAtracking)
-      importedISRA = validateJsonSchema(jsonData);
+      const importedISRA = validateJsonSchema(jsonData);
       return importedISRA
     } catch (error) {
       console.log(error);
     }
-  });
+ 
 }
 
 function getXML(filePath) {
@@ -474,7 +477,7 @@ function getXML(filePath) {
         }
       }
     
-      importedISRA = validateJsonSchema(israJSONData);
+      const importedISRA = validateJsonSchema(israJSONData);
       return importedISRA
 
 }
@@ -499,7 +502,9 @@ function getISRA(filePathArr) {
     const fileType = filePath.split('.').pop();
 
     if (fileType === 'json') {
-      return getJSON(filePath)
+      const importedISRA = getJSON(filePath)
+      return importedISRA
+      
     } else if (fileType == 'xml') {
       return getXML(filePath)
     }
@@ -510,12 +515,11 @@ const { importBA, importSA, importRisk, importVul } = require('./import')
 
     
 
-const loadData = (win) => {
+const loadData = async (win) => {
 
   const filePathArr = openFileDialog();
 
-  const importedISRA = getISRA(filePathArr);
-
+  const importedISRA = await getISRA(filePathArr);
   let dialogWindow = null;
     function activateImportDialog() {
       dialogWindow = new BrowserWindow({
@@ -528,17 +532,15 @@ const loadData = (win) => {
         show: false,
         webPreferences: {
           nodeIntegration: true,
-          contextIsolation: false,
+          // contextIsolation: false,
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'import_dialog.html'));
+      //dialogWindow.webContents.on()
+      //dialogWindow.webContents.executeJavascript()
       dialogWindow.show()
     }
 
-    
-    activateImportDialog()
-
-    
     function importTab(options, currentISRA, importedISRA) {
       const importedSAMap = {}
       const importedBAMap = {}
@@ -547,20 +549,20 @@ const loadData = (win) => {
       options.forEach ((option) => {
 
         if (option === '1') {
-          
-          importBA(currentISRA, importedISRA, importedBAMap, selectedOptions)
+
+          importBA(currentISRA, importedISRA, importedBAMap, options)
 
         } else if (option === '2') {
           
-          importSA(currentISRA, importedISRA, importedBAMap, importedSAMap, selectedOptions)
+          importSA(currentISRA, importedISRA, importedBAMap, importedSAMap, options)
 
         } else if (option === '3') {
 
-          importRisk(currentISRA, importedISRA, importedBAMap, importedSAMap, importedVulMap, selectedOptions)
+          importRisk(currentISRA, importedISRA, importedBAMap, importedSAMap, importedVulMap, options)
 
         } else if (option === '4') {
 
-          importVul(currentISRA, importedISRA, importedBAMap, importedSAMap, importedVulMap, selectedOptions)
+          importVul(currentISRA, importedISRA, importedBAMap, importedSAMap, importedVulMap, options)
 
           
 
@@ -571,32 +573,39 @@ const loadData = (win) => {
           
         
     }
-    let selectedOptions = []
-    console.log(importedISRA.Vulnerability[0])
-    // THIS PART IS BUGGY!!! Imported ISRA still reflects first imported ISRA 
+
+    function jade(options) {
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+      console.log(importedISRA.BusinessAsset)
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+      const currentISRA = israProject
+      console.log(options)
+      importTab(options,currentISRA,importedISRA)
+      
+    }
+
+    
+    activateImportDialog()
+    //ITS CONFIRMED THAT THIS IS THE ISSUE
     ipcMain.on('checkmate', (event,values) => {
-      selectedOptions = values
+
+      const selectedOptions = values
+
       
       if (dialogWindow) {
         dialogWindow.close();
         dialogWindow = null;
       }
 
-      //NEW FUNCTION PLEASE
-      const currentISRA = israProject
-        
-      console.log(importedISRA.Vulnerability[0])
-      importTab(selectedOptions, currentISRA, importedISRA)
-      //importedISRA = null;
+      options = selectedOptions
+      jade(selectedOptions)
       
-    });
-
-      
-
-      
-
       const classification = israProject.properties.ISRAmeta.classification
       win.webContents.send('project:load', israProject.toJSON(), classification);
+      
+    });    
+
+    
 
   }
 

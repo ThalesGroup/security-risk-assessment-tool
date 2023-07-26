@@ -8,10 +8,8 @@ document.getElementById('send').addEventListener('click', () => {
         values.push(checkbox.value)
       }
     });
-
+    
     ipcRenderer.send('checkmate', values);
-
-    //ipcRenderer.send('closeDialog');
 
   });
 
