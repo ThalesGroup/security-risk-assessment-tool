@@ -193,13 +193,15 @@ function enableAllTabs() {
     // add vulnerability ref
     const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
       let refLength = refs.length;
+      console.log(refs)
       refs.forEach((ref, i) => {
+        console.log(i)
         refLength--;
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
         vulnerabilityDiv.css('margin-bottom', '1%');
-        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`);
+        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${i}`);
 
         const checkboxRef = !ref.score ? null : '1';
         const checkbox = document.createElement('input');
@@ -207,14 +209,14 @@ function enableAllTabs() {
         checkbox.value = `${checkboxRef}`;
         checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
         checkbox.name = 'risks__vulnerability__checkboxes';
-        checkbox.setAttribute('data-row-id', ref.rowId);
+        checkbox.setAttribute('data-row-id', i);
         vulnerabilityDiv.append(checkbox);
 
         let select = $('<select>').append(vulnerabilityOptions);
         select.on('change', async (e)=> {
           const { value } = e.target;
           await validatePreviousRisk(getCurrentRiskId());
-          const risk = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'selectedVulnerability', value);
+          const risk = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.vulnerabilityId, 'selectedVulnerability', value);
           reloadCurrentRisk(risk);
           // if (id) setNaNValues(id);
           // else setNaNValues();
@@ -720,6 +722,7 @@ function enableAllTabs() {
         isOWASPLikelihood
       } = riskLikelihood;
 
+      console.log(risksData)
       // Set Risk description data
       $('.riskId').text(riskId);
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
