@@ -12,6 +12,21 @@
         "dist-all": "electron-builder -mwl"
     },
     "build": {
+        "fileAssociations": [
+            {
+              "ext": "json",
+              "description": "JSON File",
+              "role": "Editor"
+            },
+            {
+              "ext": "xml",
+              "description": "XML File",
+              "role": "Editor"
+            }
+        ],
+        "nsis": {
+            "perMachine": true
+        },
         "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
         "extraResources": [
             {
@@ -48,6 +63,7 @@
                 },
                 {
                     "target": "nsis"
+                    
                 }
             ]
         },
