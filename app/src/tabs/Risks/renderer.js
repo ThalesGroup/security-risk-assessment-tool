@@ -23,15 +23,35 @@
 */
 
 /* global $ tinymce Tabulator */
+
+function disableAllTabs() {
+  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+}
+
+function enableAllTabs() {
+  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+}
+
 (async () => {
   try {
-    //window.render.showLoading()
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
         event.preventDefault();
       }
     }
-    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.risks();
     $('#risks').append(result[0]);
@@ -172,13 +192,13 @@
     // add vulnerability ref
     const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
       let refLength = refs.length;
-      refs.forEach((ref, i) => {
+      refs.forEach((ref, rowId) => {
         refLength--;
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
         vulnerabilityDiv.css('margin-bottom', '1%');
-        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${ref.rowId}`);
+        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${rowId}`);
 
         const checkboxRef = !ref.score ? null : '1';
         const checkbox = document.createElement('input');
@@ -186,15 +206,25 @@
         checkbox.value = `${checkboxRef}`;
         checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
         checkbox.name = 'risks__vulnerability__checkboxes';
-        checkbox.setAttribute('data-row-id', ref.rowId);
+        checkbox.setAttribute('data-row-id', rowId);
         vulnerabilityDiv.append(checkbox);
-
+        console.log(rowId)
         let select = $('<select>').append(vulnerabilityOptions);
+        
         select.on('change', async (e)=> {
           const { value } = e.target;
+          console.log(previousVulId)
           await validatePreviousRisk(getCurrentRiskId());
-          const risk = await window.risks.updateRiskAttackPath(getCurrentRiskId(), riskAttackPathId, ref.rowId, 'selectedVulnerability', value);
-          reloadCurrentRisk(risk);
+          if (value) {
+            let risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
+            risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
+            reloadCurrentRisk(risk);
+          } else {
+
+            const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
+            reloadCurrentRisk(risk);
+          }
+          
           // if (id) setNaNValues(id);
           // else setNaNValues();
         });
@@ -207,6 +237,7 @@
           return $(this).text() === ref.name
         })
         select.val(selectedOption.val());
+        const previousVulId = selectedOption.val();
       });
     };
 
@@ -262,9 +293,42 @@
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
-          await validatePreviousRisk(getCurrentRiskId());
-          const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId);
-          reloadCurrentRisk(risk);
+          const refLength = document.getElementsByName('risks__vulnerability__checkboxes').length;
+          
+          let vulnerabilityDiv = $('<div>');
+          vulnerabilityDiv.css('display', 'flex');
+          vulnerabilityDiv.css('padding', '0');
+          vulnerabilityDiv.css('margin-bottom', '1%');
+          vulnerabilityDiv.attr('id', `vulnerabilityrefs_${refLength}`);
+  
+          const checkboxRef = null;
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = `${checkboxRef}`;
+          checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
+          checkbox.name = 'risks__vulnerability__checkboxes';
+          checkbox.setAttribute('data-row-id', refLength);
+          vulnerabilityDiv.append(checkbox);
+          let select = $('<select>').append(vulnerabilityOptions);
+          select.on('change', async (e)=> {
+            const { value } = e.target;
+            console.log(value)
+            await validatePreviousRisk(getCurrentRiskId());
+          
+            const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
+            //reloadCurrentRisk(risk);
+            
+            
+
+          });
+          vulnerabilityDiv.append(select);
+          let visibility = 'visible';
+          if (refLength + 1 === 0) visibility = 'hidden';
+          vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
+          div.append(vulnerabilityDiv);
+
+          
+          
         });
 
         // delete vulnerabilityRef
@@ -274,7 +338,11 @@
 
           checkboxes.forEach((box) => {
             if (box.checked) {
-              ids.push(Number(box.getAttribute('data-row-id')));
+              const vulRef = document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`)
+              const vulId = vulRef.querySelector('select').value
+              ids.push(Number(vulId))
+              //console.log(document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`))
+              //ids.push(Number(box.getAttribute('data-row-id')));
               // window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
             }
           });
@@ -372,13 +440,13 @@
         occurrence
       } = riskLikelihood;
 
-      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
-      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
-      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
-      $('select[id="risk__size"]').val(!size ? 'null' : size);
-      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
-      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
-      $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+      $('select[id="risk__skillLevel"]').val(skillLevel == null? 'null' : skillLevel);
+      $('select[id="risk__reward"]').val(reward == null? 'null' : reward);
+      $('select[id="risk__accessResources"]').val(accessResources == null? 'null' : accessResources);
+      $('select[id="risk__size"]').val(size == null? 'null' : size);
+      $('select[id="risk__intrusionDetection"]').val(intrusionDetection == null? 'null' : intrusionDetection);
+      $('select[id="risk__occurrence"]').val(occurrence == null? 'null' : occurrence);
+      $('select[id="risk__likelihood"]').val(riskLikelihood.riskLikelihood == null? 'null' : riskLikelihood.riskLikelihood);
     };
 
     const addRichTextArea = (selector, desc, width, riskMitigationId) => {
@@ -698,6 +766,7 @@
         isOWASPLikelihood
       } = riskLikelihood;
 
+      console.log(risksData)
       // Set Risk description data
       $('.riskId').text(riskId);
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
@@ -958,8 +1027,7 @@
         });
 
         updateRisksFields(risksData);
-        //window.render.closeLoading()
-        document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+        enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
     });
