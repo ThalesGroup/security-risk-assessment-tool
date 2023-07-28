@@ -61,6 +61,7 @@
     },
     "postinstall": "electron-builder install-app-deps",
     "dependencies": {
+        "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
         "tinymce": "^6.2.0"
