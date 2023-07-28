@@ -662,8 +662,8 @@ ipcMain.handle('render:projectContext', () => renderProjectContext());
 ipcMain.on('projectContext:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
 });
-ipcMain.handle('projectContext:urlPrompt', async () => {
-  const url = await urlPrompt();
+ipcMain.handle('projectContext:urlPrompt', async (event, currentURL) => {
+  const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
   return url;
 });

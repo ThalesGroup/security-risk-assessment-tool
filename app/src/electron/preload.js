@@ -67,7 +67,7 @@ contextBridge.exposeInMainWorld('welcome', {
 
 contextBridge.exposeInMainWorld('projectContext', {
   openURL: (url, userStatus) => ipcRenderer.send('projectContext:openURL', url, userStatus),
-  urlPrompt: () => ipcRenderer.invoke('projectContext:urlPrompt'),
+  urlPrompt: (currentURL) => ipcRenderer.invoke('projectContext:urlPrompt', currentURL),
   attachment: () => ipcRenderer.send('projectContext:attachment'),
   decodeAttachment: (fileName) => ipcRenderer.invoke('projectContext:decodeAttachment', fileName),
   fileName: (fileName) => ipcRenderer.on('projectContext:fileName', fileName),
