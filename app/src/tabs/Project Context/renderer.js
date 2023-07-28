@@ -45,7 +45,6 @@ function enableAllTabs() {
 
 (async () => {
   try {
-    let currentURL = '';
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
         event.preventDefault();
@@ -81,11 +80,19 @@ function enableAllTabs() {
     });
 
     $('#project-description__url-image').on('click', async () => {
-      const url = await window.projectContext.urlPrompt(currentURL);
+      let currentURL = ''
+        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
+            currentURL = $('#vulnerability__url--hyperlink').attr('href')
+        }
+      const url = await window.projectContext.urlPrompt(currentURL );
       projectURL(url);
     });
 
     $('#project-description__url--insert').on('click', async () => {
+      let currentURL = ''
+        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
+            currentURL = $('#vulnerability__url--hyperlink').attr('href')
+        }
       const url = await window.projectContext.urlPrompt(currentURL);
       projectURL(url);
     });
@@ -117,9 +124,6 @@ function enableAllTabs() {
     const updateProjectContextFields = (fetchedData) => {
       projectDescription(fetchedData.projectDescription);
       projectURL(fetchedData.projectURL);
-      
-      currentURL = fetchedData.projectURL
-      console.log(currentURL)
       projectDescriptiveAttachment(fetchedData.projectDescriptionAttachment);
       projectObjectives(fetchedData.securityProjectObjectives);
       officerObjectives(fetchedData.securityOfficerObjectives);

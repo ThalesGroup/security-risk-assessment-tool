@@ -831,8 +831,8 @@ ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerab
 ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
   return updateVulnerability(israProject, id, field, value);
 });
-ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
-  const url = await urlPrompt();
+ipcMain.handle('vulnerabilities:urlPrompt', async (event, id, currentURL) => {
+  const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
   return url;
 });

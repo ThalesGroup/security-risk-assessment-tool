@@ -114,7 +114,7 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
   addVulnerability: () => ipcRenderer.invoke('vulnerabilities:addVulnerability'),
   deleteVulnerability: (ids) => ipcRenderer.send('vulnerabilities:deleteVulnerability', ids),
   updateVulnerability: (id, field, value) => ipcRenderer.invoke('vulnerabilities:updateVulnerability', id, field, value),
-  urlPrompt: (id) => ipcRenderer.invoke('vulnerabilities:urlPrompt', id),
+  urlPrompt: (id, currentURL) => ipcRenderer.invoke('vulnerabilities:urlPrompt', id , currentURL),
   openURL: (url, userStatus) => ipcRenderer.send('vulnerabilities:openURL', url, userStatus),
   attachment: (id) => ipcRenderer.send('vulnerabilities:attachment', id),
   decodeAttachment: (id, fileName) => ipcRenderer.invoke('vulnerabilities:decodeAttachment', id, fileName),
