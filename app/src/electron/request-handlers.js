@@ -520,11 +520,15 @@ const loadData = async (win) => {
   const filePathArr = openFileDialog();
 
   const importedISRA = await getISRA(filePathArr);
+  const classification = israProject.properties.ISRAmeta.classification
+
+  win.webContents.send('project:load', importedISRA, classification);
+  //win.webContents.send('import:load', importedISRA, {});
   let dialogWindow = null;
     function activateImportDialog() {
       dialogWindow = new BrowserWindow({
         width: 500,
-        height: 250,
+        height: 500,
         autoHideMenuBar: true,
         menuBarVisibility: 'hidden',
         parent: getMainWindow(),
@@ -536,10 +540,18 @@ const loadData = async (win) => {
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'import_dialog.html'));
+
+      
       //dialogWindow.webContents.on()
       //dialogWindow.webContents.executeJavascript()
+
       dialogWindow.show()
     }
+
+    
+
+
+  
 
     function importTab(options, currentISRA, importedISRA) {
       const importedSAMap = {}
@@ -586,6 +598,10 @@ const loadData = async (win) => {
 
     
     activateImportDialog()
+    ipcMain.on('request-data', (event) => {
+      console.log(importedISRA)
+      event.reply('response-data', importedISRA)
+    });
     //ITS CONFIRMED THAT THIS IS THE ISSUE
     ipcMain.on('checkmate', (event,values) => {
 

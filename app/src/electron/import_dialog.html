@@ -24,66 +24,53 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
+
+    <meta charset="UTF-8">
+    
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Import ISRA data</title>
-    <style>
-      .checkbox-container {
-        margin-bottom: 10px;
-      }
+    <link rel="stylesheet" type="text/css" href="../global styles/global-styles.css">
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link href="../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 
-      .checkbox {
-        transform: scale(1.5);
-        margin-right: 5px;
-      }
+    <!-- npm modules (minified) -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="../../node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+</head>
 
-      .button-container {
-        margin-top: 10px;
-      }
-    </style>
-  </head>
 <body>
-<div>
-  <h3>Please select what you would like to import:</h3>
-  <div class="checkbox-container">
-    <label>
-      <input type="checkbox" id="checkbox1" class="checkbox" name="Business Assets" value="1"/> Business Assets
-     </label>
-  </div>
-  <div class="checkbox-container">
-    <label>
-     <input type="checkbox" id="checkbox2" class="checkbox" name="Supporting Assets" value="2"/> Supporting Assets
-     <input type="checkbox" id="checkbox3" class="checkbox" style="transform:scale(1);" name="SA with assets" value="2X"/> With Linked Business Assets
-    </label>
-  </div>
-  <div class="checkbox-container">
-    <label>
-      <input type="checkbox" id="checkbox4" class="checkbox" name="Risks" value="3"/> Risks
-      <input type="checkbox" id="checkbox5" class="checkbox" style="transform:scale(1);" name="Risks with assets" value="3X"/> With Linked Business and Supporting Assets
-     </label>
-  </div>
-  
+  <h3>ISRA import</h3>
+    <div class="wrapper">
+        <div class="buttonWrapper">
+            <button class="tab-button" data-id="business-assets">Business Assets</button>
+            <button class="tab-button" data-id="supporting-assets">Supporting Assets</button>
+            <button class="tab-button" data-id="risks">Risks</button>
+            <button class="tab-button active" data-id="vulnerabilities">Vulnerabilities</button>
+            <button class="tab-button" data-id="import-summary">Summary</button>
+          </div>
 
-  <div class="checkbox-container">
 
-    <label>
-     <input type="checkbox" id="checkbox6" class="checkbox" name="Vulnerabilities" value="4"/> Vulnerabilities
-     <input type="checkbox" id="checkbox7" class="checkbox" style="transform:scale(1);"  name="Vulnerabilities with assets" value="4X"/> With Linked Supporting Assets
-    </label>
-  </div>
-  <div class="checkbox-container">
+    </div>
 
-    <label>
-     <input type="checkbox" id="checkbox8" class="checkbox" name="Wot" value="7"/> Wot
-   
-    </label>
-  </div>
-  </div>
+    <header>Vulnerabilities</header>
 
-  <div class="button-container">
-    <button id="send">Confirm</button>
-  </div>
-  
-  <script src="renderer.js"></script>
+                <p class="subheading">Select the assets you want to import</p>
+                <div class='filter' style="display: flex;">
+                  <input id="filter-value" type="text" placeholder="Filter..." style="width: 100%">
+                  <button id="filter-clear">X</button>
+                </div>
+                <div class="table">
+                    <div id="import__table"></div>
+                </div>
+               
+                <footer></footer>
+
+    <script src="./renderer.js"></script>
+    <script src="../javascript/tabs.js"></script>
 </body>
 
 </html>

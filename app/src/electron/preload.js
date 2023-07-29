@@ -35,6 +35,11 @@ contextBridge.exposeInMainWorld('project', {
   // validationErrors: (state) => ipcRenderer.on('project:validationErrors', state),
 });
 
+contextBridge.exposeInMainWorld('import', {
+  load: (importedISRA, imports) => ipcRenderer.on('import:load', importedISRA, imports),
+  
+});
+
 contextBridge.exposeInMainWorld('render', {
   welcome: () => ipcRenderer.invoke('render:welcome'),
   projectContext: () => ipcRenderer.invoke('render:projectContext'),
