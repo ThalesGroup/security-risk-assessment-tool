@@ -511,115 +511,47 @@ function getISRA(filePathArr) {
   }
 };
 
-const { importBA, importSA, importRisk, importVul } = require('./import')
 
-    
+let importedISRA;
+
+let dialogWindow;
 
 const loadData = async (win) => {
 
   const filePathArr = openFileDialog();
 
-  const importedISRA = await getISRA(filePathArr);
+  importedISRA = await getISRA(filePathArr);
   const classification = israProject.properties.ISRAmeta.classification
 
   win.webContents.send('project:load', importedISRA, classification);
   //win.webContents.send('import:load', importedISRA, {});
-  let dialogWindow = null;
+  
     function activateImportDialog() {
       dialogWindow = new BrowserWindow({
         width: 500,
         height: 500,
         autoHideMenuBar: true,
+        icon: path.join(__dirname, '../asset/isra-app-icon-512.png'),
         menuBarVisibility: 'hidden',
         parent: getMainWindow(),
         modal: true,
         show: false,
         webPreferences: {
-          nodeIntegration: true,
-          // contextIsolation: false,
+          preload: path.join(__dirname, './preload.js'),
+          
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'import_dialog.html'));
 
       
-      //dialogWindow.webContents.on()
-      //dialogWindow.webContents.executeJavascript()
-
-      dialogWindow.show()
+      dialogWindow.webContents.on('dom-ready', () => {
+        dialogWindow.show()
+        dialogWindow.webContents.send('import:load', importedISRA)
+      });
     }
 
     
-
-
-  
-
-    function importTab(options, currentISRA, importedISRA) {
-      const importedSAMap = {}
-      const importedBAMap = {}
-      const importedVulMap = {}
-
-      options.forEach ((option) => {
-
-        if (option === '1') {
-
-          importBA(currentISRA, importedISRA, importedBAMap, options)
-
-        } else if (option === '2') {
-          
-          importSA(currentISRA, importedISRA, importedBAMap, importedSAMap, options)
-
-        } else if (option === '3') {
-
-          importRisk(currentISRA, importedISRA, importedBAMap, importedSAMap, importedVulMap, options)
-
-        } else if (option === '4') {
-
-          importVul(currentISRA, importedISRA, importedBAMap, importedSAMap, importedVulMap, options)
-
-          
-
-        }
-        
-      }); 
-      
-          
-        
-    }
-
-    function jade(options) {
-      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-      console.log(importedISRA.BusinessAsset)
-      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-      const currentISRA = israProject
-      console.log(options)
-      importTab(options,currentISRA,importedISRA)
-      
-    }
-
-    
-    activateImportDialog()
-    ipcMain.on('request-data', (event) => {
-      console.log(importedISRA)
-      event.reply('response-data', importedISRA)
-    });
-    //ITS CONFIRMED THAT THIS IS THE ISSUE
-    ipcMain.on('checkmate', (event,values) => {
-
-      const selectedOptions = values
-
-      
-      if (dialogWindow) {
-        dialogWindow.close();
-        dialogWindow = null;
-      }
-
-      options = selectedOptions
-      jade(selectedOptions)
-      
-      const classification = israProject.properties.ISRAmeta.classification
-      win.webContents.send('project:load', israProject.toJSON(), classification);
-      
-    });    
+    activateImportDialog(importedISRA)
 
     
 
@@ -772,7 +704,12 @@ const {
   closeLoading
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
+const { importData } = require('./import')
+ipcMain.on('import:sendImports', (event, data) => {
 
+  importData(data,israProject,importedISRA)
+  dialogWindow.close()
+})
 ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('render:showLoading', () => showLoading());
 ipcMain.handle('render:closeLoading', () => closeLoading());

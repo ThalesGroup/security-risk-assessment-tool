@@ -36,9 +36,29 @@ contextBridge.exposeInMainWorld('project', {
 });
 
 contextBridge.exposeInMainWorld('import', {
-  load: (importedISRA, imports) => ipcRenderer.on('import:load', importedISRA, imports),
-  
+  sendImports: (data) => ipcRenderer.send('import:sendImports', data),
+
 });
+
+contextBridge.exposeInMainWorld(
+  'api', {
+    send: (channel, func) => {
+      let validChannels = ['import:submit'];
+      if (validChannels.includes(channel)) {
+        // Deliberately strip event as it includes `sender` 
+        ipcRenderer.send(channel, func);
+      }
+    },
+    receive: (channel, func) => {
+      let validChannels = ['import:load'];
+      if (validChannels.includes(channel)) {
+        // Deliberately strip event as it includes `sender` 
+        ipcRenderer.on(channel, (event, ...args) => func(...args));
+      }
+    }
+  }
+);
+
 
 contextBridge.exposeInMainWorld('render', {
   welcome: () => ipcRenderer.invoke('render:welcome'),
