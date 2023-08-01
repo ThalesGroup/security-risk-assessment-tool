@@ -116,11 +116,25 @@ function disableAllTabs() {
                 $('#iteration').text(iteration);
 
                 let totalCost = 0;
+                const lowRisk = [0,0,0];
+                const medRisk = [0,0,0];
+                const highRisk = [0,0,0];
+                const dataIndex = {'Accept': 0, 'Transfer': 1, 'Mitigate': 2}
                 Risk.forEach((risk) => {
-                    const { residualRiskLevel, riskMitigation } = risk;
-                    if (residualRiskLevel === 'High') sortedRisk['high'].push(risk);
-                    else if (residualRiskLevel === 'Medium') sortedRisk['medium'].push(risk);
-                    else if (residualRiskLevel === 'Low') sortedRisk['low'].push(risk);
+                    const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
+                    
+
+                    if (residualRiskLevel === 'High') {
+                        sortedRisk['high'].push(risk);
+                        highRisk[dataIndex[riskManagementDecision]] += 1;
+
+                    } else if (residualRiskLevel === 'Medium') {
+                        sortedRisk['medium'].push(risk);
+                        medRisk[dataIndex[riskManagementDecision]] += 1
+                    } else if (residualRiskLevel === 'Low') {
+                        sortedRisk['low'].push(risk);
+                        lowRisk[dataIndex[riskManagementDecision]] += 1
+                    }
 
                     riskMitigation.forEach((mitigation) => {
                         const { description, decisionDetail, cost, decision } = mitigation;
@@ -132,7 +146,7 @@ function disableAllTabs() {
                             </td>`);
 
                             if(cost !== null) totalCost += cost;
-                        };
+                        }
                     });
                 });
                 $('#riskmanagement tbody')
@@ -155,6 +169,54 @@ function disableAllTabs() {
                 renderVulnerability(sortedVulnerability, 'high');
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
+
+                const ctx = document.getElementById('riskChart');
+                const chartData = {
+                    labels: ['Accept', 'Transfer', 'Mitigate'],
+                    datasets: [
+                      {
+                        label: 'Low',
+                        data: lowRisk,
+                        stack: 'stack',
+                        backgroundColor: 'rgba( 128,128,128, 0.5)', 
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: 'Medium',
+                        data: medRisk,
+                        stack: 'stack',
+                        backgroundColor: 'rgba(139, 128, 0, 0.5)', 
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: 'High',
+                        data: highRisk,
+                        stack: 'stack',
+                        backgroundColor: 'rgba(255,0,0, 0.5)', 
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1
+                      },
+
+                    ]
+                  };
+              
+                  // Configuration options for the bar chart
+                  const options = {
+                    scales: {
+                      y: {
+                        beginAtZero: true
+                      }
+                    }
+                  };
+              
+                  // Create the bar chart
+                  const riskChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: options
+                  });
             });
 
             window.project.iteration(async (event, iteration) => {

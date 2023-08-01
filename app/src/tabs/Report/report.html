@@ -38,6 +38,7 @@
     <script src="../../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../../node_modules/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="../../../node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script src="../../../node_modules/chart.js/dist/chart.umd.js"></script>
 </head>
 
 <body>
@@ -60,6 +61,10 @@
                 <h2>App version: <span id="app"></span></h2>
                 <section>
                     <h1>Project security risks</h1>
+                    <div>
+                        <canvas id="riskChart"></canvas>
+                      </div>
+                      <div id="matrixTableContainer"></div>
                     <table id="risks">
                         <thead>
                             <th>Id</th>
