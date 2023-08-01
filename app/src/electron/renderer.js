@@ -141,7 +141,126 @@
   
   const vulnerabilitiesTable = new Tabulator('#vulnerabilities__table', vulnerabilityTableConfig);
 
+  // filter
+  function clearFunction(field) {
+    if (field === "BA") {
+
+      businessAssetsTable.clearFilter();
+      $('input[id="filterBA-value"]').val('');
+      if (businessAssetsTable.getData().length > 0) $('#businessAssets section').show();
+
+    } else if (field === "SA") {
+
+      supportingAssetsTable.clearFilter();
+      $('input[id="filterSA-value"]').val('');
+      if (supportingAssetsTable.getData().length > 0) $('#supportingAssets section').show();
+
+    } else if (field === "Risk") {
+
+      risksTable.clearFilter();
+      $('input[id="filterRisk-value"]').val('');
+      if (risksTable.getData().length > 0) $('#risks section').show();
+
+    } else if (field === "Vul") {
+
+      vulnerabilitiesTable.clearFilter();
+      $('input[id="filterVul-value"]').val('');
+      if (vulnerabilitiesTable.getData().length > 0) $('#vulnerabilities section').show();
+
+    }
     
+  };
+
+  function filter(field) {
+
+    const { value } = e.target;
+
+    if (field === "BA") {
+
+      if(value === ''){
+        clearFunction(field);
+      }else {
+        const filterOptions = [
+            [
+                { field: "businessAssetName", type: "like", value: value },
+                
+            ]
+        ];
+        businessAssetsTable.setFilter(filterOptions);
+        const filteredRows = businessAssetsTable.searchData(filterOptions);
+        if (filteredRows[0]) {
+          businessAssetsTable.getData().forEach((v) => {
+                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+            });
+            vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
+            addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
+        } else $('#vulnerabilities section').hide();
+    }
+
+      
+
+    } else if (field === "SA") {
+
+      
+
+    } else if (field === "Risk") {
+
+
+    } else if (field === "Vul") {
+
+
+    }
+
+
+
+    
+
+  }
+
+  $('input[id="filter-value"]').on('change', (e)=> {
+    const { value } = e.target;
+    if(value === ''){
+        clearFunction();
+    }else {
+        const filterOptions = [
+            [
+                { field: "vulnerabilityId", type: "like", value: value },
+                { field: "projectVersion", type: "like", value: value },
+                { field: "vulnerabilityName", type: "like", value: value },
+                { field: "overallLevel", type: "like", value: value },
+            ]
+        ];
+        vulnerabilitiesTable.setFilter(filterOptions);
+        const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
+        if (filteredRows[0]) {
+            vulnerabilitiesData.forEach((v) => {
+                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+            });
+            vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
+            addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
+        } else $('#vulnerabilities section').hide();
+    }
+});
+
+$('button[id="filterBA-clear"]').on('click', () => { 
+  clearFunction(field);
+});
+
+$('button[id="filterSA-clear"]').on('click', () => { 
+  clearFunction(field);
+});
+
+$('button[id="filterRisk-clear"]').on('click', () => { 
+  clearFunction(field);
+});
+
+$('button[id="filterVul-clear"]').on('click', () => { 
+  clearFunction(field);
+});
+
+  
+
+
  
 
   const importButton = document.getElementById('importButton');
