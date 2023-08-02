@@ -14,8 +14,8 @@
     "build": {
         "fileAssociations": [
             {
-              "ext": "json",
-              "description": "JSON File",
+              "ext": "sra",
+              "description": "ISRA File",
               "role": "Editor"
             },
             {
