@@ -177,7 +177,6 @@ function disableAllTabs() {
             overallLevel,
             supportingAssetRef
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
-
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
         $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
@@ -425,7 +424,9 @@ function disableAllTabs() {
     });
 
     const vulnerabilityURL = (value) => {
+        console.log('first')
         getCurrentVulnerability().vulnerabilityTrackingURI = value;
+        
         const hyperlink = $('#vulnerability__url--hyperlink');
         const insert = $('#vulnerability__url--insert');
   
@@ -446,12 +447,20 @@ function disableAllTabs() {
       });
 
     $('#vulnerability__url--insert').on('click', async () => {
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId());
+        let currentURL = ''
+        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
+            currentURL = $('#vulnerability__url--hyperlink').attr('href')
+        }
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), currentURL);
         vulnerabilityURL(url);
     });
 
     $('#vulnerability__url--img').on('click', async () => {
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId());
+        let currentURL = ''
+        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
+            currentURL = $('#vulnerability__url--hyperlink').attr('href')
+        }
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), currentURL);
         vulnerabilityURL(url);
     });
 
