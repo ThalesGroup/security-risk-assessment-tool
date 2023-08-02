@@ -60,3 +60,8 @@ div[class='content active'] {
 /* .tabulator .tabulator-col-content:first-of-type .tabulator-col-title:first-of-type {
     font-size: small;
 } */
+
+.tabulator .tabulator-row .tabulator-cell {
+    white-space: normal;
+    overflow: visible;
+}

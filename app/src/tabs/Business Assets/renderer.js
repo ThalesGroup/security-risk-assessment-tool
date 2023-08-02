@@ -26,6 +26,7 @@
 
 function updateBusinessAssetName(id, field){
   const value = document.querySelector(`textarea[id="${id}"][name="businessAssetName"]`).value;  
+  console.log(value)
   window.businessAssets.updateBusinessAsset(id, field, value);   
 }
 
@@ -68,6 +69,7 @@ function enableAllTabs() {
 
       const update = (cell) => {
         const rowId = cell.getRow().getData().businessAssetId;
+        console.log(cell.getField())
         window.businessAssets.updateBusinessAsset(rowId, cell.getField(), cell.getValue());
       };
 
@@ -75,16 +77,14 @@ function enableAllTabs() {
       // options.columns[0].cellEdited = (cell) => {
       //   update(cell);
       // };
-      options.columns[0].formatter = (cell) => {
-        const id = cell.getRow().getIndex();
-        if (id) {
-          return `
-            <textarea id="${id}" rows="2" cols="16" name="businessAssetName" onchange="updateBusinessAssetName(${id}, 'businessAssetName')">${businessAssetName}</textarea>
-          `;
-        }
-      };
+      
 
       // asset values
+
+      options.columns[0].cellEdited = (cell) => {
+           update(cell);
+         };
+
       options.columns[1].columns.forEach((column) => {
         const c = column;
         c.cellEdited = (cell) => {
