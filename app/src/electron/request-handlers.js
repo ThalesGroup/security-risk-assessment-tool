@@ -530,9 +530,9 @@ const loadData = async (win) => {
       dialogWindow = new BrowserWindow({
         width: 500,
         height: 500,
-        autoHideMenuBar: true,
+        //autoHideMenuBar: true,
         icon: path.join(__dirname, '../asset/isra-app-icon-512.png'),
-        menuBarVisibility: 'hidden',
+        //menuBarVisibility: 'hidden',
         parent: getMainWindow(),
         modal: true,
         show: false,

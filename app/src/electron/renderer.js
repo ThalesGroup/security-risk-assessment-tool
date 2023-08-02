@@ -95,7 +95,7 @@
           title: 'Risk Name', field: 'riskName.riskName', headerSort: false, headerHozAlign: 'center', hozAlign: 'center'
         },
         {
-          title: 'Risk Level', field: 'residualRiskLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center'
+          title: 'Risk Level', field: 'residualRiskLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 80
         }
       ],
   }
@@ -119,10 +119,10 @@
           title: 'Import?', field: 'checkbox', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', headerWordWrap: true, width: 80
         },
         {
-          title: 'Vuln. Name', field: 'vulnerabilityName', headerSort: false, headerHozAlign: 'center', width: 480
+          title: 'Vuln. Name', field: 'vulnerabilityName', headerSort: false, headerHozAlign: 'center'
         },
         {
-          title: 'Vuln. Level', field: 'overallLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', headerWordWrap: true
+          title: 'Vuln. Level', field: 'overallLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', headerWordWrap: true, width: 80
         },
       ],
   }
@@ -171,11 +171,11 @@
     
   };
 
-  function filter(field) {
+  function filter(field, e) {
 
     const { value } = e.target;
-
-    if (field === "BA") {
+    console.log(value)
+    if (field === 'BA') {
 
       if(value === ''){
         clearFunction(field);
@@ -188,25 +188,71 @@
         ];
         businessAssetsTable.setFilter(filterOptions);
         const filteredRows = businessAssetsTable.searchData(filterOptions);
-        if (filteredRows[0]) {
-          businessAssetsTable.getData().forEach((v) => {
-                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-            });
-            vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
-            addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
-        } else $('#vulnerabilities section').hide();
+        if (!filteredRows[0]) {
+          $('#businessAssets section').hide();
+        } 
     }
 
       
 
-    } else if (field === "SA") {
+    } else if (field === 'SA') {
+
+      if(value === ''){
+        clearFunction(field);
+      }else {
+        const filterOptions = [
+            [
+                { field: "supportingAssetName", type: "like", value: value },
+                
+            ]
+        ];
+        supportingAssetsTable.setFilter(filterOptions);
+        const filteredRows = supportingAssetsTable.searchData(filterOptions);
+        if (!filteredRows[0]) {
+          $('#supportingAssets section').hide();
+        } 
+    }
 
       
 
-    } else if (field === "Risk") {
+    } else if (field === 'Risk') {
+
+      if(value === ''){
+        clearFunction(field);
+      }else {
+        const filterOptions = [
+            [
+                { field: "riskName.riskName", type: "like", value: value },
+                { field: "residualRiskLevel", type: "like", value: value },
+                
+            ]
+        ];
+        risksTable.setFilter(filterOptions);
+        const filteredRows = risksTable.searchData(filterOptions);
+        if (!filteredRows[0]) {
+          $('#risks section').hide();
+        } 
+    }
 
 
-    } else if (field === "Vul") {
+    } else if (field === 'Vul') {
+
+      if(value === ''){
+        clearFunction(field);
+      }else {
+        const filterOptions = [
+            [
+              { field: "vulnerabilityName", type: "like", value: value },
+              { field: "overallLevel", type: "like", value: value },
+                
+            ]
+        ];
+        vulnerabilitiesTable.setFilter(filterOptions);
+        const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
+        if (!filteredRows[0]) {
+          $('#vulnerabilities section').hide();
+        } 
+    }
 
 
     }
@@ -217,45 +263,38 @@
 
   }
 
-  $('input[id="filter-value"]').on('change', (e)=> {
-    const { value } = e.target;
-    if(value === ''){
-        clearFunction();
-    }else {
-        const filterOptions = [
-            [
-                { field: "vulnerabilityId", type: "like", value: value },
-                { field: "projectVersion", type: "like", value: value },
-                { field: "vulnerabilityName", type: "like", value: value },
-                { field: "overallLevel", type: "like", value: value },
-            ]
-        ];
-        vulnerabilitiesTable.setFilter(filterOptions);
-        const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
-        if (filteredRows[0]) {
-            vulnerabilitiesData.forEach((v) => {
-                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-            });
-            vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
-            addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
-        } else $('#vulnerabilities section').hide();
-    }
-});
+  $('input[id="filterBA-value"]').on('change', (e)=> {
+    filter('BA', e)
+  });
+
+  $('input[id="filterSA-value"]').on('change', (e)=> {
+    filter('SA', e)
+  });
+
+  $('input[id="filterRisk-value"]').on('change', (e)=> {
+    filter('Risk', e)
+  });
+
+  $('input[id="filterVul-value"]').on('change', (e)=> {
+    filter('Vul', e)
+  });
+
+
 
 $('button[id="filterBA-clear"]').on('click', () => { 
-  clearFunction(field);
+  clearFunction('BA');
 });
 
 $('button[id="filterSA-clear"]').on('click', () => { 
-  clearFunction(field);
+  clearFunction('SA');
 });
 
 $('button[id="filterRisk-clear"]').on('click', () => { 
-  clearFunction(field);
+  clearFunction('Risk');
 });
 
 $('button[id="filterVul-clear"]').on('click', () => { 
-  clearFunction(field);
+  clearFunction('Vul');
 });
 
   
