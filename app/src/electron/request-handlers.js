@@ -928,15 +928,10 @@ ipcMain.on('israreport:saveGraph', async (event,graph) => {
   const fileName = await dialog.showSaveDialog(options);
   if (!fileName.canceled) {
     try {
-      // convert base64 string to buffer (raw data)
-      const decodedBuffer = Buffer.from(graph, 'base64');
-      const fileNameSize = decodedBuffer.slice(0, 8).toString();
-      const data = decodedBuffer.slice(
-        8 + parseInt(fileNameSize, 10),
-        Buffer.byteLength(decodedBuffer),
-      );
 
-      fs.writeFileSync(fileName.filePath, data, (err) => {
+      const data = graph.replace(/^data:image\/\w+;base64,/,'')
+
+      fs.writeFile(fileName.filePath, data, {encoding: 'base64'}, (err) => {
         if (err) throw new Error('Failed to save as file');
       });
       dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved file to ${fileName.filePath}` });

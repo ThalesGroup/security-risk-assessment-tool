@@ -180,7 +180,8 @@ function disableAllTabs() {
                         stack: 'stack',
                         backgroundColor: 'rgba( 128,128,128, 0.5)', 
                         borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        barPercentage: 0.25,
                       },
                       {
                         label: 'Medium',
@@ -188,7 +189,9 @@ function disableAllTabs() {
                         stack: 'stack',
                         backgroundColor: 'rgba(139, 128, 0, 0.5)', 
                         borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        barPercentage: 0.25,
+                        
                       },
                       {
                         label: 'High',
@@ -196,7 +199,8 @@ function disableAllTabs() {
                         stack: 'stack',
                         backgroundColor: 'rgba(255,0,0, 0.5)', 
                         borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        barPercentage: 0.25,
                       },
 
                     ]
@@ -204,10 +208,13 @@ function disableAllTabs() {
               
                   // Configuration options for the bar chart
                   const options = {
+
                     scales: {
+
                       y: {
                         beginAtZero: true
-                      }
+                      },
+                      
                     },
                     animation: {
                       duration: 0
@@ -226,7 +233,7 @@ function disableAllTabs() {
                   });
 
                   const imageGraph = riskChart.toBase64Image()
-                  console.log(riskChart.toBase64Image())
+                 
                   const saveButton = document.getElementById('saveGraph')
 
                   saveButton.addEventListener('click', async () => {
@@ -234,6 +241,8 @@ function disableAllTabs() {
                    
                     
                   });
+
+                  
             });
 
             window.project.iteration(async (event, iteration) => {
