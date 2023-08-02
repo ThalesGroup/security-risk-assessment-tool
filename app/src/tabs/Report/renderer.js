@@ -234,10 +234,11 @@ function disableAllTabs() {
 
                   const imageGraph = riskChart.toBase64Image()
                  
-                  const saveButton = document.getElementById('saveGraph')
+                  const canvas = document.getElementById('riskChart')
 
-                  saveButton.addEventListener('click', async () => {
-                    window.israreport.saveGraph(imageGraph);
+                  canvas.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    window.israreport.saveGraph(imageGraph)
                    
                     
                   });
