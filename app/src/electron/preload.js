@@ -121,3 +121,7 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
   fileName: (result) => ipcRenderer.on('vulnerabilities:fileName', result),
   isVulnerabilityExist: (id) => ipcRenderer.invoke('vulnerabilities:isVulnerabilityExist', id)
 });
+
+contextBridge.exposeInMainWorld('israreport', {
+  saveGraph: (graph) => ipcRenderer.send('israreport:saveGraph', graph),
+});

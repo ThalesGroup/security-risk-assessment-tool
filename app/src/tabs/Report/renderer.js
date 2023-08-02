@@ -208,7 +208,14 @@ function disableAllTabs() {
                       y: {
                         beginAtZero: true
                       }
-                    }
+                    },
+                    animation: {
+                      duration: 0
+                    },
+                    hover: {
+                      animationDuration: 0
+                    },
+                    responsiveAnimationDuration: 0
                   };
               
                   // Create the bar chart
@@ -216,6 +223,16 @@ function disableAllTabs() {
                     type: 'bar',
                     data: chartData,
                     options: options
+                  });
+
+                  const imageGraph = riskChart.toBase64Image()
+                  console.log(riskChart.toBase64Image())
+                  const saveButton = document.getElementById('saveGraph')
+
+                  saveButton.addEventListener('click', async () => {
+                    window.israreport.saveGraph(imageGraph);
+                   
+                    
                   });
             });
 

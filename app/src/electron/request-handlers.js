@@ -915,7 +915,37 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
 
 ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => validateVulnerabilities(israProject, currentVulnerability));
 ipcMain.handle('vulnerabilities:isVulnerabilityExist', (event, id) => isVulnerabilityExist(israProject, id));
+ipcMain.on('israreport:saveGraph', async (event,graph) => {
 
+  const options = {
+    title: 'Save as file - Electron ISRA Project',
+    defaultPath: '',
+    buttonLabel: 'Save as file',
+    filters: [
+      { name: 'PNG', extensions: ['png'] },
+    ],
+  };
+  const fileName = await dialog.showSaveDialog(options);
+  if (!fileName.canceled) {
+    try {
+      // convert base64 string to buffer (raw data)
+      const decodedBuffer = Buffer.from(graph, 'base64');
+      const fileNameSize = decodedBuffer.slice(0, 8).toString();
+      const data = decodedBuffer.slice(
+        8 + parseInt(fileNameSize, 10),
+        Buffer.byteLength(decodedBuffer),
+      );
+
+      fs.writeFileSync(fileName.filePath, data, (err) => {
+        if (err) throw new Error('Failed to save as file');
+      });
+      dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved file to ${fileName.filePath}` });
+    } catch (err) {
+      console.log(err);
+      dialog.showMessageBoxSync(getMainWindow(), { message: `Error in saving file to ${fileName.filePath}` });
+    }
+  }
+});
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
 //     nativeTheme.themeSource = 'light';

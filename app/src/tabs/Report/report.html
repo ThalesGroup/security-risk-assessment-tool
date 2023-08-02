@@ -29,7 +29,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <style>
+        /* Basic button styles */
+        .styled-button {
+          display: inline-block;
+          padding: 5px 10px;
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          text-align: center;
+          text-decoration: none;
+          font-size: 12px;
+        }
+    
+        /* Add hover effect */
+        .styled-button:hover {
+          background-color: #0056b3;
+        }
+    
+        /* Add active effect */
+        .styled-button:active {
+          background-color: #003b80;
+        }
+      </style>
     <link rel="stylesheet" type="text/css" href="../../global styles/global-styles.css">
     <link rel="stylesheet" type="text/css" href="./styles.css">
     <link href="../../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
@@ -62,6 +86,7 @@
                 <section>
                     <h1>Project security risks</h1>
                     <div>
+                        <button class="styled-button" id="saveGraph">Save Graph as Image</button>
                         <canvas id="riskChart"></canvas>
                       </div>
                       <div id="matrixTableContainer"></div>
