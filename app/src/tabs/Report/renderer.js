@@ -181,7 +181,7 @@ function disableAllTabs() {
                         backgroundColor: 'rgba( 128,128,128, 0.5)', 
                         borderColor: 'rgb(255, 99, 132)',
                         borderWidth: 1,
-                        barPercentage: 0.25,
+                        barPercentage: 0.5,
                       },
                       {
                         label: 'Medium',
@@ -190,7 +190,7 @@ function disableAllTabs() {
                         backgroundColor: 'rgba(139, 128, 0, 0.5)', 
                         borderColor: 'rgb(255, 99, 132)',
                         borderWidth: 1,
-                        barPercentage: 0.25,
+                        barPercentage: 0.5,
                         
                       },
                       {
@@ -200,7 +200,7 @@ function disableAllTabs() {
                         backgroundColor: 'rgba(255,0,0, 0.5)', 
                         borderColor: 'rgb(255, 99, 132)',
                         borderWidth: 1,
-                        barPercentage: 0.25,
+                        barPercentage: 0.5,
                       },
 
                     ]
