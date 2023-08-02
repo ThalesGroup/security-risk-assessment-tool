@@ -23,15 +23,35 @@
 */
 
 /* global $ tinymce Tabulator */
+
+function disableAllTabs() {
+  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+}
+
+function enableAllTabs() {
+  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+}
+
 (async () => {
   try {
-    //window.render.showLoading()
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
         event.preventDefault();
       }
     }
-    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.risks();
     $('#risks').append(result[0]);
@@ -372,13 +392,13 @@
         occurrence
       } = riskLikelihood;
 
-      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
-      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
-      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
-      $('select[id="risk__size"]').val(!size ? 'null' : size);
-      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
-      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
-      $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+      $('select[id="risk__skillLevel"]').val(skillLevel == null? 'null' : skillLevel);
+      $('select[id="risk__reward"]').val(reward == null? 'null' : reward);
+      $('select[id="risk__accessResources"]').val(accessResources == null? 'null' : accessResources);
+      $('select[id="risk__size"]').val(size == null? 'null' : size);
+      $('select[id="risk__intrusionDetection"]').val(intrusionDetection == null? 'null' : intrusionDetection);
+      $('select[id="risk__occurrence"]').val(occurrence == null? 'null' : occurrence);
+      $('select[id="risk__likelihood"]').val(riskLikelihood.riskLikelihood == null? 'null' : riskLikelihood.riskLikelihood);
     };
 
     const addRichTextArea = (selector, desc, width, riskMitigationId) => {
@@ -958,8 +978,7 @@
         });
 
         updateRisksFields(risksData);
-        //window.render.closeLoading()
-        document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+        enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
     });

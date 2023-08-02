@@ -29,6 +29,7 @@ const {
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
+const errorMessages = require('./validation')
 
 
 const {
@@ -174,43 +175,122 @@ const validateClasses = () => {
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
-    if (!ISRAmeta.projectOrganization) return false;
-    return true;
+    let message = '';
+    let invalidCount = 0;
+    const noProjectOrganization = !ISRAmeta.projectOrganization;
+
+    if (noProjectOrganization) {
+      message += `${errorMessages['welcomeHeader']}${errorMessages['noProjectOrganization']}`;
+      invalidCount++
+    } 
+
+    return {status: invalidCount, error: message};
   };
 
   const validateSupportingAssetsTab = () =>{
+    let message = '';
+    let invalidCount = 0;
+    const invalidSAs = new Set() //Need to use set
     for(let i=0; i<SupportingAsset.length; i++){
-      const { businessAssetRef } = SupportingAsset[i];
+      const { businessAssetRef, supportingAssetId } = SupportingAsset[i];
       const uniqueRefs = new Set();
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
-        if (!ref || uniqueRefs.has(ref)) return false;
+        const nullBusinessAssetRef = !ref
+        const duplicateBusinessAssetRef = uniqueRefs.has(ref)
+        if (nullBusinessAssetRef || duplicateBusinessAssetRef) {
+          invalidCount++
+          invalidSAs.add(supportingAssetId)
+        } 
+
         uniqueRefs.add(ref);
       }
+      if (invalidCount) {
+        message += `${errorMessages['supportingAssetsHeader']}${errorMessages['supportingAssets']}${invalidCount}\n
+        ${errorMessages['supportingAssetsIDs']}${[...invalidSAs].join(',')}\n\n`
+      }
+      
     }
-    return true;
+
+
+    return {status: invalidCount, error: message};
   };
 
   const validateRisksTab = () => {
+    let message = '';
+    const invalidRisks = [];
+    const invalidRisksMitigations = [];
     for (let i = 0; i < Risk.length; i++) {
-      const { riskName,threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation, riskMitigation } = Risk[i];
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === '') return false;
+
+      
+      const { riskName, riskMitigation, riskId } = Risk[i];
+      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
+      const noThreatAgent = !threatAgent;
+      const noThreatVerb = !threatVerb;
+      const noBusinessAssetRef = !businessAssetRef;
+      const noSupportingAssetRef = !supportingAssetRef;
+      const noMotivation = !motivation;
+      if (noThreatAgent || noThreatVerb || noBusinessAssetRef || noSupportingAssetRef || noMotivation) {
+        invalidRisks.push(riskId);
+      }
+      
+     
      for(let i=0; i<riskMitigation.length; i++){
-       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) return false;
+       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
+        invalidRisksMitigations.push(riskId );
+       }
      }
     }
-    return true;
+    if (invalidRisks.length || invalidRisksMitigations.length) {
+      message += errorMessages['risksHeader']
+      if (invalidRisks.length) {
+        message += `${errorMessages['riskDescription']}${invalidRisks.length}\n
+        ${errorMessages['riskDescriptionIDs']}${invalidRisks.join(',')}\n\n`
+      }
+      
+      if (invalidRisksMitigations.length) {
+        message += `${errorMessages['riskMitigation']}${invalidRisksMitigations.length}\n
+        ${errorMessages['riskMitigationIDs']}${invalidRisksMitigations.join(',')}\n\n`
+      }
+    }
+    
+    return {status: invalidRisks.length + invalidRisksMitigations.length, error: message};
   };
 
   const validateVulnerabilitiesTab = () => {
+    const invalidVuls = [];
+    let message = '';
     for(let i=0; i<Vulnerability.length; i++) {
-      const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
-      if (cveScore < 0 || cveScore > 10 || cveScore === null || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '') return false;
+    
+      const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = Vulnerability[i];
+      const invalidCVEScore = cveScore < 0 || cveScore > 10;
+      const noCVEScore = cveScore === null;
+      const noSupportingAssetRef = supportingAssetRef.length === 0;
+      const noVulnerabilityDescription =  !vulnerabilityDescription;
+      const noVulnerabilityName = !vulnerabilityName;
+      if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName) {
+        invalidVuls.push(vulnerabilityId);
+      }
     }
-    return true;
+
+    if (invalidVuls.length) {
+      message += `${errorMessages['vulnerabilitiesHeader']}${errorMessages['vulnerabilities']}${invalidVuls.length}\n${errorMessages['vulnerabilityIDs']}${invalidVuls.join(',')}\n\n`
+    }
+
+    return {status: invalidVuls.length, error: message};
   };
 
-  return validateWelcomeTab() && validateSupportingAssetsTab() && validateRisksTab() && validateVulnerabilitiesTab();
+  const {status: welcomeInvalid, error: welcomeError} = validateWelcomeTab();
+  const {status: saInvalid, error: saError} = validateSupportingAssetsTab();
+  const {status: riskInvalid, error: riskError} = validateRisksTab();
+  const {status: vulInvalid, error: vulError} = validateVulnerabilitiesTab();
+  let valid = true;
+  if (welcomeInvalid + saInvalid + riskInvalid + vulInvalid) {
+    valid = false;
+
+  }
+  const message = `${welcomeError}${saError}${riskError}${vulError}`;
+  return {status: valid, error: message}
 };
 
 /**
@@ -250,12 +330,12 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       if (labelSelected === 'Save As') saveAs();
       else if (labelSelected === 'Save') saveProject();
     };
-
-    if (validateClasses()) saveOrSaveAs();
+    const {status, error} = validateClasses();
+    if (status) saveOrSaveAs();
     else {
       const result = dialog.showMessageBoxSync(getMainWindow(), {
         type: 'warning',
-        message: 'The form contains validation errors. Errors are marked with red border/color (required fields/invalid values). Do you still want to save it?',
+        message: `The form contains validation errors. Errors are marked with red border/color (required fields/invalid values).\n\n${error} \nDo you still want to save it?`,
         title: 'Validation Errors',
         buttons: ['Yes', 'No'], // Yes returns 0, No returns 1
       });
@@ -326,6 +406,28 @@ const validationErrors = (labelSelected) => {
 //     if (result === 0) saveOrSaveAs();
 //   }
 // });
+function getError(err) {
+  let message = ""
+    const JSON_START_INDEX = 42;
+    if (err.message.slice(0,JSON_START_INDEX) === "Failed to validate json against schema at:") {
+      
+      const errorJSON = JSON.parse(err.message.slice("Failed to validate json against schema at:".length, ));
+      const affectedField = errorJSON[0]['instancePath'].split("/").filter(element => isNaN(element));
+
+      message += "Invalid data input in " + affectedField[0] + " Tab, \n`"
+      for (const subCategory in affectedField) {
+        if (subCategory > 0) {
+          message +=  " " + affectedField[subCategory]
+        }
+      }
+      message += "` field: " + errorJSON[0]['message']
+    } else {
+      message = err.message;
+    }
+
+  return message
+}
+
 
 /**
   * Exit button is pressed
@@ -343,8 +445,8 @@ const exit = (e, app) => {
 */
 const loadJSONFile = async (win, filePath) => {
   try {
-    israProject = new ISRAProject();
-    await DataLoad(israProject, filePath);
+    
+    israProject = DataLoad(filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
@@ -352,7 +454,8 @@ const loadJSONFile = async (win, filePath) => {
     oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: 'Invalid JSON File' });
+    const errorMessage = getError(err)
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
   }
 };
 
@@ -370,26 +473,8 @@ const loadXMLFile = (win, filePath) => {
     getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
-    let message = ""
-    const JSON_START_INDEX = 42;
-    if (err.message.slice(0,JSON_START_INDEX) === "Failed to validate json against schema at:") {
-      
-      const errorJSON = JSON.parse(err.message.slice("Failed to validate json against schema at:".length, ));
-      const affectedField = errorJSON[0]['instancePath'].split("/").filter(element => isNaN(element));
-
-      message += "Invalid data input in " + affectedField[0] + " Tab, \n`"
-      for (const subCategory in affectedField) {
-        if (subCategory > 0) {
-          message +=  " " + affectedField[subCategory]
-        }
-      }
-      message += "` field: " + errorJSON[0]['message']
-    } else {
-      message = err.message;
-    }
-    
-    
-    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${message}` });
+    const errorMessage = getError(err)
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${errorMessage}` });
   }
 };
 
@@ -578,8 +663,8 @@ ipcMain.handle('render:projectContext', () => renderProjectContext());
 ipcMain.on('projectContext:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
 });
-ipcMain.handle('projectContext:urlPrompt', async () => {
-  const url = await urlPrompt();
+ipcMain.handle('projectContext:urlPrompt', async (event, currentURL) => {
+  const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
   return url;
 });
@@ -747,8 +832,8 @@ ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerab
 ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
   return updateVulnerability(israProject, id, field, value);
 });
-ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
-  const url = await urlPrompt();
+ipcMain.handle('vulnerabilities:urlPrompt', async (event, id, currentURL) => {
+  const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
   return url;
 });

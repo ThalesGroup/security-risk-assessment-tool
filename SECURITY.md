@@ -11,35 +11,32 @@ Describe here all the security policies in place on this repository to help your
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are currently being supported with security updates.
+This is the currently supported versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| < 1.0.3 | :x:                |
+| 1.0.3   | :white_check_mark: |
+| 1.1.x   | :x:                |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
-Tell them where to go, how often they can expect to get an update on a reported vulnerability, what to expect if the vulnerability is accepted or declined, etc.
+Please report a vulnerability through the issue tracker by specifying the 'security' label.
 
 You can ask for support by contacting security@opensource.thalesgroup.com
 
 ## Disclosure policy
+In the case a vulnerability is found, you can always contact one of the administrators of this provide to provide more information or create a an issue ticket with the 'security' label. It is important that if you decide to create an issue in the issue tracker that the description of the vulnerability should be high-level and not contain exact exploitation steps. 
 
-Define the procedure for what a reporter who finds a security issue needs to do in order to fully disclose the problem safely, including who to contact and how.
 
 ## Security Update policy
 
-Define how you intend to update users about new security vulnerabilities as they are found.
+TBD
 
 ## Security related configuration.
 
-Settings users should consider that would impact the security posture of deploying this project, such as HTTPS, authorization and many others.
+TBD 
 
 ## Known security gaps & future enhancements.
 
-Security improvements you haven’t gotten to yet.
-Inform users those security controls aren’t in place, and perhaps suggest they contribute an implementation
+* Currently the internal browser is used to access internal links (#137)

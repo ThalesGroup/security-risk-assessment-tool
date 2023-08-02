@@ -23,15 +23,35 @@
 */
 /* global $ tinymce Tabulator */
 
+function disableAllTabs() {
+    document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+  }
+  
+  function enableAllTabs() {
+    document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+  }
+
 (async () => {
     try {
-    //window.render.showLoading()
     function handleReload(event) {
         if (event.ctrlKey && event.key === 'r') {
           event.preventDefault();
         }
       }
-    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+    
+      disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData;
@@ -157,7 +177,6 @@
             overallLevel,
             supportingAssetRef
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
-
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
         $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
@@ -350,8 +369,7 @@
             });
 
             loadVulnerabilities(fetchedData);
-            //window.render.closeLoading()
-            document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+            enableAllTabs()
             window.removeEventListener('keydown', handleReload);
         });
     });
@@ -406,7 +424,9 @@
     });
 
     const vulnerabilityURL = (value) => {
+        console.log('first')
         getCurrentVulnerability().vulnerabilityTrackingURI = value;
+        
         const hyperlink = $('#vulnerability__url--hyperlink');
         const insert = $('#vulnerability__url--insert');
   
@@ -427,12 +447,20 @@
       });
 
     $('#vulnerability__url--insert').on('click', async () => {
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId());
+        let currentURL = ''
+        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
+            currentURL = $('#vulnerability__url--hyperlink').attr('href')
+        }
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), currentURL);
         vulnerabilityURL(url);
     });
 
     $('#vulnerability__url--img').on('click', async () => {
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId());
+        let currentURL = ''
+        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
+            currentURL = $('#vulnerability__url--hyperlink').attr('href')
+        }
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), currentURL);
         vulnerabilityURL(url);
     });
 
