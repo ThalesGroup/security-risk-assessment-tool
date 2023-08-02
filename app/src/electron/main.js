@@ -143,7 +143,7 @@ app.whenReady().then(() => {
 
   if (filePath !== '.') {
     const fileType = filePath.split('.').pop();
-    if (fileType === 'json') loadJSONFile(getMainWindow(), filePath);
+    if (fileType === 'json' || fileType === 'sra') loadJSONFile(getMainWindow(), filePath);
     else loadXMLFile(getMainWindow(), filePath);
 
     
