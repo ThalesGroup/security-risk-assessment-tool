@@ -135,7 +135,7 @@ const saveAs = async () => {
   // Placeholders
     title: 'Save file - Electron ISRA Project',
     defaultPath: os.homedir(),
-    buttonLabel: 'Save JSON File',
+    buttonLabel: 'Save ISRA File',
     filters: [
       { name: 'ISRA file type', extensions: ['sra'] },
     ],
