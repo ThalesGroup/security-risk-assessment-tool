@@ -588,7 +588,9 @@ module.exports = {
   loadFile,
   newISRAProject,
   downloadReport,
-  exit
+  exit,
+  loadJSONFile,
+  loadXMLFile
 };
 
 /**

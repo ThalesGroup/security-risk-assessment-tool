@@ -31,7 +31,9 @@ const {
   loadFile,
   newISRAProject,
   downloadReport,
-  exit
+  exit,
+  loadJSONFile,
+  loadXMLFile
 } = require('./request-handlers');
 
 app.disableHardwareAcceleration();
@@ -116,8 +118,37 @@ function createWindow() {
   Menu.setApplicationMenu(mainMenu);
 }
 
+let filePath = '';
+
+
+app.on('open-file', function(event, path) {
+  event.preventDefault();
+  filePath = path;
+  
+})
+
+if (process.argv.length >= 2) { 
+  filePath = process.argv[1];
+  //open, read, handle file
+}
+
 app.whenReady().then(() => {
+
   createWindow();
+
+  const getMainWindow = () => {
+    const ID = process.env.MAIN_WINDOW_ID * 1;
+    return BrowserWindow.fromId(ID);
+  };
+
+  if (filePath !== '.') {
+    const fileType = filePath.split('.').pop();
+    if (fileType === 'json' || fileType === 'sra') loadJSONFile(getMainWindow(), filePath);
+    else loadXMLFile(getMainWindow(), filePath);
+
+    
+  }
+
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
