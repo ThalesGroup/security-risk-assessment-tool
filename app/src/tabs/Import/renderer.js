@@ -30,6 +30,7 @@
 
 
     const checkBoxIndex = 0
+    const levelIndex = 2
 
   const businessAssetsTableConfig = {
     selectable: 1,
@@ -109,6 +110,18 @@
     }
 };
 
+risksTableConfig.columns[levelIndex].formatter = (cell) => {
+  const residualRiskLevel = cell.getValue()
+  if (residualRiskLevel === 'Critical') cell.getElement().style.color = '#FF0000';
+  else if (residualRiskLevel === 'High') cell.getElement().style.color = '#E73927';
+  else if (residualRiskLevel === 'Medium') cell.getElement().style.color = '#FFA500';
+  else cell.getElement().style.color = '#000000';
+
+  
+  return residualRiskLevel;
+
+}
+
   const vulnerabilityTableConfig = {
     selectable: 1,
       layout: 'fitColumns',
@@ -135,6 +148,15 @@
 `;
     }
 };
+
+vulnerabilityTableConfig.columns[levelIndex].formatter = (cell) => {
+  const overallLevel = cell.getValue()
+  if (overallLevel === 'High') cell.getElement().style.color = '#FF0000';
+  else if (overallLevel === 'Medium') cell.getElement().style.color = '#FFA500';
+  else cell.getElement().style.color = '#000000';
+  return overallLevel;
+}
+
   const businessAssetsTable = new Tabulator('#businessAssets__table', businessAssetsTableConfig);
   const supportingAssetsTable = new Tabulator('#supportingAssets__table', supportingAssetsTableConfig);
   const risksTable = new Tabulator('#risks__table', risksTableConfig);
