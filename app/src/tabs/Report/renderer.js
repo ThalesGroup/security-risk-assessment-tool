@@ -43,6 +43,97 @@ function disableAllTabs() {
     document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
   }
 
+  function generateGraph(lowRisk, medRisk, highRisk) {
+    const chartElement = document.getElementById('riskChart');
+    const chartData = {
+        labels: ['Accept', 'Transfer', 'Mitigate'],
+        datasets: [
+          {
+            label: 'Low',
+            data: lowRisk,
+            stack: 'stack',
+            backgroundColor: '#000000', 
+            
+            borderWidth: 1,
+            barPercentage: 0.5,
+          },
+          {
+            label: 'Medium',
+            data: medRisk,
+            stack: 'stack',
+            backgroundColor: '#FFA500', 
+
+            borderWidth: 1,
+            barPercentage: 0.5,
+            
+          },
+          {
+            label: 'High',
+            data: highRisk,
+            stack: 'stack',
+            backgroundColor: '#FF0000', 
+            borderWidth: 1,
+            barPercentage: 0.5,
+          },
+
+        ]
+      };
+  
+      const options = {
+
+        scales: {
+
+          y: {
+            beginAtZero: true
+          },
+          x : {
+            ticks: {
+                font: {
+                    size: 14
+                }
+            }
+          }
+          
+        },
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0,
+        plugins: {
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+        }
+      };
+  
+      // Create the bar chart
+      const riskChart = new Chart(chartElement, {
+        type: 'bar',
+        data: chartData,
+        options: options
+      });
+
+      const canvas = document.getElementById('riskChart')
+
+      canvas.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        const imageGraph = riskChart.toBase64Image()
+        window.israreport.saveGraph(imageGraph)
+       
+        
+    });          
+                        
+  }
+
+
 (async () => {
     try {
         function handleReload(event) {
@@ -170,78 +261,11 @@ function disableAllTabs() {
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
 
-                const ctx = document.getElementById('riskChart');
-                const chartData = {
-                    labels: ['Accept', 'Transfer', 'Mitigate'],
-                    datasets: [
-                      {
-                        label: 'Low',
-                        data: lowRisk,
-                        stack: 'stack',
-                        backgroundColor: 'rgba( 128,128,128, 0.5)', 
-                        borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1,
-                        barPercentage: 0.5,
-                      },
-                      {
-                        label: 'Medium',
-                        data: medRisk,
-                        stack: 'stack',
-                        backgroundColor: 'rgba(139, 128, 0, 0.5)', 
-                        borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1,
-                        barPercentage: 0.5,
-                        
-                      },
-                      {
-                        label: 'High',
-                        data: highRisk,
-                        stack: 'stack',
-                        backgroundColor: 'rgba(255,0,0, 0.5)', 
-                        borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1,
-                        barPercentage: 0.5,
-                      },
-
-                    ]
-                  };
-              
-                  // Configuration options for the bar chart
-                  const options = {
-
-                    scales: {
-
-                      y: {
-                        beginAtZero: true
-                      },
-                      
-                    },
-                    animation: {
-                      duration: 0
-                    },
-                    hover: {
-                      animationDuration: 0
-                    },
-                    responsiveAnimationDuration: 0
-                  };
-              
-                  // Create the bar chart
-                  const riskChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: chartData,
-                    options: options
-                  });
-
-                  const imageGraph = riskChart.toBase64Image()
+                
+                generateGraph(lowRisk, medRisk, highRisk)
+                  
                  
-                  const canvas = document.getElementById('riskChart')
-
-                  canvas.addEventListener('contextmenu', function(e) {
-                    e.preventDefault();
-                    window.israreport.saveGraph(imageGraph)
-                   
-                    
-                  });
+                
 
                   
             });
