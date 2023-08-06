@@ -174,7 +174,7 @@
   function filter(field, e) {
 
     const { value } = e.target;
-    console.log(value)
+ 
     if (field === 'BA') {
 
       if(value === ''){
@@ -258,9 +258,38 @@
     }
 
 
+  }
 
-    
+  function importAll(field) {
+    if (field === "BA") {
 
+      const baIds = document.getElementsByName('businessAssets__table__checkboxes');
+      baIds.forEach((ba) => {
+          ba.checked = true
+      });
+
+    } else if (field === "SA") {
+
+      const saIds = document.getElementsByName('supportingAssets__table__checkboxes');
+      saIds.forEach((sa) => {
+        sa.checked = true
+      });
+
+    } else if (field === "Risk") {
+
+      const riskIds = document.getElementsByName('risks__table__checkboxes');
+      riskIds.forEach((risk) => {
+          risk.checked = true
+      });
+
+    } else if (field === "Vul") {
+
+      const vulnerabilityIds = document.getElementsByName('vulnerabilities__table__checkboxes');
+      vulnerabilityIds.forEach((vul) => {
+          vul.checked = true
+      });
+
+    }
   }
 
   $('input[id="filterBA-value"]').on('change', (e)=> {
@@ -295,6 +324,22 @@ $('button[id="filterRisk-clear"]').on('click', () => {
 
 $('button[id="filterVul-clear"]').on('click', () => { 
   clearFunction('Vul');
+});
+
+$('button[id="select-all-BA"]').on('click', () => { 
+  importAll('BA');
+});
+
+$('button[id="select-all-SA"]').on('click', () => { 
+  importAll('SA');
+});
+
+$('button[id="select-all-Risk"]').on('click', () => { 
+  importAll('Risk');
+});
+
+$('button[id="select-all-Vul"]').on('click', () => { 
+  importAll('Vul');
 });
 
   

@@ -436,8 +436,6 @@ function getJSON(filePath){
         }
       }
 
-
-      //console.log(jsonData.ISRAmeta.ISRAtracking)
       const importedISRA = validateJsonSchema(jsonData);
       return importedISRA
     } catch (error) {
@@ -541,7 +539,7 @@ const loadData = async (win) => {
           
         },
       });
-      dialogWindow.loadFile(path.join(__dirname,'import_dialog.html'));
+      dialogWindow.loadFile(path.join(__dirname,'../tabs/Import/import_dialog.html'));
 
       
       dialogWindow.webContents.on('dom-ready', () => {

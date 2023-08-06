@@ -57,14 +57,14 @@
         background-color: #003b80;
       }
     </style>
-    <link rel="stylesheet" type="text/css" href="../global styles/global-styles.css">
+    <link rel="stylesheet" type="text/css" href="../../global styles/global-styles.css">
     <link rel="stylesheet" type="text/css" href="./styles.css">
-    <link href="../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <link href="../../../node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 
     <!-- npm modules (minified) -->
-    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../../node_modules/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="../../node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script src="../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../node_modules/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="../../../node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
 </head>
 
 <body>
@@ -74,6 +74,7 @@
 
                 <p class="subheading">Select the business assets you want to import</p>
                 <div class='filter' style="display: flex;">
+                  <button id="select-all-BA">Import All</button>
                   <input id="filterBA-value" type="text" placeholder="Filter..." style="width: 100%">
                   <button id="filterBA-clear">X</button>
                 </div>
@@ -87,6 +88,7 @@
 
                 <p class="subheading">Select the supporting assets you want to import</p>
                 <div class='filter' style="display: flex;">
+                  <button id="select-all-SA">Import All</button>
                   <input id="filterSA-value" type="text" placeholder="Filter..." style="width: 100%">
                   <button id="filterSA-clear">X</button>
                 </div>
@@ -101,6 +103,7 @@
 
                 <p class="subheading">Select the risks you want to import</p>
                 <div class='filter' style="display: flex;">
+                  <button id="select-all-Risk">Import All</button>
                   <input id="filterRisk-value" type="text" placeholder="Filter..." style="width: 100%">
                   <button id="filterRisk-clear">X</button>
                 </div>
@@ -115,6 +118,7 @@
 
                 <p class="subheading">Select the vulnerabilities you want to import</p>
                 <div class='filter' style="display: flex;">
+                  <button id="select-all-Vul">Import All</button>
                   <input id="filterVul-value" type="text" placeholder="Filter..." style="width: 100%">
                   <button id="filterVul-clear">X</button>
                 </div>
