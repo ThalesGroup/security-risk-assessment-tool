@@ -12,6 +12,21 @@
         "dist-all": "electron-builder -mwl"
     },
     "build": {
+        "fileAssociations": [
+            {
+              "ext": "sra",
+              "description": "ISRA File",
+              "role": "Editor"
+            },
+            {
+              "ext": "xml",
+              "description": "XML File",
+              "role": "Editor"
+            }
+        ],
+        "nsis": {
+            "perMachine": true
+        },
         "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
         "extraResources": [
             {
@@ -45,6 +60,10 @@
                 {
                     "target": "zip",
                     "arch": "x64"
+                },
+                {
+                    "target": "nsis"
+                    
                 }
             ]
         },
@@ -61,6 +80,7 @@
     },
     "postinstall": "electron-builder install-app-deps",
     "dependencies": {
+        "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
         "tinymce": "^6.2.0"

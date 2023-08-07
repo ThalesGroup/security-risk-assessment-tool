@@ -43,6 +43,97 @@ function disableAllTabs() {
     document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
   }
 
+  function generateGraph(lowRisk, medRisk, highRisk) {
+    const chartElement = document.getElementById('riskChart');
+    const chartData = {
+        labels: ['Accept', 'Transfer', 'Mitigate'],
+        datasets: [
+          {
+            label: 'Low',
+            data: lowRisk,
+            stack: 'stack',
+            backgroundColor: '#000000', 
+            
+            borderWidth: 1,
+            barPercentage: 0.5,
+          },
+          {
+            label: 'Medium',
+            data: medRisk,
+            stack: 'stack',
+            backgroundColor: '#FFA500', 
+
+            borderWidth: 1,
+            barPercentage: 0.5,
+            
+          },
+          {
+            label: 'High',
+            data: highRisk,
+            stack: 'stack',
+            backgroundColor: '#FF0000', 
+            borderWidth: 1,
+            barPercentage: 0.5,
+          },
+
+        ]
+      };
+  
+      const options = {
+
+        scales: {
+
+          y: {
+            beginAtZero: true
+          },
+          x : {
+            ticks: {
+                font: {
+                    size: 14
+                }
+            }
+          }
+          
+        },
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0,
+        plugins: {
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+        }
+      };
+  
+      // Create the bar chart
+      const riskChart = new Chart(chartElement, {
+        type: 'bar',
+        data: chartData,
+        options: options
+      });
+
+      const canvas = document.getElementById('riskChart')
+
+      canvas.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        const imageGraph = riskChart.toBase64Image()
+        window.israreport.saveGraph(imageGraph)
+       
+        
+    });          
+                        
+  }
+
+
 (async () => {
     try {
         function handleReload(event) {
@@ -116,11 +207,25 @@ function disableAllTabs() {
                 $('#iteration').text(iteration);
 
                 let totalCost = 0;
+                const lowRisk = [0,0,0];
+                const medRisk = [0,0,0];
+                const highRisk = [0,0,0];
+                const dataIndex = {'Accept': 0, 'Transfer': 1, 'Mitigate': 2}
                 Risk.forEach((risk) => {
-                    const { residualRiskLevel, riskMitigation } = risk;
-                    if (residualRiskLevel === 'High') sortedRisk['high'].push(risk);
-                    else if (residualRiskLevel === 'Medium') sortedRisk['medium'].push(risk);
-                    else if (residualRiskLevel === 'Low') sortedRisk['low'].push(risk);
+                    const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
+                    
+
+                    if (residualRiskLevel === 'High') {
+                        sortedRisk['high'].push(risk);
+                        highRisk[dataIndex[riskManagementDecision]] += 1;
+
+                    } else if (residualRiskLevel === 'Medium') {
+                        sortedRisk['medium'].push(risk);
+                        medRisk[dataIndex[riskManagementDecision]] += 1
+                    } else if (residualRiskLevel === 'Low') {
+                        sortedRisk['low'].push(risk);
+                        lowRisk[dataIndex[riskManagementDecision]] += 1
+                    }
 
                     riskMitigation.forEach((mitigation) => {
                         const { description, decisionDetail, cost, decision } = mitigation;
@@ -132,7 +237,7 @@ function disableAllTabs() {
                             </td>`);
 
                             if(cost !== null) totalCost += cost;
-                        };
+                        }
                     });
                 });
                 $('#riskmanagement tbody')
@@ -155,6 +260,14 @@ function disableAllTabs() {
                 renderVulnerability(sortedVulnerability, 'high');
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
+
+                
+                generateGraph(lowRisk, medRisk, highRisk)
+                  
+                 
+                
+
+                  
             });
 
             window.project.iteration(async (event, iteration) => {

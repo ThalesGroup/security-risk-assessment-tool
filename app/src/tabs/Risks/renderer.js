@@ -239,9 +239,9 @@ function enableAllTabs() {
     };
 
     // add Vulnerabilities evaluation section
-    const addVulnerabilitySection = (riskAttackPaths) =>{
+    const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
-      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName).forEach((v)=>{
+      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName && uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
         vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
       });
 
@@ -801,7 +801,7 @@ function enableAllTabs() {
 
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
-      addVulnerabilitySection(riskAttackPaths);
+      addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
       $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
       $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
 

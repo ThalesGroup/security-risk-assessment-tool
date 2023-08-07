@@ -135,9 +135,9 @@ const saveAs = async () => {
   // Placeholders
     title: 'Save file - Electron ISRA Project',
     defaultPath: os.homedir(),
-    buttonLabel: 'Save JSON File',
+    buttonLabel: 'Save ISRA File',
     filters: [
-      { name: 'JSON', extensions: ['json'] },
+      { name: 'ISRA file type', extensions: ['sra'] },
     ],
   };
   const fileName = await dialog.showSaveDialog(options);
@@ -192,7 +192,7 @@ const validateClasses = () => {
     let invalidCount = 0;
     const invalidSAs = new Set() //Need to use set
     for(let i=0; i<SupportingAsset.length; i++){
-      const { businessAssetRef } = SupportingAsset[i];
+      const { businessAssetRef, supportingAssetId } = SupportingAsset[i];
       const uniqueRefs = new Set();
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
@@ -200,7 +200,7 @@ const validateClasses = () => {
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
         if (nullBusinessAssetRef || duplicateBusinessAssetRef) {
           invalidCount++
-          invalidSAs.add(i + 1)
+          invalidSAs.add(supportingAssetId)
         } 
 
         uniqueRefs.add(ref);
@@ -223,7 +223,7 @@ const validateClasses = () => {
     for (let i = 0; i < Risk.length; i++) {
 
       
-      const { riskName, riskMitigation } = Risk[i];
+      const { riskName, riskMitigation, riskId } = Risk[i];
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       const noThreatAgent = !threatAgent;
       const noThreatVerb = !threatVerb;
@@ -231,13 +231,13 @@ const validateClasses = () => {
       const noSupportingAssetRef = !supportingAssetRef;
       const noMotivation = !motivation;
       if (noThreatAgent || noThreatVerb || noBusinessAssetRef || noSupportingAssetRef || noMotivation) {
-        invalidRisks.push(i + 1);
+        invalidRisks.push(riskId);
       }
       
      
      for(let i=0; i<riskMitigation.length; i++){
        if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
-        invalidRisksMitigations.push(i + 1);
+        invalidRisksMitigations.push(riskId );
        }
      }
     }
@@ -262,14 +262,14 @@ const validateClasses = () => {
     let message = '';
     for(let i=0; i<Vulnerability.length; i++) {
     
-      const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName } = Vulnerability[i];
+      const { cveScore, supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = Vulnerability[i];
       const invalidCVEScore = cveScore < 0 || cveScore > 10;
       const noCVEScore = cveScore === null;
       const noSupportingAssetRef = supportingAssetRef.length === 0;
       const noVulnerabilityDescription =  !vulnerabilityDescription;
       const noVulnerabilityName = !vulnerabilityName;
       if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName) {
-        invalidVuls.push(i + 1);
+        invalidVuls.push(vulnerabilityId);
       }
     }
 
@@ -311,7 +311,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       title: 'Open file - Electron ISRA Project',
       buttonLabel: 'Open File',
       filters: [
-        { name: 'JSON/XML', extensions: ['json', 'xml'] },
+        { name: 'SRA/JSON/XML', extensions: ['sra','json', 'xml'] },
       ],
     };
     const filePathArr = dialog.showOpenDialogSync(options);
@@ -320,7 +320,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       const filePath = filePathArr[0];
       const fileType = filePath.split('.').pop();
 
-      if (fileType === 'json') loadJSONFile(getMainWindow(), filePath);
+      if (fileType === 'json' || fileType === 'sra') loadJSONFile(getMainWindow(), filePath);
       else loadXMLFile(getMainWindow(), filePath);
     }
   };
@@ -445,8 +445,8 @@ const exit = (e, app) => {
 */
 const loadJSONFile = async (win, filePath) => {
   try {
-    israProject = new ISRAProject();
-    await DataLoad(israProject, filePath);
+    
+    israProject = DataLoad(filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
@@ -588,7 +588,9 @@ module.exports = {
   loadFile,
   newISRAProject,
   downloadReport,
-  exit
+  exit,
+  loadJSONFile,
+  loadXMLFile
 };
 
 /**
@@ -614,7 +616,8 @@ const {
   removeFile,
   saveAsFile,
   decodeFile, 
-  useNewDecodeFileMethod
+  useNewDecodeFileMethod,
+  downloadFile
 } = require('../../../lib/src/api/utility');
 
 // Welcome Tab
@@ -663,8 +666,8 @@ ipcMain.handle('render:projectContext', () => renderProjectContext());
 ipcMain.on('projectContext:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
 });
-ipcMain.handle('projectContext:urlPrompt', async () => {
-  const url = await urlPrompt();
+ipcMain.handle('projectContext:urlPrompt', async (event, currentURL) => {
+  const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
   return url;
 });
@@ -832,8 +835,8 @@ ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerab
 ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
   return updateVulnerability(israProject, id, field, value);
 });
-ipcMain.handle('vulnerabilities:urlPrompt', async (event, id) => {
-  const url = await urlPrompt();
+ipcMain.handle('vulnerabilities:urlPrompt', async (event, id, currentURL) => {
+  const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
   return url;
 });
@@ -916,7 +919,20 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
 
 ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => validateVulnerabilities(israProject, currentVulnerability));
 ipcMain.handle('vulnerabilities:isVulnerabilityExist', (event, id) => isVulnerabilityExist(israProject, id));
+ipcMain.on('israreport:saveGraph',  (event,graph) => {
 
+  const contextMenu = Menu.buildFromTemplate([{
+    label: 'Save chart as image',
+    click: () => downloadFile(
+      graph
+    ),
+  }]);
+  contextMenu.popup();
+
+  
+
+  
+});
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
 //     nativeTheme.themeSource = 'light';
