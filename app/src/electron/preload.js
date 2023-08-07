@@ -92,7 +92,7 @@ contextBridge.exposeInMainWorld('welcome', {
 
 contextBridge.exposeInMainWorld('projectContext', {
   openURL: (url, userStatus) => ipcRenderer.send('projectContext:openURL', url, userStatus),
-  urlPrompt: () => ipcRenderer.invoke('projectContext:urlPrompt'),
+  urlPrompt: (currentURL) => ipcRenderer.invoke('projectContext:urlPrompt', currentURL),
   attachment: () => ipcRenderer.send('projectContext:attachment'),
   decodeAttachment: (fileName) => ipcRenderer.invoke('projectContext:decodeAttachment', fileName),
   fileName: (fileName) => ipcRenderer.on('projectContext:fileName', fileName),
@@ -139,10 +139,14 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
   addVulnerability: () => ipcRenderer.invoke('vulnerabilities:addVulnerability'),
   deleteVulnerability: (ids) => ipcRenderer.send('vulnerabilities:deleteVulnerability', ids),
   updateVulnerability: (id, field, value) => ipcRenderer.invoke('vulnerabilities:updateVulnerability', id, field, value),
-  urlPrompt: (id) => ipcRenderer.invoke('vulnerabilities:urlPrompt', id),
+  urlPrompt: (id, currentURL) => ipcRenderer.invoke('vulnerabilities:urlPrompt', id , currentURL),
   openURL: (url, userStatus) => ipcRenderer.send('vulnerabilities:openURL', url, userStatus),
   attachment: (id) => ipcRenderer.send('vulnerabilities:attachment', id),
   decodeAttachment: (id, fileName) => ipcRenderer.invoke('vulnerabilities:decodeAttachment', id, fileName),
   fileName: (result) => ipcRenderer.on('vulnerabilities:fileName', result),
   isVulnerabilityExist: (id) => ipcRenderer.invoke('vulnerabilities:isVulnerabilityExist', id)
+});
+
+contextBridge.exposeInMainWorld('israreport', {
+  saveGraph: (graph) => ipcRenderer.send('israreport:saveGraph', graph),
 });

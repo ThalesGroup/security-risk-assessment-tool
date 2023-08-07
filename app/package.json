@@ -1,6 +1,6 @@
 {
     "name": "sratool",
-    "version": "1.0.1-alpha01",
+    "version": "1.0.3",
     "author": "Thales DIS",
     "license": "BSD-4-Clause",
     "description": "Security Risk Assessment tool",
@@ -12,13 +12,30 @@
         "dist-all": "electron-builder -mwl"
     },
     "build": {
+        "fileAssociations": [
+            {
+              "ext": "sra",
+              "description": "ISRA File",
+              "role": "Editor"
+            },
+            {
+              "ext": "xml",
+              "description": "XML File",
+              "role": "Editor"
+            }
+        ],
+        "nsis": {
+            "perMachine": true
+        },
+        "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
         "extraResources": [
             {
                 "from": "../lib",
                 "to": "lib",
                 "filter": [
                     "**/*",
-                    "!**/node_modules/.bin"
+                    "!**/node_modules/.bin",
+                    "!**/test/**"
                 ]
             }
         ],
@@ -28,11 +45,11 @@
             "category": "public.app-category.business",
             "target": [
                 {
-                    "target": "7z",
+                    "target": "zip",
                     "arch": "x64"
                 },
                 {
-                    "target": "7z",
+                    "target": "tar.gz",
                     "arch": "arm64"
                 }
             ]
@@ -41,8 +58,12 @@
             "icon": "src/asset/isra-app-icon-512.png",
             "target": [
                 {
-                    "target": "7z",
+                    "target": "zip",
                     "arch": "x64"
+                },
+                {
+                    "target": "nsis"
+                    
                 }
             ]
         },
@@ -59,6 +80,7 @@
     },
     "postinstall": "electron-builder install-app-deps",
     "dependencies": {
+        "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
         "tinymce": "^6.2.0"

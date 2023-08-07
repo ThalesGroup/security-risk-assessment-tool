@@ -1,0 +1,53 @@
+name: Report an Issue
+description: File an issue
+title: "[Issue]: "
+labels: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this issue!
+  - type: textarea
+    id: issue-description 
+    attributes:
+      label: Issue Description
+      description: Describe the issue encountered
+      placeholder: Tell us what you see!
+
+    validations:
+      required: true
+  - type: textarea
+    id: duplicate-steps
+    attributes:
+      label: Duplicate Steps 
+      description: How to reproduce the issue
+      placeholder: Tell us what you did!
+
+
+  - type: textarea
+    id: expected-results
+    attributes:
+      label: Expected Results
+      description: Describe what it supposed to happen instead
+      placeholder: Tell us what you expect!
+
+    validations:
+      required: true
+  - type: dropdown
+    id: version-detected
+    attributes:
+      label: Version Detected
+      description: What version of SRA tool are you running?
+      options:
+        - 1.0.1 
+        - 1.0.2 
+        - 1.0.3 (Default)
+    validations:
+      required: true
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Attachments
+      description: Upload attachments to show the issue
+      placeholder: Show us what happened

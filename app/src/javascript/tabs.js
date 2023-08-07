@@ -32,9 +32,9 @@ const contents = document.querySelectorAll('.content');
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
  */
-window.project.load(async (event, data, classification) => {
+window.project.load(async (event, data) => {
   console.log(await JSON.parse(data));
-  const { projectName } = await JSON.parse(data).ISRAmeta;
+  const { projectName, classification } = await JSON.parse(data).ISRAmeta;
   if(projectName === '') $('footer').text(classification);
   else $('footer').text(classification.substring(0, classification.indexOf('{') + 1) + projectName + classification[classification.length - 1]);
 });
@@ -84,15 +84,14 @@ const validateTabs = (tab) => {
 
   const validateRisks = () => {
     let data = {
-      riskName: {},
       riskLikelihood: {}
     };
     const selectedTableData = Tabulator.findTable('#risks__table')[0].getSelectedData()[0];
     if (selectedTableData){
       data.riskId = selectedTableData.riskId;
-      data.riskName.threatAgentDetail = tinymce.get('risk__threatAgent__rich-text').getContent();
-      data.riskName.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
-      data.riskName.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
+      data.threatAgentDetail = tinymce.get('risk__threatAgent__rich-text').getContent();
+      data.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
+      data.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
       data.riskLikelihood.riskLikelihoodDetail = tinymce.get('risk__likelihood__details').getContent();
       data.riskMitigation = [];
       $('.mitigations section .top').each((index)=> {

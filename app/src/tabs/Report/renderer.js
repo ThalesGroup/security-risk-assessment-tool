@@ -23,6 +23,117 @@
 */
 /* global $ tinymce */
 
+function disableAllTabs() {
+    document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+    document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+  }
+  
+  function enableAllTabs() {
+    document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+    document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+  }
+
+  function generateGraph(lowRisk, medRisk, highRisk) {
+    const chartElement = document.getElementById('riskChart');
+    const chartData = {
+        labels: ['Accept', 'Transfer', 'Mitigate'],
+        datasets: [
+          {
+            label: 'Low',
+            data: lowRisk,
+            stack: 'stack',
+            backgroundColor: '#000000', 
+            
+            borderWidth: 1,
+            barPercentage: 0.5,
+          },
+          {
+            label: 'Medium',
+            data: medRisk,
+            stack: 'stack',
+            backgroundColor: '#FFA500', 
+
+            borderWidth: 1,
+            barPercentage: 0.5,
+            
+          },
+          {
+            label: 'High',
+            data: highRisk,
+            stack: 'stack',
+            backgroundColor: '#FF0000', 
+            borderWidth: 1,
+            barPercentage: 0.5,
+          },
+
+        ]
+      };
+  
+      const options = {
+
+        scales: {
+
+          y: {
+            beginAtZero: true
+          },
+          x : {
+            ticks: {
+                font: {
+                    size: 14
+                }
+            }
+          }
+          
+        },
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0,
+        plugins: {
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+        }
+      };
+  
+      // Create the bar chart
+      const riskChart = new Chart(chartElement, {
+        type: 'bar',
+        data: chartData,
+        options: options
+      });
+
+      const canvas = document.getElementById('riskChart')
+
+      canvas.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        const imageGraph = riskChart.toBase64Image()
+        window.israreport.saveGraph(imageGraph)
+       
+        
+    });          
+                        
+  }
+
+
 (async () => {
     try {
         function handleReload(event) {
@@ -30,7 +141,7 @@
               event.preventDefault();
             }
           }
-        document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+          disableAllTabs()
         window.addEventListener('keydown', handleReload);
         const renderVulnerability = (sortedVulnerability, overallLevel) => {
             sortedVulnerability[overallLevel].forEach((vulnerability) => {
@@ -92,15 +203,29 @@
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
-                $('#app').text('1.0.1-alpha01');
+                $('#app').text('1.0.3');
                 $('#iteration').text(iteration);
 
                 let totalCost = 0;
+                const lowRisk = [0,0,0];
+                const medRisk = [0,0,0];
+                const highRisk = [0,0,0];
+                const dataIndex = {'Accept': 0, 'Transfer': 1, 'Mitigate': 2}
                 Risk.forEach((risk) => {
-                    const { residualRiskLevel, riskMitigation } = risk;
-                    if (residualRiskLevel === 'High') sortedRisk['high'].push(risk);
-                    else if (residualRiskLevel === 'Medium') sortedRisk['medium'].push(risk);
-                    else if (residualRiskLevel === 'Low') sortedRisk['low'].push(risk);
+                    const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
+                    
+
+                    if (residualRiskLevel === 'High') {
+                        sortedRisk['high'].push(risk);
+                        highRisk[dataIndex[riskManagementDecision]] += 1;
+
+                    } else if (residualRiskLevel === 'Medium') {
+                        sortedRisk['medium'].push(risk);
+                        medRisk[dataIndex[riskManagementDecision]] += 1
+                    } else if (residualRiskLevel === 'Low') {
+                        sortedRisk['low'].push(risk);
+                        lowRisk[dataIndex[riskManagementDecision]] += 1
+                    }
 
                     riskMitigation.forEach((mitigation) => {
                         const { description, decisionDetail, cost, decision } = mitigation;
@@ -112,7 +237,7 @@
                             </td>`);
 
                             if(cost !== null) totalCost += cost;
-                        };
+                        }
                     });
                 });
                 $('#riskmanagement tbody')
@@ -135,12 +260,20 @@
                 renderVulnerability(sortedVulnerability, 'high');
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
+
+                
+                generateGraph(lowRisk, medRisk, highRisk)
+                  
+                 
+                
+
+                  
             });
 
             window.project.iteration(async (event, iteration) => {
                 $('#iteration').text(iteration);
             });
-            document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+            enableAllTabs()
             window.removeEventListener('keydown', handleReload);
         });
     } catch (err) {

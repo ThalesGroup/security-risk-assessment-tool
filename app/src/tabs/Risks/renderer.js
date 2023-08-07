@@ -23,15 +23,35 @@
 */
 
 /* global $ tinymce Tabulator */
+
+function disableAllTabs() {
+  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
+  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
+}
+
+function enableAllTabs() {
+  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
+  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
+}
+
 (async () => {
   try {
-    //window.render.showLoading()
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
         event.preventDefault();
       }
     }
-    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
+    disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.risks();
     $('#risks').append(result[0]);
@@ -50,12 +70,11 @@
 
     tableOptions.columns[riskNameIndex].formatter = (cell) => {
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
-      const riskNameMeta = cell.getRow().getData().nameMeta
-      const threatAgent = riskNameMeta.threatAgent;
-      const threatVerb = riskNameMeta.threatVerb;
-      const businessAssetRef = riskNameMeta.businessAssetRef;
-      const supportingAssetRef = riskNameMeta.supportingAssetRef;
-      const motivation = riskNameMeta.motivation;
+      const threatAgent = cell.getRow().getData().threatAgent;
+      const threatVerb =cell.getRow().getData().threatVerb;
+      const businessAssetRef = cell.getRow().getData().businessAssetRef;
+      const supportingAssetRef = cell.getRow().getData().supportingAssetRef;
+      const motivation = cell.getRow().getData().motivation;
       if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
         cell.getElement().style.color = '#FF0000';
       } else cell.getElement().style.color = '#000000';
@@ -212,9 +231,9 @@
     };
 
     // add Vulnerabilities evaluation section
-    const addVulnerabilitySection = (riskAttackPaths) =>{
+    const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
-      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName).forEach((v)=>{
+      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName && uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
         vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
       });
 
@@ -373,13 +392,13 @@
         occurrence
       } = riskLikelihood;
 
-      $('select[id="risk__skillLevel"]').val(!skillLevel ? 'null' : skillLevel);
-      $('select[id="risk__reward"]').val(!reward ? 'null' : reward);
-      $('select[id="risk__accessResources"]').val(!accessResources ? 'null' : accessResources);
-      $('select[id="risk__size"]').val(!size ? 'null' : size);
-      $('select[id="risk__intrusionDetection"]').val(!intrusionDetection ? 'null' : intrusionDetection);
-      $('select[id="risk__occurrence"]').val(!occurrence ? 'null' : occurrence);
-      $('select[id="risk__likelihood"]').val(!riskLikelihood.riskLikelihood ? 'null' : riskLikelihood.riskLikelihood);
+      $('select[id="risk__skillLevel"]').val(skillLevel == null? 'null' : skillLevel);
+      $('select[id="risk__reward"]').val(reward == null? 'null' : reward);
+      $('select[id="risk__accessResources"]').val(accessResources == null? 'null' : accessResources);
+      $('select[id="risk__size"]').val(size == null? 'null' : size);
+      $('select[id="risk__intrusionDetection"]').val(intrusionDetection == null? 'null' : intrusionDetection);
+      $('select[id="risk__occurrence"]').val(occurrence == null? 'null' : occurrence);
+      $('select[id="risk__likelihood"]').val(riskLikelihood.riskLikelihood == null? 'null' : riskLikelihood.riskLikelihood);
     };
 
     const addRichTextArea = (selector, desc, width, riskMitigationId) => {
@@ -670,6 +689,15 @@
       const {
         riskId,
         riskName,
+        threatAgent,
+        threatAgentDetail, 
+        threatVerb,
+        threatVerbDetail,
+        motivation, 
+        motivationDetail,
+        businessAssetRef,
+        supportingAssetRef,
+        isAutomaticRiskName,
         allAttackPathsScore,
         inherentRiskScore,
         riskAttackPaths,
@@ -682,17 +710,7 @@
         residualRiskScore,
         residualRiskLevel
       } = risksData.find((risk) => risk.riskId === id);
-      const {
-        threatAgent,
-        threatAgentDetail, 
-        threatVerb,
-        threatVerbDetail,
-        motivation, 
-        motivationDetail,
-        businessAssetRef,
-        supportingAssetRef,
-        isAutomaticRiskName
-      } = riskName;
+
       const {
         riskLikelihoodDetail,
         threatFactorLevel,
@@ -715,11 +733,11 @@
       if(isAutomaticRiskName){
         $('#risk__manual__riskName').hide();
         $('#riskName').show();
-        $('.riskname').text(riskName.riskName);
+        $('.riskname').text(riskName);
       }else{
         $('#risk__manual__riskName').show();
         $('#riskName').hide();
-        $('#risk__manual__riskName input').val(riskName.riskName);
+        $('#risk__manual__riskName input').val(riskName);
       }; 
 
       // Set Risk evaluation data
@@ -739,7 +757,7 @@
 
       // risk impact
       updateEvaluationTable(riskImpact, businessAssetRef);
-      addVulnerabilitySection(riskAttackPaths);
+      addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
       $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
       $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
 
@@ -793,7 +811,7 @@
       $('input[id="filter-value"]').val('');
       if (risksData.length > 0) $('#risks section').show();
       const rowData = {
-        ...risk, riskName: risk.riskName.riskName, nameMeta: risk.riskName
+        ...risk
       }
       risksTable.addData([rowData]);
 
@@ -836,7 +854,7 @@
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
       const tableData = fetchedData.map(risk => ( {
-        ...risk, riskName: risk.riskName.riskName, nameMeta: risk.riskName
+        ...risk
       }))
       risksTable.addData(tableData);
       risksTable.selectRow(fetchedData[0].riskId);
@@ -948,11 +966,10 @@
               const { id } = e.target;
               let richText = tinymce.get(id).getContent();
               const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
-              const { riskName, riskLikelihood } = risk;
-
-              if (id === 'risk__threatAgent__rich-text') riskName.threatAgentDetail = richText;
-              else if (id === 'risk__threat__rich-text') riskName.threatVerbDetail = richText;
-              else if (id === 'risk__motivation__rich-text') riskName.motivationDetail = richText;
+              const { riskLikelihood } = risk;
+              if (id === 'risk__threatAgent__rich-text') risk.threatAgentDetail = richText;
+              else if (id === 'risk__threat__rich-text') risk.threatVerbDetail = richText;
+              else if (id === 'risk__motivation__rich-text') risk.motivationDetail = richText;
               else if (id === 'risk__likelihood__details') riskLikelihood.riskLikelihoodDetail = richText;
               else if (id === 'risk__management__detail__rich-text') risk.riskManagementDetail = richText;
               validatePreviousRisk(getCurrentRiskId());
@@ -961,20 +978,19 @@
         });
 
         updateRisksFields(risksData);
-        //window.render.closeLoading()
-        document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
+        enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
     });
 
     // reloads all data displayed for current risk
     const reloadCurrentRisk = (updatedRisk) => {
-      const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
+      const { riskId, riskName, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation, residualRiskLevel, riskManagementDecision } = updatedRisk;
+      //const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       let riskIndex = risksData.findIndex((risk) => risk.riskId === updatedRisk.riskId);
 
       risksData[riskIndex] = updatedRisk;
-      risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: riskName['riskName'], residualRiskLevel }]);
+      risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: riskName, residualRiskLevel }]);
       validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation);
       styleResidualRiskLevelTable(riskId, residualRiskLevel);
       styleRiskName(riskManagementDecision, riskId);
@@ -985,7 +1001,7 @@
     const updateScoresAndLevel = (risk) => {
       let riskIndex = risksData.findIndex((r) => r.riskId === risk.riskId);
       risksData[riskIndex] = risk;
-      risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: risk.riskName.riskName, residualRiskLevel: risk.residualRiskLevel }]);
+      risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: risk.riskName, residualRiskLevel: risk.residualRiskLevel }]);
       if(risk.inherentRiskScore != null){
         $('#inherent_risk_score').text(risk.inherentRiskScore);
         $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
