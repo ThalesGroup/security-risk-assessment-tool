@@ -26,10 +26,28 @@ const {
   dialog, ipcMain, Menu, BrowserWindow
   // nativeTheme,
 } = require('electron');
+
+
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
+
+
+const parser = require('../../../lib/src/api/xml-json/parser');
+const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra');
+const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
+const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
+const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
+const Vulnerability = require('../../../lib/src/model/classes/Vulnerability/vulnerability');
+const Risk = require('../../../lib/src/model/classes/Risk/risk');
+const RiskName = require('../../../lib/src/model/classes/Risk/risk-name');
+const RiskLikelihood = require('../../../lib/src/model/classes/Risk/risk-likelihood');
+const RiskImpact = require('../../../lib/src/model/classes/Risk/risk-impact');
+//const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
+//const populateClass = require('./populate-class');
+
 const errorMessages = require('./validation')
+
 
 
 const {
@@ -42,10 +60,14 @@ const {
 const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-project');
 const config = require('../../../lib/src/config')
 
+
+
 /**
   * israProject: holds current class for project
 */
 let israProject, browserTitle = 'ISRA Risk Assessment', oldIsraProject;
+
+let oldImport = null;
 
 /**
   * every time you want the main window, call this function.
@@ -172,6 +194,7 @@ const saveProject = () => {
   * validation instantly fails when one of the validation methods fails
 */
 const validateClasses = () => {
+  //console.log(israProject.properties)
   const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
@@ -487,6 +510,158 @@ const loadFile = (win) => {
   validationErrors('Load File');
 };
 
+
+
+function getJSON(filePath){
+  const data =fs.readFileSync(filePath, 'utf8') 
+    
+
+    try {
+      const jsonData = JSON.parse(data);
+      const iterations = jsonData.ISRAmeta.ISRAtracking
+      const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
+      + '|(^$)')
+      for (var index = 0; index < iterations.length; index++) {
+        const currentDate = iterations[index].trackingDate
+        const validFormat = dateFormat.test(currentDate)
+        const isValidDate = !isNaN(new Date(currentDate));
+        if (!validFormat) {
+          if (isValidDate) {
+            // convert to correct format
+            const date = new Date(currentDate);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const newDate = year + '-' + month + '-' + day;
+            jsonData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
+          } else {
+            jsonData.ISRAmeta.ISRAtracking[index].trackingDate = '';
+          }
+        }
+      }
+
+      const importedISRA = validateJsonSchema(jsonData);
+      return importedISRA
+    } catch (error) {
+      console.log(error);
+    }
+ 
+}
+
+function getXML(filePath) {
+
+  const xmlData = fs.readFileSync(filePath, 'utf8');
+      const resultJSON = parser(xmlData);
+
+      // writeFile(resultJSON);
+
+      const israJSONData = alterISRA(resultJSON.ISRA, xmlData);
+      const iterations = israJSONData.ISRAmeta.ISRAtracking
+      const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
+      + '|(^$)')
+
+      for (var index = 0; index < iterations.length; index++) {
+        const currentDate = iterations[index].trackingDate
+        const validFormat = dateFormat.test(currentDate)
+        const isValidDate = !isNaN(new Date(currentDate));
+        if (!validFormat) {
+          if (isValidDate) {
+            // convert to correct format
+            const date = new Date(currentDate);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const newDate = year + '-' + month + '-' + day;
+            israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = newDate;
+          } else {
+            israJSONData.ISRAmeta.ISRAtracking[index].trackingDate = '';
+          }
+        }
+      }
+    
+      const importedISRA = validateJsonSchema(israJSONData);
+      return importedISRA
+
+}
+
+const openFileDialog = () => {
+  const options = {
+    title: 'Open file - Electron ISRA Project',
+    buttonLabel: 'Open File',
+    filters: [
+      { name: 'JSON/XML', extensions: ['json', 'xml'] },
+    ],
+  };
+  const filePathArr = dialog.showOpenDialogSync(options);
+  return filePathArr
+}
+
+function getISRA(filePathArr) {
+
+  if (filePathArr !== undefined) {
+
+    const filePath = filePathArr[0];
+    const fileType = filePath.split('.').pop();
+
+    if (fileType === 'json') {
+      const importedISRA = getJSON(filePath)
+      return importedISRA
+      
+    } else if (fileType == 'xml') {
+      return getXML(filePath)
+    }
+  }
+};
+
+
+let importedISRA;
+
+let dialogWindow;
+
+const loadData = async (win) => {
+
+  const filePathArr = openFileDialog();
+
+  importedISRA = await getISRA(filePathArr);
+  const classification = israProject.properties.ISRAmeta.classification
+
+  win.webContents.send('project:load', importedISRA, classification);
+  //win.webContents.send('import:load', importedISRA, {});
+  
+    function activateImportDialog() {
+      dialogWindow = new BrowserWindow({
+        width: 500,
+        height: 500,
+        //autoHideMenuBar: true,
+        icon: path.join(__dirname, '../asset/isra-app-icon-512.png'),
+        //menuBarVisibility: 'hidden',
+        parent: getMainWindow(),
+        modal: true,
+        show: false,
+        webPreferences: {
+          preload: path.join(__dirname, './preload.js'),
+          
+        },
+      });
+      dialogWindow.loadFile(path.join(__dirname,'../tabs/Import/import_dialog.html'));
+
+      
+      dialogWindow.webContents.on('dom-ready', () => {
+        dialogWindow.show()
+        dialogWindow.webContents.send('import:load', importedISRA)
+      });
+    }
+
+    
+    activateImportDialog(importedISRA)
+
+    
+
+  }
+
+  
+
+
 /**
   * Download pdf file to selected path
   * @module downloadReport
@@ -586,6 +761,7 @@ const downloadReport = async (app) => {
 module.exports = {
   validationErrors,
   loadFile,
+  loadData,
   newISRAProject,
   downloadReport,
   exit,
@@ -633,7 +809,12 @@ const {
   closeLoading
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
+const { importData } = require('./import')
+ipcMain.on('import:sendImports', (event, data) => {
 
+  importData(data,israProject,importedISRA)
+  dialogWindow.close()
+})
 ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('render:showLoading', () => showLoading());
 ipcMain.handle('render:closeLoading', () => closeLoading());
@@ -829,6 +1010,7 @@ ipcMain.handle('risks:mitigationDecisionOptions', () => riskMitigationSchema.dec
 // Vulnerability Tab
 const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/api/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
+const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));

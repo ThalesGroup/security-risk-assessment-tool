@@ -29,6 +29,7 @@ const path = require('path');
 const {
   validationErrors,
   loadFile,
+  loadData,
   newISRAProject,
   downloadReport,
   exit,
@@ -81,6 +82,10 @@ function createWindow() {
         {
           label: 'Open File',
           click: () => loadFile(win),
+        },
+        {
+          label: 'Import Data',
+          click: () => loadData(win),
         },
         {
           label: 'Print',
