@@ -191,9 +191,9 @@ function enableAllTabs() {
 
     // add vulnerability ref
     const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
-      let refLength = refs.length;
+      let numberOfVulnerabilities = refs.length;
       refs.forEach((ref, rowId) => {
-        refLength--;
+        numberOfVulnerabilities--;
         let vulnerabilityDiv = $('<div>');
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
@@ -208,12 +208,10 @@ function enableAllTabs() {
         checkbox.name = 'risks__vulnerability__checkboxes';
         checkbox.setAttribute('data-row-id', rowId);
         vulnerabilityDiv.append(checkbox);
-        console.log(rowId)
         let select = $('<select>').append(vulnerabilityOptions);
         
         select.on('change', async (e)=> {
           const { value } = e.target;
-          console.log(previousVulId)
           await validatePreviousRisk(getCurrentRiskId());
           if (value) {
             let risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
@@ -230,7 +228,7 @@ function enableAllTabs() {
         });
         vulnerabilityDiv.append(select);
         let visibility = 'visible';
-        if (refLength === 0) visibility = 'hidden';
+        if (numberOfVulnerabilities === 0) visibility = 'hidden';
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
         div.append(vulnerabilityDiv);
         const selectedOption = select.find('option').filter(function() {
@@ -293,13 +291,13 @@ function enableAllTabs() {
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
-          const refLength = document.getElementsByName('risks__vulnerability__checkboxes').length;
+          const numberOfVulnerabilities = document.getElementsByName('risks__vulnerability__checkboxes').length;
           
           let vulnerabilityDiv = $('<div>');
           vulnerabilityDiv.css('display', 'flex');
           vulnerabilityDiv.css('padding', '0');
           vulnerabilityDiv.css('margin-bottom', '1%');
-          vulnerabilityDiv.attr('id', `vulnerabilityrefs_${refLength}`);
+          vulnerabilityDiv.attr('id', `vulnerabilityrefs_${numberOfVulnerabilities}`);
   
           const checkboxRef = null;
           const checkbox = document.createElement('input');
@@ -307,12 +305,11 @@ function enableAllTabs() {
           checkbox.value = `${checkboxRef}`;
           checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
           checkbox.name = 'risks__vulnerability__checkboxes';
-          checkbox.setAttribute('data-row-id', refLength);
+          checkbox.setAttribute('data-row-id', numberOfVulnerabilities);
           vulnerabilityDiv.append(checkbox);
           let select = $('<select>').append(vulnerabilityOptions);
           select.on('change', async (e)=> {
             const { value } = e.target;
-            console.log(value)
             await validatePreviousRisk(getCurrentRiskId());
           
             const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
@@ -323,7 +320,7 @@ function enableAllTabs() {
           });
           vulnerabilityDiv.append(select);
           let visibility = 'visible';
-          if (refLength + 1 === 0) visibility = 'hidden';
+          if (numberOfVulnerabilities + 1 === 0) visibility = 'hidden';
           vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
           div.append(vulnerabilityDiv);
 
@@ -766,7 +763,6 @@ function enableAllTabs() {
         isOWASPLikelihood
       } = riskLikelihood;
 
-      console.log(risksData)
       // Set Risk description data
       $('.riskId').text(riskId);
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
