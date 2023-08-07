@@ -52,9 +52,8 @@ function disableAllTabs() {
             label: 'Low',
             data: lowRisk,
             stack: 'stack',
-            backgroundColor: '#000000', 
+            backgroundColor: '#7db700', 
             
-            borderWidth: 1,
             barPercentage: 0.5,
           },
           {
@@ -62,8 +61,6 @@ function disableAllTabs() {
             data: medRisk,
             stack: 'stack',
             backgroundColor: '#FFA500', 
-
-            borderWidth: 1,
             barPercentage: 0.5,
             
           },
@@ -72,7 +69,6 @@ function disableAllTabs() {
             data: highRisk,
             stack: 'stack',
             backgroundColor: '#FF0000', 
-            borderWidth: 1,
             barPercentage: 0.5,
           },
 
