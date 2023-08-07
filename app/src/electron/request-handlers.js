@@ -616,7 +616,8 @@ const {
   removeFile,
   saveAsFile,
   decodeFile, 
-  useNewDecodeFileMethod
+  useNewDecodeFileMethod,
+  downloadFile
 } = require('../../../lib/src/api/utility');
 
 // Welcome Tab
@@ -918,7 +919,20 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
 
 ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => validateVulnerabilities(israProject, currentVulnerability));
 ipcMain.handle('vulnerabilities:isVulnerabilityExist', (event, id) => isVulnerabilityExist(israProject, id));
+ipcMain.on('israreport:saveGraph',  (event,graph) => {
 
+  const contextMenu = Menu.buildFromTemplate([{
+    label: 'Save chart as image',
+    click: () => downloadFile(
+      graph
+    ),
+  }]);
+  contextMenu.popup();
+
+  
+
+  
+});
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
 //     nativeTheme.themeSource = 'light';
