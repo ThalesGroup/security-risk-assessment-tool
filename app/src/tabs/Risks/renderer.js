@@ -232,9 +232,8 @@ function enableAllTabs() {
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
         div.append(vulnerabilityDiv);
         const selectedOption = select.find('option').filter(function() {
-          return $(this).text() === ref.name
+          return Number($(this).val()) === ref.vulnerabilityId     
         })
-        select.val(selectedOption.val());
         const previousVulId = selectedOption.val();
       });
     };
