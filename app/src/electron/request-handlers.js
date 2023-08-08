@@ -36,15 +36,6 @@ const fs = require('fs');
 const parser = require('../../../lib/src/api/xml-json/parser');
 const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra');
 const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
-const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
-const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
-const Vulnerability = require('../../../lib/src/model/classes/Vulnerability/vulnerability');
-const Risk = require('../../../lib/src/model/classes/Risk/risk');
-const RiskName = require('../../../lib/src/model/classes/Risk/risk-name');
-const RiskLikelihood = require('../../../lib/src/model/classes/Risk/risk-likelihood');
-const RiskImpact = require('../../../lib/src/model/classes/Risk/risk-impact');
-//const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
-//const populateClass = require('./populate-class');
 
 const errorMessages = require('./validation')
 
@@ -814,6 +805,7 @@ ipcMain.on('import:sendImports', (event, data) => {
 
   importData(data,israProject,importedISRA)
   dialogWindow.close()
+  getMainWindow().webContents.send('project:load', israProject.toJSON());
 })
 ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('render:showLoading', () => showLoading());
