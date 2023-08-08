@@ -208,7 +208,17 @@ function enableAllTabs() {
         checkbox.name = 'risks__vulnerability__checkboxes';
         checkbox.setAttribute('data-row-id', rowId);
         vulnerabilityDiv.append(checkbox);
+        
         let select = $('<select>').append(vulnerabilityOptions);
+        const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
+        console.log(check.length)
+        if (matchingRef.length === 0) {
+          const placeholderRef = document.createElement('option')
+          placeholderRef.value = ref.vulnerabilityId
+          placeholderRef.text = ref.name
+          select.append(placeholderRef)
+        }
+        
         
         select.on('change', async (e)=> {
           const { value } = e.target;
@@ -231,9 +241,11 @@ function enableAllTabs() {
         if (numberOfVulnerabilities === 0) visibility = 'hidden';
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
         div.append(vulnerabilityDiv);
+        
         const selectedOption = select.find('option').filter(function() {
           return Number($(this).val()) === ref.vulnerabilityId     
         })
+        select.val(selectedOption.val());
         const previousVulId = selectedOption.val();
       });
     };

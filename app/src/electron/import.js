@@ -147,16 +147,16 @@ function importRisk(currentISRA, importedISRA, selectedRiskIds) {
 
       highestRiskId += 1;
       const newRisk = new Risk();
-      const newRiskName = new RiskName();
-      newRiskName.riskName = selectedRisk.riskName.riskName;
-      newRiskName.threatAgent = selectedRisk.riskName.threatAgent;
-      newRiskName.threatAgentDetail = selectedRisk.riskName.threatAgentDetail;
-      newRiskName.threatVerb  = selectedRisk.riskName.threatVerb;
-      newRiskName.threatVerbDetail = selectedRisk.riskName.threatVerbDetail;
-      newRiskName.motivation = selectedRisk.riskName.motivation;
-      newRiskName.motivationDetail = selectedRisk.riskName.motivationDetail;
+      
+      newRisk.riskName = selectedRisk.riskName;
+      newRisk.threatAgent = selectedRisk.threatAgent;
+      newRisk.threatAgentDetail = selectedRisk.threatAgentDetail;
+      newRisk.threatVerb  = selectedRisk.threatVerb;
+      newRisk.threatVerbDetail = selectedRisk.threatVerbDetail;
+      newRisk.motivation = selectedRisk.motivation;
+      newRisk.motivationDetail = selectedRisk.motivationDetail;
 
-      newRiskName.riskName.isAutomaticRiskName = selectedRisk.riskName.isAutomaticRiskName;
+      newRisk.riskName.isAutomaticRiskName = selectedRisk.isAutomaticRiskName;
 
       // Need to change to account for schema update
       newRisk.riskId = highestRiskId;

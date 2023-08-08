@@ -167,7 +167,7 @@ function disableAllTabs() {
                     <td style="padding:0;">
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
-                            <div class="grid-item">${riskName.riskName}</div>
+                            <div class="grid-item">${riskName}</div>
                             <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
                             <div class="grid-item">${riskManagementDetail}</div>
                         </div>

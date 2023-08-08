@@ -93,7 +93,7 @@
           title: 'Import?', field: 'checkbox', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', headerWordWrap: true, width: 80
         },
         {
-          title: 'Risk Name', field: 'riskName.riskName', headerSort: false, headerHozAlign: 'center', hozAlign: 'center'
+          title: 'Risk Name', field: 'riskName', headerSort: false, headerHozAlign: 'center', hozAlign: 'center'
         },
         {
           title: 'Risk Level', field: 'residualRiskLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 80
@@ -244,7 +244,7 @@ vulnerabilityTableConfig.columns[levelIndex].formatter = (cell) => {
       }else {
         const filterOptions = [
             [
-                { field: "riskName.riskName", type: "like", value: value },
+                { field: "riskName", type: "like", value: value },
                 { field: "residualRiskLevel", type: "like", value: value },
                 
             ]
