@@ -234,6 +234,7 @@ function enableAllTabs() {
         const selectedOption = select.find('option').filter(function() {
           return Number($(this).val()) === ref.vulnerabilityId     
         })
+        select.val(selectedOption.val());
         const previousVulId = selectedOption.val();
       });
     };
