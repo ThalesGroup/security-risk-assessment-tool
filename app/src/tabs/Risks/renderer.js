@@ -211,7 +211,6 @@ function enableAllTabs() {
         
         let select = $('<select>').append(vulnerabilityOptions);
         const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
-        console.log(check.length)
         if (matchingRef.length === 0) {
           const placeholderRef = document.createElement('option')
           placeholderRef.value = ref.vulnerabilityId
