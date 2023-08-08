@@ -509,6 +509,51 @@ function getJSON(filePath){
 
     try {
       const jsonData = JSON.parse(data);
+
+      if (!jsonData.ISRAmeta.schemaVersion) {
+        const risks = jsonData.Risk
+        risks.forEach((risk) => {
+          const riskNameObject = risk.riskName
+          delete risk.riskName
+          Object.keys(riskNameObject).forEach((field) => {
+            risk[field] = riskNameObject[field]
+          });
+        });
+
+        const vulnerabilities = jsonData.Vulnerability;
+        const vulIdMap = {};
+        vulnerabilities.forEach((vulnerability) => {
+          vulIdMap[vulnerability.vulnerabilityName] = vulnerability.vulnerabilityId;
+        });
+
+        jsonData.Risk.forEach((risk) => {
+          
+          const riskAttackPaths = risk.riskAttackPaths;
+          riskAttackPaths.forEach((riskAttackPath)=> {
+              
+              const vulnerabilityRef = riskAttackPath.vulnerabilityRef;
+              const validRefs = []
+               vulnerabilityRef.forEach((ref)=> {
+                if (!ref.name === '') {
+                  delete ref.rowId  
+
+                  ref.vulnerabilityId = vulIdMap[ref.name];
+                  validRefs.push(ref)
+                }
+                
+              });
+              
+              riskAttackPath.vulnerabilityRef = validRefs
+             
+          });
+      });
+
+
+      } else if (jsonData.ISRAmeta.schemaVersion > 3) {
+        throw Error(`Unable to load schema version ${jsonData.ISRAmeta.schemaVersion}, this version only supports 3 and below`)
+      }
+
+
       const iterations = jsonData.ISRAmeta.ISRAtracking
       const dateFormat = new RegExp('(^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$)' 
       + '|(^$)')
@@ -535,13 +580,16 @@ function getJSON(filePath){
       return importedISRA
     } catch (error) {
       console.log(error);
+      const errorMessage = getError(error)
+      dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
     }
  
 }
 
 function getXML(filePath) {
+  try {
 
-  const xmlData = fs.readFileSync(filePath, 'utf8');
+    const xmlData = fs.readFileSync(filePath, 'utf8');
       const resultJSON = parser(xmlData);
 
       // writeFile(resultJSON);
@@ -573,6 +621,13 @@ function getXML(filePath) {
       const importedISRA = validateJsonSchema(israJSONData);
       return importedISRA
 
+  } catch {
+    console.log(error);
+    const errorMessage = getError(error)
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File \n\n${errorMessage}` });
+  }
+  
+
 }
 
 const openFileDialog = () => {
@@ -580,7 +635,7 @@ const openFileDialog = () => {
     title: 'Open file - Electron ISRA Project',
     buttonLabel: 'Open File',
     filters: [
-      { name: 'JSON/XML', extensions: ['json', 'xml'] },
+      { name: 'JSON/XML', extensions: ['json', 'xml', 'sra'] },
     ],
   };
   const filePathArr = dialog.showOpenDialogSync(options);
@@ -594,7 +649,7 @@ function getISRA(filePathArr) {
     const filePath = filePathArr[0];
     const fileType = filePath.split('.').pop();
 
-    if (fileType === 'json') {
+    if (fileType === 'json' || fileType === 'sra') {
       const importedISRA = getJSON(filePath)
       return importedISRA
       
@@ -614,10 +669,6 @@ const loadData = async (win) => {
   const filePathArr = openFileDialog();
 
   importedISRA = await getISRA(filePathArr);
-  const classification = israProject.properties.ISRAmeta.classification
-
-  win.webContents.send('project:load', importedISRA, classification);
-  //win.webContents.send('import:load', importedISRA, {});
   
     function activateImportDialog() {
       dialogWindow = new BrowserWindow({
@@ -643,8 +694,10 @@ const loadData = async (win) => {
       });
     }
 
+    if (importedISRA) {
+      activateImportDialog(importedISRA)
+    }
     
-    activateImportDialog(importedISRA)
 
     
 
