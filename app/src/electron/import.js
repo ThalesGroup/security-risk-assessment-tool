@@ -160,7 +160,7 @@ function importRisk(currentISRA, importedISRA, selectedRiskIds) {
 
       // Need to change to account for schema update
       newRisk.riskId = highestRiskId;
-      newRisk.riskName  = selectedRisk.riskName;
+      newRisk.riskName  = newRiskName;
       newRisk.mitigationsBenefits = selectedRisk.mitigationsBenefits;
       newRisk.mitigationsDoneBenefits = selectedRisk.mitigationsDoneBenefits;
       newRisk.mitigatedRiskScore = selectedRisk.mitigatedRiskScore;
