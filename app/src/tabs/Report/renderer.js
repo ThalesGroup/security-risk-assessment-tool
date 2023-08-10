@@ -44,6 +44,7 @@ function disableAllTabs() {
   }
 
   function generateGraph(lowRisk, medRisk, highRisk) {
+   
     const chartElement = document.getElementById('riskChart');
     const chartData = {
         labels: ['Accept', 'Transfer', 'Mitigate'],
@@ -257,8 +258,10 @@ function disableAllTabs() {
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
 
+                if (document.getElementById('riskChart')) {
+                  generateGraph(lowRisk, medRisk, highRisk)
+                }
                 
-                generateGraph(lowRisk, medRisk, highRisk)
                   
                  
                 
