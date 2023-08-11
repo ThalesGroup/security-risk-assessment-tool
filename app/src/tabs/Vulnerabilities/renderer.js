@@ -424,7 +424,6 @@ function disableAllTabs() {
     });
 
     const vulnerabilityURL = (value) => {
-        console.log('first')
         getCurrentVulnerability().vulnerabilityTrackingURI = value;
         
         const hyperlink = $('#vulnerability__url--hyperlink');

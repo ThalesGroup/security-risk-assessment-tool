@@ -323,7 +323,7 @@ function enableAllTabs() {
             await validatePreviousRisk(getCurrentRiskId());
           
             const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
-            //reloadCurrentRisk(risk);
+            reloadCurrentRisk(risk);
             
             
 
@@ -347,7 +347,10 @@ function enableAllTabs() {
             if (box.checked) {
               const vulRef = document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`)
               const vulId = vulRef.querySelector('select').value
-              ids.push(Number(vulId))
+              if (vulId) {
+                ids.push(Number(vulId))
+              }
+              
               //console.log(document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`))
               //ids.push(Number(box.getAttribute('data-row-id')));
               // window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 

@@ -43,7 +43,10 @@ function disableAllTabs() {
     document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
   }
 
+  let riskChart;
+
   function generateGraph(lowRisk, medRisk, highRisk) {
+   
     const chartElement = document.getElementById('riskChart');
     const chartData = {
         labels: ['Accept', 'Transfer', 'Mitigate'],
@@ -111,7 +114,7 @@ function disableAllTabs() {
       };
   
       // Create the bar chart
-      const riskChart = new Chart(chartElement, {
+      riskChart = new Chart(chartElement, {
         type: 'bar',
         data: chartData,
         options: options
@@ -257,8 +260,16 @@ function disableAllTabs() {
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
 
+                if (riskChart) {
+                  riskChart.data.datasets[0].data= lowRisk
+                  riskChart.data.datasets[1].data= medRisk
+                  riskChart.data.datasets[2].data= highRisk
+                  riskChart.update()
+                  
+                } else {
+                  generateGraph(lowRisk, medRisk, highRisk)
+                }
                 
-                generateGraph(lowRisk, medRisk, highRisk)
                   
                  
                 
