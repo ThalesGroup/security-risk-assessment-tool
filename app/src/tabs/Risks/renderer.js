@@ -258,7 +258,6 @@ function enableAllTabs() {
 
       riskAttackPaths.forEach((path, i) =>{
         const {riskAttackPathId, vulnerabilityRef, attackPathScore} = path;
-
         if (i > 0 || riskAttackPathId > 1) $('#risks__vulnerability__attack__path').append('<p style="margin-left: 18px">OR</p>');
         
         const mainDiv = $('<div>');
