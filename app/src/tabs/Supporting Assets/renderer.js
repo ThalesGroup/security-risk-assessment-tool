@@ -251,6 +251,7 @@ function enableAllTabs() {
           min_height: 300,
           verify_html: true,
           statusbar: false,
+          link_target_list: false,
           plugins: 'link lists image autoresize',
           toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
           file_picker_callback: function (callback, value, meta) {
@@ -300,6 +301,17 @@ function enableAllTabs() {
               const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
               window.validate.supportingAssets(tableData, desc);
 
+            });
+            ed.on('click', function (event) {
+              const target = event.target;
+  
+              if (target.tagName === 'A') {
+                event.preventDefault();
+                const href = target.getAttribute('href');
+                if (href) {
+                  window.utility.openURL(href, navigator.onLine);
+                }
+              }
             });
           }
 

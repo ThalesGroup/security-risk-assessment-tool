@@ -40,6 +40,12 @@ contextBridge.exposeInMainWorld('import', {
 
 });
 
+contextBridge.exposeInMainWorld('utility', {
+  openURL: (url, userStatus) => ipcRenderer.send('utility:openURL', url, userStatus),
+
+});
+
+
 contextBridge.exposeInMainWorld(
   'api', {
     send: (channel, func) => {
