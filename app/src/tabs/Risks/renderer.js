@@ -469,6 +469,7 @@ function enableAllTabs() {
         verify_html: true,
         statusbar: false,
         deep: true,
+        link_target_list: false,
         plugins: 'link lists image autoresize',
         toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
         file_picker_callback: function (callback, value, meta) {
@@ -528,6 +529,18 @@ function enableAllTabs() {
             if (id === `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.description = richText;
             else if (id === `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.decisionDetail = richText;
             validatePreviousRisk(getCurrentRiskId());
+          });
+
+          editor.on('click', function (event) {
+            const target = event.target;
+
+            if (target.tagName === 'A') {
+              event.preventDefault();
+              const href = target.getAttribute('href');
+              if (href) {
+                window.utility.openURL(href, navigator.onLine);
+              }
+            }
           });
         },
       });
@@ -977,6 +990,7 @@ function enableAllTabs() {
           min_height: 300,
           verify_html: true,
           statusbar: false,
+          link_target_list: false,
           plugins: 'link lists image autoresize',
           toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
           file_picker_callback: function (callback, value, meta) {
@@ -1031,6 +1045,17 @@ function enableAllTabs() {
               else if (id === 'risk__likelihood__details') riskLikelihood.riskLikelihoodDetail = richText;
               else if (id === 'risk__management__detail__rich-text') risk.riskManagementDetail = richText;
               validatePreviousRisk(getCurrentRiskId());
+            });
+            ed.on('click', function (event) {
+              const target = event.target;
+  
+              if (target.tagName === 'A') {
+                event.preventDefault();
+                const href = target.getAttribute('href');
+                if (href) {
+                  window.utility.openURL(href, navigator.onLine);
+                }
+              }
             });
           }
         });

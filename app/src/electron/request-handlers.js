@@ -840,6 +840,12 @@ const {
   downloadFile
 } = require('../../../lib/src/api/utility');
 
+// Utility APIs (Common Functions)
+
+ipcMain.on('utility:openURL', (event, url, userStatus) => {
+  openUrl(url, userStatus);
+});
+
 // Welcome Tab
 const {
   addTrackingRow,
