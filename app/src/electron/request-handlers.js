@@ -674,9 +674,9 @@ const loadData = async (win) => {
       dialogWindow = new BrowserWindow({
         width: 500,
         height: 500,
-        //autoHideMenuBar: true,
+        autoHideMenuBar: true,
         icon: path.join(__dirname, '../asset/isra-app-icon-512.png'),
-        //menuBarVisibility: 'hidden',
+        menuBarVisibility: 'hidden',
         parent: getMainWindow(),
         modal: true,
         show: false,
@@ -855,8 +855,6 @@ const {
   validateISRAmeta,
   getConfig,
   updateConfigOrg,
-  showLoading,
-  closeLoading
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
 const { importData } = require('./import')
@@ -867,8 +865,6 @@ ipcMain.on('import:sendImports', (event, data) => {
   getMainWindow().webContents.send('project:load', israProject.toJSON());
 })
 ipcMain.handle('render:welcome', () => renderWelcome());
-ipcMain.handle('render:showLoading', () => showLoading());
-ipcMain.handle('render:closeLoading', () => closeLoading());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
 ipcMain.handle('welcome:getConfig', () => getConfig());
 ipcMain.handle('welcome:updateConfigOrg', (event, data) => updateConfigOrg(data));
