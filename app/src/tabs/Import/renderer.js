@@ -399,11 +399,9 @@ $('button[id="select-all-Vul"]').on('click', () => {
       imports.businessAssets = checkedBAs;
       imports.risks = checkedRisks;
       imports.vulnerabilities = checkedVulnerabilities;
-      console.log(imports)
       const data = imports;
       window.import.sendImports(data);
-      //window.vulnerabilities.deleteVulnerability(checkedVulnerabilities);
-      // Perform any actions you want to happen when the button is clicked here.
+
     });
 
 
