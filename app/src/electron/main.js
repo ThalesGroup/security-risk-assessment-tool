@@ -130,12 +130,14 @@ app.on('open-file', function(event, path) {
   event.preventDefault();
   filePath = path;
 
-  if (process.argv.length >= 2) { 
-    filePath = process.argv[1];
-
-  }
+  
   
 })
+
+if (process.argv.length >= 2) { 
+  filePath = process.argv[1];
+
+}
 
 
 
@@ -148,7 +150,7 @@ app.whenReady().then(() => {
     return BrowserWindow.fromId(ID);
   };
 
-  if (filePath !== '') {
+  if (filePath !== '.') {
     const fileType = filePath.split('.').pop();
     if (fileType === 'json' || fileType === 'sra') loadJSONFile(getMainWindow(), filePath);
     else if (fileType === 'xml') loadXMLFile(getMainWindow(), filePath);
