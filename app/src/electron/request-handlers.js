@@ -237,8 +237,7 @@ const validateClasses = () => {
     for (let i = 0; i < Risk.length; i++) {
 
       
-      const { riskName, riskMitigation, riskId } = Risk[i];
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
+      const { riskName, riskMitigation, riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = Risk[i];
       const noThreatAgent = !threatAgent;
       const noThreatVerb = !threatVerb;
       const noBusinessAssetRef = !businessAssetRef;
