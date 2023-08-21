@@ -448,6 +448,7 @@ function disableAllTabs() {
           hyperlink.text(value);
         } else if (value === '') {
           insert.show();
+          hyperlink.attr('href', value);
           hyperlink.hide();
         }
     };
@@ -458,20 +459,12 @@ function disableAllTabs() {
       });
 
     $('#vulnerability__url--insert').on('click', async () => {
-        let currentURL = ''
-        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
-            currentURL = $('#vulnerability__url--hyperlink').attr('href')
-        }
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), currentURL);
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), $('#vulnerability__url--hyperlink').attr('href'));
         vulnerabilityURL(url);
     });
 
     $('#vulnerability__url--img').on('click', async () => {
-        let currentURL = ''
-        if (!getCurrentVulnerability().vulnerabilityTrackingURI === '') {
-            currentURL = $('#vulnerability__url--hyperlink').attr('href')
-        }
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), currentURL);
+        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), $('#vulnerability__url--hyperlink').attr('href'));
         vulnerabilityURL(url);
     });
 

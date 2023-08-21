@@ -46,8 +46,6 @@ function enableAllTabs() {
 (async () => {
   try {
 
-    let currentURL;
-
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
         event.preventDefault();
@@ -73,6 +71,7 @@ function enableAllTabs() {
         hyperlink.text(value);
       } else if (value === '') {
         insert.show();
+        hyperlink.attr('href', value);
         hyperlink.hide();
       }
     };
@@ -84,13 +83,13 @@ function enableAllTabs() {
 
     $('#project-description__url-image').on('click', async () => {
 
-      const url = await window.projectContext.urlPrompt(currentURL );
+      const url = await window.projectContext.urlPrompt($('#project-description__url--hyperlink').attr('href'));
       projectURL(url);
     });
 
     $('#project-description__url--insert').on('click', async () => {
 
-      const url = await window.projectContext.urlPrompt(currentURL);
+      const url = await window.projectContext.urlPrompt($('#project-description__url--hyperlink').attr('href'));
       projectURL(url);
     });
 
@@ -121,7 +120,6 @@ function enableAllTabs() {
     const updateProjectContextFields = (fetchedData) => {
       projectDescription(fetchedData.projectDescription);
       projectURL(fetchedData.projectURL);
-      currentURL = fetchedData.projectURL
       projectDescriptiveAttachment(fetchedData.projectDescriptionAttachment);
       projectObjectives(fetchedData.securityProjectObjectives);
       officerObjectives(fetchedData.securityOfficerObjectives);
