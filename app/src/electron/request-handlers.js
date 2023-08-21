@@ -533,7 +533,7 @@ function getJSON(filePath){
               const vulnerabilityRef = riskAttackPath.vulnerabilityRef;
               const validRefs = []
                vulnerabilityRef.forEach((ref)=> {
-                if (!ref.name === '') {
+                if (!(ref.name === '')) {
                   delete ref.rowId  
 
                   ref.vulnerabilityId = vulIdMap[ref.name];
