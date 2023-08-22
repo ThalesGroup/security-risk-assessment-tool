@@ -64,7 +64,8 @@
                     "arch": "x64"
                 },
                 {
-                    "target": "nsis"
+                    "target": "nsis",
+                    "arch": "x64"
                     
                 }
             ]
