@@ -155,9 +155,12 @@ Documentation for lib is available at [lib/doc/index.html](lib/doc/index.html).
 ## Credits
 
 * Frederic Paillart who managed the initial version of the tool using Infopath
-  * Several people including Philippe Biton, Antoine Galland, Frank Converset, Karen Lu, Petr Skripal, Sebastien Petit, Patrick George who improved, commented and/or worked on the ISRA methodology throughout the years. Apologies if i missed someone in this list, contact me if its the case.
 * Megan Liow for the initial port to Electron.
 * Alvin Siah for the major improvements to the Electron version.
+* Sun Fang who reviewed and helped us improve the JSON Schema
+* All other people including Philippe Biton, Frank Converset,  Antoine Galland,  Patrick George, Karen Lu, Sebastien Petit, Petr Skripal, who improved, commented and/or worked on the ISRA methodology throughout the years.
+
+Since this methodology has been around for several years internally, we may have missed some names who contributed to it, our apologies if its the case. 
 
 ## Contributing
 
