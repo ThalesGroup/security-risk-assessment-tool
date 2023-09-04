@@ -75,7 +75,7 @@ section {
 }
 
 #risks,
-#vulnerabilites,
+#vulnerabilities,
 #riskmanagement {
     width: 95%;
     margin: auto;
@@ -86,17 +86,17 @@ section {
 }
 
 #risks tbody tr td,
-#vulnerabilites tbody tr td {
+#vulnerabilities tbody tr td {
     text-align: center;
 }
 
 #risks tbody tr td:nth-of-type(2),
-#vulnerabilites tbody tr td:nth-of-type(2) {
+#vulnerabilities tbody tr td:nth-of-type(2) {
     text-align: left;
 }
 
-#vulnerabilites tbody tr td:nth-of-type(3), 
-#vulnerabilites tbody tr td:nth-of-type(4) {
+#vulnerabilities tbody tr td:nth-of-type(3), 
+#vulnerabilities tbody tr td:nth-of-type(4) {
     width: 10%;
 }
 
