@@ -708,7 +708,7 @@ const loadData = async (win) => {
 /**
   * Download pdf file to selected path
   * @module downloadReport
-  * @param {App} app Curent Application
+  * @param {App} app Current Application
 */
 const downloadReport = async (app) => {
   try{

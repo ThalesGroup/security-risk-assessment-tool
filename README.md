@@ -10,22 +10,22 @@ It permits to define the primary assets, called the business assets, the associa
 Creating a security risk assessment of engineering projects involves several steps, which are quickly summarized below (you can refer to ISO 27005 for more information):
 1. Identify and define the scope of the risk assessment including assumptions and trusted boundaries.
 2. Identify the business, also called primary assets, (what has value and is important from a business perspective) according to their required quality security sub-characteristics (see ISO 25010 for the definition of the security characteristics of products). The consequences for the loss of these security characteristics are rated here for each security quality sub-characterstic. This is equivalent to the Identification of assets and identification of consequences activities in ISO 27005. Examples of business assets: a payment service, user personal information, intellectual property or algorithm.
-3. Identify the supporting assets, where the actual business assets will flow through or be managed. This is usually technical in nature, these assets may have vulnerabilities that are exploitable by threat agents. Example of supporting assets: volatile memory, storage location, data processing equipment, cryptograpgic keys, network, operating system, software application. The selection of supporting assets depends on the level of granularity required. These supporting assets shoud be linked to the business assets in the tool. For example, if a business asset is stored then it should be linked to a storage location. This is equivalent to the Identification of assets activities in ISO 27005.
+3. Identify the supporting assets, where the actual business assets will flow through or be managed. This is usually technical in nature, these assets may have vulnerabilities that are exploitable by threat agents. Example of supporting assets: volatile memory, storage location, data processing equipment, cryptograpgic keys, network, operating system, software application. The selection of supporting assets depends on the level of granularity required. These supporting assets should be linked to the business assets in the tool. For example, if a business asset is stored then it should be linked to a storage location. This is equivalent to the Identification of assets activities in ISO 27005.
 4. Identify threats, and threat scenarios in the risk tab. This involves identifying the threat agents, what may be attacked and likelihood scenarios. Each threat should be defined as separate risk in the risk tab. This is the Identification of threats activity in ISO 27005.
-5. Identify vulnerabilities that could be exploited for each threat scenario. This is done in the vulnerabilites tab, which should be linked to supporting assets. Each vulnerability should be scored with a score of 0 to 10. This is the identification of Vulnerabilities activity in ISO 27005.
+5. Identify vulnerabilities that could be exploited for each threat scenario. This is done in the vulnerabilities tab, which should be linked to supporting assets. Each vulnerability should be scored with a score of 0 to 10. This is the identification of Vulnerabilities activity in ISO 27005.
 6. In the risks tab, create an attack path of vulnerabilities for each threat. This will create incident scenarios. Complete the attack path with AND and OR combinations can be used. This is the Assessment of incident likelihood and Level of risk determination in ISO 27005. Once this step is completed, the risk level should be available for each incident scenario.
 7. Determine level of acceptance of risks. For each evaluated risk, determine if risk is acceptable or not. This is equivalent to the Risk Evaluation activity in ISO 27005.
 8. For those risks that need to be treated determine how they will be treated:
   * Mitigate or Modify: propose the security controls to put into place in the risks tab for each treatment decision, with the expected benefit of the security control (in % on risk level).
   * Retain: Risk is accepted as is.
-  * Avoid:  Avoid the risk by stopping the activity, feature, project or by changing the archictecture.
+  * Avoid:  Avoid the risk by stopping the activity, feature, project or by changing the architecture.
   * Share: Share or transfer the risk with the customer or another third-party.
    
 In some cases, vulnerabilities may be found before the risks are actually defined, such as through security testing, then the steps above may be modified accordingly.
 
 ## How to run ##
 
-Just download the zip file for your platform and unzip it and executre `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
+Just download the zip file for your platform and unzip it and execute `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
 
 # Development information
 

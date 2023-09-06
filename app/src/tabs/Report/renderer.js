@@ -149,7 +149,7 @@ function disableAllTabs() {
                 if (overallLevel === 'High') color = 'red';
                 else if (overallLevel === 'Medium') color = 'orange';
 
-                $('#vulnerabilites tbody').append(`<tr>
+                $('#vulnerabilities tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
                     <td>${vulnerabilityName}</td>
                     <td style="color: ${overallScore === null ? 'red' : 'black'}">${overallScore === null ? 'NaN' : overallScore}/10</td>
@@ -198,7 +198,7 @@ function disableAllTabs() {
                     low: []
                 };
                 $('#risks tbody').empty();
-                $('#vulnerabilites tbody').empty();
+                $('#vulnerabilities tbody').empty();
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
