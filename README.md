@@ -3,7 +3,7 @@
 
 The ISRA or Security risk assessment tool project is an Electron based application used internally in Thales Digital Identity and Security Business Unit (Thales DIS) to evaluate security risks of engineering projects. 
 
-It permits to define the primary assets, called the business assets, the associated supporting assets, the threat agents, the vulnerabilities and calculate associated risks ad potential risk treatment options. This process is fully compliant with the ISO 27005 risk management standard.
+It permits to define the primary assets, called the business assets, the associated supporting assets, the threat agents, the vulnerabilities and calculate associated risks and potential risk treatment options. This process is fully compliant with the ISO 27005 risk management standard.
 
 ## Usage ##
 
