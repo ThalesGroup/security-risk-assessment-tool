@@ -150,7 +150,7 @@ Documentation for lib is available at [lib/doc/index.html](lib/doc/index.html).
 
 ## Contact
 
-* Carl Eric Codere is currently overseeing the project in Thales DIS
+* Carl Eric Codere and Sebastien Petit are currently overseeing the project in Thales DIS
 
 ## Credits
 
