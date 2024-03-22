@@ -670,8 +670,7 @@ function enableAllTabs() {
         const bottomSection = $('<section>');
         bottomSection.attr('class', 'bottom');
         bottomSection.css('background-color', 'transparent');
-
-        if (riskManagementDecision !== 'Mitigate') {
+        if (riskManagementDecision !== 'Mitigate' && riskManagementDecision !== 'Transfer') {
           bottomSection.css('display', 'none');
         }
 
@@ -1377,7 +1376,7 @@ function enableAllTabs() {
 
   $(`input[type='radio'][name='risk__management__decision']`).change(async (e) => {
     const { value } = e.target;
-    if (value === 'Mitigate') $('.bottom:hidden').css('display', 'grid');
+    if (value === 'Mitigate' || value === 'Transfer') $('.bottom:hidden').css('display', 'grid');
     else $('.bottom').css('display', 'none');
 
     await validatePreviousRisk(getCurrentRiskId());
