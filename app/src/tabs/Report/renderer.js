@@ -160,7 +160,7 @@ function disableAllTabs() {
 
         const renderRisk = (sortedRisk, residualRiskLevel) => {
             sortedRisk[residualRiskLevel].forEach((risk) => {
-                const { riskId, residualRiskLevel, inherentRiskScore, residualRiskScore, riskManagementDecision, riskName, riskManagementDetail } = risk;
+                const { riskId, residualRiskLevel, inherentRiskScore, residualRiskScore, mitigatedRiskScore,riskManagementDecision, riskName, riskManagementDetail } = risk;
                 let color = 'black';
                 if (residualRiskLevel === 'High') color = 'red';
                 else if (residualRiskLevel === 'Medium') color = 'orange';
@@ -177,6 +177,7 @@ function disableAllTabs() {
                     </td>
                     <td style="color: ${inherentRiskScore === null ? 'red' : 'black'}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
                     <td style="color: ${residualRiskScore === null ? 'red' : 'black'}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
+                    <td style="color: ${mitigatedRiskScore === null ? 'red' : 'black'}">${mitigatedRiskScore === null ? 'NaN' : mitigatedRiskScore}/20</td>
                     <td style="color: ${color}; font-weight: ${residualRiskLevel === 'High' || residualRiskLevel === 'Medium' ? 'bold' : 'normal'};">${residualRiskLevel}</td>
                     <td>${riskManagementDecision}</td>
                     </td>`);
