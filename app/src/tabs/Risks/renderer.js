@@ -350,10 +350,6 @@ function enableAllTabs() {
               if (vulId) {
                 ids.push(Number(vulId))
               }
-              
-              //console.log(document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`))
-              //ids.push(Number(box.getAttribute('data-row-id')));
-              // window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
             }
           });
 
@@ -459,102 +455,109 @@ function enableAllTabs() {
       $('select[id="risk__likelihood"]').val(riskLikelihood.riskLikelihood == null? 'null' : riskLikelihood.riskLikelihood);
     };
 
-    const addRichTextArea = (selector, desc, width, riskMitigationId) => {
-      tinymce.init({
-        selector,
-        promotion: false,
-        height: 250,
-        min_height: 250,
-        width,
-        verify_html: true,
-        statusbar: false,
-        deep: true,
-        link_target_list: false,
-        plugins: 'link lists image autoresize',
-        toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
-        file_picker_callback: function (callback, value, meta) {
-          // Provide image and alt text for the image dialog
-          if (meta.filetype == 'image') {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
+    const addRichTextArea = async(selector, desc, width, riskMitigationId) => {
+      const promiseSetup = new Promise((resolveSetup, rejectSetup) => {
+        tinymce.init({
+          selector,
+          promotion: false,
+          height: 250,
+          min_height: 250,
+          width,
+          verify_html: true,
+          statusbar: false,
+          deep: true,
+          link_target_list: false,
+          plugins: 'link lists image autoresize',
+          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+          file_picker_callback: function (callback, value, meta) {
+            // Provide image and alt text for the image dialog
+            if (meta.filetype == 'image') {
+              var input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/*');
 
-            /*
-              Note: In modern browsers input[type="file"] is functional without
-              even adding it to the DOM, but that might not be the case in some older
-              or quirky browsers like IE, so you might want to add it to the DOM
-              just in case, and visually hide it. And do not forget do remove it
-              once you do not need it anymore.
-            */
+              /*
+                Note: In modern browsers input[type="file"] is functional without
+                even adding it to the DOM, but that might not be the case in some older
+                or quirky browsers like IE, so you might want to add it to the DOM
+                just in case, and visually hide it. And do not forget do remove it
+                once you do not need it anymore.
+              */
 
-            input.onchange = function () {
-              var file = this.files[0];
+              input.onchange = function () {
+                var file = this.files[0];
 
-              var reader = new FileReader();
-              reader.onload = function () {
-                /*
-                  Note: Now we need to register the blob in TinyMCEs image blob
-                  registry. In the next release this part hopefully won't be
-                  necessary, as we are looking to handle it internally.
-                */
-                var id = 'blobid' + (new Date()).getTime();
-                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                var base64 = reader.result.split(',')[1];
-                var blobInfo = blobCache.create(id, file, base64);
-                blobCache.add(blobInfo);
+                var reader = new FileReader();
+                reader.onload = function () {
+                  /*
+                    Note: Now we need to register the blob in TinyMCEs image blob
+                    registry. In the next release this part hopefully won't be
+                    necessary, as we are looking to handle it internally.
+                  */
+                  var id = 'blobid' + (new Date()).getTime();
+                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var base64 = reader.result.split(',')[1];
+                  var blobInfo = blobCache.create(id, file, base64);
+                  blobCache.add(blobInfo);
 
-                /* call the callback and populate the Title field with the file name */
-                callback(blobInfo.blobUri(), { title: file.name });
+                  /* call the callback and populate the Title field with the file name */
+                  callback(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
               };
-              reader.readAsDataURL(file);
-            };
 
-            input.click();
-          }
-        },
-        setup: (editor) => {
-          editor.on('init', () => {
-            const content = desc;
-            editor.setContent(content);
-            
-          });
-
-          editor.on('change', function (e) {
-            const { id } = e.target;
-            let richText = tinymce.get(id).getContent();
-            const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
-            const { riskMitigation } = risk;
-            const mitigation = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
-         
-            if (id === `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.description = richText;
-            else if (id === `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.decisionDetail = richText;
-            validatePreviousRisk(getCurrentRiskId());
-          });
-
-          editor.on('click', function (event) {
-            const target = event.target;
-
-            if (target.tagName === 'A') {
-              event.preventDefault();
-              const href = target.getAttribute('href');
-              if (href) {
-                window.utility.openURL(href, navigator.onLine);
-              }
+              input.click();
             }
-          });
-        },
+          },
+          setup: async (editor) => {
+            const promiseInit = new Promise((resolveInit, rejectInit) => {
+              editor.on('init', () => {
+                const content = desc;
+                editor.setContent(content);
+                resolveInit()
+
+              });
+            });
+
+            editor.on('change', function (e) {
+              const { id } = e.target;
+              let richText = tinymce.get(id).getContent();
+              const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
+              const { riskMitigation } = risk;
+              const mitigation = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
+              if (id === `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.description = richText;
+              else if (id === `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`) mitigation.decisionDetail = richText;
+              validatePreviousRisk(getCurrentRiskId());
+            });
+
+            editor.on('click', function (event) {
+              const target = event.target;
+
+              if (target.tagName === 'A') {
+                event.preventDefault();
+                const href = target.getAttribute('href');
+                if (href) {
+                  window.utility.openURL(href, navigator.onLine);
+                }
+              }
+            });
+            // Wait for init to finish, ensure content is displayed
+            await promiseInit
+            resolveSetup()
+          },
+        });
       });
+      // Wait for setup to finish
+      await promiseSetup
     }
 
     // add Mitigation evaluation section
-    const addMitigationSection = (riskMitigations, riskManagementDecision)=> {
-      riskMitigations.forEach(async (mitigation)=> {
+    const addMitigationSection = async (riskMitigations, riskManagementDecision)=> {
+      const promises = riskMitigations.map(async (mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
         const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
-
         const mainSection = $('<section>');
         mainSection.css('padding', '0');
-
         // add checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -563,18 +566,15 @@ function enableAllTabs() {
         checkbox.name = 'risks__mitigation__checkboxes';
         checkbox.style.position = 'absolute';
         mainSection.append(checkbox);
-
         const section = $('<section>');
         section.attr('id', `risks__mitigation__section__${riskMitigationId}`);
         section.css('background-color', 'rgb(200,212,204)');
         section.css('margin-left', '20px');
         section.css('margin-top', '2%');
         section.css('padding', '0');
-
         const topSection = $('<section>');
         topSection.attr('class', 'top');
         topSection.css('background-color', 'transparent');
-
         // security control desc
         const securityControlDescSection = $('<section>');
         securityControlDescSection.css('background-color', 'transparent');
@@ -586,13 +586,11 @@ function enableAllTabs() {
         textArea1.attr('name', `security__control__desc__rich-text__${riskMitigationId}`);
         securityControlDescSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Security control Description</p>');
         securityControlDescSection.append(textArea1);
-        
         topSection.append(securityControlDescSection);
         section.append(topSection);
         mainSection.append(section);
         mitigationSections.append(mainSection);
-        addRichTextArea(`#security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, description, '100%', riskMitigationId);
-
+        const promiseDescription = addRichTextArea(`#security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, description, '100%', riskMitigationId);  
         // expected benefits
         const benefitsSection = $('<section>');
         benefitsSection.css('background-color', 'transparent');
@@ -605,7 +603,6 @@ function enableAllTabs() {
         options.forEach((option)=> {
           if(option.title) expectedBenefitsOptions[option.const] = option.title;
         });
-
         const div = $('<div>');
         for (const [key, value] of Object.entries(expectedBenefitsOptions)) {
           const input = $('<input>');
@@ -620,18 +617,17 @@ function enableAllTabs() {
           div.append(input);
           div.append(label);
           div.append('<br>');
-
           input.on('change', async (e)=> {
             const { value } = e.target;
             await validatePreviousRisk(getCurrentRiskId());
             const risk = await window.risks.updateRiskMitigation(getCurrentRiskId(), riskMitigationId, 'benefits', Number(value));
             updateScoresAndLevel(risk);
-            // reloadCurrentRisk(risk);
+           // reloadCurrentRisk(risk);
           })
         }
         benefitsSection.append(div);
         topSection.append(benefitsSection);
-       
+      
         // cost
         const validateCost = (input, cost) => {
           if (!Number.isInteger(cost))  input.css('border', '1px solid red');
@@ -640,7 +636,6 @@ function enableAllTabs() {
             validatePreviousRisk(getCurrentRiskId());
           } 
         }
-
         const costSection = $('<section>');
         costSection.css('background-color', 'transparent');
         costSection.css('margin', '0');
@@ -660,21 +655,16 @@ function enableAllTabs() {
           const rm = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
           rm.cost = Number(value);
           validateCost(input, Number(value));
-          
         });
         costSection.append(input);
-        
         topSection.append(costSection);
         section.append(topSection);
-
         const bottomSection = $('<section>');
         bottomSection.attr('class', 'bottom');
         bottomSection.css('background-color', 'transparent');
-
         if (riskManagementDecision !== 'Mitigate') {
           bottomSection.css('display', 'none');
         }
-
         // mitigation decision
         const mitigationDecisionSection = $('<section>');
         mitigationDecisionSection.css('background-color', 'transparent');
@@ -687,7 +677,6 @@ function enableAllTabs() {
         decisionOptions.forEach((option) => {
           mitigationDecisionOptions[option.title] = option.const;
         });
-
         const div2 = $('<div>');
         for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
           const input = $('<input>');
@@ -702,7 +691,6 @@ function enableAllTabs() {
           div2.append(input);
           div2.append(label);
           div2.append('<br>');
-
           input.on('change', async (e) => {
             const { value } = e.target;
             await validatePreviousRisk(getCurrentRiskId());
@@ -713,26 +701,28 @@ function enableAllTabs() {
         }
         mitigationDecisionSection.append(div2);
         bottomSection.append(mitigationDecisionSection);
-
         // decision comment
         const decisionSection = $('<section>');
         decisionSection.css('background-color', 'transparent');
         decisionSection.css('margin', '0');
         decisionSection.css('padding', '5px');
         decisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Decision Comment</p>');
-
         const textArea2 = $('<textArea>');
         textArea2.attr('class', 'rich-text');
         textArea2.attr('id', `comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`);
         textArea2.attr('name', `comment__desc__rich-text__${riskMitigationId}`);
         decisionSection.append(textArea2);
-
         bottomSection.append(decisionSection);
         section.append(bottomSection);
         mainSection.append(section);
         mitigationSections.append(mainSection);
-        addRichTextArea(`#comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
+        const promiseDecisionDetail = addRichTextArea(`#comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
+       
+        await promiseDecisionDetail 
+        await promiseDescription
       });
+      // Wait for all the risk mitigations to be assigned
+      await Promise.all(promises)
     };
 
     const styleResidualRiskLevelTable = (id, residualRiskLevel) => {
@@ -755,8 +745,11 @@ function enableAllTabs() {
       else risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'none';
     };
 
+    let addSelectedRowDataExecuting = false;
+
     // render selected row data on page by riskId
-    const addSelectedRowData = (id) =>{
+    const addSelectedRowData = async (id) =>{
+      addSelectedRowDataExecuting = true;
       const {
         riskId,
         riskName,
@@ -834,7 +827,7 @@ function enableAllTabs() {
 
       //risk mitigation
       $('#risks__risk__mitigation__evaluation section').empty();
-      addMitigationSection(riskMitigation, riskManagementDecision);
+      await addMitigationSection(riskMitigation, riskManagementDecision);
       $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
 
       //risk management
@@ -854,6 +847,7 @@ function enableAllTabs() {
           } else setNaNValues();
         }
       })
+      addSelectedRowDataExecuting = false;
     };
 
     const validatePreviousRisk = async (id) => {
@@ -870,10 +864,13 @@ function enableAllTabs() {
       validatePreviousRisk(row.getIndex());
     });
 
+
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
-      risksTable.selectRow(row.getIndex());
-      addSelectedRowData(row.getIndex());
+      if(!addSelectedRowDataExecuting){
+        risksTable.selectRow(row.getIndex());
+        addSelectedRowData(row.getIndex());
+      }
     });
 
     const addRisk = (risk) => {
@@ -918,7 +915,7 @@ function enableAllTabs() {
       if (currentRiskId) addSelectedRowData(currentRiskId);
     };
 
-    const updateRisksFields = (fetchedData) => {
+    const updateRisksFields = async (fetchedData) => {
       risksTable.clearData();
       // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
@@ -929,7 +926,7 @@ function enableAllTabs() {
       }))
       risksTable.addData(tableData);
       risksTable.selectRow(fetchedData[0].riskId);
-      addSelectedRowData(fetchedData[0].riskId);
+      await addSelectedRowData(fetchedData[0].riskId);
       
       /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
@@ -1060,7 +1057,8 @@ function enableAllTabs() {
           }
         });
 
-        updateRisksFields(risksData);
+        await updateRisksFields(risksData);
+        //Wait the data to be ready with await 
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
@@ -1187,7 +1185,6 @@ function enableAllTabs() {
         size: size,
         intrusionDetection: intrusionDetection
       });
-      // reloadCurrentRisk(risk);
       updateScoresAndLevel(risk);
       updateOccurrenceThreatFactorTable(risk.riskLikelihood.threatFactorLevel, risk.riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!risk.riskLikelihood.riskLikelihood ? 'null' : risk.riskLikelihood.riskLikelihood);
