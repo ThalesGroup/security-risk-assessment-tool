@@ -350,10 +350,6 @@ function enableAllTabs() {
               if (vulId) {
                 ids.push(Number(vulId))
               }
-              
-              //console.log(document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`))
-              //ids.push(Number(box.getAttribute('data-row-id')));
-              // window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, Number(box.getAttribute('data-row-id'))); 
             }
           });
 
@@ -722,7 +718,6 @@ function enableAllTabs() {
         mitigationSections.append(mainSection);
         const promiseDecisionDetail = addRichTextArea(`#comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
        
-        //console.log(mitigationSections[0].innerHTML)
         await promiseDecisionDetail 
         await promiseDescription
       });
@@ -1190,7 +1185,6 @@ function enableAllTabs() {
         size: size,
         intrusionDetection: intrusionDetection
       });
-      // reloadCurrentRisk(risk);
       updateScoresAndLevel(risk);
       updateOccurrenceThreatFactorTable(risk.riskLikelihood.threatFactorLevel, risk.riskLikelihood.occurrenceLevel);
       $('select[id="risk__likelihood"]').val(!risk.riskLikelihood.riskLikelihood ? 'null' : risk.riskLikelihood.riskLikelihood);
