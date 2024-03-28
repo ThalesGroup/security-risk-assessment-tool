@@ -127,74 +127,7 @@
 									<my:supportingAssetSecurityLevel>-1</my:supportingAssetSecurityLevel>
 									<my:supportingAndBusinessAssetLink my:businessAssetRef="2"></my:supportingAndBusinessAssetLink>
 								</my:SupportingAsset>
-								<my:Risk><my:projectName>Sample Mobile Application</my:projectName>
-									<my:projectVersion>1.0</my:projectVersion>
-									<my:riskId></my:riskId>
-									<my:riskName>As a Operationnal Employee, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:riskName>
-									<my:threatAgent>Operationnal Employee</my:threatAgent>
-									<my:threatAgentDetail><div xmlns="http://www.w3.org/1999/xhtml">fddh</div>
-<div xmlns="http://www.w3.org/1999/xhtml">fh</div></my:threatAgentDetail>
-									<my:threatVerb>steal</my:threatVerb>
-									<my:threatVerbDetail><ul xmlns="http://www.w3.org/1999/xhtml" style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc">
-<li>dhdh</li>
-<li>hhdh</li></ul></my:threatVerbDetail>
-									<my:motivation>get the user credentials to be able to login through the web interface and do financial transactions</my:motivation>
-									<my:motivationDetail><strong xmlns="http://www.w3.org/1999/xhtml"><em><font size="6">HEYYYYYYYYYYYY</font></em></strong></my:motivationDetail>
-									<my:businessAssetRef>1</my:businessAssetRef>
-									<my:supportingAssetRef>2</my:supportingAssetRef>
-									<my:RiskName>
-										<my:ComputedRiskName>
-									<my:computedRiskName>As a Operationnal Employee, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:computedRiskName>
-								</my:ComputedRiskName>
-									</my:RiskName>
-									<my:ImpactRiskEvaluation>
-										<my:riskImpact>4</my:riskImpact>
-										<my:BusinessAssetSelectedProperties>
-											<my:businessAssetConfidentialityFlag>1</my:businessAssetConfidentialityFlag>
-											<my:businessAssetIntegrityFlag>0</my:businessAssetIntegrityFlag>
-											<my:businessAssetAvailabilityFlag>0</my:businessAssetAvailabilityFlag>
-											<my:businessAssetAuthenticityFlag>0</my:businessAssetAuthenticityFlag>
-											<my:businessAssetAuthorizationFlag>0</my:businessAssetAuthorizationFlag>
-											<my:businessAssetNonRepudiationFlag>0</my:businessAssetNonRepudiationFlag>
-										</my:BusinessAssetSelectedProperties></my:ImpactRiskEvaluation><my:LikelihoodRiskEvaluation>
-										<my:riskLikelihood>3</my:riskLikelihood>
-										<my:riskLikelihoodDetail><div xmlns="http://www.w3.org/1999/xhtml"><strong><em><font size="5">cdf </font></em></strong></div>
-<ul style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc" xmlns="http://www.w3.org/1999/xhtml">
-<li><strong><em><font size="5">dfdf</font></em></strong></li></ul></my:riskLikelihoodDetail>
-										<my:LikelihoodRiskEvaluationMethod>
-											<my:SimpleLikelihoodEvaluation></my:SimpleLikelihoodEvaluation>
-										</my:LikelihoodRiskEvaluationMethod>
-									</my:LikelihoodRiskEvaluation>
-									<my:VulnerabilityRiskEvaluation>
-										<my:vulnerabilityRef my:score="6" my:name="Shoulder surfing attack">3</my:vulnerabilityRef>
-										<my:vulnerabilityRef my:score="7" my:name="Man in the middle attack through network interception">1</my:vulnerabilityRef><my:attackPathName>Shoulder surfing attack AND Man in the middle attack through network interception</my:attackPathName>
-										<my:attackPathScore>6</my:attackPathScore>
-									</my:VulnerabilityRiskEvaluation>
-									<my:allAttackPathsName>Shoulder surfing attack AND Man in the middle attack through network interception</my:allAttackPathsName>
-									<my:allAttackPathsScore>6</my:allAttackPathsScore>
-									<my:inherentRiskScore>14</my:inherentRiskScore>
-									<my:Mitigation>
-										<my:description><div xmlns="http://www.w3.org/1999/xhtml">Additional proprietary encryption.</div>
-<ul xmlns="http://www.w3.org/1999/xhtml" style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc">
-<li>dfdsfsf</li></ul></my:description>
-										<my:benefits>0.5</my:benefits>
-										<my:cost xsi:nil="true"></my:cost>
-										<my:mitigationDecision>
-											<my:decision>Done</my:decision>
-											<my:decisionDetail><div xmlns="http://www.w3.org/1999/xhtml"><strong>fgdgdfg</strong></div>
-<div xmlns="http://www.w3.org/1999/xhtml"><strong>dsfsfsfsf</strong></div></my:decisionDetail>
-										</my:mitigationDecision>
-									</my:Mitigation>
-									<my:mitigationsBenefits>0.5</my:mitigationsBenefits>
-									<my:mitigationsDoneBenefits>0.5</my:mitigationsDoneBenefits>
-									<my:mitigatedRiskScore>7</my:mitigatedRiskScore>
-									<my:riskManagementDecision>Mitigate</my:riskManagementDecision>
-									<my:riskManagmentDetail><ul xmlns="http://www.w3.org/1999/xhtml" style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc">
-<li><strong>Security control implemented by adding proprietary encryption on top of TLS communication layer.</strong></li></ul></my:riskManagmentDetail>
-									<my:residualRiskScore>7</my:residualRiskScore>
-									<my:residualRiskLevel>Medium</my:residualRiskLevel>
-									</my:Risk>
-									<my:Risk>
+								<my:Risk>
 									<my:projectName>Sample Mobile Application</my:projectName>
 									<my:projectVersion>1.0</my:projectVersion>
 									<my:riskId>2</my:riskId>
@@ -267,80 +200,8 @@
 									<my:riskManagmentDetail>Risk accepted by Product Owner on 2020-11-24.</my:riskManagmentDetail>
 									<my:residualRiskScore>0</my:residualRiskScore>
 									<my:residualRiskLevel>Low</my:residualRiskLevel>
-								</my:Risk><my:Risk>
-									<my:projectName>Sample Mobile Application</my:projectName>
-									<my:projectVersion>1.0</my:projectVersion>
-									<my:riskId>2</my:riskId>
-									<my:riskName>As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack</my:riskName>
-									<my:threatAgent>Criminal</my:threatAgent>
-									<my:threatAgentDetail></my:threatAgentDetail>
-									<my:threatVerb>steal</my:threatVerb>
-									<my:threatVerbDetail></my:threatVerbDetail>
-									<my:motivation>get the user credentials to be able to login through the web interface and do financial transactions</my:motivation>
-									<my:motivationDetail>The threat agent looks over the shoulder while the person is entering their credentials.</my:motivationDetail>
-									<my:businessAssetRef>1</my:businessAssetRef>
-									<my:supportingAssetRef>3</my:supportingAssetRef>
-									<my:RiskName>
-										<my:ComputedRiskName>
-											<my:computedRiskName>As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack</my:computedRiskName>
-										</my:ComputedRiskName>
-									</my:RiskName>
-									<my:ImpactRiskEvaluation>
-										<my:riskImpact>4</my:riskImpact>
-										<my:BusinessAssetSelectedProperties>
-											<my:businessAssetConfidentialityFlag>1</my:businessAssetConfidentialityFlag>
-											<my:businessAssetIntegrityFlag>0</my:businessAssetIntegrityFlag>
-											<my:businessAssetAvailabilityFlag>0</my:businessAssetAvailabilityFlag>
-											<my:businessAssetAuthenticityFlag>0</my:businessAssetAuthenticityFlag>
-											<my:businessAssetAuthorizationFlag>0</my:businessAssetAuthorizationFlag>
-											<my:businessAssetNonRepudiationFlag>0</my:businessAssetNonRepudiationFlag>
-										</my:BusinessAssetSelectedProperties>
-									</my:ImpactRiskEvaluation>
-									<my:LikelihoodRiskEvaluation>
-										<my:riskLikelihood>2</my:riskLikelihood>
-										<my:riskLikelihoodDetail></my:riskLikelihoodDetail>
-										<my:LikelihoodRiskEvaluationMethod>
-											<my:OWASPLikelihoodEvaluation>
-												<my:ThreatFactor>
-													<my:skillLevel>9</my:skillLevel>
-													<my:reward>4</my:reward>
-													<my:accessRessources>4</my:accessRessources>
-													<my:size>9</my:size>
-													<my:intrusionDection>9</my:intrusionDection>
-												</my:ThreatFactor>
-												<my:threatFactorScore>7</my:threatFactorScore>
-												<my:threatFactorLevel>High</my:threatFactorLevel>
-												<my:occurence>5</my:occurence>
-												<my:occurenceLevel>Medium</my:occurenceLevel>
-												<my:OWASPLikelihoodScore></my:OWASPLikelihoodScore>
-											</my:OWASPLikelihoodEvaluation>
-										</my:LikelihoodRiskEvaluationMethod>
-									</my:LikelihoodRiskEvaluation>
-									<my:VulnerabilityRiskEvaluation>
-										<my:vulnerabilityRef my:score="6" my:name="Shoulder surfing attack">3</my:vulnerabilityRef>
-										<my:attackPathName>Shoulder surfing attack</my:attackPathName>
-										<my:attackPathScore>6</my:attackPathScore>
-									</my:VulnerabilityRiskEvaluation>
-									<my:allAttackPathsName>Shoulder surfing attack</my:allAttackPathsName>
-									<my:allAttackPathsScore>6</my:allAttackPathsScore>
-									<my:inherentRiskScore>11</my:inherentRiskScore>
-									<my:Mitigation>
-										<my:description></my:description>
-										<my:benefits>0</my:benefits>
-										<my:cost xsi:nil="true"></my:cost>
-										<my:mitigationDecision>
-											<my:decision></my:decision>
-											<my:decisionDetail></my:decisionDetail>
-										</my:mitigationDecision>
-									</my:Mitigation>
-									<my:mitigationsBenefits>1</my:mitigationsBenefits>
-									<my:mitigationsDoneBenefits>1</my:mitigationsDoneBenefits>
-									<my:mitigatedRiskScore>11</my:mitigatedRiskScore>
-									<my:riskManagementDecision>Transfer</my:riskManagementDecision>
-									<my:riskManagmentDetail>Risk transferred to users, with application help  indicating that displaying of sensitive information should be protected from prying eyes and users should be aware of their surroundings.</my:riskManagmentDetail>
-									<my:residualRiskScore>11</my:residualRiskScore>
-									<my:residualRiskLevel>High</my:residualRiskLevel>
-								</my:Risk><my:Risk>
+								</my:Risk>
+								<my:Risk>
 									<my:projectName>Sample Mobile Application</my:projectName>
 									<my:projectVersion>1.0</my:projectVersion>
 									<my:riskId>4</my:riskId>
@@ -425,6 +286,147 @@
 									<my:riskManagmentDetail>Risk reduced through implementation of hardware backed storage.</my:riskManagmentDetail>
 									<my:residualRiskScore>NaN</my:residualRiskScore>
 									<my:residualRiskLevel>Low</my:residualRiskLevel>
+								</my:Risk>
+								<my:Risk><my:projectName>Sample Mobile Application</my:projectName>
+									<my:projectVersion>1.0</my:projectVersion>
+									<my:riskId>5</my:riskId>
+									<my:riskName>As a Operationnal Employee, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:riskName>
+									<my:threatAgent>Operationnal Employee</my:threatAgent>
+									<my:threatAgentDetail><div xmlns="http://www.w3.org/1999/xhtml">fddh</div>
+<div xmlns="http://www.w3.org/1999/xhtml">fh</div></my:threatAgentDetail>
+									<my:threatVerb>steal</my:threatVerb>
+									<my:threatVerbDetail><ul xmlns="http://www.w3.org/1999/xhtml" style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc">
+<li>dhdh</li>
+<li>hhdh</li></ul></my:threatVerbDetail>
+									<my:motivation>get the user credentials to be able to login through the web interface and do financial transactions</my:motivation>
+									<my:motivationDetail><strong xmlns="http://www.w3.org/1999/xhtml"><em><font size="6">HEYYYYYYYYYYYY</font></em></strong></my:motivationDetail>
+									<my:businessAssetRef>1</my:businessAssetRef>
+									<my:supportingAssetRef>2</my:supportingAssetRef>
+									<my:RiskName>
+										<my:ComputedRiskName>
+									<my:computedRiskName>As a Operationnal Employee, I can steal the User credentials compromising the Internet connection (TLS) in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack AND Man in the middle attack through network interception</my:computedRiskName>
+								</my:ComputedRiskName>
+									</my:RiskName>
+									<my:ImpactRiskEvaluation>
+										<my:riskImpact>4</my:riskImpact>
+										<my:BusinessAssetSelectedProperties>
+											<my:businessAssetConfidentialityFlag>1</my:businessAssetConfidentialityFlag>
+											<my:businessAssetIntegrityFlag>0</my:businessAssetIntegrityFlag>
+											<my:businessAssetAvailabilityFlag>0</my:businessAssetAvailabilityFlag>
+											<my:businessAssetAuthenticityFlag>0</my:businessAssetAuthenticityFlag>
+											<my:businessAssetAuthorizationFlag>0</my:businessAssetAuthorizationFlag>
+											<my:businessAssetNonRepudiationFlag>0</my:businessAssetNonRepudiationFlag>
+										</my:BusinessAssetSelectedProperties></my:ImpactRiskEvaluation><my:LikelihoodRiskEvaluation>
+										<my:riskLikelihood>3</my:riskLikelihood>
+										<my:riskLikelihoodDetail><div xmlns="http://www.w3.org/1999/xhtml"><strong><em><font size="5">cdf </font></em></strong></div>
+<ul style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc" xmlns="http://www.w3.org/1999/xhtml">
+<li><strong><em><font size="5">dfdf</font></em></strong></li></ul></my:riskLikelihoodDetail>
+										<my:LikelihoodRiskEvaluationMethod>
+											<my:SimpleLikelihoodEvaluation></my:SimpleLikelihoodEvaluation>
+										</my:LikelihoodRiskEvaluationMethod>
+									</my:LikelihoodRiskEvaluation>
+									<my:VulnerabilityRiskEvaluation>
+										<my:vulnerabilityRef my:score="6" my:name="Shoulder surfing attack">3</my:vulnerabilityRef>
+										<my:vulnerabilityRef my:score="7" my:name="Man in the middle attack through network interception">1</my:vulnerabilityRef><my:attackPathName>Shoulder surfing attack AND Man in the middle attack through network interception</my:attackPathName>
+										<my:attackPathScore>6</my:attackPathScore>
+									</my:VulnerabilityRiskEvaluation>
+									<my:allAttackPathsName>Shoulder surfing attack AND Man in the middle attack through network interception</my:allAttackPathsName>
+									<my:allAttackPathsScore>6</my:allAttackPathsScore>
+									<my:inherentRiskScore>14</my:inherentRiskScore>
+									<my:Mitigation>
+										<my:description><div xmlns="http://www.w3.org/1999/xhtml">Additional proprietary encryption.</div>
+<ul xmlns="http://www.w3.org/1999/xhtml" style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc">
+<li>dfdsfsf</li></ul></my:description>
+										<my:benefits>0.5</my:benefits>
+										<my:cost xsi:nil="true"></my:cost>
+										<my:mitigationDecision>
+											<my:decision>Done</my:decision>
+											<my:decisionDetail><div xmlns="http://www.w3.org/1999/xhtml"><strong>fgdgdfg</strong></div>
+<div xmlns="http://www.w3.org/1999/xhtml"><strong>dsfsfsfsf</strong></div></my:decisionDetail>
+										</my:mitigationDecision>
+									</my:Mitigation>
+									<my:mitigationsBenefits>0.5</my:mitigationsBenefits>
+									<my:mitigationsDoneBenefits>0.5</my:mitigationsDoneBenefits>
+									<my:mitigatedRiskScore>7</my:mitigatedRiskScore>
+									<my:riskManagementDecision>Mitigate</my:riskManagementDecision>
+									<my:riskManagmentDetail><ul xmlns="http://www.w3.org/1999/xhtml" style="MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px" type="disc">
+<li><strong>Security control implemented by adding proprietary encryption on top of TLS communication layer.</strong></li></ul></my:riskManagmentDetail>
+									<my:residualRiskScore>7</my:residualRiskScore>
+									<my:residualRiskLevel>Medium</my:residualRiskLevel>
+									</my:Risk>
+									<my:Risk>
+									<my:projectName>Sample Mobile Application</my:projectName>
+									<my:projectVersion>1.0</my:projectVersion>
+									<my:riskId>6</my:riskId>
+									<my:riskName>As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack</my:riskName>
+									<my:threatAgent>Criminal</my:threatAgent>
+									<my:threatAgentDetail></my:threatAgentDetail>
+									<my:threatVerb>steal</my:threatVerb>
+									<my:threatVerbDetail></my:threatVerbDetail>
+									<my:motivation>get the user credentials to be able to login through the web interface and do financial transactions</my:motivation>
+									<my:motivationDetail>The threat agent looks over the shoulder while the person is entering their credentials.</my:motivationDetail>
+									<my:businessAssetRef>1</my:businessAssetRef>
+									<my:supportingAssetRef>3</my:supportingAssetRef>
+									<my:RiskName>
+										<my:ComputedRiskName>
+											<my:computedRiskName>As a Criminal, I can steal the User credentials compromising the  User Interface in order to get the user credentials to be able to login through the web interface and do financial transactions, exploiting the Shoulder surfing attack</my:computedRiskName>
+										</my:ComputedRiskName>
+									</my:RiskName>
+									<my:ImpactRiskEvaluation>
+										<my:riskImpact>4</my:riskImpact>
+										<my:BusinessAssetSelectedProperties>
+											<my:businessAssetConfidentialityFlag>1</my:businessAssetConfidentialityFlag>
+											<my:businessAssetIntegrityFlag>0</my:businessAssetIntegrityFlag>
+											<my:businessAssetAvailabilityFlag>0</my:businessAssetAvailabilityFlag>
+											<my:businessAssetAuthenticityFlag>0</my:businessAssetAuthenticityFlag>
+											<my:businessAssetAuthorizationFlag>0</my:businessAssetAuthorizationFlag>
+											<my:businessAssetNonRepudiationFlag>0</my:businessAssetNonRepudiationFlag>
+										</my:BusinessAssetSelectedProperties>
+									</my:ImpactRiskEvaluation>
+									<my:LikelihoodRiskEvaluation>
+										<my:riskLikelihood>2</my:riskLikelihood>
+										<my:riskLikelihoodDetail></my:riskLikelihoodDetail>
+										<my:LikelihoodRiskEvaluationMethod>
+											<my:OWASPLikelihoodEvaluation>
+												<my:ThreatFactor>
+													<my:skillLevel>9</my:skillLevel>
+													<my:reward>4</my:reward>
+													<my:accessRessources>4</my:accessRessources>
+													<my:size>9</my:size>
+													<my:intrusionDection>9</my:intrusionDection>
+												</my:ThreatFactor>
+												<my:threatFactorScore>7</my:threatFactorScore>
+												<my:threatFactorLevel>High</my:threatFactorLevel>
+												<my:occurence>5</my:occurence>
+												<my:occurenceLevel>Medium</my:occurenceLevel>
+												<my:OWASPLikelihoodScore></my:OWASPLikelihoodScore>
+											</my:OWASPLikelihoodEvaluation>
+										</my:LikelihoodRiskEvaluationMethod>
+									</my:LikelihoodRiskEvaluation>
+									<my:VulnerabilityRiskEvaluation>
+										<my:vulnerabilityRef my:score="6" my:name="Shoulder surfing attack">3</my:vulnerabilityRef>
+										<my:attackPathName>Shoulder surfing attack</my:attackPathName>
+										<my:attackPathScore>6</my:attackPathScore>
+									</my:VulnerabilityRiskEvaluation>
+									<my:allAttackPathsName>Shoulder surfing attack</my:allAttackPathsName>
+									<my:allAttackPathsScore>6</my:allAttackPathsScore>
+									<my:inherentRiskScore>11</my:inherentRiskScore>
+									<my:Mitigation>
+										<my:description></my:description>
+										<my:benefits>0</my:benefits>
+										<my:cost xsi:nil="true"></my:cost>
+										<my:mitigationDecision>
+											<my:decision></my:decision>
+											<my:decisionDetail></my:decisionDetail>
+										</my:mitigationDecision>
+									</my:Mitigation>
+									<my:mitigationsBenefits>1</my:mitigationsBenefits>
+									<my:mitigationsDoneBenefits>1</my:mitigationsDoneBenefits>
+									<my:mitigatedRiskScore>11</my:mitigatedRiskScore>
+									<my:riskManagementDecision>Transfer</my:riskManagementDecision>
+									<my:riskManagmentDetail>Risk transferred to users, with application help  indicating that displaying of sensitive information should be protected from prying eyes and users should be aware of their surroundings.</my:riskManagmentDetail>
+									<my:residualRiskScore>11</my:residualRiskScore>
+									<my:residualRiskLevel>High</my:residualRiskLevel>
 								</my:Risk>
 								
 								
