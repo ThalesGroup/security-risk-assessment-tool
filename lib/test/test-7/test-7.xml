@@ -101,7 +101,7 @@
 		</my:LikelihoodRiskEvaluation>
 		<my:VulnerabilityRiskEvaluation>
 			<my:vulnerabilityRef my:score="4" my:name="V1">1</my:vulnerabilityRef>
-			<my:vulnerabilityRef my:score="" my:name=""></my:vulnerabilityRef><my:attackPathName>V1 AND </my:attackPathName>
+			<my:vulnerabilityRef my:score="" my:name="">2</my:vulnerabilityRef><my:attackPathName>V1 AND </my:attackPathName>
 			<my:attackPathScore>4</my:attackPathScore>
 		</my:VulnerabilityRiskEvaluation>
 		<my:VulnerabilityRiskEvaluation>
