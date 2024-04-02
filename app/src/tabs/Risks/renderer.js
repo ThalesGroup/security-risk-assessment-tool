@@ -161,15 +161,21 @@ function enableAllTabs() {
       return found ? true : false
     };
 
+    // Check if the supportingAsset exists globally
+    const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
+      if (ref === null) return false
+      found = vulnerabilities.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
+      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+      return true
+    };
+
     // Check if each vulnerability in attackPaths exist globally
     const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
-      let found
       if(attackPaths.length){
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
-            for (const vul of attackPath.vulnerabilityRef) {
-              found = vulnerabilities.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
-              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            for (const ref of attackPath.vulnerabilityRef) {
+              if (!checkVulnerabilityRef(ref,supportingAssetRef)) return false
             }
           }
         }
@@ -214,7 +220,7 @@ function enableAllTabs() {
     }
 
     // add vulnerability ref
-    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
+    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId, supportingAssetRef) => {
       let numberOfVulnerabilities = refs.length;
       refs.forEach((ref, rowId) => {
         numberOfVulnerabilities--;
@@ -232,13 +238,16 @@ function enableAllTabs() {
         checkbox.name = 'risks__vulnerability__checkboxes';
         checkbox.setAttribute('data-row-id', rowId);
         vulnerabilityDiv.append(checkbox);
-        
         let select = $('<select>').append(vulnerabilityOptions);
         const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
         if (matchingRef.length === 0) {
           const placeholderRef = document.createElement('option')
           placeholderRef.value = ref.vulnerabilityId
           placeholderRef.text = ref.name
+          if (!checkVulnerabilityRef(ref,supportingAssetRef)){
+            placeholderRef.style ="color: red;"
+            select.css('border-color', 'red');
+          }
           select.append(placeholderRef)
         }
         
@@ -389,7 +398,7 @@ function enableAllTabs() {
         mainDiv.append(div);
         $('#risks__vulnerability__attack__path').append(mainDiv);
 
-        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions, riskAttackPathId);
+        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions, riskAttackPathId, supportingAssetRef);
       });
     };
 
