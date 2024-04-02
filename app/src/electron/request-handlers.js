@@ -186,7 +186,7 @@ const saveProject = () => {
 */
 const validateClasses = () => {
   //console.log(israProject.properties)
-  const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
+  const { ISRAmeta, SupportingAsset, BusinessAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
     let message = '';
@@ -225,9 +225,44 @@ const validateClasses = () => {
       }
       
     }
-
-
     return {status: invalidCount, error: message};
+  };
+
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRef = (ref) =>{
+      if (ref === null) return false
+      let found = BusinessAsset.find(obj => obj.businessAssetId === ref);
+      return found ? true : false
+    };
+
+    // Check if the supportingAsset exists globally
+    const checkSupportingAssetRef = (ref) =>{
+      if (ref === null) return false
+      let found = SupportingAsset.find(obj => obj.supportingAssetId === ref);
+      return found ? true : false
+    };
+
+    // Check if each vulnerability in attackPaths exist globally
+    const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
+      let found
+      if(attackPaths.length){
+        for (const attackPath of attackPaths) {
+          if(attackPath.vulnerabilityRef.length){
+            for (const vul of attackPath.vulnerabilityRef) {
+              found = Vulnerability.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
+              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            }
+          }
+        }
+      }
+      return true
+    };
+
+  const validateRisk = (risk) => {
+    const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
+    if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+      return false;
+    } else return true;
   };
 
   const validateRisksTab = () => {
@@ -236,23 +271,14 @@ const validateClasses = () => {
     const invalidRisksMitigations = [];
     for (let i = 0; i < Risk.length; i++) {
 
-      
-      const { riskName, riskMitigation, riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = Risk[i];
-      const noThreatAgent = !threatAgent;
-      const noThreatVerb = !threatVerb;
-      const noBusinessAssetRef = !businessAssetRef;
-      const noSupportingAssetRef = !supportingAssetRef;
-      const noMotivation = !motivation;
-      if (noThreatAgent || noThreatVerb || noBusinessAssetRef || noSupportingAssetRef || noMotivation) {
-        invalidRisks.push(riskId);
+      const { riskMitigation, riskId} = Risk[i];
+      if (!validateRisk(Risk[i])) invalidRisks.push(riskId);
+
+      for(let i=0; i<riskMitigation.length; i++){
+        if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
+         invalidRisksMitigations.push(riskId );
+        }
       }
-      
-     
-     for(let i=0; i<riskMitigation.length; i++){
-       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
-        invalidRisksMitigations.push(riskId );
-       }
-     }
     }
     if (invalidRisks.length || invalidRisksMitigations.length) {
       message += errorMessages['risksHeader']
@@ -1057,6 +1083,7 @@ ipcMain.handle('risks:mitigationDecisionOptions', () => riskMitigationSchema.dec
 const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/api/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
 const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
+const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));
