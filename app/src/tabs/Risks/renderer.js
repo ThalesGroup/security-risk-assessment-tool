@@ -1128,32 +1128,27 @@ function enableAllTabs() {
     $('#risk__threatAgent').on('change', ()=>{   
       const selected = $('#risk__threatAgent').find(":selected").val();
       updateRiskName('threatAgent', selected);
-      validateRiskName(getCurrentRiskId(), selected, 'threatVerb', 'businessAssetRef', 'supportingRef', 'motivation');
     });
 
     $('#risk__threat').on('change', ()=>{
       const selected = $('#risk__threat').find(":selected").val();
       updateRiskName('threatVerb', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', selected, 'businessAssetRef', 'supportingRef', 'motivation');
     });
 
     $('#risk__businessAsset').on('change', ()=>{
       const selected = $('#risk__businessAsset').find(":selected").val();
       updateRiskName('businessAssetRef', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', selected, 'supportingRef', 'motivation');
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', selected, 'motivation');
     });
 
     $('#risk__motivation').on('change', ()=>{
       const input = $('#risk__motivation').val();
       updateRiskName('motivation', input);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', 'supportingRef', input);
     });
 
   /**
