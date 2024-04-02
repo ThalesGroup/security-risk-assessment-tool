@@ -70,14 +70,7 @@ function enableAllTabs() {
 
     tableOptions.columns[riskNameIndex].formatter = (cell) => {
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
-      const threatAgent = cell.getRow().getData().threatAgent;
-      const threatVerb =cell.getRow().getData().threatVerb;
-      const businessAssetRef = cell.getRow().getData().businessAssetRef;
-      const supportingAssetRef = cell.getRow().getData().supportingAssetRef;
-      const motivation = cell.getRow().getData().motivation;
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
-        cell.getElement().style.color = '#FF0000';
-      } else cell.getElement().style.color = '#000000';
+      cell.getElement().style.color = validateRiskName(cell.getRow().getData())
 
       const currentColour = cell.getElement().style.color;
       if (riskManagementDecision === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') cell.getElement().style['text-decoration'] = 'line-through';
@@ -154,10 +147,41 @@ function enableAllTabs() {
       return risksTable.getSelectedData()[0].riskId;
     };
 
-    const validateRiskName = (riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation) => {
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
-        risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#FF0000';
-      } else risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#000000';
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRef = (ref) =>{
+      if (ref === null) return false
+      let found = businessAssets.find(obj => obj.businessAssetId === ref);
+      return found ? true : false
+    };
+
+    // Check if the supportingAsset exists globally
+    const checkSupportingAssetRef = (ref) =>{
+      if (ref === null) return false
+      let found = supportingAssets.find(obj => obj.supportingAssetId === ref);
+      return found ? true : false
+    };
+
+    // Check if each vulnerability in attackPaths exist globally
+    const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
+      let found
+      if(attackPaths.length){
+        for (const attackPath of attackPaths) {
+          if(attackPath.vulnerabilityRef.length){
+            for (const vul of attackPath.vulnerabilityRef) {
+              found = vulnerabilities.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
+              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            }
+          }
+        }
+      }
+      return true
+    };
+
+    const validateRiskName = (risk) => {
+      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
+      if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+        return '#FF0000';
+      } else return '#000000';
     };
 
     // add Supporting Assets Select options
@@ -1066,13 +1090,12 @@ function enableAllTabs() {
 
     // reloads all data displayed for current risk
     const reloadCurrentRisk = (updatedRisk) => {
-      const { riskId, riskName, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation, residualRiskLevel, riskManagementDecision } = updatedRisk;
+      const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
       //const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       let riskIndex = risksData.findIndex((risk) => risk.riskId === updatedRisk.riskId);
-
       risksData[riskIndex] = updatedRisk;
       risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: riskName, residualRiskLevel }]);
-      validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation);
+      risksTable.getRow(riskId).getCell('riskName').getElement().style.color = validateRiskName(updatedRisk);
       styleResidualRiskLevelTable(riskId, residualRiskLevel);
       styleRiskName(riskManagementDecision, riskId);
       addSelectedRowData(riskId);
