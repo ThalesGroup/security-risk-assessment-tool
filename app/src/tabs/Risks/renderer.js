@@ -780,38 +780,39 @@ function enableAllTabs() {
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
-      addSelectedRowDataExecuting = true;
-      const {
-        riskId,
-        riskName,
-        threatAgent,
-        threatAgentDetail, 
-        threatVerb,
-        threatVerbDetail,
-        motivation, 
-        motivationDetail,
-        businessAssetRef,
-        supportingAssetRef,
-        isAutomaticRiskName,
-        allAttackPathsScore,
-        inherentRiskScore,
-        riskAttackPaths,
-        riskLikelihood,
-        riskImpact,
-        riskMitigation,
-        mitigatedRiskScore,
-        riskManagementDecision,
-        riskManagementDetail,
-        residualRiskScore,
-        residualRiskLevel
-      } = risksData.find((risk) => risk.riskId === id);
+      if (!addSelectedRowDataExecuting){
+        addSelectedRowDataExecuting = true;
+        const {
+          riskId,
+          riskName,
+          threatAgent,
+          threatAgentDetail, 
+          threatVerb,
+          threatVerbDetail,
+          motivation, 
+          motivationDetail,
+          businessAssetRef,
+          supportingAssetRef,
+          isAutomaticRiskName,
+          allAttackPathsScore,
+          inherentRiskScore,
+          riskAttackPaths,
+          riskLikelihood,
+          riskImpact,
+          riskMitigation,
+          mitigatedRiskScore,
+          riskManagementDecision,
+          riskManagementDetail,
+          residualRiskScore,
+          residualRiskLevel
+        } = risksData.find((risk) => risk.riskId === id);
 
-      const {
-        riskLikelihoodDetail,
-        threatFactorLevel,
-        occurrenceLevel,
-        isOWASPLikelihood
-      } = riskLikelihood;
+        const {
+          riskLikelihoodDetail,
+          threatFactorLevel,
+          occurrenceLevel,
+          isOWASPLikelihood
+        } = riskLikelihood;
 
       // Set Risk description data
       $('.riskId').text(riskId);
@@ -823,63 +824,63 @@ function enableAllTabs() {
       $('#risk__motivation').val(motivation);
       $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
       addSupportingAssetOptions(businessAssetRef);
-
       $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
 
-      if(isAutomaticRiskName){
-        $('#risk__manual__riskName').hide();
-        $('#riskName').show();
-        $('.riskname').text(riskName);
-      }else{
-        $('#risk__manual__riskName').show();
-        $('#riskName').hide();
-        $('#risk__manual__riskName input').val(riskName);
-      }; 
+        if(isAutomaticRiskName){
+          $('#risk__manual__riskName').hide();
+          $('#riskName').show();
+          $('.riskname').text(riskName);
+        }else{
+          $('#risk__manual__riskName').show();
+          $('#riskName').hide();
+          $('#risk__manual__riskName input').val(riskName);
+        }; 
 
-      // Set Risk evaluation data
-      // risk likelihood
-      $('#risks__vulnerability__attack__path').empty();
-      setSecurityPropertyValues(riskLikelihood);
-      updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
-      tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
+        // Set Risk evaluation data
+        // risk likelihood
+        $('#risks__vulnerability__attack__path').empty();
+        setSecurityPropertyValues(riskLikelihood);
+        updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
+        tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
 
-      if(isOWASPLikelihood){
-        $('#risk__simple__evaluation').hide();
-        $('#risk__likehood__table').show();
-      }else{
-        $('#risk__simple__evaluation').show();
-        $('#risk__likehood__table').hide();
-      }
-
-      // risk impact
-      updateEvaluationTable(riskImpact, businessAssetRef);
-      addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
-      $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
-      $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
-
-      //risk mitigation
-      $('#risks__risk__mitigation__evaluation section').empty();
-      await addMitigationSection(riskMitigation, riskManagementDecision);
-      $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
-
-      //risk management
-      $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
-      tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
-      $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-      $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-      styleResidualRiskLevel(residualRiskLevel);
-
-      // set 'NaN' values
-      riskAttackPaths.forEach((path) => {
-        const { vulnerabilityRef, riskAttackPathId } = path;
-        for(let i=0; i<vulnerabilityRef.length; i++){
-          if (vulnerabilityRef[i].name !== '' && vulnerabilityRef[i].score === null) {
-            setNaNValues(riskAttackPathId);
-            break;
-          } else setNaNValues();
+        if(isOWASPLikelihood){
+          $('#risk__simple__evaluation').hide();
+          $('#risk__likehood__table').show();
+        }else{
+          $('#risk__simple__evaluation').show();
+          $('#risk__likehood__table').hide();
         }
-      })
-      addSelectedRowDataExecuting = false;
+
+        // risk impact
+        updateEvaluationTable(riskImpact, businessAssetRef);
+        addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
+        $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
+        $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
+
+        //risk mitigation
+        $('#risks__risk__mitigation__evaluation section').empty();
+        await addMitigationSection(riskMitigation, riskManagementDecision);
+        $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
+
+        //risk management
+        $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
+        tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
+        $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+        $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+        styleResidualRiskLevel(residualRiskLevel);
+
+        // set 'NaN' values
+        riskAttackPaths.forEach((path) => {
+          const { vulnerabilityRef, riskAttackPathId } = path;
+          for(let i=0; i<vulnerabilityRef.length; i++){
+            if (vulnerabilityRef[i].name !== '' && vulnerabilityRef[i].score === null) {
+              setNaNValues(riskAttackPathId);
+              break;
+            } else setNaNValues();
+          }
+        })
+        addSelectedRowDataExecuting = false;
+      }
     };
 
     const validatePreviousRisk = async (id) => {
@@ -899,10 +900,8 @@ function enableAllTabs() {
 
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
-      if(!addSelectedRowDataExecuting){
-        risksTable.selectRow(row.getIndex());
-        addSelectedRowData(row.getIndex());
-      }
+      risksTable.selectRow(row.getIndex());
+      addSelectedRowData(row.getIndex());
     });
 
     const addRisk = (risk) => {

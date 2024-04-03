@@ -2,7 +2,6 @@ const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/busi
 const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
 const Vulnerability = require('../../../lib/src/model/classes/Vulnerability/vulnerability');
 const Risk = require('../../../lib/src/model/classes/Risk/risk');
-const RiskName = require('../../../lib/src/model/classes/Risk/risk-name');
 const RiskLikelihood = require('../../../lib/src/model/classes/Risk/risk-likelihood');
 const RiskImpact = require('../../../lib/src/model/classes/Risk/risk-impact');
 const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
