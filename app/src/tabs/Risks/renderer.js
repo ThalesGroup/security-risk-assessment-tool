@@ -869,10 +869,8 @@ function enableAllTabs() {
 
     // row is clicked & selected
     risksTable.on('rowClick', (e, row) => {
-      if(!addSelectedRowDataExecuting){
-        risksTable.selectRow(row.getIndex());
-        addSelectedRowData(row.getIndex());
-      }
+      risksTable.selectRow(row.getIndex());
+      addSelectedRowData(row.getIndex());
     });
 
     const addRisk = (risk) => {
