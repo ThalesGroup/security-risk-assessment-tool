@@ -247,6 +247,8 @@ function enableAllTabs() {
           if (!checkVulnerabilityRef(ref,supportingAssetRef)){
             placeholderRef.style ="color: red;"
             select.css('border-color', 'red');
+            select.css('border-width', '3px');
+
           }
           select.append(placeholderRef)
         }
