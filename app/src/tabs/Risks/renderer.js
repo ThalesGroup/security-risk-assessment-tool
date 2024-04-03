@@ -150,15 +150,22 @@ function enableAllTabs() {
     // Check if the businessAsset exists globally
     const checkBusinessAssetRef = (ref) =>{
       if (ref === null) return false
-      let found = businessAssets.find(obj => obj.businessAssetId === ref);
-      return found ? true : false
+      let foundBusinessAsset = businessAssets.find(obj => obj.businessAssetId === ref);
+      return foundBusinessAsset ? true : false
     };
 
     // Check if the supportingAsset exists globally
     const checkSupportingAssetRef = (ref) =>{
       if (ref === null) return false
-      let found = supportingAssets.find(obj => obj.supportingAssetId === ref);
-      return found ? true : false
+      let foundSupportingAsset = supportingAssets.find(obj => obj.supportingAssetId === ref);
+
+      if (!foundSupportingAsset || !foundSupportingAsset.businessAssetRef.length) return false
+
+      for (const businessAssetRef of foundSupportingAsset.businessAssetRef) {
+        if (!checkBusinessAssetRef(businessAssetRef) ) return false
+      }
+
+      return true
     };
 
     // Check if each vulnerability in attackPaths exist globally
@@ -814,9 +821,10 @@ function enableAllTabs() {
       $('select[id="risk__threatAgent"]').val(threatAgent);
       $('select[id="risk__threat"]').val(threatVerb);
       $('#risk__motivation').val(motivation);
-      $('select[id="risk__businessAsset"]').val(businessAssetRef === null ? 'null' : businessAssetRef);
+      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
       addSupportingAssetOptions(businessAssetRef);
-      $('select[id="risk__supportingAsset"]').val(supportingAssetRef === null ? 'null' : supportingAssetRef);
+
+      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
 
       if(isAutomaticRiskName){
         $('#risk__manual__riskName').hide();
