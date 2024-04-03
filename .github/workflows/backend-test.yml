@@ -10,5 +10,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.11.1'
-      - run: cd lib | npm install
+      - run: npm install
+        working-directory: lib
       - run: npm run test  
+        working-directory: lib
