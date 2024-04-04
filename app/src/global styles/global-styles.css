@@ -135,7 +135,7 @@ label {
 }
 
 input:invalid {
-    border: 1px red;
+    border: 3px solid red;
 }
 
 input:valid {

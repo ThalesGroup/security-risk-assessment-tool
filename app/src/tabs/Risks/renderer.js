@@ -199,14 +199,13 @@ function enableAllTabs() {
 
     // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
-      let supportingAssetOptions = '';
+      let supportingAssetOptions = '<option value="">Select...</option>';
       $('#risk__supportingAsset').empty();
       supportingAssets.filter(uncheckedSA => uncheckedSA.supportingAssetName).forEach((sa) =>{
         if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef)){
           supportingAssetOptions += `<option value="${sa.supportingAssetId}">${sa.supportingAssetName}</option>`;
         }
       });
-      supportingAssetOptions += '<option value="null">Select...</option>'
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
@@ -830,12 +829,18 @@ function enableAllTabs() {
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
       tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
       tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+      console.log(threatAgent)
+      console.log(threatVerb)
+      console.log(motivation)
+      console.log(businessAssetRef)
+      console.log(supportingAssetRef)
+
       $('select[id="risk__threatAgent"]').val(threatAgent);
       $('select[id="risk__threat"]').val(threatVerb);
       $('#risk__motivation').val(motivation);
-      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
+      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? '' : businessAssetRef);
       addSupportingAssetOptions(businessAssetRef);
-      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
+      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? '' : supportingAssetRef);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
@@ -1004,11 +1009,10 @@ function enableAllTabs() {
       });
 
       $('#risk__businessAsset').empty();
-      let businessAssetsOptions = '';
+      let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.filter(uncheckedBA => uncheckedBA.businessAssetName).forEach((ba)=>{
         businessAssetsOptions += `<option value="${ba.businessAssetId}">${ba.businessAssetName}</option>`;
       });
-      businessAssetsOptions += '<option value="null">Select...</option>'
       $('#risk__businessAsset').append(businessAssetsOptions);
     }
 
@@ -1142,6 +1146,7 @@ function enableAllTabs() {
      * 
   */
     const updateRiskName = async (field, value) =>{
+      if ((field == "businessAssetRef" || field == "supportingAssetRef") && value == "") value = "null"
       await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskName(getCurrentRiskId(), field, value);
       reloadCurrentRisk(risk);
