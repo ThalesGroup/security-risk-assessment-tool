@@ -128,6 +128,7 @@ function enableAllTabs() {
       };
       newSelect.value = ref;
       prevOption();
+      newSelect.setAttribute('style',`border-color:${newSelect.value === 'null' ? 'red' : 'black'};border-width: ${newSelect.value === 'null' ? 3 : 1}px`);
 
       // change in selected option due to user input
       $(newSelect).on('change', (e) => {
@@ -135,6 +136,7 @@ function enableAllTabs() {
         window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
+        newSelect.setAttribute('style',`border-color:${e.target.value === 'null' ? 'red' : 'black'};border-width: ${e.target.value === 'null' ? 3 : 1}px`);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
