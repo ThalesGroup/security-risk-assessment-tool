@@ -829,11 +829,6 @@ function enableAllTabs() {
       tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
       tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
       tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
-      console.log(threatAgent)
-      console.log(threatVerb)
-      console.log(motivation)
-      console.log(businessAssetRef)
-      console.log(supportingAssetRef)
 
       $('select[id="risk__threatAgent"]').val(threatAgent);
       $('select[id="risk__threat"]').val(threatVerb);
