@@ -146,6 +146,8 @@ function disableAllTabs() {
 
     const validateVulnerabilityName = (vulnerability) => {
         const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
+        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`);
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
             || vulnerabilityDescription === '' 
@@ -184,6 +186,8 @@ function disableAllTabs() {
         $('#vulnerability__CVE').val(vulnerabilityCVE);
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
+        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`)
+
         if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 9) {
             $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(9));
         } else $('#vulnerability__scoring').val(cveScore);
@@ -193,6 +197,7 @@ function disableAllTabs() {
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
         validateCVEScore(cveScore);
 
+        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length ? '#000000' : '#FF0000'}`)
         $('input[name="refs__checkboxes"]').prop('checked', false);
         supportingAssetRef.forEach((ref)=>{
             $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
@@ -254,7 +259,6 @@ function disableAllTabs() {
 
     const updateSupportingAssets = (supportingAssets) =>{
         $('.refs').empty();
-
         supportingAssets.filter(unfilteredSA => unfilteredSA.supportingAssetName).forEach((sa)=>{
             // add div
             const div = document.createElement('div');
@@ -276,7 +280,6 @@ function disableAllTabs() {
                     vulnerability.supportingAssetRef = v.supportingAssetRef;
                 }
                 validateVulnerabilityName(vulnerability);
-                
             })
             div.append(checkbox);
 
@@ -284,7 +287,6 @@ function disableAllTabs() {
             const label = document.createElement('label');
             label.innerHTML = sa.supportingAssetName;
             div.append(label);
-
             $('.refs').append(div);
             
         
@@ -302,7 +304,6 @@ function disableAllTabs() {
         
 
         updateVulnerabilityFields(vulnerabilitiesData);
-
     };
 
     $(document).ready(async function () {
