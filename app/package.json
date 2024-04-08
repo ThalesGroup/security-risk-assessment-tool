@@ -86,7 +86,7 @@
         "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
-        "tinymce": "^6.2.0"
+        "tinymce": "^7.0.0"
     },
     "devDependencies": {
         "electron": "^22.3.25",
