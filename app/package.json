@@ -90,7 +90,7 @@
     },
     "devDependencies": {
         "electron": "^22.3.25",
-        "electron-builder": "^24.4.0"
+        "electron-builder": "^24.13.3"
     },
     "overrides": {
         "got": "^11.8.5"
