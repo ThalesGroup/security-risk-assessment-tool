@@ -54,7 +54,7 @@ function disableAllTabs() {
       disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.vulnerabilities();
-    let vulnerabilitiesData, supportingAssetsData;
+    let vulnerabilitiesData, supportingAssetsData, businessAssetsData;
     $('#vulnerabilities').append(result[0]);
     const tableOptions = result[1];
     const checkBoxIndex = 0
@@ -144,10 +144,39 @@ function disableAllTabs() {
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
 
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRef = (ref) =>{
+        if (ref === null) return false
+        let foundBusinessAsset = businessAssetsData.find(obj => obj.businessAssetId === ref);
+        return foundBusinessAsset ? true : false
+      };
+
+    // Check if the supportingAsset exists globally
+    const checkSupportingAssetRef = (ref) =>{
+        if (ref === null) return false
+
+        let foundSupportingAsset = supportingAssetsData.find(obj => obj.supportingAssetId === ref);
+  
+        if (!foundSupportingAsset || !foundSupportingAsset.businessAssetRef.length) return false
+  
+        for (const businessAssetRef of foundSupportingAsset.businessAssetRef) {
+          if (!checkBusinessAssetRef(businessAssetRef) ) return false
+        }
+        return true
+      };
+    const checkSupportingAssetArray = (supportingAssetArray) =>{
+        if (! supportingAssetArray.length) return false
+        for (ref of supportingAssetArray){
+            if (! checkSupportingAssetRef(ref)) return false
+        }
+        return true
+    };
+
     const validateVulnerabilityName = (vulnerability) => {
         const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
+            || ! checkSupportingAssetArray(supportingAssetRef)
             || vulnerabilityDescription === '' 
             || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#FF0000';
         else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#000000';
@@ -258,6 +287,7 @@ function disableAllTabs() {
         supportingAssets.filter(unfilteredSA => unfilteredSA.supportingAssetName).forEach((sa)=>{
             // add div
             const div = document.createElement('div');
+            if (!checkSupportingAssetRef(sa.supportingAssetId)) div.style = 'color:red'
 
             // add checkbox
             const checkbox = document.createElement('input');
@@ -295,6 +325,7 @@ function disableAllTabs() {
         
         vulnerabilitiesData = data.Vulnerability;
         supportingAssetsData = data.SupportingAsset;
+        businessAssetsData = data.BusinessAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
         else $('#vulnerabilities section').show();
         
