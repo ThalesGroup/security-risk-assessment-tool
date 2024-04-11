@@ -75,7 +75,7 @@ function disableAllTabs() {
         const supportingAssetRef = rowData.supportingAssetRef
         const vulnerabilityDescription = rowData.vulnerabilityDescription
         const vulnerabilityName = rowData.vulnerabilityName
-        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '')  {
+        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || ! checkSupportingAssetArray(supportingAssetRef) || vulnerabilityDescription === '' || vulnerabilityName === '')  {
                 cell.getElement().style.color = '#FF0000';
             }
         else  {

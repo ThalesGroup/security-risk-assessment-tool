@@ -238,9 +238,24 @@ const validateClasses = () => {
     // Check if the supportingAsset exists globally
     const checkSupportingAssetRef = (ref) =>{
       if (ref === null) return false
-      let found = SupportingAsset.find(obj => obj.supportingAssetId === ref);
-      return found ? true : false
+      let foundSupportingAsset = SupportingAsset.find(obj => obj.supportingAssetId === ref);
+
+      if (!foundSupportingAsset || !foundSupportingAsset.businessAssetRef.length) return false
+
+      for (const businessAssetRef of foundSupportingAsset.businessAssetRef) {
+        if (!checkBusinessAssetRef(businessAssetRef) ) return false
+      }
+      return true
     };
+
+    const checkSupportingAssetArray = (supportingAssetArray) =>{
+      console.log(supportingAssetArray)
+      if (! supportingAssetArray.length) return false
+      for (ref of supportingAssetArray){
+          if (! checkSupportingAssetRef(ref)) return false
+      }
+      return true
+  };
 
     // Check if each vulnerability in attackPaths exist globally
     const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
@@ -322,7 +337,7 @@ const validateClasses = () => {
       const noSupportingAssetRef = supportingAssetRef.length === 0;
       const noVulnerabilityDescription =  !vulnerabilityDescription;
       const noVulnerabilityName = !vulnerabilityName;
-      if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName) {
+      if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName || !checkSupportingAssetArray(supportingAssetRef)) {
         invalidVuls.push(vulnerabilityId);
       }
     }
