@@ -186,7 +186,7 @@ const saveProject = () => {
 */
 const validateClasses = () => {
   //console.log(israProject.properties)
-  const { ISRAmeta, SupportingAsset, Vulnerability, Risk} = israProject.properties;
+  const { ISRAmeta, SupportingAsset, BusinessAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
     let message = '';
@@ -225,40 +225,81 @@ const validateClasses = () => {
       }
       
     }
-
-
     return {status: invalidCount, error: message};
+  };
+
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRef = (ref) =>{
+      if (ref === null) return false
+      let found = BusinessAsset.find(obj => obj.businessAssetId === ref);
+      return found ? true : false
+    };
+
+    // Check if the supportingAsset exists globally
+    const checkSupportingAssetRef = (ref) =>{
+      if (ref === null) return false
+      let found = SupportingAsset.find(obj => obj.supportingAssetId === ref);
+      return found ? true : false
+    };
+
+    // Check if each vulnerability in attackPaths exist globally
+    const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
+      let found
+      if(attackPaths.length){
+        for (const attackPath of attackPaths) {
+          if(attackPath.vulnerabilityRef.length){
+            for (const vul of attackPath.vulnerabilityRef) {
+              found = Vulnerability.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
+              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            }
+          }
+        }
+      }
+      return true
+    };
+
+  const validateRiskDescription = (risk) => {
+    const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = risk;
+    if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || motivation === ''){
+      return false;
+    } else return true;
+  };
+
+  const validateRiskEvaluation = (risk) => {
+    const { supportingAssetRef, riskAttackPaths } = risk;
+    if (! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
+      return false;
+    } else return true;
   };
 
   const validateRisksTab = () => {
     let message = '';
-    const invalidRisks = [];
+    const invalidRisksDescriptions = [];
+    const invalidRisksEvaluations = [];
     const invalidRisksMitigations = [];
     for (let i = 0; i < Risk.length; i++) {
 
-      
-      const { riskName, riskMitigation, riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = Risk[i];
-      const noThreatAgent = !threatAgent;
-      const noThreatVerb = !threatVerb;
-      const noBusinessAssetRef = !businessAssetRef;
-      const noSupportingAssetRef = !supportingAssetRef;
-      const noMotivation = !motivation;
-      if (noThreatAgent || noThreatVerb || noBusinessAssetRef || noSupportingAssetRef || noMotivation) {
-        invalidRisks.push(riskId);
+      const { riskMitigation, riskId} = Risk[i];
+      if (!validateRiskDescription(Risk[i])) invalidRisksDescriptions.push(riskId);
+
+      if (!validateRiskEvaluation(Risk[i])) invalidRisksEvaluations.push(riskId);
+
+      for(let i=0; i<riskMitigation.length; i++){
+        if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
+         invalidRisksMitigations.push(riskId );
+        }
       }
-      
-     
-     for(let i=0; i<riskMitigation.length; i++){
-       if (riskMitigation[i].cost != null && !Number.isInteger(riskMitigation[i].cost)) {
-        invalidRisksMitigations.push(riskId );
-       }
-     }
     }
-    if (invalidRisks.length || invalidRisksMitigations.length) {
+    if (invalidRisksDescriptions.length || invalidRisksMitigations.length.length || invalidRisksMitigations.length ) {
       message += errorMessages['risksHeader']
-      if (invalidRisks.length) {
-        message += `${errorMessages['riskDescription']}${invalidRisks.length}\n
-        ${errorMessages['riskDescriptionIDs']}${invalidRisks.join(',')}\n\n`
+      if (invalidRisksDescriptions.length) {
+        message += `${errorMessages['riskDescription']}${invalidRisksDescriptions.length}\n
+        ${errorMessages['riskDescriptionIDs']}${invalidRisksDescriptions.join(',')}\n\n`
+      }
+
+      if (invalidRisksEvaluations.length) {
+        message += `${errorMessages['riskEvaluation']}${invalidRisksEvaluations.length}\n
+        ${errorMessages['riskEvaluationIDs']}${invalidRisksEvaluations.join(',')}\n\n`
       }
       
       if (invalidRisksMitigations.length) {
@@ -267,7 +308,7 @@ const validateClasses = () => {
       }
     }
     
-    return {status: invalidRisks.length + invalidRisksMitigations.length, error: message};
+    return {status: invalidRisksDescriptions.length + invalidRisksEvaluations.length + invalidRisksMitigations.length , error: message};
   };
 
   const validateVulnerabilitiesTab = () => {
@@ -1057,6 +1098,7 @@ ipcMain.handle('risks:mitigationDecisionOptions', () => riskMitigationSchema.dec
 const { addVulnerability, deleteVulnerability, updateVulnerability, validateVulnerabilities, isVulnerabilityExist } = require('../../../lib/src/api/Vulnerability/handler-event')
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
 const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
+const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
 ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
 ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
 ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));

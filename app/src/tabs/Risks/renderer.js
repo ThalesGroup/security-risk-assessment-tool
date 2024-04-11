@@ -70,14 +70,7 @@ function enableAllTabs() {
 
     tableOptions.columns[riskNameIndex].formatter = (cell) => {
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
-      const threatAgent = cell.getRow().getData().threatAgent;
-      const threatVerb =cell.getRow().getData().threatVerb;
-      const businessAssetRef = cell.getRow().getData().businessAssetRef;
-      const supportingAssetRef = cell.getRow().getData().supportingAssetRef;
-      const motivation = cell.getRow().getData().motivation;
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
-        cell.getElement().style.color = '#FF0000';
-      } else cell.getElement().style.color = '#000000';
+      cell.getElement().style.color = validateRiskName(cell.getRow().getData())
 
       const currentColour = cell.getElement().style.color;
       if (riskManagementDecision === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') cell.getElement().style['text-decoration'] = 'line-through';
@@ -154,10 +147,48 @@ function enableAllTabs() {
       return risksTable.getSelectedData()[0].riskId;
     };
 
-    const validateRiskName = (riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation) => {
-      if (threatAgent === '' || threatVerb === '' || businessAssetRef === null || supportingAssetRef === null || motivation === ''){
-        risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#FF0000';
-      } else risksTable.getRow(riskId).getCell('riskName').getElement().style.color = '#000000';
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRef = (ref) =>{
+      if (ref === null) return false
+      let foundBusinessAsset = businessAssets.find(obj => obj.businessAssetId === ref);
+      return foundBusinessAsset ? true : false
+    };
+
+    // Check if the supportingAsset exists globally
+    const checkSupportingAssetRef = (ref) =>{
+      if (ref === null) return false
+      let foundSupportingAsset = supportingAssets.find(obj => obj.supportingAssetId === ref);
+
+      if (!foundSupportingAsset || !foundSupportingAsset.businessAssetRef.length) return false
+
+      for (const businessAssetRef of foundSupportingAsset.businessAssetRef) {
+        if (!checkBusinessAssetRef(businessAssetRef) ) return false
+      }
+
+      return true
+    };
+
+    // Check if each vulnerability in attackPaths exist globally
+    const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
+      let found
+      if(attackPaths.length){
+        for (const attackPath of attackPaths) {
+          if(attackPath.vulnerabilityRef.length){
+            for (const vul of attackPath.vulnerabilityRef) {
+              found = vulnerabilities.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
+              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            }
+          }
+        }
+      }
+      return true
+    };
+
+    const validateRiskName = (risk) => {
+      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
+      if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+        return '#FF0000';
+      } else return '#000000';
     };
 
     // add Supporting Assets Select options
@@ -783,17 +814,17 @@ function enableAllTabs() {
           isOWASPLikelihood
         } = riskLikelihood;
 
-        // Set Risk description data
-        $('.riskId').text(riskId);
-        tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
-        tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
-        tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
-        $('select[id="risk__threatAgent"]').val(threatAgent);
-        $('select[id="risk__threat"]').val(threatVerb);
-        $('#risk__motivation').val(motivation);
-        $('select[id="risk__businessAsset"]').val(businessAssetRef === null ? 'null' : businessAssetRef);
-        addSupportingAssetOptions(businessAssetRef);
-        $('select[id="risk__supportingAsset"]').val(supportingAssetRef === null ? 'null' : supportingAssetRef);
+      // Set Risk description data
+      $('.riskId').text(riskId);
+      tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+      tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
+      tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+      $('select[id="risk__threatAgent"]').val(threatAgent);
+      $('select[id="risk__threat"]').val(threatVerb);
+      $('#risk__motivation').val(motivation);
+      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
+      addSupportingAssetOptions(businessAssetRef);
+      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
@@ -1066,13 +1097,12 @@ function enableAllTabs() {
 
     // reloads all data displayed for current risk
     const reloadCurrentRisk = (updatedRisk) => {
-      const { riskId, riskName, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation, residualRiskLevel, riskManagementDecision } = updatedRisk;
+      const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
       //const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       let riskIndex = risksData.findIndex((risk) => risk.riskId === updatedRisk.riskId);
-
       risksData[riskIndex] = updatedRisk;
       risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: riskName, residualRiskLevel }]);
-      validateRiskName(riskId, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation);
+      risksTable.getRow(riskId).getCell('riskName').getElement().style.color = validateRiskName(updatedRisk);
       styleResidualRiskLevelTable(riskId, residualRiskLevel);
       styleRiskName(riskManagementDecision, riskId);
       addSelectedRowData(riskId);
@@ -1128,32 +1158,27 @@ function enableAllTabs() {
     $('#risk__threatAgent').on('change', ()=>{   
       const selected = $('#risk__threatAgent').find(":selected").val();
       updateRiskName('threatAgent', selected);
-      validateRiskName(getCurrentRiskId(), selected, 'threatVerb', 'businessAssetRef', 'supportingRef', 'motivation');
     });
 
     $('#risk__threat').on('change', ()=>{
       const selected = $('#risk__threat').find(":selected").val();
       updateRiskName('threatVerb', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', selected, 'businessAssetRef', 'supportingRef', 'motivation');
     });
 
     $('#risk__businessAsset').on('change', ()=>{
       const selected = $('#risk__businessAsset').find(":selected").val();
       updateRiskName('businessAssetRef', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', selected, 'supportingRef', 'motivation');
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', selected, 'motivation');
     });
 
     $('#risk__motivation').on('change', ()=>{
       const input = $('#risk__motivation').val();
       updateRiskName('motivation', input);
-      validateRiskName(getCurrentRiskId(), 'threatAgent', 'threatVerb', 'businessAssetRef', 'supportingRef', input);
     });
 
   /**
