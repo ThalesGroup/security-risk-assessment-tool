@@ -1,0 +1,16 @@
+name: backend-test
+on: pull_request
+jobs: 
+  test: 
+    runs-on: windows-latest
+    steps: 
+      - name: checkout repo
+        uses: actions/checkout@v3
+      - name: use node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.11.1'
+      - run: npm install
+        working-directory: lib
+      - run: npm run test  
+        working-directory: lib

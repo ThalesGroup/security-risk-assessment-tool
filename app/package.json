@@ -86,11 +86,11 @@
         "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
-        "tinymce": "^6.2.0"
+        "tinymce": "^7.0.0"
     },
     "devDependencies": {
-        "electron": "^22.0.0",
-        "electron-builder": "^24.4.0"
+        "electron": "^22.3.25",
+        "electron-builder": "^24.13.3"
     },
     "overrides": {
         "got": "^11.8.5"

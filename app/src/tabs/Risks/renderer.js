@@ -824,18 +824,18 @@ function enableAllTabs() {
           isOWASPLikelihood
         } = riskLikelihood;
 
-      // Set Risk description data
-      $('.riskId').text(riskId);
-      tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
-      tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
-      tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
-
-      $('select[id="risk__threatAgent"]').val(threatAgent);
-      $('select[id="risk__threat"]').val(threatVerb);
-      $('#risk__motivation').val(motivation);
-      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? '' : businessAssetRef);
-      addSupportingAssetOptions(businessAssetRef);
-      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? '' : supportingAssetRef);
+        // Set Risk description data
+        $('.riskId').text(riskId);
+        tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+        tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
+        tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+        
+        $('select[id="risk__threatAgent"]').val(threatAgent);
+        $('select[id="risk__threat"]').val(threatVerb);
+        $('#risk__motivation').val(motivation);
+        $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? '' : businessAssetRef);
+        addSupportingAssetOptions(businessAssetRef);
+        $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? '' : supportingAssetRef);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
