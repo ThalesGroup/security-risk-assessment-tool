@@ -45,6 +45,8 @@ function enableAllTabs() {
 }
 
 (async () => {
+  let addSelectedRowDataExecuting = false;
+
   try {
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
@@ -744,8 +746,6 @@ function enableAllTabs() {
       if (value === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
       else risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'none';
     };
-
-    let addSelectedRowDataExecuting = false;
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
