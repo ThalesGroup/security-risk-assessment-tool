@@ -135,10 +135,13 @@ label {
 }
 
 .disabled {
-    opacity: 0.2;
     pointer-events: none;
+    
 }
 
+.disabled div{
+    color: #aaaaaa8c !important;
+}
 
 .disabled:hover {
     cursor: default !important;
