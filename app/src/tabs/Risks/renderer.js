@@ -44,6 +44,25 @@ function enableAllTabs() {
   document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
 }
 
+// Display the buttons as not usable
+function disableButtons(){
+  for (button of document.querySelectorAll('#risks .add-delete-container button')) button.disabled = true;
+}
+
+// Display the buttons as usable
+function enableButtons(){
+  for (button of document.querySelectorAll('#risks .add-delete-container button')) button.disabled = false;
+}
+
+// Display the buttons as not selectable
+function disableRiskSelection(){
+  document.querySelector('#risks__table .tabulator-tableholder').classList.add('disabled')
+}
+// Display the buttons as selectable
+function enableRiskSelection(){
+  document.querySelector('#risks__table .tabulator-tableholder').classList.remove('disabled')
+}
+
 (async () => {
   let addSelectedRowDataExecuting = false;
 
@@ -108,7 +127,7 @@ function enableAllTabs() {
       if (risksData.length > 0) $('#risks section').show();
     };
 
-    $('input[id="filter-value"]').on('change', (e) => {
+    $('input[id="filter-value"]').on('change', async (e) => {
       const { value } = e.target;
       if(value === ''){
         clearFunction();
@@ -129,7 +148,12 @@ function enableAllTabs() {
             risksTable.deselectRow(r.riskId);
           });
           risksTable.selectRow(filteredRows[0].riskId);
-          addSelectedRowData(filteredRows[0].riskId);
+          disableButtons()
+          disableRiskSelection()
+          await addSelectedRowData(filteredRows[0].riskId);
+          enableButtons()
+          enableRiskSelection()
+
         } else $('#risks section').hide();
       }
     });
@@ -879,6 +903,10 @@ function enableAllTabs() {
             } else setNaNValues();
           }
         })
+        // Display the risks as selectable
+        enableRiskSelection()
+        // Display the buttons as usable
+        enableButtons()
         addSelectedRowDataExecuting = false;
       }
     };
@@ -899,9 +927,13 @@ function enableAllTabs() {
 
 
     // row is clicked & selected
-    risksTable.on('rowClick', (e, row) => {
+    risksTable.on('rowClick', async(e, row) => {
       risksTable.selectRow(row.getIndex());
-      addSelectedRowData(row.getIndex());
+      disableButtons()
+      disableRiskSelection()
+      await addSelectedRowData(row.getIndex());
+      enableButtons()
+      enableRiskSelection()
     });
 
     const addRisk = (risk) => {
@@ -956,9 +988,10 @@ function enableAllTabs() {
         ...risk
       }))
       risksTable.addData(tableData);
+      disableRiskSelection()
+
       risksTable.selectRow(fetchedData[0].riskId);
       await addSelectedRowData(fetchedData[0].riskId);
-      
       /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
 
@@ -974,7 +1007,11 @@ function enableAllTabs() {
       addRisk(risk);
       if (risksData.length === 1) {
         risksTable.selectRow(risk.riskId);
-        addSelectedRowData(risk.riskId);
+        disableButtons()
+        disableRiskSelection()
+        await addSelectedRowData(risk.riskId);
+        enableButtons()
+        enableRiskSelection()
       }
     });
 
@@ -983,6 +1020,8 @@ function enableAllTabs() {
       const checkboxes = document.getElementsByName('risks__table__checkboxes');
       deleteRisks(checkboxes);
     });
+
+    disableButtons()
 
     const assetsRelationshipSetUp = (fetchedData) =>{
       businessAssets = fetchedData.BusinessAsset;
@@ -1007,9 +1046,9 @@ function enableAllTabs() {
         risksData = fetchedData.Risk;
         if (risksData.length === 0) $('#risks section').hide();
         else $('#risks section').show();
+
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
-        
         
         await tinymce.init({
           selector: '.rich-text',
@@ -1090,6 +1129,8 @@ function enableAllTabs() {
 
         await updateRisksFields(risksData);
         //Wait the data to be ready with await 
+        enableRiskSelection()
+        enableButtons()
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });

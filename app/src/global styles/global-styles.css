@@ -134,6 +134,16 @@ label {
     font-style: italic;
 }
 
+.disabled {
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+
+.disabled:hover {
+    cursor: default !important;
+}
+
 input:invalid {
     border: 1px red;
 }
@@ -144,6 +154,14 @@ input:valid {
 
 select:invalid {
     border: 1px solid red;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+button:disabled:hover{
+    cursor: default;
 }
 
 select option {
@@ -178,11 +196,6 @@ select option {
     border: none; */
     /* width: 8%; */
     font-size: 12px;
-    cursor: pointer;
-}
-
-.addDelete:hover{
-    color: rgb(63, 63, 63);
 }
 
 .table{
