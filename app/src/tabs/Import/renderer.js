@@ -409,7 +409,6 @@ $('button[id="select-all-Vul"]').on('click', () => {
     $(document).ready(async function () {
 
       window.api.receive('import:load', (importedISRA) => {
-        console.log(importedISRA)
         businessAssetsTable.addData(importedISRA.BusinessAsset);
         supportingAssetsTable.addData(importedISRA.SupportingAsset);
         risksTable.addData(importedISRA.Risk);

@@ -202,7 +202,6 @@ function updateBusinessAssetName(id, field){
     };
 
     const addBusinessAssetSection = async (businessAssets) => {
-      console.log(addBusinessAssetSectionExecuting)
       if(!addBusinessAssetSectionExecuting){
         addBusinessAssetSectionExecuting = true;
         const promises = await businessAssets.map(async (asset) => {
