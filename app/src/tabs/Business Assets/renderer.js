@@ -29,25 +29,6 @@ function updateBusinessAssetName(id, field){
   window.businessAssets.updateBusinessAsset(id, field, value);   
 }
 
-function disableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
-}
-
-function enableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
-}
 (async () => {
   let addBusinessAssetSectionExecuting = false;
   try {
@@ -56,9 +37,7 @@ function enableAllTabs() {
         event.preventDefault();
       }
     }
-
     disableAllTabs();
-    
     window.addEventListener('keydown', handleReload);
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
@@ -275,5 +254,6 @@ function enableAllTabs() {
     // })
   } catch (err) {
     alert('Failed to load business assets tab');
+    console.log(err)
   }
 })();
