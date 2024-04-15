@@ -360,7 +360,6 @@ function disableAllTabs() {
                 },
                 setup: function (ed) {
                     ed.on('change', function (e) {
-                        //console.log(e.target.id)
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
                         validateVulnerabilityName(vulnerability);

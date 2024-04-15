@@ -33,7 +33,6 @@ const contents = document.querySelectorAll('.content');
  * for reference in developer's tool
  */
 window.project.load(async (event, data) => {
-  console.log(await JSON.parse(data));
   const { projectName, classification } = await JSON.parse(data).ISRAmeta;
   if(projectName === '') $('footer').text(classification);
   else $('footer').text(classification.substring(0, classification.indexOf('{') + 1) + projectName + classification[classification.length - 1]);
@@ -69,7 +68,6 @@ const validateTabs = (tab) => {
   const validateBusinessAsset = () => {
     const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
     checkboxIds.forEach((id) => {
-      console.log(id)
       const tableData = Tabulator.findTable(`#business-assets__section-table__${id.value}`)[0].getData()[0];
       tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
       window.validate.businessAssets(tableData);
@@ -110,7 +108,6 @@ const validateTabs = (tab) => {
   const validateVulnerabilities = () => {
     let data = {};
     const selectedTableData = Tabulator.findTable('#vulnerabilties__table')[0].getSelectedData()[0];
-    console.log(selectedTableData)
     if (selectedTableData){
       data.vulnerabilityId = selectedTableData.vulnerabilityId;
       data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
