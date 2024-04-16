@@ -185,7 +185,6 @@ const saveProject = () => {
   * validation instantly fails when one of the validation methods fails
 */
 const validateClasses = () => {
-  //console.log(israProject.properties)
   const { ISRAmeta, SupportingAsset, BusinessAsset, Vulnerability, Risk} = israProject.properties;
 
   const validateWelcomeTab = () =>{
