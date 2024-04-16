@@ -985,8 +985,8 @@
       window.project.load(async (event, data) => {
         const fetchedData = await JSON.parse(data);
         risksData = fetchedData.Risk;
-        if (risksData.length === 0) $('#risks section').hide();
-        else $('#risks section').show();
+
+        $('#risks section').show();
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
         
@@ -1007,7 +1007,6 @@
               var input = document.createElement('input');
               input.setAttribute('type', 'file');
               input.setAttribute('accept', 'image/*');
-
               /*
                 Note: In modern browsers input[type="file"] is functional without
                 even adding it to the DOM, but that might not be the case in some older
@@ -1015,10 +1014,8 @@
                 just in case, and visually hide it. And do not forget do remove it
                 once you do not need it anymore.
               */
-
               input.onchange = function () {
                 var file = this.files[0];
-
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
@@ -1031,13 +1028,11 @@
                   var base64 = reader.result.split(',')[1];
                   var blobInfo = blobCache.create(id, file, base64);
                   blobCache.add(blobInfo);
-
                   /* call the callback and populate the Title field with the file name */
                   callback(blobInfo.blobUri(), { title: file.name });
                 };
                 reader.readAsDataURL(file);
               };
-
               input.click();
             }
           },
@@ -1056,7 +1051,7 @@
             });
             ed.on('click', function (event) {
               const target = event.target;
-  
+            
               if (target.tagName === 'A') {
                 event.preventDefault();
                 const href = target.getAttribute('href');
@@ -1068,11 +1063,17 @@
           }
         });
 
-        await updateRisksFields(risksData);
+        if (risksData.length > 0){
+          await updateRisksFields(risksData);
+        }else{
+          $('#risks section').hide();
+        }
+
         //Wait the data to be ready with await 
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
+
     });
 
     // reloads all data displayed for current risk
