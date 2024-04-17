@@ -202,29 +202,43 @@ const validateClasses = () => {
 
   const validateSupportingAssetsTab = () =>{
     let message = '';
-    let invalidCount = 0;
-    const invalidSAs = new Set() //Need to use set
+    let invalidBACount = 0;
+    let invalidNameCount = 0;
+
+    const invalidSAsBA = new Set() //Need to use set
+    const invalidSAsName = new Set() //Need to use set
+
     for(let i=0; i<SupportingAsset.length; i++){
-      const { businessAssetRef, supportingAssetId } = SupportingAsset[i];
+      const { businessAssetRef, supportingAssetId, supportingAssetName} = SupportingAsset[i];
       const uniqueRefs = new Set();
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
         const nullBusinessAssetRef = !ref
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
         if (nullBusinessAssetRef || duplicateBusinessAssetRef || !checkBusinessAssetRef(ref)) {
-          invalidCount++
-          invalidSAs.add(supportingAssetId)
+          invalidBACount++
+          invalidSAsBA.add(supportingAssetId)
         } 
 
         uniqueRefs.add(ref);
       }
-      if (invalidCount) {
-        message += `${errorMessages['supportingAssetsHeader']}${errorMessages['supportingAssets']}${invalidCount}\n
-        ${errorMessages['supportingAssetsIDs']}${[...invalidSAs].join(',')}\n\n`
+      if(supportingAssetName == ''){
+        invalidNameCount++
+        invalidSAsName.add(supportingAssetId)
       }
-      
     }
-    return {status: invalidCount, error: message};
+    if (invalidBACount + invalidNameCount != 0) {
+      message += `${errorMessages['supportingAssetsHeader']}`
+    }
+    if (invalidBACount) {
+      message += `${errorMessages['supportingAssetsBA']}${invalidBACount}\n
+      ${errorMessages['supportingAssetsIDs']}${[...invalidSAsBA].join(',')}\n\n`
+    }
+    if (invalidNameCount) {
+      message += `${errorMessages['supportingAssetsName']}${invalidNameCount}\n
+      ${errorMessages['supportingAssetsIDs']}${[...invalidSAsName].join(',')}\n\n`
+    }
+    return {status: invalidBACount + invalidNameCount, error: message};
   };
 
     // Check if the businessAsset exists globally
