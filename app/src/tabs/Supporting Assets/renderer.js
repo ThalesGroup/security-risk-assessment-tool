@@ -157,6 +157,7 @@
     };
 
     const addMatrixRow = (id, name) => {
+      console.log(id)
       const row = `
       <tr id="supporting-asset-business-assets__table-${id}">
         <td>${name}</td>
@@ -209,12 +210,11 @@
         // checkbox.value = `${id}`;
         // checkbox.id = `supporting-assets__section-checkbox${id}`;
         // checkbox.name = 'supporting-assets__section-checkbox';
-        if (asset.supportingAssetName) {
-          addMatrixRow(id, asset.supportingAssetName);
-          asset.businessAssetRef.forEach((ref, index) => {
-            addBusinessAsset(id, ref, index);
-          });       
-        }
+
+        addMatrixRow(id, asset.supportingAssetName);
+        asset.businessAssetRef.forEach((ref, index) => {
+          addBusinessAsset(id, ref, index);
+        });       
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
