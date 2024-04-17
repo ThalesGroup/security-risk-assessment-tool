@@ -128,6 +128,9 @@
         const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
         $("#select__refs__id").prop('style',`color:${supportingAssetRef.length ? '#000000' : '#FF0000'}`);
         $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid red'}`);
+
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
             || vulnerabilityDescription === '' 
@@ -161,6 +164,8 @@
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
+        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid red'}`);
         $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
         vulnerabilityURL(vulnerabilityTrackingURI);
         $('#vulnerability__CVE').val(vulnerabilityCVE);
