@@ -36,7 +36,6 @@
     
     // Check if the businessAsset exists globally
     const checkBusinessAssetRefArray = (refArray) =>{
-      console.log(refArray)
       if(refArray.length){
         for (ref of refArray){
           if (! checkBusinessAssetRef(ref)) return false
@@ -45,6 +44,11 @@
       return true
     };
     
+    const validateSAName = (sa) => {
+      if (sa.businessAssetRef.length == 0 || sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || !checkBusinessAssetRefArray(sa.businessAssetRef) || sa.supportingAssetName == ''){
+        return '#FF0000';
+      } else return '#000000';
+    };
 
   try {
     function handleReload(event) {
@@ -77,6 +81,8 @@
       }
     }
 
+    const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
+
     const updateSupportingAsset = (id, field, value) => {
       if (field === 'businessAssetRef') {
         validate(id, value);
@@ -91,17 +97,22 @@
         }
 
         window.supportingAssets.updateSupportingAsset(id, field, value);
-      } 
+      }
+      let updatedSA = supportingAssetsTable.getRow(id).getData()
+      updatedSA[field]=value
+      supportingAssetsTable.getRow(id).getCell('supportingAssetName').getElement().style.color = validateSAName(updatedSA);
+
     };
 
+    const tableOptions = result[1];
     // cell edited callback function
-    result[1].columns[3].cellEdited = (cell) => {
+    tableOptions.columns[3].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
       updateSupportingAsset(id, cell.getField(), cell.getValue());
       $(`${matrixTable}-${id} td.matrix-sa-name`).html(cell.getValue());
     };
 
-    result[1].columns[0].formatter = (cell) => {
+    tableOptions.columns[0].formatter = (cell) => {
       const id = cell.getRow().getIndex();
       if (id) {
         return `
@@ -109,8 +120,11 @@
         `;
       }
     };
-    const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
+    tableOptions.columns[3].formatter = (cell) => {
+      cell.getElement().style.color = validateSAName(cell.getRow().getData())
+      return cell.getValue();
+    }
     const addBusinessAsset = (id, ref, index) => {
       const matrixRow = $(`${matrixTable}-${id} td.matrix-sa-ba`);
       const newDiv = document.createElement('div');
@@ -175,6 +189,7 @@
       $(`${matrixTable}-${id} button`).first().on('click', async () => {
         let index = $(`${matrixTable}-${id} div:last-of-type input:last-of-type`).attr('data-index');
         if(!index) index = -1;
+
         addBusinessAsset(id, null, parseInt(index)+1);
         const value = $(`${matrixTable}-${id} option:selected`).last().val();
         if (!value) await window.supportingAssets.addBusinessAssetRef(id, 'null');
@@ -182,6 +197,8 @@
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         validate(id, selected);
+        updateSupportingAsset(id, 'businessAssetRef', selected)
+
       });
 
       // delete business asset ref
@@ -200,6 +217,7 @@
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
         validate(id, selected);
+        updateSupportingAsset(id, 'businessAssetRef', selected)
       });
     };
 
