@@ -211,7 +211,7 @@ const validateClasses = () => {
         const ref = businessAssetRef[j];
         const nullBusinessAssetRef = !ref
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
-        if (nullBusinessAssetRef || duplicateBusinessAssetRef) {
+        if (nullBusinessAssetRef || duplicateBusinessAssetRef || !checkBusinessAssetRef(ref)) {
           invalidCount++
           invalidSAs.add(supportingAssetId)
         } 
@@ -231,7 +231,7 @@ const validateClasses = () => {
     const checkBusinessAssetRef = (ref) =>{
       if (ref === null) return false
       let found = BusinessAsset.find(obj => obj.businessAssetId === ref);
-      return found ? true : false
+      return found && found.businessAssetName !== ''? true : false
     };
 
     // Check if the supportingAsset exists globally

@@ -25,6 +25,27 @@
 /* global $ Tabulator tinymce */
 
 (async () => {
+  var fetchedData
+
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRef = (ref) =>{
+      if (ref === null) return false
+      let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId == ref);
+      return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
+    };
+    
+    // Check if the businessAsset exists globally
+    const checkBusinessAssetRefArray = (refArray) =>{
+      console.log(refArray)
+      if(refArray.length){
+        for (ref of refArray){
+          if (! checkBusinessAssetRef(ref)) return false
+        }
+      }
+      return true
+    };
+    
+
   try {
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
@@ -42,7 +63,9 @@
     const validate = (id, value) =>{
       if ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
         || value.length !== new Set(value).size
-        || value.includes('null')) {
+        || value.includes('null')
+        || !checkBusinessAssetRefArray(value)) {
+       
         $(`${matrixTable}-${id} td`).first().css('color', 'red');
         $(`${matrixTable}-${id} td`).first().css('font-weight', 'bold');
       } else {
@@ -108,7 +131,7 @@
       };
       newSelect.value = ref;
       prevOption();
-      newSelect.setAttribute('style',`border-color:${newSelect.value === 'null' ? 'red' : 'black'};border-width: ${newSelect.value === 'null' ? 3 : 1}px`);
+      newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(newSelect.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(newSelect.value) ? 3 : 1}px`);
 
       // change in selected option due to user input
       $(newSelect).on('change', (e) => {
@@ -116,7 +139,7 @@
         window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
-        newSelect.setAttribute('style',`border-color:${e.target.value === 'null' ? 'red' : 'black'};border-width: ${e.target.value === 'null' ? 3 : 1}px`);
+        newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(e.target.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(e.target.value) ? 3 : 1}px`);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
@@ -207,7 +230,7 @@
       $(`${matrixTable} tbody`).empty();
       selectOptions = {};
       selectOptions[null] = 'Select...';
-      businessAssets.filter(uncheckedAsset => uncheckedAsset.businessAssetName).forEach((asset) => {
+      businessAssets.forEach((asset) => {
         selectOptions[asset.businessAssetId] = asset.businessAssetName;
       });
 
@@ -299,7 +322,7 @@
 
         });
 
-        const fetchedData = await JSON.parse(data);
+        fetchedData = await JSON.parse(data);
         updateSupportingAssetFields(fetchedData);
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
