@@ -154,7 +154,7 @@
     const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
       found = vulnerabilities.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
-      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+      if (!found || !found.supportingAssetRef.includes(supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
       return true
     };
 
@@ -236,11 +236,17 @@
             placeholderRef.style ="color: red;"
             select.css('border-color', 'red');
             select.css('border-width', '3px');
-
           }
           select.append(placeholderRef)
+        }else{
+          if (!checkVulnerabilityRef(ref,supportingAssetRef)){
+            for (optionRef of matchingRef){
+              optionRef.style ="color: red;"
+            }
+            select.css('border-color', 'red');
+            select.css('border-width', '3px');
+          }
         }
-        
         
         select.on('change', async (e)=> {
           const { value } = e.target;
@@ -275,8 +281,8 @@
     // add Vulnerabilities evaluation section
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
-      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName && uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
+      vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v) ? 'style="color: red;"' : ''}>${v.vulnerabilityName}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
