@@ -65,12 +65,15 @@
         || value.length !== new Set(value).size
         || value.includes('null')
         || !checkBusinessAssetRefArray(value)) {
-       
-        $(`${matrixTable}-${id} td`).first().css('color', 'red');
-        $(`${matrixTable}-${id} td`).first().css('font-weight', 'bold');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'bold');
       } else {
-        $(`${matrixTable}-${id} td`).first().css('color', 'black');
-        $(`${matrixTable}-${id} td`).first().css('font-weight', 'normal');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'black');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'normal');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'black');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'normal');
       }
     }
 
@@ -95,7 +98,7 @@
     result[1].columns[3].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
       updateSupportingAsset(id, cell.getField(), cell.getValue());
-      $(`${matrixTable}-${id} td`).first().html(cell.getValue());
+      $(`${matrixTable}-${id} td.matrix-sa-name`).html(cell.getValue());
     };
 
     result[1].columns[0].formatter = (cell) => {
@@ -109,8 +112,7 @@
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
     const addBusinessAsset = (id, ref, index) => {
-      const matrixRow = $(`${matrixTable}-${id} td:nth-child(2)`);
-
+      const matrixRow = $(`${matrixTable}-${id} td.matrix-sa-ba`);
       const newDiv = document.createElement('div');
       const newInput = document.createElement('input');
       const newSelect = document.createElement('select');
@@ -157,11 +159,11 @@
     };
 
     const addMatrixRow = (id, name) => {
-      console.log(id)
       const row = `
       <tr id="supporting-asset-business-assets__table-${id}">
-        <td>${name}</td>
-        <td>
+        <td class="matrix-sa-id">${id}</td>
+        <td class="matrix-sa-name">${name}</td>
+        <td class="matrix-sa-ba">
            <div class="add-delete-container">
               <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
            </div>
