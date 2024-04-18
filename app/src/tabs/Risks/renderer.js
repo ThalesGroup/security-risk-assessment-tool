@@ -213,10 +213,10 @@
     const addSupportingAssetOptions = (businessAssetRef) =>{
       let supportingAssetOptions = '<option value="">Select...</option>';
       $('#risk__supportingAsset').empty();
-      if(businessAssetRef!=null){
+      if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}">${sa.supportingAssetName}</option>`;
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" style="${checkSupportingAssetRef(sa.supportingAssetId)?'':'color:red'}">${sa.supportingAssetName}</option>`;
           }
         });
       }
@@ -854,7 +854,7 @@
         $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
         $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid red'}`);
         addSupportingAssetOptions(businessAssetRef);
-        $('select[id="risk__supportingAsset"]').val(existSupportingAsset(supportingAssetRef) == null ? '' : supportingAssetRef);
+        $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || existSupportingAsset(supportingAssetRef) == null ? '' : supportingAssetRef);
         $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(supportingAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid red'}`);
 
         if(isAutomaticRiskName){
@@ -1026,7 +1026,8 @@
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}">${ba.businessAssetName}</option>`;
+        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:red'}">${ba.businessAssetName}</option>`;
+
       });
       $('#risk__businessAsset').append(businessAssetsOptions);
     }
@@ -1202,7 +1203,6 @@
       updateRiskName('businessAssetRef', selected);
       addSupportingAssetOptions(selected)
       $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(selected) != null && checkBusinessAssetRef(selected) ? 'none' : '3px solid red'}`);
-      console.log("ok")
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
