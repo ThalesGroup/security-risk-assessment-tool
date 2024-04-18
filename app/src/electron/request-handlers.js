@@ -211,23 +211,27 @@ const validateClasses = () => {
     for(let i=0; i<SupportingAsset.length; i++){
       const { businessAssetRef, supportingAssetId, supportingAssetName} = SupportingAsset[i];
       const uniqueRefs = new Set();
+      let invalidBA = false
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
         const nullBusinessAssetRef = !ref
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
         if (nullBusinessAssetRef || duplicateBusinessAssetRef || !checkBusinessAssetRef(ref)) {
-          invalidBACount++
-          invalidSAsBA.add(supportingAssetId)
+          invalidBA = true
         } 
 
         uniqueRefs.add(ref);
+      }
+      if(invalidBA){
+        invalidBACount++
+        invalidSAsBA.add(supportingAssetId)
       }
       if(supportingAssetName == ''){
         invalidNameCount++
         invalidSAsName.add(supportingAssetId)
       }
     }
-    if (invalidBACount + invalidNameCount != 0) {
+    if (invalidBACount || invalidNameCount) {
       message += `${errorMessages['supportingAssetsHeader']}`
     }
     if (invalidBACount) {
