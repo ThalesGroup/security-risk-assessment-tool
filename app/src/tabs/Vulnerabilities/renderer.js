@@ -23,26 +23,6 @@
 */
 /* global $ tinymce Tabulator */
 
-function disableAllTabs() {
-    document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
-    document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
-    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
-    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
-    document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
-    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
-    document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
-  }
-  
-  function enableAllTabs() {
-    document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
-    document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
-    document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
-    document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
-    document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
-    document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
-    document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
-  }
-
 (async () => {
     try {
     function handleReload(event) {
@@ -296,13 +276,14 @@ function disableAllTabs() {
         vulnerabilitiesData = data.Vulnerability;
         supportingAssetsData = data.SupportingAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
-        else $('#vulnerabilities section').show();
-        
-        updateSupportingAssets(data.SupportingAsset);
-        
-
-        updateVulnerabilityFields(vulnerabilitiesData);
-
+        else {
+            $('#vulnerabilities section').show();
+            
+            updateSupportingAssets(data.SupportingAsset);
+            
+            
+            updateVulnerabilityFields(vulnerabilitiesData);
+        }
     };
 
     $(document).ready(async function () {
@@ -360,7 +341,6 @@ function disableAllTabs() {
                 },
                 setup: function (ed) {
                     ed.on('change', function (e) {
-                        //console.log(e.target.id)
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
                         vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
                         validateVulnerabilityName(vulnerability);

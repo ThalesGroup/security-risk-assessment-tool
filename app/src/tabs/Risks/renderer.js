@@ -24,26 +24,6 @@
 
 /* global $ tinymce Tabulator */
 
-function disableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
-}
-
-function enableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
-}
-
 // Display the buttons as not usable
 function disableButtons(){
   for (button of document.querySelectorAll('#risks .add-delete-container button')) button.disabled = true;
@@ -1066,7 +1046,6 @@ function enableRiskSelection(){
               var input = document.createElement('input');
               input.setAttribute('type', 'file');
               input.setAttribute('accept', 'image/*');
-
               /*
                 Note: In modern browsers input[type="file"] is functional without
                 even adding it to the DOM, but that might not be the case in some older
@@ -1074,10 +1053,8 @@ function enableRiskSelection(){
                 just in case, and visually hide it. And do not forget do remove it
                 once you do not need it anymore.
               */
-
               input.onchange = function () {
                 var file = this.files[0];
-
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
@@ -1090,13 +1067,11 @@ function enableRiskSelection(){
                   var base64 = reader.result.split(',')[1];
                   var blobInfo = blobCache.create(id, file, base64);
                   blobCache.add(blobInfo);
-
                   /* call the callback and populate the Title field with the file name */
                   callback(blobInfo.blobUri(), { title: file.name });
                 };
                 reader.readAsDataURL(file);
               };
-
               input.click();
             }
           },
@@ -1115,7 +1090,7 @@ function enableRiskSelection(){
             });
             ed.on('click', function (event) {
               const target = event.target;
-  
+            
               if (target.tagName === 'A') {
                 event.preventDefault();
                 const href = target.getAttribute('href');
@@ -1127,13 +1102,19 @@ function enableRiskSelection(){
           }
         });
 
-        await updateRisksFields(risksData);
+        if (risksData.length > 0){
+          await updateRisksFields(risksData);
+        }else{
+          $('#risks section').hide();
+        }
+
         //Wait the data to be ready with await 
         enableRiskSelection()
         enableButtons()
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
+
     });
 
     // reloads all data displayed for current risk
