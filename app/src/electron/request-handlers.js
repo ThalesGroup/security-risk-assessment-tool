@@ -193,7 +193,7 @@ const validateClasses = () => {
     const noProjectOrganization = !ISRAmeta.projectOrganization;
 
     if (noProjectOrganization) {
-      message += `${errorMessages['welcomeHeader']}${errorMessages['noProjectOrganization']}`;
+      message += `${errorMessages['welcomeHeader']}${errorMessages['noProjectOrganization']}\n`;
       invalidCount++
     } 
 
