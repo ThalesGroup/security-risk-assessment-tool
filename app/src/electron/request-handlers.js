@@ -247,12 +247,35 @@ const validateClasses = () => {
       let found = BusinessAsset.find(obj => obj.businessAssetId === ref);
       return found && found.businessAssetName !== ''? true : false
     };
-
+      
+      // Check if the businessAssets are valid
+      const checkBusinessAssetRefArray = (refArray) =>{
+        if(refArray.length){
+          for (ref of refArray){
+            if (!checkBusinessAssetRef(ref)) return false
+          }
+        }
+        return true
+    };
+    
     // Check if the supportingAsset exists globally
     const checkSupportingAssetRef = (ref) =>{
-      if (ref === null) return false
-      let found = SupportingAsset.find(obj => obj.supportingAssetId === ref);
-      return found ? true : false
+      if (ref === null) return 
+      let foundSupportingAsset = SupportingAsset.find(obj => obj.supportingAssetId == ref);
+
+      if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+          return false
+      }
+      return true
+  };
+    // Check if the supportingAssets are valid
+    const checkSupportingAssetRefArray = (refArray) =>{
+      if(refArray.length){
+        for (ref of refArray){
+          if (!checkSupportingAssetRef(ref)) return false
+        }
+      }
+      return true
     };
 
     // Check if each vulnerability in attackPaths exist globally
@@ -325,7 +348,11 @@ const validateClasses = () => {
   };
 
   const validateVulnerabilitiesTab = () => {
-    const invalidVuls = [];
+    const invalidVulsName = [];
+    const invalidVulsDescription = [];
+    const invalidVulsSA = [];
+    const invalidVulsCVE = [];
+
     let message = '';
     for(let i=0; i<Vulnerability.length; i++) {
     
@@ -335,16 +362,41 @@ const validateClasses = () => {
       const noSupportingAssetRef = supportingAssetRef.length === 0;
       const noVulnerabilityDescription =  !vulnerabilityDescription;
       const noVulnerabilityName = !vulnerabilityName;
-      if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName) {
-        invalidVuls.push(vulnerabilityId);
+
+      if (noVulnerabilityName || vulnerabilityName =='') {
+        invalidVulsName.push(vulnerabilityId);
       }
+
+      if (noVulnerabilityDescription || vulnerabilityDescription == '') {
+        invalidVulsDescription.push(vulnerabilityId);
+      }
+
+      if ( noSupportingAssetRef || !checkSupportingAssetRefArray(supportingAssetRef)) {
+        invalidVulsSA.push(vulnerabilityId);
+      }
+
+      if (invalidCVEScore || noCVEScore) {
+        invalidVulsCVE.push(vulnerabilityId);
+      }
+
     }
 
-    if (invalidVuls.length) {
-      message += `${errorMessages['vulnerabilitiesHeader']}${errorMessages['vulnerabilities']}${invalidVuls.length}\n${errorMessages['vulnerabilityIDs']}${invalidVuls.join(',')}\n\n`
+    if (invalidVulsName.length || invalidVulsDescription.length || invalidVulsSA.length || invalidVulsCVE.length) {
+      message += `${errorMessages['vulnerabilitiesHeader']}`
     }
-
-    return {status: invalidVuls.length, error: message};
+    if (invalidVulsName.length) {
+      message += `${errorMessages['vulnerabilitiesName']}${invalidVulsName.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsName.join(',')}\n\n`
+    }
+    if (invalidVulsDescription.length) {
+      message += `${errorMessages['vulnerabilitiesDescription']}${invalidVulsDescription.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsDescription.join(',')}\n\n`
+    }
+    if (invalidVulsSA.length) {
+      message += `${errorMessages['vulnerabilitiesSA']}${invalidVulsSA.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsSA.join(',')}\n\n`
+    }
+    if (invalidVulsCVE.length) {
+      message += `${errorMessages['vulnerabilitiesCVE']}${invalidVulsCVE.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsCVE.join(',')}\n\n`
+    }
+    return {status: invalidVulsName.length + invalidVulsDescription.length + invalidVulsSA.length + invalidVulsCVE.length, error: message};
   };
 
   const {status: welcomeInvalid, error: welcomeError} = validateWelcomeTab();

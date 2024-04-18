@@ -13,6 +13,11 @@ const errorMessages = {
     'riskMitigation' : '- There are risks with invalid mitigation cost in Risk Mitigation section. Total: ',
     'riskMitigationIDs' :'- Affected Risk IDs: ',
     'vulnerabilitiesHeader' : 'Vulnerabilities Tab:\n',
+    'vulnerabilitiesName' : '- There are vulnerabilities with empty names. Total: ',
+    'vulnerabilitiesDescription' : '- There are vulnerabilities with empty description. Total: ',
+    'vulnerabilitiesSA' : '- There are vulnerabilities with incomplete or invalid Supporting Assets. Total: ',
+    'vulnerabilitiesCVE' : '- There are vulnerabilities with an invalid CVE score. Total: ',
+    'vulnerabilities' : '- There are vulnerabilities with incomplete or invalid fields. Total: ',
     'vulnerabilities' : '- There are vulnerabilities with incomplete or invalid fields. Total: ',
     'vulnerabilityIDs' : '- Affected Vulnerability IDs: '
 
