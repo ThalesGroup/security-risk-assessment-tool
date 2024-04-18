@@ -314,7 +314,7 @@
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkSupportingAssetRefArray(v) ? 'style="color: red;"' : ''}>${v.vulnerabilityName}</option>`;
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? 'style="color: red;"' : ''}>${v.vulnerabilityName}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
