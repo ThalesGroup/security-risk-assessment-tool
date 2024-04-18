@@ -278,15 +278,21 @@ const validateClasses = () => {
       return true
     };
 
+    // Check if the supportingAsset exists globally
+    const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
+      if (ref === null) return false
+      found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
+      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+      return true
+    };
+
     // Check if each vulnerability in attackPaths exist globally
     const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
-      let found
       if(attackPaths.length){
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
-            for (const vul of attackPath.vulnerabilityRef) {
-              found = Vulnerability.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
-              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            for (const ref of attackPath.vulnerabilityRef) {
+              if (!checkVulnerabilityRef(ref,supportingAssetRef)) return false
             }
           }
         }
@@ -303,7 +309,7 @@ const validateClasses = () => {
 
   const validateRiskEvaluation = (risk) => {
     const { supportingAssetRef, riskAttackPaths } = risk;
-    if (! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
+    if (!checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
       return false;
     } else return true;
   };
@@ -326,7 +332,7 @@ const validateClasses = () => {
         }
       }
     }
-    if (invalidRisksDescriptions.length || invalidRisksMitigations.length.length || invalidRisksMitigations.length ) {
+    if (invalidRisksDescriptions.length || invalidRisksEvaluations.length || invalidRisksMitigations.length ) {
       message += errorMessages['risksHeader']
       if (invalidRisksDescriptions.length) {
         message += `${errorMessages['riskDescription']}${invalidRisksDescriptions.length}\n
