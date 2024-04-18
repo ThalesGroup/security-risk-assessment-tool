@@ -26,12 +26,23 @@
 
 // Display the buttons as not usable
 function disableButtons(){
-  for (button of document.querySelectorAll('#risks .add-delete-container button')) button.disabled = true;
+  for (button of document.querySelectorAll('button')) button.disabled = true;
+}
+
+function disableInputs(){
+  for (input of document.querySelectorAll('input')) input.disabled = true;
+  for (select of document.querySelectorAll('select')) select.disabled = true;
 }
 
 // Display the buttons as usable
 function enableButtons(){
-  for (button of document.querySelectorAll('#risks .add-delete-container button')) button.disabled = false;
+  for (button of document.querySelectorAll('button')) button.disabled = false;
+}
+
+function enableInputs(){
+  for (input of document.querySelectorAll('input')) input.disabled = false;
+  for (select of document.querySelectorAll('select')) select.disabled = false;
+
 }
 
 // Display the buttons as not selectable
@@ -129,9 +140,11 @@ function enableRiskSelection(){
           });
           risksTable.selectRow(filteredRows[0].riskId);
           disableButtons()
+          disableInputs()
           disableRiskSelection()
           await addSelectedRowData(filteredRows[0].riskId);
           enableButtons()
+          enableInputs()
           enableRiskSelection()
 
         } else $('#risks section').hide();
@@ -887,6 +900,7 @@ function enableRiskSelection(){
         enableRiskSelection()
         // Display the buttons as usable
         enableButtons()
+        enableInputs()
         addSelectedRowDataExecuting = false;
       }
     };
@@ -910,9 +924,11 @@ function enableRiskSelection(){
     risksTable.on('rowClick', async(e, row) => {
       risksTable.selectRow(row.getIndex());
       disableButtons()
+      disableInputs()
       disableRiskSelection()
       await addSelectedRowData(row.getIndex());
       enableButtons()
+      enableInputs()
       enableRiskSelection()
     });
 
@@ -988,9 +1004,11 @@ function enableRiskSelection(){
       if (risksData.length === 1) {
         risksTable.selectRow(risk.riskId);
         disableButtons()
+        disableInputs()
         disableRiskSelection()
         await addSelectedRowData(risk.riskId);
         enableButtons()
+        enableInputs()
         enableRiskSelection()
       }
     });
@@ -1002,7 +1020,7 @@ function enableRiskSelection(){
     });
 
     disableButtons()
-
+    disableInputs()
     const assetsRelationshipSetUp = (fetchedData) =>{
       businessAssets = fetchedData.BusinessAsset;
       supportingAssets = fetchedData.SupportingAsset;
@@ -1111,6 +1129,7 @@ function enableRiskSelection(){
         //Wait the data to be ready with await 
         enableRiskSelection()
         enableButtons()
+        enableInputs()
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
       });
