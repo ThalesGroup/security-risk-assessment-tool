@@ -29,35 +29,15 @@ function updateBusinessAssetName(id, field){
   window.businessAssets.updateBusinessAsset(id, field, value);   
 }
 
-function disableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
-}
-
-function enableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
-}
 (async () => {
+  let addBusinessAssetSectionExecuting = false;
   try {
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
         event.preventDefault();
       }
     }
-
     disableAllTabs();
-    
     window.addEventListener('keydown', handleReload);
     const result = await window.render.businessAssets();
     $('#business-assets').append(result[0]);
@@ -187,11 +167,10 @@ function enableAllTabs() {
         },
         
       });
-      enableAllTabs()
       window.removeEventListener('keydown', handleReload);
     };
 
-    const addSection = (id, asset) => {
+    const addSection = async (id, asset) => {
       // add checkbox
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
@@ -219,14 +198,20 @@ function enableAllTabs() {
       // add rich text box
       section.append('<p class="business-assets__sections-description">Description</p>');
       section.append(`<textarea class="business-assets-rich-text" id="business-assets__section-text-${id}" name="business-assets__section-text-${id}"></textarea>`);
-      addDesc(id, asset.businessAssetDescription);
+      await addDesc(id, asset.businessAssetDescription);
     };
 
-    const addBusinessAssetSection = (businessAssets) => {
-      businessAssets.forEach((asset) => {
-        const id = asset.businessAssetId;
-        addSection(id, asset);
-      });
+    const addBusinessAssetSection = async (businessAssets) => {
+      if(!addBusinessAssetSectionExecuting){
+        addBusinessAssetSectionExecuting = true;
+        const promises = await businessAssets.map(async (asset) => {
+          const id = asset.businessAssetId;
+          await addSection(id, asset);
+        });
+        await Promise.all(promises)
+        addBusinessAssetSectionExecuting = false;
+        enableAllTabs()
+      }
     };
 
     $(document).ready(function () {
@@ -268,5 +253,6 @@ function enableAllTabs() {
     // })
   } catch (err) {
     alert('Failed to load business assets tab');
+    console.log(err)
   }
 })();

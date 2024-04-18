@@ -30,7 +30,7 @@ html {
     background-color: #f8ecac;
 }
 
-#supporting-asset-business-assets__table > tbody > tr > td:nth-child(2) > div:nth-child(n+2){
+#supporting-asset-business-assets__table > tbody > tr > td.matrix-sa-ba > div:nth-child(n+2){
     display:flex; 
     flex-direction:row;
     padding-top: 10px;

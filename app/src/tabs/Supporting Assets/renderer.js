@@ -24,27 +24,32 @@
 
 /* global $ Tabulator tinymce */
 
-function disableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = true;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = true;
-}
-
-function enableAllTabs() {
-  document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="supporting-assets"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="risks"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
-  document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
-}
-
 (async () => {
+  var fetchedData
+
+    // Check if the businessAsset is valid
+    const checkBusinessAssetRef = (ref) =>{
+      if (ref === null) return false
+      let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId == ref);
+      return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
+    };
+    
+    // Check if the businessAssets are valid
+    const checkBusinessAssetRefArray = (refArray) =>{
+      if(refArray.length){
+        for (ref of refArray){
+          if (! checkBusinessAssetRef(ref)) return false
+        }
+      }
+      return true
+    };
+    
+    const validateSAName = (sa) => {
+      if (sa.businessAssetRef.length == 0 || sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || !checkBusinessAssetRefArray(sa.businessAssetRef) || sa.supportingAssetName == ''){
+        return '#FF0000';
+      } else return '#000000';
+    };
+
   try {
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
@@ -62,14 +67,21 @@ function enableAllTabs() {
     const validate = (id, value) =>{
       if ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
         || value.length !== new Set(value).size
-        || value.includes('null')) {
-        $(`${matrixTable}-${id} td`).first().css('color', 'red');
-        $(`${matrixTable}-${id} td`).first().css('font-weight', 'bold');
+        || value.includes('null')
+        || !checkBusinessAssetRefArray(value)) {
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'bold');
       } else {
-        $(`${matrixTable}-${id} td`).first().css('color', 'black');
-        $(`${matrixTable}-${id} td`).first().css('font-weight', 'normal');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'black');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'normal');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'black');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'normal');
       }
     }
+
+    const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
     const updateSupportingAsset = (id, field, value) => {
       if (field === 'businessAssetRef') {
@@ -85,17 +97,22 @@ function enableAllTabs() {
         }
 
         window.supportingAssets.updateSupportingAsset(id, field, value);
-      } 
+      }
+      let updatedSA = supportingAssetsTable.getRow(id).getData()
+      updatedSA[field]=value
+      supportingAssetsTable.getRow(id).getCell('supportingAssetName').getElement().style.color = validateSAName(updatedSA);
+
     };
 
+    const tableOptions = result[1];
     // cell edited callback function
-    result[1].columns[3].cellEdited = (cell) => {
+    tableOptions.columns[3].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
       updateSupportingAsset(id, cell.getField(), cell.getValue());
-      $(`${matrixTable}-${id} td`).first().html(cell.getValue());
+      $(`${matrixTable}-${id} td.matrix-sa-name`).html(cell.getValue());
     };
 
-    result[1].columns[0].formatter = (cell) => {
+    tableOptions.columns[0].formatter = (cell) => {
       const id = cell.getRow().getIndex();
       if (id) {
         return `
@@ -103,11 +120,13 @@ function enableAllTabs() {
         `;
       }
     };
-    const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
+    tableOptions.columns[3].formatter = (cell) => {
+      cell.getElement().style.color = validateSAName(cell.getRow().getData())
+      return cell.getValue();
+    }
     const addBusinessAsset = (id, ref, index) => {
-      const matrixRow = $(`${matrixTable}-${id} td:nth-child(2)`);
-
+      const matrixRow = $(`${matrixTable}-${id} td.matrix-sa-ba`);
       const newDiv = document.createElement('div');
       const newInput = document.createElement('input');
       const newSelect = document.createElement('select');
@@ -128,6 +147,7 @@ function enableAllTabs() {
       };
       newSelect.value = ref;
       prevOption();
+      newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(newSelect.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(newSelect.value) ? 3 : 1}px`);
 
       // change in selected option due to user input
       $(newSelect).on('change', (e) => {
@@ -135,6 +155,7 @@ function enableAllTabs() {
         window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
+        newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(e.target.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(e.target.value) ? 3 : 1}px`);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
@@ -154,8 +175,9 @@ function enableAllTabs() {
     const addMatrixRow = (id, name) => {
       const row = `
       <tr id="supporting-asset-business-assets__table-${id}">
-        <td>${name}</td>
-        <td>
+        <td class="matrix-sa-id">${id}</td>
+        <td class="matrix-sa-name">${name}</td>
+        <td class="matrix-sa-ba">
            <div class="add-delete-container">
               <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
            </div>
@@ -167,6 +189,7 @@ function enableAllTabs() {
       $(`${matrixTable}-${id} button`).first().on('click', async () => {
         let index = $(`${matrixTable}-${id} div:last-of-type input:last-of-type`).attr('data-index');
         if(!index) index = -1;
+
         addBusinessAsset(id, null, parseInt(index)+1);
         const value = $(`${matrixTable}-${id} option:selected`).last().val();
         if (!value) await window.supportingAssets.addBusinessAssetRef(id, 'null');
@@ -174,6 +197,8 @@ function enableAllTabs() {
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         validate(id, selected);
+        updateSupportingAsset(id, 'businessAssetRef', selected)
+
       });
 
       // delete business asset ref
@@ -192,6 +217,7 @@ function enableAllTabs() {
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
         validate(id, selected);
+        updateSupportingAsset(id, 'businessAssetRef', selected)
       });
     };
 
@@ -204,12 +230,11 @@ function enableAllTabs() {
         // checkbox.value = `${id}`;
         // checkbox.id = `supporting-assets__section-checkbox${id}`;
         // checkbox.name = 'supporting-assets__section-checkbox';
-        if (asset.supportingAssetName) {
-          addMatrixRow(id, asset.supportingAssetName);
-          asset.businessAssetRef.forEach((ref, index) => {
-            addBusinessAsset(id, ref, index);
-          });       
-        }
+
+        addMatrixRow(id, asset.supportingAssetName);
+        asset.businessAssetRef.forEach((ref, index) => {
+          addBusinessAsset(id, ref, index);
+        });       
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
@@ -225,7 +250,7 @@ function enableAllTabs() {
       $(`${matrixTable} tbody`).empty();
       selectOptions = {};
       selectOptions[null] = 'Select...';
-      businessAssets.filter(uncheckedAsset => uncheckedAsset.businessAssetName).forEach((asset) => {
+      businessAssets.forEach((asset) => {
         selectOptions[asset.businessAssetId] = asset.businessAssetName;
       });
 
@@ -317,7 +342,7 @@ function enableAllTabs() {
 
         });
 
-        const fetchedData = await JSON.parse(data);
+        fetchedData = await JSON.parse(data);
         updateSupportingAssetFields(fetchedData);
         enableAllTabs()
         window.removeEventListener('keydown', handleReload);
