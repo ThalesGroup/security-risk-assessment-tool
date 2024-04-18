@@ -27,14 +27,14 @@
 (async () => {
   var fetchedData
 
-    // Check if the businessAsset exists globally
+    // Check if the businessAsset is valid
     const checkBusinessAssetRef = (ref) =>{
       if (ref === null) return false
       let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId == ref);
       return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
     };
     
-    // Check if the businessAsset exists globally
+    // Check if the businessAssets are valid
     const checkBusinessAssetRefArray = (refArray) =>{
       if(refArray.length){
         for (ref of refArray){
