@@ -24,6 +24,50 @@
 
 /* global $ tinymce Tabulator */
 
+// Display the buttons as not usable
+function disableButtons(){
+  for (button of document.querySelectorAll('button')) button.disabled = true;
+}
+
+function disableInputs(){
+  for (input of document.querySelectorAll('input')) input.disabled = true;
+  for (select of document.querySelectorAll('select')) select.disabled = true;
+}
+
+// Display the buttons as usable
+function enableButtons(){
+  for (button of document.querySelectorAll('button')) button.disabled = false;
+}
+
+function enableInputs(){
+  for (input of document.querySelectorAll('input')) input.disabled = false;
+  for (select of document.querySelectorAll('select')) select.disabled = false;
+
+}
+
+// Display the buttons as not selectable
+function disableRiskSelection(){
+  document.querySelector('#risks__table .tabulator-tableholder').classList.add('disabled')
+}
+// Display the buttons as selectable
+function enableRiskSelection(){
+  document.querySelector('#risks__table .tabulator-tableholder').classList.remove('disabled')
+}
+
+function disableInteract(){
+  disableButtons()
+  disableInputs()
+  disableRiskSelection()
+  disableAllTabs()
+}
+
+function enableInteract(){
+  enableButtons()
+  enableInputs()
+  enableRiskSelection()
+  disableAllTabs
+}
+
 (async () => {
   let addSelectedRowDataExecuting = false;
 
@@ -88,7 +132,7 @@
       if (risksData.length > 0) $('#risks section').show();
     };
 
-    $('input[id="filter-value"]').on('change', (e) => {
+    $('input[id="filter-value"]').on('change', async (e) => {
       const { value } = e.target;
       if(value === ''){
         clearFunction();
@@ -109,7 +153,10 @@
             risksTable.deselectRow(r.riskId);
           });
           risksTable.selectRow(filteredRows[0].riskId);
-          addSelectedRowData(filteredRows[0].riskId);
+          disableInteract()
+          await addSelectedRowData(filteredRows[0].riskId);
+          enableInteract()
+
         } else $('#risks section').hide();
       }
     });
@@ -910,6 +957,7 @@
             } else setNaNValues();
           }
         })
+        enableInteract()
         addSelectedRowDataExecuting = false;
       }
     };
@@ -930,9 +978,11 @@
 
 
     // row is clicked & selected
-    risksTable.on('rowClick', (e, row) => {
+    risksTable.on('rowClick', async(e, row) => {
       risksTable.selectRow(row.getIndex());
-      addSelectedRowData(row.getIndex());
+      disableInteract()
+      await addSelectedRowData(row.getIndex());
+      enableInteract()
     });
 
     const addRisk = (risk) => {
@@ -987,9 +1037,10 @@
         ...risk
       }))
       risksTable.addData(tableData);
+      disableRiskSelection()
+
       risksTable.selectRow(fetchedData[0].riskId);
       await addSelectedRowData(fetchedData[0].riskId);
-      
       /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
 
@@ -1005,7 +1056,9 @@
       addRisk(risk);
       if (risksData.length === 1) {
         risksTable.selectRow(risk.riskId);
-        addSelectedRowData(risk.riskId);
+        disableInteract()
+        await addSelectedRowData(risk.riskId);
+        enableInteract()
       }
     });
 
@@ -1015,6 +1068,8 @@
       deleteRisks(checkboxes);
     });
 
+    disableButtons()
+    disableInputs()
     const assetsRelationshipSetUp = (fetchedData) =>{
       businessAssets = fetchedData.BusinessAsset;
       supportingAssets = fetchedData.SupportingAsset;
@@ -1036,11 +1091,11 @@
       window.project.load(async (event, data) => {
         const fetchedData = await JSON.parse(data);
         risksData = fetchedData.Risk;
+        if (risksData.length === 0) $('#risks section').hide();
+        else $('#risks section').show();
 
-        $('#risks section').show();
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
-        
         
         await tinymce.init({
           selector: '.rich-text',
@@ -1119,16 +1174,15 @@
         }else{
           $('#risks section').hide();
         }
-
-        //Wait the data to be ready with await 
-        enableAllTabs()
+        enableInteract()
         window.removeEventListener('keydown', handleReload);
       });
 
     });
 
     // reloads all data displayed for current risk
-    const reloadCurrentRisk = (updatedRisk) => {
+    const reloadCurrentRisk = async (updatedRisk) => {
+      disableInteract()
       const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
       //const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       let riskIndex = risksData.findIndex((risk) => risk.riskId === updatedRisk.riskId);
@@ -1137,7 +1191,7 @@
       risksTable.getRow(riskId).getCell('riskName').getElement().style.color = validateRiskName(updatedRisk);
       styleResidualRiskLevelTable(riskId, residualRiskLevel);
       styleRiskName(riskManagementDecision, riskId);
-      addSelectedRowData(riskId);
+      await addSelectedRowData(riskId);
     };
 
     // reloads selected data displayed for updateRiskLikelihood, updateRiskMitigation, updateRiskManagement
