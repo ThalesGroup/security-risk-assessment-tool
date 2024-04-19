@@ -324,12 +324,11 @@
         supportingAssetsData = data.SupportingAsset;
         businessAssetsData = data.BusinessAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
-        else $('#vulnerabilities section').show();
-        
-        updateSupportingAssets(data.SupportingAsset);
-        
-
-        updateVulnerabilityFields(vulnerabilitiesData);
+        else{
+            $('#vulnerabilities section').show();  
+            updateSupportingAssets(data.SupportingAsset);
+            updateVulnerabilityFields(vulnerabilitiesData);
+        }
     };
 
     $(document).ready(async function () {

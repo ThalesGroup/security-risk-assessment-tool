@@ -200,6 +200,25 @@ const validateClasses = () => {
     return {status: invalidCount, error: message};
   };
 
+  const validateBusinessAssetsTab = () =>{
+    let message = '';
+    const invalidName = [];
+
+    for(let i=0; i<BusinessAsset.length; i++){
+      const { businessAssetId, businessAssetName} = BusinessAsset[i];
+      if (businessAssetName == '') invalidName.push(businessAssetId)
+    }
+    if (invalidName.length) {
+      message += errorMessages['businessAssetsHeader']
+      if (invalidName.length) {
+        message += `${errorMessages['businessAssetsName']}${invalidName.length}\n
+        ${errorMessages['businessAssetsIDs']}${invalidName.join(',')}\n\n`
+      }
+    }
+      
+    return {status: invalidName.length , error: message};
+  };
+
   const validateSupportingAssetsTab = () =>{
     let message = '';
     let invalidBACount = 0;
@@ -211,23 +230,27 @@ const validateClasses = () => {
     for(let i=0; i<SupportingAsset.length; i++){
       const { businessAssetRef, supportingAssetId, supportingAssetName} = SupportingAsset[i];
       const uniqueRefs = new Set();
+      let invalidBA = false
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
         const nullBusinessAssetRef = !ref
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
         if (nullBusinessAssetRef || duplicateBusinessAssetRef || !checkBusinessAssetRef(ref)) {
-          invalidBACount++
-          invalidSAsBA.add(supportingAssetId)
+          invalidBA = true
         } 
 
         uniqueRefs.add(ref);
+      }
+      if(invalidBA){
+        invalidBACount++
+        invalidSAsBA.add(supportingAssetId)
       }
       if(supportingAssetName == ''){
         invalidNameCount++
         invalidSAsName.add(supportingAssetId)
       }
     }
-    if (invalidBACount + invalidNameCount != 0) {
+    if (invalidBACount || invalidNameCount) {
       message += `${errorMessages['supportingAssetsHeader']}`
     }
     if (invalidBACount) {
@@ -316,12 +339,14 @@ const validateClasses = () => {
 
   const validateRisksTab = () => {
     let message = '';
+    const invalidRisksName = [];
     const invalidRisksDescriptions = [];
     const invalidRisksEvaluations = [];
     const invalidRisksMitigations = [];
     for (let i = 0; i < Risk.length; i++) {
 
-      const { riskMitigation, riskId} = Risk[i];
+      const { riskMitigation, riskId, riskName} = Risk[i];
+      if (riskName == '') invalidRisksName.push(riskId);
       if (!validateRiskDescription(Risk[i])) invalidRisksDescriptions.push(riskId);
 
       if (!validateRiskEvaluation(Risk[i])) invalidRisksEvaluations.push(riskId);
@@ -332,25 +357,30 @@ const validateClasses = () => {
         }
       }
     }
-    if (invalidRisksDescriptions.length || invalidRisksEvaluations.length || invalidRisksMitigations.length ) {
+    if (invalidRisksName.length || invalidRisksDescriptions.length || invalidRisksEvaluations.length || invalidRisksMitigations.length ) {
       message += errorMessages['risksHeader']
+      if (invalidRisksName.length) {
+        message += `${errorMessages['riskName']}${invalidRisksName.length}\n
+        ${errorMessages['riskIDs']}${invalidRisksName.join(',')}\n\n`
+      }
+
       if (invalidRisksDescriptions.length) {
         message += `${errorMessages['riskDescription']}${invalidRisksDescriptions.length}\n
-        ${errorMessages['riskDescriptionIDs']}${invalidRisksDescriptions.join(',')}\n\n`
+        ${errorMessages['riskIDs']}${invalidRisksDescriptions.join(',')}\n\n`
       }
 
       if (invalidRisksEvaluations.length) {
         message += `${errorMessages['riskEvaluation']}${invalidRisksEvaluations.length}\n
-        ${errorMessages['riskEvaluationIDs']}${invalidRisksEvaluations.join(',')}\n\n`
+        ${errorMessages['riskIDs']}${invalidRisksEvaluations.join(',')}\n\n`
       }
       
       if (invalidRisksMitigations.length) {
         message += `${errorMessages['riskMitigation']}${invalidRisksMitigations.length}\n
-        ${errorMessages['riskMitigationIDs']}${invalidRisksMitigations.join(',')}\n\n`
+        ${errorMessages['riskIDs']}${invalidRisksMitigations.join(',')}\n\n`
       }
     }
     
-    return {status: invalidRisksDescriptions.length + invalidRisksEvaluations.length + invalidRisksMitigations.length , error: message};
+    return {status: invalidRisksName.length + invalidRisksDescriptions.length + invalidRisksEvaluations.length + invalidRisksMitigations.length , error: message};
   };
 
   const validateVulnerabilitiesTab = () => {
@@ -406,15 +436,16 @@ const validateClasses = () => {
   };
 
   const {status: welcomeInvalid, error: welcomeError} = validateWelcomeTab();
+  const {status: baInvalid, error: baError} = validateBusinessAssetsTab();
   const {status: saInvalid, error: saError} = validateSupportingAssetsTab();
   const {status: riskInvalid, error: riskError} = validateRisksTab();
   const {status: vulInvalid, error: vulError} = validateVulnerabilitiesTab();
   let valid = true;
-  if (welcomeInvalid + saInvalid + riskInvalid + vulInvalid) {
+  if (welcomeInvalid + baInvalid +saInvalid + riskInvalid + vulInvalid) {
     valid = false;
 
   }
-  const message = `${welcomeError}${saError}${riskError}${vulError}`;
+  const message = `${welcomeError}${baError}${saError}${riskError}${vulError}`;
   return {status: valid, error: message}
 };
 
