@@ -760,7 +760,7 @@
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
-      if (!addSelectedRowDataExecuting){
+      if (!addSelectedRowDataExecuting && risksData.find((risk) => risk.riskId === id)){
         addSelectedRowDataExecuting = true;
         const {
           riskId,
@@ -794,17 +794,17 @@
           isOWASPLikelihood
         } = riskLikelihood;
 
-      // Set Risk description data
-      $('.riskId').text(riskId);
-      tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
-      tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
-      tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
-      $('select[id="risk__threatAgent"]').val(threatAgent);
-      $('select[id="risk__threat"]').val(threatVerb);
-      $('#risk__motivation').val(motivation);
-      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
-      addSupportingAssetOptions(businessAssetRef);
-      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
+        // Set Risk description data
+        $('.riskId').text(riskId);
+        tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+        tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
+        tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+        $('select[id="risk__threatAgent"]').val(threatAgent);
+        $('select[id="risk__threat"]').val(threatVerb);
+        $('#risk__motivation').val(motivation);
+        $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
+        addSupportingAssetOptions(businessAssetRef);
+        $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
@@ -888,7 +888,6 @@
       // filter
       risksTable.clearFilter();
       $('input[id="filter-value"]').val('');
-      if (risksData.length > 0) $('#risks section').show();
       const rowData = {
         ...risk
       }
