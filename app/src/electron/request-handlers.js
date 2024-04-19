@@ -193,63 +193,129 @@ const validateClasses = () => {
     const noProjectOrganization = !ISRAmeta.projectOrganization;
 
     if (noProjectOrganization) {
-      message += `${errorMessages['welcomeHeader']}${errorMessages['noProjectOrganization']}`;
+      message += `${errorMessages['welcomeHeader']}${errorMessages['noProjectOrganization']}\n`;
       invalidCount++
     } 
 
     return {status: invalidCount, error: message};
   };
 
+  const validateBusinessAssetsTab = () =>{
+    let message = '';
+    const invalidName = [];
+
+    for(let i=0; i<BusinessAsset.length; i++){
+      const { businessAssetId, businessAssetName} = BusinessAsset[i];
+      if (businessAssetName == '') invalidName.push(businessAssetId)
+    }
+    if (invalidName.length) {
+      message += errorMessages['businessAssetsHeader']
+      if (invalidName.length) {
+        message += `${errorMessages['businessAssetsName']}${invalidName.length}\n
+        ${errorMessages['businessAssetsIDs']}${invalidName.join(',')}\n\n`
+      }
+    }
+      
+    return {status: invalidName.length , error: message};
+  };
+
   const validateSupportingAssetsTab = () =>{
     let message = '';
-    let invalidCount = 0;
-    const invalidSAs = new Set() //Need to use set
+    let invalidBACount = 0;
+    let invalidNameCount = 0;
+
+    const invalidSAsBA = new Set() //Need to use set
+    const invalidSAsName = new Set() //Need to use set
+
     for(let i=0; i<SupportingAsset.length; i++){
-      const { businessAssetRef, supportingAssetId } = SupportingAsset[i];
+      const { businessAssetRef, supportingAssetId, supportingAssetName} = SupportingAsset[i];
       const uniqueRefs = new Set();
+      let invalidBA = false
       for (let j = 0; j < businessAssetRef.length; j++){
         const ref = businessAssetRef[j];
         const nullBusinessAssetRef = !ref
         const duplicateBusinessAssetRef = uniqueRefs.has(ref)
-        if (nullBusinessAssetRef || duplicateBusinessAssetRef) {
-          invalidCount++
-          invalidSAs.add(supportingAssetId)
+        if (nullBusinessAssetRef || duplicateBusinessAssetRef || !checkBusinessAssetRef(ref)) {
+          invalidBA = true
         } 
 
         uniqueRefs.add(ref);
       }
-      if (invalidCount) {
-        message += `${errorMessages['supportingAssetsHeader']}${errorMessages['supportingAssets']}${invalidCount}\n
-        ${errorMessages['supportingAssetsIDs']}${[...invalidSAs].join(',')}\n\n`
+      if(invalidBA){
+        invalidBACount++
+        invalidSAsBA.add(supportingAssetId)
       }
-      
+      if(supportingAssetName == ''){
+        invalidNameCount++
+        invalidSAsName.add(supportingAssetId)
+      }
     }
-    return {status: invalidCount, error: message};
+    if (invalidBACount || invalidNameCount) {
+      message += `${errorMessages['supportingAssetsHeader']}`
+    }
+    if (invalidBACount) {
+      message += `${errorMessages['supportingAssetsBA']}${invalidBACount}\n
+      ${errorMessages['supportingAssetsIDs']}${[...invalidSAsBA].join(',')}\n\n`
+    }
+    if (invalidNameCount) {
+      message += `${errorMessages['supportingAssetsName']}${invalidNameCount}\n
+      ${errorMessages['supportingAssetsIDs']}${[...invalidSAsName].join(',')}\n\n`
+    }
+    return {status: invalidBACount + invalidNameCount, error: message};
   };
 
     // Check if the businessAsset exists globally
     const checkBusinessAssetRef = (ref) =>{
       if (ref === null) return false
       let found = BusinessAsset.find(obj => obj.businessAssetId === ref);
-      return found ? true : false
+      return found && found.businessAssetName !== ''? true : false
+    };
+      
+      // Check if the businessAssets are valid
+      const checkBusinessAssetRefArray = (refArray) =>{
+        if(refArray.length){
+          for (ref of refArray){
+            if (!checkBusinessAssetRef(ref)) return false
+          }
+        }
+        return true
+    };
+    
+    // Check if the supportingAsset exists globally
+    const checkSupportingAssetRef = (ref) =>{
+      if (ref === null) return 
+      let foundSupportingAsset = SupportingAsset.find(obj => obj.supportingAssetId == ref);
+
+      if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+          return false
+      }
+      return true
+  };
+    // Check if the supportingAssets are valid
+    const checkSupportingAssetRefArray = (refArray) =>{
+      if(refArray.length){
+        for (ref of refArray){
+          if (!checkSupportingAssetRef(ref)) return false
+        }
+      }
+      return true
     };
 
     // Check if the supportingAsset exists globally
-    const checkSupportingAssetRef = (ref) =>{
+    const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
-      let found = SupportingAsset.find(obj => obj.supportingAssetId === ref);
-      return found ? true : false
+      found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
+      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+      return true
     };
 
     // Check if each vulnerability in attackPaths exist globally
     const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
-      let found
       if(attackPaths.length){
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
-            for (const vul of attackPath.vulnerabilityRef) {
-              found = Vulnerability.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
-              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            for (const ref of attackPath.vulnerabilityRef) {
+              if (!checkVulnerabilityRef(ref,supportingAssetRef)) return false
             }
           }
         }
@@ -266,19 +332,21 @@ const validateClasses = () => {
 
   const validateRiskEvaluation = (risk) => {
     const { supportingAssetRef, riskAttackPaths } = risk;
-    if (! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
+    if (!checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
       return false;
     } else return true;
   };
 
   const validateRisksTab = () => {
     let message = '';
+    const invalidRisksName = [];
     const invalidRisksDescriptions = [];
     const invalidRisksEvaluations = [];
     const invalidRisksMitigations = [];
     for (let i = 0; i < Risk.length; i++) {
 
-      const { riskMitigation, riskId} = Risk[i];
+      const { riskMitigation, riskId, riskName} = Risk[i];
+      if (riskName == '') invalidRisksName.push(riskId);
       if (!validateRiskDescription(Risk[i])) invalidRisksDescriptions.push(riskId);
 
       if (!validateRiskEvaluation(Risk[i])) invalidRisksEvaluations.push(riskId);
@@ -289,29 +357,38 @@ const validateClasses = () => {
         }
       }
     }
-    if (invalidRisksDescriptions.length || invalidRisksMitigations.length.length || invalidRisksMitigations.length ) {
+    if (invalidRisksName.length || invalidRisksDescriptions.length || invalidRisksEvaluations.length || invalidRisksMitigations.length ) {
       message += errorMessages['risksHeader']
+      if (invalidRisksName.length) {
+        message += `${errorMessages['riskName']}${invalidRisksName.length}\n
+        ${errorMessages['riskIDs']}${invalidRisksName.join(',')}\n\n`
+      }
+
       if (invalidRisksDescriptions.length) {
         message += `${errorMessages['riskDescription']}${invalidRisksDescriptions.length}\n
-        ${errorMessages['riskDescriptionIDs']}${invalidRisksDescriptions.join(',')}\n\n`
+        ${errorMessages['riskIDs']}${invalidRisksDescriptions.join(',')}\n\n`
       }
 
       if (invalidRisksEvaluations.length) {
         message += `${errorMessages['riskEvaluation']}${invalidRisksEvaluations.length}\n
-        ${errorMessages['riskEvaluationIDs']}${invalidRisksEvaluations.join(',')}\n\n`
+        ${errorMessages['riskIDs']}${invalidRisksEvaluations.join(',')}\n\n`
       }
       
       if (invalidRisksMitigations.length) {
         message += `${errorMessages['riskMitigation']}${invalidRisksMitigations.length}\n
-        ${errorMessages['riskMitigationIDs']}${invalidRisksMitigations.join(',')}\n\n`
+        ${errorMessages['riskIDs']}${invalidRisksMitigations.join(',')}\n\n`
       }
     }
     
-    return {status: invalidRisksDescriptions.length + invalidRisksEvaluations.length + invalidRisksMitigations.length , error: message};
+    return {status: invalidRisksName.length + invalidRisksDescriptions.length + invalidRisksEvaluations.length + invalidRisksMitigations.length , error: message};
   };
 
   const validateVulnerabilitiesTab = () => {
-    const invalidVuls = [];
+    const invalidVulsName = [];
+    const invalidVulsDescription = [];
+    const invalidVulsSA = [];
+    const invalidVulsCVE = [];
+
     let message = '';
     for(let i=0; i<Vulnerability.length; i++) {
     
@@ -321,28 +398,54 @@ const validateClasses = () => {
       const noSupportingAssetRef = supportingAssetRef.length === 0;
       const noVulnerabilityDescription =  !vulnerabilityDescription;
       const noVulnerabilityName = !vulnerabilityName;
-      if (invalidCVEScore || noCVEScore || noSupportingAssetRef || noVulnerabilityDescription || noVulnerabilityName) {
-        invalidVuls.push(vulnerabilityId);
+
+      if (noVulnerabilityName || vulnerabilityName =='') {
+        invalidVulsName.push(vulnerabilityId);
       }
+
+      if (noVulnerabilityDescription || vulnerabilityDescription == '') {
+        invalidVulsDescription.push(vulnerabilityId);
+      }
+
+      if ( noSupportingAssetRef || !checkSupportingAssetRefArray(supportingAssetRef)) {
+        invalidVulsSA.push(vulnerabilityId);
+      }
+
+      if (invalidCVEScore || noCVEScore) {
+        invalidVulsCVE.push(vulnerabilityId);
+      }
+
     }
 
-    if (invalidVuls.length) {
-      message += `${errorMessages['vulnerabilitiesHeader']}${errorMessages['vulnerabilities']}${invalidVuls.length}\n${errorMessages['vulnerabilityIDs']}${invalidVuls.join(',')}\n\n`
+    if (invalidVulsName.length || invalidVulsDescription.length || invalidVulsSA.length || invalidVulsCVE.length) {
+      message += `${errorMessages['vulnerabilitiesHeader']}`
     }
-
-    return {status: invalidVuls.length, error: message};
+    if (invalidVulsName.length) {
+      message += `${errorMessages['vulnerabilitiesName']}${invalidVulsName.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsName.join(',')}\n\n`
+    }
+    if (invalidVulsDescription.length) {
+      message += `${errorMessages['vulnerabilitiesDescription']}${invalidVulsDescription.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsDescription.join(',')}\n\n`
+    }
+    if (invalidVulsSA.length) {
+      message += `${errorMessages['vulnerabilitiesSA']}${invalidVulsSA.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsSA.join(',')}\n\n`
+    }
+    if (invalidVulsCVE.length) {
+      message += `${errorMessages['vulnerabilitiesCVE']}${invalidVulsCVE.length}\n${errorMessages['vulnerabilityIDs']}${invalidVulsCVE.join(',')}\n\n`
+    }
+    return {status: invalidVulsName.length + invalidVulsDescription.length + invalidVulsSA.length + invalidVulsCVE.length, error: message};
   };
 
   const {status: welcomeInvalid, error: welcomeError} = validateWelcomeTab();
+  const {status: baInvalid, error: baError} = validateBusinessAssetsTab();
   const {status: saInvalid, error: saError} = validateSupportingAssetsTab();
   const {status: riskInvalid, error: riskError} = validateRisksTab();
   const {status: vulInvalid, error: vulError} = validateVulnerabilitiesTab();
   let valid = true;
-  if (welcomeInvalid + saInvalid + riskInvalid + vulInvalid) {
+  if (welcomeInvalid + baInvalid +saInvalid + riskInvalid + vulInvalid) {
     valid = false;
 
   }
-  const message = `${welcomeError}${saError}${riskError}${vulError}`;
+  const message = `${welcomeError}${baError}${saError}${riskError}${vulError}`;
   return {status: valid, error: message}
 };
 

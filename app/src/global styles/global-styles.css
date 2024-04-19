@@ -135,7 +135,7 @@ label {
 }
 
 input:invalid {
-    border: 1px red;
+    border: 3px solid red;
 }
 
 input:valid {
@@ -143,7 +143,7 @@ input:valid {
 }
 
 select:invalid {
-    border: 1px solid red;
+    border: 3px solid red;
 }
 
 select option {

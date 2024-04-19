@@ -130,35 +130,71 @@
     };
 
     // Check if the businessAsset exists globally
+    const existBusinessAsset = (ref) =>{
+      if (ref === null) return null
+      let foundBusinessAsset = businessAssets.find(obj => obj.businessAssetId === ref);
+      return foundBusinessAsset || null
+    };
+
+    // Check if the businessAsset is valid
     const checkBusinessAssetRef = (ref) =>{
       if (ref === null) return false
-      let foundBusinessAsset = businessAssets.find(obj => obj.businessAssetId === ref);
-      return foundBusinessAsset ? true : false
+      let foundBusinessAsset = existBusinessAsset(ref)
+      return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
+    };
+
+    // Check if the businessAssets are valid
+    const checkBusinessAssetRefArray = (refArray) =>{
+      if(refArray.length){
+        for (ref of refArray){
+          if (!checkBusinessAssetRef(ref)) return false
+        }
+      }
+      return true
+    };
+
+    const existSupportingAsset = (ref) =>{
+      if (ref === null) return null
+      let foundSupportingAsset = supportingAssets.find(obj => obj.supportingAssetId == ref);
+      return foundSupportingAsset || null
+    };
+
+    // Check if the supportingAsset is valid
+    const checkSupportingAssetRef = (ref) =>{
+      if (ref === null) return 
+      let foundSupportingAsset = existSupportingAsset(ref)
+
+      if (foundSupportingAsset == null || foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+          return false
+      }
+      return true
+    };
+
+    // Check if the supportingAssets are valid
+    const checkSupportingAssetRefArray = (refArray) =>{
+      if(refArray.length){
+        for (ref of refArray){
+          if (!checkSupportingAssetRef(ref)) return false
+        }
+      }
+      return true
     };
 
     // Check if the supportingAsset exists globally
-    const checkSupportingAssetRef = (ref) =>{
+    const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
-      let foundSupportingAsset = supportingAssets.find(obj => obj.supportingAssetId === ref);
-
-      if (!foundSupportingAsset || !foundSupportingAsset.businessAssetRef.length) return false
-
-      for (const businessAssetRef of foundSupportingAsset.businessAssetRef) {
-        if (!checkBusinessAssetRef(businessAssetRef) ) return false
-      }
-
+      found = vulnerabilities.find(obj => obj.vulnerabilityId === ref);
+      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
       return true
     };
 
     // Check if each vulnerability in attackPaths exist globally
     const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
-      let found
       if(attackPaths.length){
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
-            for (const vul of attackPath.vulnerabilityRef) {
-              found = vulnerabilities.find(obj => obj.vulnerabilityId === vul.vulnerabilityId);
-              if (!found || !found.supportingAssetRef.includes(supportingAssetRef)) return false
+            for (const ref of attackPath.vulnerabilityRef) {
+              if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)) return false
             }
           }
         }
@@ -175,14 +211,15 @@
 
     // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
-      let supportingAssetOptions = '';
+      let supportingAssetOptions = '<option value="">Select...</option>';
       $('#risk__supportingAsset').empty();
-      supportingAssets.filter(uncheckedSA => uncheckedSA.supportingAssetName).forEach((sa) =>{
-        if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef)){
-          supportingAssetOptions += `<option value="${sa.supportingAssetId}">${sa.supportingAssetName}</option>`;
-        }
-      });
-      supportingAssetOptions += '<option value="null">Select...</option>'
+      if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
+        supportingAssets.forEach((sa) =>{
+          if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" style="${checkSupportingAssetRef(sa.supportingAssetId)?'':'color:red'}">${sa.supportingAssetName}</option>`;
+          }
+        });
+      }
       $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
@@ -203,7 +240,7 @@
     }
 
     // add vulnerability ref
-    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId) => {
+    const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId, supportingAssetRef) => {
       let numberOfVulnerabilities = refs.length;
       refs.forEach((ref, rowId) => {
         numberOfVulnerabilities--;
@@ -221,16 +258,27 @@
         checkbox.name = 'risks__vulnerability__checkboxes';
         checkbox.setAttribute('data-row-id', rowId);
         vulnerabilityDiv.append(checkbox);
-        
         let select = $('<select>').append(vulnerabilityOptions);
         const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
         if (matchingRef.length === 0) {
           const placeholderRef = document.createElement('option')
           placeholderRef.value = ref.vulnerabilityId
           placeholderRef.text = ref.name
+          if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
+            placeholderRef.style ="color: red;"
+            select.css('border-color', 'red');
+            select.css('border-width', '3px');
+          }
           select.append(placeholderRef)
+        }else{
+          if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
+            for (optionRef of matchingRef){
+              optionRef.style ="color: red;"
+            }
+            select.css('border-color', 'red');
+            select.css('border-width', '3px');
+          }
         }
-        
         
         select.on('change', async (e)=> {
           const { value } = e.target;
@@ -265,8 +313,8 @@
     // add Vulnerabilities evaluation section
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
-      vulnerabilities.filter(uncheckedV => uncheckedV.vulnerabilityName && uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}">${v.vulnerabilityName}</option>`;
+      vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? 'style="color: red;"' : ''}>${v.vulnerabilityName}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -378,7 +426,7 @@
         mainDiv.append(div);
         $('#risks__vulnerability__attack__path').append(mainDiv);
 
-        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions, riskAttackPathId);
+        addVulnerabilityRef(vulnerabilityRef, div, vulnerabilityOptions, riskAttackPathId, supportingAssetRef);
       });
     };
 
@@ -794,17 +842,20 @@
           isOWASPLikelihood
         } = riskLikelihood;
 
-      // Set Risk description data
-      $('.riskId').text(riskId);
-      tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
-      tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
-      tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
-      $('select[id="risk__threatAgent"]').val(threatAgent);
-      $('select[id="risk__threat"]').val(threatVerb);
-      $('#risk__motivation').val(motivation);
-      $('select[id="risk__businessAsset"]').val(!checkBusinessAssetRef(businessAssetRef) ? 'null' : businessAssetRef);
-      addSupportingAssetOptions(businessAssetRef);
-      $('select[id="risk__supportingAsset"]').val(!checkSupportingAssetRef(supportingAssetRef) ? 'null' : supportingAssetRef);
+        // Set Risk description data
+        $('.riskId').text(riskId);
+        tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+        tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
+        tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+        
+        $('select[id="risk__threatAgent"]').val(threatAgent);
+        $('select[id="risk__threat"]').val(threatVerb);
+        $('#risk__motivation').val(motivation);
+        $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
+        $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid red'}`);
+        addSupportingAssetOptions(businessAssetRef);
+        $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || existSupportingAsset(supportingAssetRef) == null ? '' : supportingAssetRef);
+        $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(supportingAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid red'}`);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
@@ -973,11 +1024,11 @@
       });
 
       $('#risk__businessAsset').empty();
-      let businessAssetsOptions = '';
-      businessAssets.filter(uncheckedBA => uncheckedBA.businessAssetName).forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}">${ba.businessAssetName}</option>`;
+      let businessAssetsOptions = '<option value="">Select...</option>';
+      businessAssets.forEach((ba)=>{
+        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:red'}">${ba.businessAssetName}</option>`;
+
       });
-      businessAssetsOptions += '<option value="null">Select...</option>'
       $('#risk__businessAsset').append(businessAssetsOptions);
     }
 
@@ -1112,6 +1163,7 @@
      * 
   */
     const updateRiskName = async (field, value) =>{
+      if ((field == "businessAssetRef" || field == "supportingAssetRef") && value == "") value = "null"
       await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.updateRiskName(getCurrentRiskId(), field, value);
       reloadCurrentRisk(risk);
@@ -1149,12 +1201,15 @@
     $('#risk__businessAsset').on('change', ()=>{
       const selected = $('#risk__businessAsset').find(":selected").val();
       updateRiskName('businessAssetRef', selected);
+      addSupportingAssetOptions(selected)
+      $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(selected) != null && checkBusinessAssetRef(selected) ? 'none' : '3px solid red'}`);
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
+      $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(selected) != null && checkSupportingAssetRef(selected) ? 'none' : '3px solid red'}`);
     });
 
     $('#risk__motivation').on('change', ()=>{

@@ -24,6 +24,7 @@
 /* global $ tinymce Tabulator */
 
 (async () => {
+    var fetchedData
     try {
     function handleReload(event) {
         if (event.ctrlKey && event.key === 'r') {
@@ -55,9 +56,9 @@
         const supportingAssetRef = rowData.supportingAssetRef
         const vulnerabilityDescription = rowData.vulnerabilityDescription
         const vulnerabilityName = rowData.vulnerabilityName
-        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || vulnerabilityDescription === '' || vulnerabilityName === '')  {
-                cell.getElement().style.color = '#FF0000';
-            }
+        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || !checkSupportingAssetRefArray(supportingAssetRef) || vulnerabilityDescription === '' || vulnerabilityName === '')  {
+            cell.getElement().style.color = '#FF0000';
+        }
         else  {
             cell.getElement().style.color = '#000000';
         }
@@ -124,11 +125,54 @@
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
 
+    // Check if the businessAsset is valid
+    const checkBusinessAssetRef = (ref) =>{
+        if (ref === null) return false
+        let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId == ref);
+        return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
+      };
+      
+      // Check if the businessAssets are valid
+    const checkBusinessAssetRefArray = (refArray) =>{
+        if(refArray.length){
+          for (ref of refArray){
+            if (!checkBusinessAssetRef(ref)) return false
+          }
+        }
+        return true
+    };
+    // Check if the supportingAsset is valid
+    const checkSupportingAssetRef = (ref) =>{
+        if (ref === null) return 
+        let foundSupportingAsset = fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref);
+
+        if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+            return false
+        }
+        return true
+      };
+
+    // Check if the supportingAssets are valid
+    const checkSupportingAssetRefArray = (refArray) =>{
+        if(refArray.length){
+          for (ref of refArray){
+            if (!checkSupportingAssetRef(ref)) return false
+          }
+        }
+        return true
+      };
+    
     const validateVulnerabilityName = (vulnerability) => {
         const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
+        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid red'}`);
+
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
-            || vulnerabilityDescription === '' 
+            || !checkSupportingAssetRefArray(supportingAssetRef)
+            || vulnerabilityDescription === ''
             || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#FF0000';
         else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#000000';
     };
@@ -159,11 +203,15 @@
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
+        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
+        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid red'}`);
         $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
         vulnerabilityURL(vulnerabilityTrackingURI);
         $('#vulnerability__CVE').val(vulnerabilityCVE);
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
+        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`)
+
         if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 9) {
             $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(9));
         } else $('#vulnerability__scoring').val(cveScore);
@@ -173,6 +221,7 @@
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
         validateCVEScore(cveScore);
 
+        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? '#000000' : '#FF0000'}`)
         $('input[name="refs__checkboxes"]').prop('checked', false);
         supportingAssetRef.forEach((ref)=>{
             $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
@@ -234,8 +283,7 @@
 
     const updateSupportingAssets = (supportingAssets) =>{
         $('.refs').empty();
-
-        supportingAssets.filter(unfilteredSA => unfilteredSA.supportingAssetName).forEach((sa)=>{
+        supportingAssets.forEach((sa)=>{
             // add div
             const div = document.createElement('div');
 
@@ -256,7 +304,6 @@
                     vulnerability.supportingAssetRef = v.supportingAssetRef;
                 }
                 validateVulnerabilityName(vulnerability);
-                
             })
             div.append(checkbox);
 
@@ -264,7 +311,6 @@
             const label = document.createElement('label');
             label.innerHTML = sa.supportingAssetName;
             div.append(label);
-
             $('.refs').append(div);
             
         
@@ -276,19 +322,16 @@
         vulnerabilitiesData = data.Vulnerability;
         supportingAssetsData = data.SupportingAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
-        else {
-            $('#vulnerabilities section').show();
-            
+        else{
+            $('#vulnerabilities section').show();  
             updateSupportingAssets(data.SupportingAsset);
-            
-            
             updateVulnerabilityFields(vulnerabilitiesData);
         }
     };
 
     $(document).ready(async function () {
         window.project.load(async (event, data) => {
-        const fetchedData = await JSON.parse(data);
+        fetchedData = await JSON.parse(data);
             await tinymce.init({
                 selector: '.rich-text',
                 promotion: false,
