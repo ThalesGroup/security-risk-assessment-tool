@@ -35,7 +35,7 @@
       disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.vulnerabilities();
-    let vulnerabilitiesData, supportingAssetsData;
+    let vulnerabilitiesData, supportingAssetsData, businessAssetsData;
     $('#vulnerabilities').append(result[0]);
     const tableOptions = result[1];
     const checkBoxIndex = 0
@@ -286,6 +286,7 @@
         supportingAssets.forEach((sa)=>{
             // add div
             const div = document.createElement('div');
+            if (!checkSupportingAssetRef(sa.supportingAssetId)) div.style = 'color:red'
 
             // add checkbox
             const checkbox = document.createElement('input');
@@ -321,6 +322,7 @@
         
         vulnerabilitiesData = data.Vulnerability;
         supportingAssetsData = data.SupportingAsset;
+        businessAssetsData = data.BusinessAsset;
         if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
         else{
             $('#vulnerabilities section').show();  
