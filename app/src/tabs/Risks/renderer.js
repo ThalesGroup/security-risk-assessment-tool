@@ -183,7 +183,7 @@
     // Check if the supportingAsset exists globally
     const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
-      found = vulnerabilities.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
+      found = vulnerabilities.find(obj => obj.vulnerabilityId === ref);
       if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
       return true
     };
@@ -194,7 +194,7 @@
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
             for (const ref of attackPath.vulnerabilityRef) {
-              if (!checkVulnerabilityRef(ref,supportingAssetRef)) return false
+              if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)) return false
             }
           }
         }
@@ -264,14 +264,14 @@
           const placeholderRef = document.createElement('option')
           placeholderRef.value = ref.vulnerabilityId
           placeholderRef.text = ref.name
-          if (!checkVulnerabilityRef(ref,supportingAssetRef)){
+          if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
             placeholderRef.style ="color: red;"
             select.css('border-color', 'red');
             select.css('border-width', '3px');
           }
           select.append(placeholderRef)
         }else{
-          if (!checkVulnerabilityRef(ref,supportingAssetRef)){
+          if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
             for (optionRef of matchingRef){
               optionRef.style ="color: red;"
             }
