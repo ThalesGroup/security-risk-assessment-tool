@@ -54,6 +54,20 @@ function enableRiskSelection(){
   document.querySelector('#risks__table .tabulator-tableholder').classList.remove('disabled')
 }
 
+function disableInteract(){
+  disableButtons()
+  disableInputs()
+  disableRiskSelection()
+  disableAllTabs()
+}
+
+function enableInteract(){
+  enableButtons()
+  enableInputs()
+  enableRiskSelection()
+  disableAllTabs
+}
+
 (async () => {
   let addSelectedRowDataExecuting = false;
 
@@ -139,13 +153,9 @@ function enableRiskSelection(){
             risksTable.deselectRow(r.riskId);
           });
           risksTable.selectRow(filteredRows[0].riskId);
-          disableButtons()
-          disableInputs()
-          disableRiskSelection()
+          disableInteract()
           await addSelectedRowData(filteredRows[0].riskId);
-          enableButtons()
-          enableInputs()
-          enableRiskSelection()
+          enableInteract()
 
         } else $('#risks section').hide();
       }
@@ -896,11 +906,7 @@ function enableRiskSelection(){
             } else setNaNValues();
           }
         })
-        // Display the risks as selectable
-        enableRiskSelection()
-        // Display the buttons as usable
-        enableButtons()
-        enableInputs()
+        enableInteract()
         addSelectedRowDataExecuting = false;
       }
     };
@@ -923,13 +929,9 @@ function enableRiskSelection(){
     // row is clicked & selected
     risksTable.on('rowClick', async(e, row) => {
       risksTable.selectRow(row.getIndex());
-      disableButtons()
-      disableInputs()
-      disableRiskSelection()
+      disableInteract()
       await addSelectedRowData(row.getIndex());
-      enableButtons()
-      enableInputs()
-      enableRiskSelection()
+      enableInteract()
     });
 
     const addRisk = (risk) => {
@@ -1003,13 +1005,9 @@ function enableRiskSelection(){
       addRisk(risk);
       if (risksData.length === 1) {
         risksTable.selectRow(risk.riskId);
-        disableButtons()
-        disableInputs()
-        disableRiskSelection()
+        disableInteract()
         await addSelectedRowData(risk.riskId);
-        enableButtons()
-        enableInputs()
-        enableRiskSelection()
+        enableInteract()
       }
     });
 
@@ -1125,19 +1123,15 @@ function enableRiskSelection(){
         }else{
           $('#risks section').hide();
         }
-
-        //Wait the data to be ready with await 
-        enableRiskSelection()
-        enableButtons()
-        enableInputs()
-        enableAllTabs()
+        enableInteract()
         window.removeEventListener('keydown', handleReload);
       });
 
     });
 
     // reloads all data displayed for current risk
-    const reloadCurrentRisk = (updatedRisk) => {
+    const reloadCurrentRisk = async (updatedRisk) => {
+      disableInteract()
       const { riskId, riskName, residualRiskLevel, riskManagementDecision } = updatedRisk;
       //const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = riskName;
       let riskIndex = risksData.findIndex((risk) => risk.riskId === updatedRisk.riskId);
@@ -1146,7 +1140,7 @@ function enableRiskSelection(){
       risksTable.getRow(riskId).getCell('riskName').getElement().style.color = validateRiskName(updatedRisk);
       styleResidualRiskLevelTable(riskId, residualRiskLevel);
       styleRiskName(riskManagementDecision, riskId);
-      addSelectedRowData(riskId);
+      await addSelectedRowData(riskId);
     };
 
     // reloads selected data displayed for updateRiskLikelihood, updateRiskMitigation, updateRiskManagement
