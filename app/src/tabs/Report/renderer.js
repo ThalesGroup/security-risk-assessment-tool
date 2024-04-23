@@ -261,7 +261,7 @@
             });
 
             window.project.iteration(async (event, iteration) => {
-                $('#iteration').text(iteration);
+                $('#revision').text(iteration);
             });
             enableAllTabs()
             window.removeEventListener('keydown', handleReload);
