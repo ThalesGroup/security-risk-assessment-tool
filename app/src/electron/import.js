@@ -155,7 +155,7 @@ function importRisk(currentISRA, importedISRA, selectedRiskIds) {
       newRisk.motivation = selectedRisk.motivation;
       newRisk.motivationDetail = selectedRisk.motivationDetail;
 
-      newRisk.riskName.isAutomaticRiskName = selectedRisk.isAutomaticRiskName;
+      newRisk.isAutomaticRiskName = selectedRisk.isAutomaticRiskName;
 
       // Need to change to account for schema update
       newRisk.riskId = highestRiskId;

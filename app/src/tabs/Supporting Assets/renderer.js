@@ -64,11 +64,12 @@
     const matrixTable = '#supporting-asset-business-assets__table';
     let selectOptions = {};
 
-    const validate = (id, value) =>{
-      if ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
-        || value.length !== new Set(value).size
-        || value.includes('null')
-        || !checkBusinessAssetRefArray(value)) {
+    const validate = (id, field, value) =>{
+      if ((field === 'businessAssetRef' && ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
+          || value.length !== new Set(value).size
+          || value.includes('null')
+          || !checkBusinessAssetRefArray(value)))
+        || (field === 'supportingAssetName' && !value)) {
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
@@ -85,15 +86,17 @@
 
     const updateSupportingAsset = (id, field, value) => {
       if (field === 'businessAssetRef') {
-        validate(id, value);
+        validate(id, field, value);
       }
       else {
-        if (field === 'supportingAssetName' && value) {
-          if (!document.getElementById(`supporting-asset-business-assets__table-${id}`)) {
+        if (field === 'supportingAssetName') {
+          if (value && !document.getElementById(`supporting-asset-business-assets__table-${id}`)) {
             addMatrixRow(id, value);
             addBusinessAsset(id, null, 0);
-            validate(id, $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get());
-          } 
+            validate(id, 'businessAssetRef', $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get());
+          } else {
+            validate(id, field, value);
+          }
         }
 
         window.supportingAssets.updateSupportingAsset(id, field, value);
@@ -196,7 +199,7 @@
         else await window.supportingAssets.addBusinessAssetRef(id, value);
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
-        validate(id, selected);
+        validate(id, 'businessAssetRef', selected);
         updateSupportingAsset(id, 'businessAssetRef', selected)
 
       });
@@ -216,7 +219,7 @@
         });
 
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
-        validate(id, selected);
+        validate(id, 'businessAssetRef', selected);
         updateSupportingAsset(id, 'businessAssetRef', selected)
       });
     };

@@ -57,6 +57,17 @@ div[class='content active'] {
     font-size: smaller;
 }
 
+.tabulator .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell textarea{
+    resize:none;
+}
+
+.tabulator .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell{
+    display: grid;
+}
+
+.tabulator .tabulator-tableholder .tabulator-table .tabulator-row {
+    display: inline-flex;
+}
 /* .tabulator .tabulator-col-content:first-of-type .tabulator-col-title:first-of-type {
     font-size: small;
 } */
