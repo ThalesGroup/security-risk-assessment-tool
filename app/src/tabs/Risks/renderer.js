@@ -206,6 +206,12 @@ function enableInteract(){
       return foundSupportingAsset || null
     };
 
+    const coherentSupportingAsset = (refSA,refBA) =>{
+      if (refSA === null || refBA === null) return null
+      let foundSupportingAsset = existSupportingAsset(refSA)
+      return (foundSupportingAsset && foundSupportingAsset.businessAssetRef.some((ba) => ba === refBA)) || null
+    };
+
     // Check if the supportingAsset is valid
     const checkSupportingAssetRef = (ref) =>{
       if (ref === null) return 
@@ -901,8 +907,8 @@ function enableInteract(){
         $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
         $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid red'}`);
         addSupportingAssetOptions(businessAssetRef);
-        $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || existSupportingAsset(supportingAssetRef) == null ? '' : supportingAssetRef);
-        $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(supportingAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid red'}`);
+        $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || coherentSupportingAsset(supportingAssetRef, businessAssetRef) == null ? '' : supportingAssetRef);
+        $('select[id="risk__supportingAsset"]').prop('style',`border:${coherentSupportingAsset(supportingAssetRef, businessAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid red'}`);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
