@@ -214,11 +214,9 @@ $(document).keydown(function(e) {
     const currentPanel = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     const indexCurrent = panels.findIndex(p => p.name == currentPanel);
     if(e.shiftKey){
-      if(indexCurrent > 0)
-        location.href = panels[indexCurrent-1].link;
+      location.href = panels[indexCurrent-1 >= 0 ? indexCurrent-1 : panels.length + indexCurrent-1].link;
     }else{
-      if(indexCurrent < panels.length-1)
-        location.href = panels[indexCurrent+1].link;
+      location.href = panels[(indexCurrent+1) % panels.length].link;
     }
   }
 });
