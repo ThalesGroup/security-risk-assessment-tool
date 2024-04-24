@@ -113,6 +113,7 @@
     });
 
     const getCurrentVulnerabilityId = () => {
+        sessionStorage.setItem("currentVulnerability",vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId);
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
     };
 
@@ -181,8 +182,9 @@
         vulnerabilitiesTable.clearData();
         $('#vulnerabilties__table__checkboxes').empty();
         vulnerabilitiesTable.addData(vulnerabilities);
-        vulnerabilitiesTable.selectRow(vulnerabilities[0].vulnerabilityId);
-        addSelectedVulnerabilityRowData(vulnerabilities[0].vulnerabilityId);
+        const selectedVulnerability = sessionStorage.getItem("currentVulnerability") ? sessionStorage.getItem("currentVulnerability") : vulnerabilities[0].vulnerabilityId
+        vulnerabilitiesTable.selectRow(selectedVulnerability);
+        addSelectedVulnerabilityRowData(selectedVulnerability);
 
     };
     
@@ -200,7 +202,7 @@
             cveScore,
             overallLevel,
             supportingAssetRef
-        } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
+        } = vulnerabilitiesData.find((v) => v.vulnerabilityId == id);
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
         $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
