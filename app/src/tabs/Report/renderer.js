@@ -167,7 +167,7 @@
         $(document).ready(function () {
             window.project.load(async (event, data) => {
                 const { Vulnerability, Risk, ISRAmeta } = await JSON.parse(data);
-                const { projectName, projectVersion, iteration } = ISRAmeta;
+                const { projectName, projectVersion, iteration, ISRAtracking} = ISRAmeta;
                 const sortedVulnerability = {
                     high: [],
                     medium: [],
@@ -184,7 +184,9 @@
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
                 $('#app').text('1.1.0');
-                $('#iteration').text(iteration);
+                $('#iteration').text(ISRAtracking.length);
+                $('#revision').text(iteration);
+
 
                 let totalCost = 0;
                 const lowRisk = [0,0,0];
@@ -259,7 +261,7 @@
             });
 
             window.project.iteration(async (event, iteration) => {
-                $('#iteration').text(iteration);
+                $('#revision').text(iteration);
             });
             enableAllTabs()
             window.removeEventListener('keydown', handleReload);
