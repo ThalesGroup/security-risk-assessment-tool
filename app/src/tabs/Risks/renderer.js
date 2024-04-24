@@ -173,6 +173,7 @@ function enableInteract(){
      * 
   */
     const getCurrentRiskId = () =>{
+      sessionStorage.setItem("currentRisk",risksTable.getSelectedData()[0].riskId);
       return risksTable.getSelectedData()[0].riskId;
     };
 
@@ -880,7 +881,7 @@ function enableInteract(){
           riskManagementDetail,
           residualRiskScore,
           residualRiskLevel
-        } = risksData.find((risk) => risk.riskId === id);
+        } = risksData.find((risk) => risk.riskId == id);
 
         const {
           riskLikelihoodDetail,
@@ -1039,8 +1040,9 @@ function enableInteract(){
       risksTable.addData(tableData);
       disableRiskSelection()
 
-      risksTable.selectRow(fetchedData[0].riskId);
-      await addSelectedRowData(fetchedData[0].riskId);
+      const selectedRisk = sessionStorage.getItem("currentRisk") ? sessionStorage.getItem("currentRisk") : fetchedData[0].riskId
+      risksTable.selectRow(selectedRisk);
+      await addSelectedRowData(selectedRisk);
       /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
 
