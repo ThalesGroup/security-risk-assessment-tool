@@ -212,8 +212,8 @@
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
         $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`)
 
-        if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 9) {
-            $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(9));
+        if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 1) {
+            $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(1));
         } else $('#vulnerability__scoring').val(cveScore);
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
 
@@ -512,8 +512,8 @@
     $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
         const { value } = e.target;
         let fixedValue = value;
-        if (value.includes('.') && value.split('.')[1].length > 9) {
-            fixedValue = Number.parseFloat(value).toFixed(9); 
+        if (value.includes('.') && value.split('.')[1].length > 1) {
+            fixedValue = Number.parseFloat(value).toFixed(1); 
         };
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', fixedValue);
         const { overallLevel, cveScore } = vulnerability;
