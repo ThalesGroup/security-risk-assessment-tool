@@ -114,6 +114,7 @@
 
 
 (async () => {
+    let fetchedData
     try {
         function handleReload(event) {
             if (event.ctrlKey && event.key === 'r') {
@@ -138,6 +139,86 @@
             });
         };
 
+        // Check if the businessAsset exists globally
+        const existBusinessAsset = (ref) =>{
+          if (ref === null) return null
+          let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId === ref);
+          return foundBusinessAsset || null
+        };
+      
+        // Check if the businessAsset is valid
+        const checkBusinessAssetRef = (ref) =>{
+          if (ref === null) return false
+          let foundBusinessAsset = existBusinessAsset(ref)
+          return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
+        };
+      
+        // Check if the businessAssets are valid
+        const checkBusinessAssetRefArray = (refArray) =>{
+          if(refArray.length){
+            for (ref of refArray){
+              if (!checkBusinessAssetRef(ref)) return false
+            }
+          }
+          return true
+        };
+      
+        const existSupportingAsset = (ref) =>{
+          if (ref === null) return null
+          let foundSupportingAsset = fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref);
+          return foundSupportingAsset || null
+        };
+      
+        // Check if the supportingAsset is valid
+        const checkSupportingAssetRef = (ref) =>{
+          if (ref === null) return 
+          let foundSupportingAsset = existSupportingAsset(ref)
+        
+          if (foundSupportingAsset == null || foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+              return false
+          }
+          return true
+        };
+      
+        // Check if the supportingAssets are valid
+        const checkSupportingAssetRefArray = (refArray) =>{
+          if(refArray.length){
+            for (ref of refArray){
+              if (!checkSupportingAssetRef(ref)) return false
+            }
+          }
+          return true
+        };
+      
+        // Check if the supportingAsset exists globally
+        const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
+          if (ref === null) return false
+          found = fetchedData.Vulnerability.find(obj => obj.vulnerabilityId === ref);
+          if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+          return true
+        };
+      
+        // Check if each vulnerability in attackPaths exist globally
+        const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
+          if(attackPaths.length){
+            for (const attackPath of attackPaths) {
+              if(attackPath.vulnerabilityRef.length){
+                for (const ref of attackPath.vulnerabilityRef) {
+                  if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)) return false
+                }
+              }
+            }
+          }
+          return true
+        };
+      
+        const validateRiskName = (risk) => {
+          const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
+          if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+            return '#FF0000';
+          } else return '#000000';
+        };
+
         const renderRisk = (sortedRisk, residualRiskLevel) => {
             sortedRisk[residualRiskLevel].forEach((risk) => {
                 const { riskId, residualRiskLevel, inherentRiskScore, mitigatedRiskScore, residualRiskScore,riskManagementDecision, riskName, riskManagementDetail } = risk;
@@ -150,7 +231,7 @@
                     <td style="padding:0;">
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
-                            <div class="grid-item">${riskName}</div>
+                            <div class="grid-item" style ="color:${validateRiskName(risk)}">${riskName}</div>
                             <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
                             <div class="grid-item">${riskManagementDetail}</div>
                         </div>
@@ -166,7 +247,8 @@
 
         $(document).ready(function () {
             window.project.load(async (event, data) => {
-                const { Vulnerability, Risk, ISRAmeta } = await JSON.parse(data);
+                fetchedData = await JSON.parse(data);
+                const { Vulnerability, Risk, ISRAmeta } = fetchedData
                 const { projectName, projectVersion, iteration, ISRAtracking} = ISRAmeta;
                 const sortedVulnerability = {
                     high: [],
