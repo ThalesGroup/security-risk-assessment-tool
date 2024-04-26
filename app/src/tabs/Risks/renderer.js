@@ -65,7 +65,7 @@ function enableInteract(){
   enableButtons()
   enableInputs()
   enableRiskSelection()
-  disableAllTabs
+  enableAllTabs()
 }
 
 (async () => {
