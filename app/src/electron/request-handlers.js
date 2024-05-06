@@ -523,7 +523,6 @@ const loadJSONFile = async (win, filePath) => {
   try {
     loadPromise = DataLoad(filePath,true);
     loadPromise.then((israProject) => {
-      console.log("3 israProject")
       win.webContents.send('project:load', israProject.toJSON());
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
