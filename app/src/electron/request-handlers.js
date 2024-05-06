@@ -111,11 +111,11 @@ const newISRAProject = (win, app) => {
 */
 let jsonFilePath = '', electronApp = null;
 
-const savetoPath = async (filePath, saveAs = false) => {
+const savetoPath = async (filePath, saveAs = false, encryption = false) => {
   if (jsonFilePath === '' || saveAs) {
     // save as new project in selected directory (save as)
     try {
-      await DataStore(israProject, filePath);
+      await DataStore(israProject, filePath, encryption);
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
@@ -157,6 +157,26 @@ const saveAs = async () => {
   if (!fileName.canceled) {
     const { filePath } = fileName;
     savetoPath(filePath, true);
+    // getMainWindow().webContents.send('validate:allTabs', filePath);
+  }
+};
+/**
+  * Encrypt a project as a new file in selected directory (save as)
+*/
+const EncryptAs = async () => {
+  const options = {
+  // Placeholders
+    title: 'Save file - Electron ISRA Project',
+    defaultPath: os.homedir(),
+    buttonLabel: 'Save ISRA File',
+    filters: [
+      { name: 'ISRA file type', extensions: ['sra'] },
+    ],
+  };
+  const fileName = await dialog.showSaveDialog(options);
+  if (!fileName.canceled) {
+    const { filePath } = fileName;
+    savetoPath(filePath, true, true);
     // getMainWindow().webContents.send('validate:allTabs', filePath);
   }
 };
@@ -383,6 +403,8 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
     const saveOrSaveAs = () => {
       if (labelSelected === 'Save As') saveAs();
       else if (labelSelected === 'Save') saveProject();
+      else if (labelSelected === 'Encrypt As') EncryptAs();
+
     };
     const {status, error} = validateClasses();
     if (status) saveOrSaveAs();
@@ -499,13 +521,24 @@ const exit = (e, app) => {
 */
 const loadJSONFile = async (win, filePath) => {
   try {
-    
-    israProject = DataLoad(filePath);
-    win.webContents.send('project:load', israProject.toJSON());
-    jsonFilePath = filePath;
-    browserTitle = `ISRA Risk Assessment - ${filePath}`;
-    getMainWindow().title = browserTitle;
-    oldIsraProject = israProject.toJSON();
+    loadPromise = DataLoad(filePath,true);
+    loadPromise.then((israProject) => {
+      console.log("3 israProject")
+      win.webContents.send('project:load', israProject.toJSON());
+      jsonFilePath = filePath;
+      browserTitle = `ISRA Risk Assessment - ${filePath}`;
+      getMainWindow().title = browserTitle;
+      oldIsraProject = israProject.toJSON();
+    }
+    ).catch((err) => {
+      console.log(err)
+    })
+    console.log("1 israProject")
+
+    await loadPromise
+    console.log("2 israProject")
+
+
   } catch (err) {
     console.log(err);
     const errorMessage = getError(err)
