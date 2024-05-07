@@ -170,7 +170,7 @@ function enableInteract(){
      * 
   */
     const getCurrentRiskId = () => {
-      // Store the current risk id in the browser's storage
+      // Store the current risk id in the browser's volatile storage
       sessionStorage.setItem("currentRisk",risksTable.getSelectedData()[0].riskId);
       return risksTable.getSelectedData()[0].riskId;
     };
@@ -1038,7 +1038,7 @@ function enableInteract(){
       risksTable.addData(tableData);
       disableRiskSelection()
 
-      // Select the latest risk selected (stored in the browser's storage) (default: first risk of the table)
+      // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
       const selectedRisk = sessionStorage.getItem("currentRisk") ? sessionStorage.getItem("currentRisk") : fetchedData[0].riskId
       risksTable.selectRow(selectedRisk);
       await addSelectedRowData(selectedRisk);
