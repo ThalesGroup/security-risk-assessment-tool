@@ -118,9 +118,6 @@ function enableInteract(){
     
     }
     
-
-
-
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
@@ -172,7 +169,9 @@ function enableInteract(){
      * 
      * 
   */
-    const getCurrentRiskId = () =>{
+    const getCurrentRiskId = () => {
+      // Store the current risk id in the browser's volatile storage
+      sessionStorage.setItem("currentRisk",risksTable.getSelectedData()[0].riskId);
       return risksTable.getSelectedData()[0].riskId;
     };
 
@@ -886,7 +885,7 @@ function enableInteract(){
           riskManagementDetail,
           residualRiskScore,
           residualRiskLevel
-        } = risksData.find((risk) => risk.riskId === id);
+        } = risksData.find((risk) => risk.riskId == id);
 
         const {
           riskLikelihoodDetail,
@@ -1045,8 +1044,10 @@ function enableInteract(){
       risksTable.addData(tableData);
       disableRiskSelection()
 
-      risksTable.selectRow(fetchedData[0].riskId);
-      await addSelectedRowData(fetchedData[0].riskId);
+      // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
+      const selectedRisk = sessionStorage.getItem("currentRisk") ? sessionStorage.getItem("currentRisk") : fetchedData[0].riskId
+      risksTable.selectRow(selectedRisk);
+      await addSelectedRowData(selectedRisk);
       /* fetchedData.forEach((risk, i) => {
         addRisk(risk);
 
