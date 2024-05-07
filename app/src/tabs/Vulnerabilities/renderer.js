@@ -513,7 +513,7 @@
         const { value } = e.target;
         let fixedValue = value;
         if (value.includes('.') && value.split('.')[1].length > 1) {
-            fixedValue = Number.parseFloat(value).toFixed(1); 
+            fixedValue = Number.parseFloat(value).toString().match(/^-?\d+(?:\.\d?)?/)[0]
         };
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', fixedValue);
         const { overallLevel, cveScore } = vulnerability;
