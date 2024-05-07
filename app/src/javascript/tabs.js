@@ -210,11 +210,16 @@ tabs.onclick = (e) => {
 };
 
 $(document).keydown(function(e) {
-  if(e.ctrlKey && (e.keyCode === 9)){
+  const tabKeyCode = 9
+  // Ctrl and Tab keys pressed simultaneously
+  if(e.ctrlKey && e.keyCode === tabKeyCode){
+    // Set the current panel as reference
     const currentPanel = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     const indexCurrent = panels.findIndex(p => p.name == currentPanel);
+    // If shift is also pressed, navigate to the left
     if(e.shiftKey){
       location.href = panels[indexCurrent-1 >= 0 ? indexCurrent-1 : panels.length + indexCurrent-1].link;
+    // Else, navigate to the right
     }else{
       location.href = panels[(indexCurrent+1) % panels.length].link;
     }
