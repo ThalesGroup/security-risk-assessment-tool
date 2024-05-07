@@ -155,3 +155,7 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
 contextBridge.exposeInMainWorld('israreport', {
   saveGraph: (graph) => ipcRenderer.send('israreport:saveGraph', graph),
 });
+
+contextBridge.exposeInMainWorld('encryption', {
+  setSecret: (secret) => ipcRenderer.send('set-secret', secret)
+})

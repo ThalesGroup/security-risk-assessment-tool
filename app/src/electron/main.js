@@ -80,6 +80,10 @@ function createWindow() {
           click: () => validationErrors('Save As'),
         },
         {
+          label: 'Encrypt As',
+          click: () => validationErrors('Encrypt As'),
+        },
+        {
           label: 'Open File',
           click: () => loadFile(win),
         },

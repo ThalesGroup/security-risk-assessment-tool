@@ -23,7 +23,7 @@
 */
 
 const {
-  dialog, ipcMain, Menu, BrowserWindow
+  app,dialog, ipcMain, Menu, BrowserWindow
   // nativeTheme,
 } = require('electron');
 
@@ -43,6 +43,7 @@ const errorMessages = require('./validation')
 
 const {
   DataStore,
+  DataEncrypt,
   XML2JSON,
   DataLoad,
   DataNew,
@@ -67,6 +68,21 @@ const getMainWindow = () => {
   const ID = process.env.MAIN_WINDOW_ID * 1;
   return BrowserWindow.fromId(ID);
 };
+
+const passordWindow = (resolveFunc) => {
+  const mainWindow = new BrowserWindow({
+    webPreferences: {
+      preload: path.join(__dirname, '/preload.js')
+    }
+  })
+
+  ipcMain.on('set-secret', (event, secret) => {
+    resolveFunc(secret)
+    mainWindow.close()
+  })
+
+  mainWindow.loadFile(path.join(__dirname,'../tabs/Encryption/index.html'))
+}
 
 /**
   * Create new project
@@ -111,11 +127,43 @@ const newISRAProject = (win, app) => {
 */
 let jsonFilePath = '', electronApp = null;
 
-const savetoPath = async (filePath, saveAs = false) => {
+const savetoPath = async (filePath, saveAs = false, encryption = false) => {
   if (jsonFilePath === '' || saveAs) {
     // save as new project in selected directory (save as)
     try {
-      await DataStore(israProject, filePath);
+      if (encryption) {
+        let encryptedIsraProject
+        const settingPassword = new Promise((resolveSettingPassword, rejectSettingPassword) => {
+          app.whenReady().then(() => {
+            passordWindow(resolveSettingPassword)
+            app.on('activate', function () {
+              if (BrowserWindow.getAllWindows().length === 0) createWindow()
+            })
+          })
+  
+          app.on('window-all-closed', function () {
+            if (process.platform !== 'darwin') app.quit()  
+          })
+        });
+        settingPassword.then((secret) => {
+          console.log("ok")
+          console.log("israProject")
+          console.log(israProject)
+          encryptedIsraProject = DataEncrypt(israProject.toJSON(),secret)
+          console.log("encryptedIsraProject")
+          console.log(encryptedIsraProject)
+
+        })
+        await settingPassword
+
+        console.log(encryptedIsraProject)
+        await DataStore(encryptedIsraProject, filePath);
+
+      }else{
+        console.log(israProject)
+
+        await DataStore(israProject, filePath);
+      }
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
@@ -172,6 +220,28 @@ const save = () => {
     // getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
   }
 };
+
+/**
+  * save as new encrypted file in selected directory (encrypt as)
+*/
+const encryptAs = async () => {
+  const options = {
+  // Placeholders
+    title: 'Save file - Electron ISRA Project',
+    defaultPath: os.homedir(),
+    buttonLabel: 'Save ISRA File',
+    filters: [
+      { name: 'ISRA file type', extensions: ['sra'] },
+    ],
+  };
+  const fileName = await dialog.showSaveDialog(options);
+  if (!fileName.canceled) {
+    const { filePath } = fileName;
+
+    savetoPath(filePath, true, true);
+  }
+};
+
 
 /**
   * save current project (save/save as)
@@ -485,6 +555,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
     const saveOrSaveAs = () => {
       if (labelSelected === 'Save As') saveAs();
       else if (labelSelected === 'Save') saveProject();
+      else if (labelSelected === 'Encrypt As') encryptAs();
     };
     const {status, error} = validateClasses();
     if (status) saveOrSaveAs();

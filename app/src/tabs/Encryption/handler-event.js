@@ -21,25 +21,9 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-const fs = require('fs');
-const ISRAProject = require('../../model/classes/ISRAProject/isra-project');
-const EncryptedISRAProject = require('../../model/classes/EncryptedISRAProject/encrypted-isra-project');
-
-/**
-  * Save project to existing json file
-  * @function DataStore
-  * @param {ISRAProject} israProject - current instance of israProject
-  * @param {string} filePath - path of file
-  * @return {Promise}
-  * @throws reject the promise in case of error
-*/
-const DataStore = (israProject, filePath) => new Promise((resolve, reject) => {
-  if ( (israProject instanceof ISRAProject || israProject instanceof EncryptedISRAProject) && typeof filePath === 'string') {
-    fs.writeFile(filePath, israProject.toJSON(), (err) => {
-      if (err) reject(new Error('Failed to save file'));
-      resolve('Done save');
-    });
-  } else reject(new Error('Invalid project or filepath'));
-});
-
-module.exports = DataStore;
+const setButton = document.getElementById('btn')
+const secretInput = document.getElementById('secret')
+setButton.addEventListener('click', () => {
+  const secret = secretInput.value
+  window.encryption.setSecret(secret)
+})
