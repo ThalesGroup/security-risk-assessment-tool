@@ -118,9 +118,6 @@ function enableInteract(){
     
     }
     
-
-
-
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
@@ -172,7 +169,8 @@ function enableInteract(){
      * 
      * 
   */
-    const getCurrentRiskId = () =>{
+    const getCurrentRiskId = () => {
+      // Store the current risk id in the browser's storage
       sessionStorage.setItem("currentRisk",risksTable.getSelectedData()[0].riskId);
       return risksTable.getSelectedData()[0].riskId;
     };
@@ -1040,6 +1038,7 @@ function enableInteract(){
       risksTable.addData(tableData);
       disableRiskSelection()
 
+      // Select the latest risk selected (stored in the browser's storage) (default: first risk of the table)
       const selectedRisk = sessionStorage.getItem("currentRisk") ? sessionStorage.getItem("currentRisk") : fetchedData[0].riskId
       risksTable.selectRow(selectedRisk);
       await addSelectedRowData(selectedRisk);

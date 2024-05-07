@@ -113,6 +113,7 @@
     });
 
     const getCurrentVulnerabilityId = () => {
+        // Store the current vulnerability id in the browser's storage
         sessionStorage.setItem("currentVulnerability",vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId);
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
     };
@@ -182,6 +183,7 @@
         vulnerabilitiesTable.clearData();
         $('#vulnerabilties__table__checkboxes').empty();
         vulnerabilitiesTable.addData(vulnerabilities);
+        // Select the latest vulerability selected (stored in the browser's storage) (default: first vulerability of the table)
         const selectedVulnerability = sessionStorage.getItem("currentVulnerability") ? sessionStorage.getItem("currentVulnerability") : vulnerabilities[0].vulnerabilityId
         vulnerabilitiesTable.selectRow(selectedVulnerability);
         addSelectedVulnerabilityRowData(selectedVulnerability);
