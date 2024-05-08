@@ -45,6 +45,7 @@ const {
   DataStore,
   DataEncrypt,
   XML2JSON,
+  IsEncrypted,
   DataLoad,
   DataNew,
 } = require('../../../lib/src/api/index');
@@ -146,17 +147,10 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
           })
         });
         settingPassword.then((secret) => {
-          console.log("ok")
-          console.log("israProject")
-          console.log(israProject)
           encryptedIsraProject = DataEncrypt(israProject.toJSON(),secret)
-          console.log("encryptedIsraProject")
-          console.log(encryptedIsraProject)
-
         })
         await settingPassword
 
-        console.log(encryptedIsraProject)
         await DataStore(encryptedIsraProject, filePath);
 
       }else{
@@ -672,8 +666,28 @@ const exit = (e, app) => {
 */
 const loadJSONFile = async (win, filePath) => {
   try {
-    
-    israProject = DataLoad(filePath);
+    if (IsEncrypted(filePath)){
+      let password
+      const settingPassword = new Promise((resolveSettingPassword, rejectSettingPassword) => {
+        app.whenReady().then(() => {
+          passordWindow(resolveSettingPassword)
+          app.on('activate', function () {
+            if (BrowserWindow.getAllWindows().length === 0) createWindow()
+          })
+        })
+
+        app.on('window-all-closed', function () {
+          if (process.platform !== 'darwin') app.quit()  
+        })
+      });
+      settingPassword.then((secret) => {
+        password = secret
+      })
+      await settingPassword
+      israProject = DataLoad(filePath, password);
+    }else{
+      israProject = DataLoad(filePath);
+    }
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
