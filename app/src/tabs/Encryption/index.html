@@ -7,8 +7,11 @@
     <title>Encryption Window</title>
   </head>
   <body>
-    Password: <input id="secret"/>
-    <button id="btn" type="button">RUN</button>
+    <form>
+      Password: <input id="secret" type="password" minlength="8"/>
+      <button id="show-secret" type="button">Show</button>
+      <input id="btn" type="submit" value="Submit"/>
+    </form>
     <script src="./handler-event.js"></script>
   </body>
 </html>

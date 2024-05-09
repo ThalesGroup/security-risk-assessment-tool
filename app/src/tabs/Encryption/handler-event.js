@@ -22,8 +22,21 @@
 * -----------------------------------------------------------------------------
 */
 const setButton = document.getElementById('btn')
+const setShowButton = document.getElementById('show-secret')
 const secretInput = document.getElementById('secret')
 setButton.addEventListener('click', () => {
-  const secret = secretInput.value
-  window.encryption.setSecret(secret)
+  if(secretInput.checkValidity()){
+    const secret = secretInput.value
+    window.encryption.setSecret(secret)
+  }
 })
+
+setShowButton.addEventListener('click', () => {
+  if (secretInput.type === "password") {  
+    secretInput.type = "text";
+  } else {  
+    secretInput.type = "password";  
+  }  
+})
+
+

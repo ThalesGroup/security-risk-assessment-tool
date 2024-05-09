@@ -71,18 +71,22 @@ const getMainWindow = () => {
 };
 
 const passordWindow = (resolveFunc) => {
-  const mainWindow = new BrowserWindow({
+  const passordWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    parent: getMainWindow(),
+    modal: true,
     webPreferences: {
       preload: path.join(__dirname, '/preload.js')
     }
   })
-
+  passordWindow.removeMenu()
   ipcMain.on('set-secret', (event, secret) => {
     resolveFunc(secret)
-    mainWindow.close()
+    passordWindow.close()
   })
 
-  mainWindow.loadFile(path.join(__dirname,'../tabs/Encryption/index.html'))
+  passordWindow.loadFile(path.join(__dirname,'../tabs/Encryption/index.html'))
 }
 
 /**
