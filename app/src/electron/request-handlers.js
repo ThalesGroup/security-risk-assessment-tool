@@ -85,6 +85,11 @@ const passordWindow = (resolveFunc) => {
     resolveFunc(secret)
     passordWindow.close()
   })
+  // set to null
+  passordWindow.on('close', (e) => {
+    e.preventDefault()
+    passordWindow.hide();
+  });
 
   passordWindow.loadFile(path.join(__dirname,'../tabs/Encryption/index.html'))
 }
@@ -142,7 +147,7 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
           app.whenReady().then(() => {
             passordWindow(resolveSettingPassword)
             app.on('activate', function () {
-              if (BrowserWindow.getAllWindows().length === 0) createWindow()
+              if (BrowserWindow.getAllWindows().length === 0) passordWindow(resolveSettingPassword)
             })
           })
   
@@ -676,7 +681,7 @@ const loadJSONFile = async (win, filePath) => {
         app.whenReady().then(() => {
           passordWindow(resolveSettingPassword)
           app.on('activate', function () {
-            if (BrowserWindow.getAllWindows().length === 0) createWindow()
+            if (BrowserWindow.getAllWindows().length === 0) passordWindow(resolveSettingPassword)
           })
         })
 

@@ -25,7 +25,7 @@ const setButton = document.getElementById('btn')
 const setShowButton = document.getElementById('show-secret')
 const secretInput = document.getElementById('secret')
 setButton.addEventListener('click', () => {
-  if(secretInput.checkValidity()){
+  if(secretInput.checkValidity() && secretInput.value){
     const secret = secretInput.value
     window.encryption.setSecret(secret)
   }
