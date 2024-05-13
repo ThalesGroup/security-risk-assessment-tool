@@ -70,8 +70,8 @@ const getMainWindow = () => {
   return BrowserWindow.fromId(ID);
 };
 
-const passordWindow = (resolveFunc) => {
-  const passordWindow = new BrowserWindow({
+const passwordWindow = (resolveFunc, type) => {
+  const passwordWindow = new BrowserWindow({
     width: 400,
     height: 400,
     parent: getMainWindow(),
@@ -80,18 +80,20 @@ const passordWindow = (resolveFunc) => {
       preload: path.join(__dirname, '/preload.js')
     }
   })
-  passordWindow.removeMenu()
+  //passwordWindow.removeMenu()
   ipcMain.on('set-secret', (event, secret) => {
     resolveFunc(secret)
-    passordWindow.close()
+    passwordWindow.close()
   })
   // set to null
-  passordWindow.on('close', (e) => {
+  passwordWindow.on('close', (e) => {
     e.preventDefault()
-    passordWindow.hide();
+    passwordWindow.hide();
   });
-
-  passordWindow.loadFile(path.join(__dirname,'../tabs/Encryption/index.html'))
+  if(type == "encryption")
+    passwordWindow.loadFile(path.join(__dirname,'../tabs/Encryption/encryption.html'))
+  else if(type == "decryption")
+    passwordWindow.loadFile(path.join(__dirname,'../tabs/Encryption/decryption.html'))
 }
 
 /**
@@ -141,13 +143,13 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
   if (jsonFilePath === '' || saveAs) {
     // save as new project in selected directory (save as)
     try {
+      let password=null
       if (encryption) {
-        let encryptedIsraProject
         const settingPassword = new Promise((resolveSettingPassword, rejectSettingPassword) => {
           app.whenReady().then(() => {
-            passordWindow(resolveSettingPassword)
+            passwordWindow(resolveSettingPassword,"encryption")
             app.on('activate', function () {
-              if (BrowserWindow.getAllWindows().length === 0) passordWindow(resolveSettingPassword)
+              if (BrowserWindow.getAllWindows().length === 0) passwordWindow(resolveSettingPassword,"encryption")
             })
           })
   
@@ -156,17 +158,11 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
           })
         });
         settingPassword.then((secret) => {
-          encryptedIsraProject = DataEncrypt(israProject.toJSON(),secret)
+          password = secret
         })
         await settingPassword
-
-        await DataStore(encryptedIsraProject, filePath);
-
-      }else{
-        console.log(israProject)
-
-        await DataStore(israProject, filePath);
       }
+      await DataStore(israProject, filePath,password);
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
@@ -679,9 +675,9 @@ const loadJSONFile = async (win, filePath) => {
       let password
       const settingPassword = new Promise((resolveSettingPassword, rejectSettingPassword) => {
         app.whenReady().then(() => {
-          passordWindow(resolveSettingPassword)
+          passwordWindow(resolveSettingPassword,"decryption")
           app.on('activate', function () {
-            if (BrowserWindow.getAllWindows().length === 0) passordWindow(resolveSettingPassword)
+            if (BrowserWindow.getAllWindows().length === 0) passwordWindow(resolveSettingPassword,"decryption")
           })
         })
 

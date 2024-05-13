@@ -21,6 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
 const setButton = document.getElementById('btn')
 const setShowButton = document.getElementById('show-secret')
 const secretInput = document.getElementById('secret')
@@ -32,11 +33,25 @@ setButton.addEventListener('click', () => {
 })
 
 setShowButton.addEventListener('click', () => {
-  if (secretInput.type === "password") {  
+  if (secretInput.type === "password") {
     secretInput.type = "text";
+    setShowButton.classList.add("active");
   } else {  
-    secretInput.type = "password";  
+    secretInput.type = "password";
+    setShowButton.classList.remove("active");
   }  
 })
 
-
+secretInput.addEventListener('keydown', () => {
+  let message='Your password must contain at least:'
+  const regexLowerCase = /[a-z]/g;
+  const regexUpperCase = /[A-Z]/g;
+  const regexSpecialCase = /[#$@!%&*?]/g;
+  const regexNumber = /[\d]/g;
+  message += ` ${secretInput.value.length >= 8 ? '✔ ' : ''}8 caracters`
+  message += ` ${secretInput.value.match(regexLowerCase) ? '✔ ' : ''}1 lowercase caracter`
+  message += ` ${secretInput.value.match(regexUpperCase) ? '✔ ' : ''}1 uppercase caracter`
+  message += ` ${secretInput.value.match(regexSpecialCase) ? '✔ ' : ''}1 number`
+  message += ` ${secretInput.value.match(regexNumber) ? '✔ ' : ''}1 special caracter`
+  secretInput.title = message;  
+})

@@ -325,3 +325,26 @@ select{
     margin-top: 2%;
     background-color: white;
 }
+
+#show-secret {
+    height: 2rem;
+    width: 2rem;
+    background-image: url(../asset/show_secret.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#show-secret.active{
+    background-image: url(../asset/hide_secret.svg);
+}
+
+.password-input-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.password-form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

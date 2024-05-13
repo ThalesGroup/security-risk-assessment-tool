@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Decryption Window</title>
+    <link rel="stylesheet" type="text/css" href="../../global styles/global-styles.css">
+  </head>
+  <body>
+    <form class="password-form-container">
+      <div class="password-input-container">
+        <label>Password:</label>
+        <input 
+          id="secret" 
+          type="password"
+          />
+        <div id="show-secret" type="button"></div>
+      </div>
+      <input id="btn" type="submit" value="Decrypt"/>
+    </form>
+    <script src="./handler-event.js"></script>
+  </body>
+</html>
