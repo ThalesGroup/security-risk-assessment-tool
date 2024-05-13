@@ -22,16 +22,25 @@
 * -----------------------------------------------------------------------------
 */
 
+html {
+    height: 100%;
+}
+body {
+    overflow: hidden;
+    height: 100%;
+    margin:0;
+}
+
+
 /*tabs*/
 
 .wrapper {
-    min-width: 800px;
-    width: 55%;
+    width: 100%;
+    height: 100%;
     margin: auto;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 textarea {
@@ -45,8 +54,6 @@ textarea {
 .buttonWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 2px;
-    position: fixed;
     z-index: 3;
 }
 
@@ -56,6 +63,8 @@ textarea {
     /* background-color: white; */
     font-size: 12px;
     cursor: pointer;
+    background-color: white;
+    color: black !important;
 }
 
 /* button.active {
@@ -63,40 +72,63 @@ textarea {
 } */
 
 button[data-id='welcome']{
-    background-color: #e1e1e1;
+    color: #e1e1e1;
 }
 
 button[data-id='project-context'] {
-    background-color: #68a7ab;
+    color: #68a7ab;
 }
 
 button[data-id='business-assets'] {
-    background-color: #92d050;
+    color: #92d050;
 }
 
 button[data-id='supporting-assets'] {
-    background-color: #ffc000;
+    color: #ffc000;
 }
 
 button[data-id='risks'] {
-    background-color: #b789fb;
+    color: #b789fb;
 }
 
 button[data-id='vulnerabilities'] {
-    background-color: #f3748c;
+    color: #f3748c;
 }
 
 button[data-id='isra-report'] {
+    color: #a6c2b2;
+}
+
+button.tab-button.active[data-id='welcome']{
+    background-color: #e1e1e1;
+    color:black;
+}
+button.tab-button.active[data-id='project-context']{
+    background-color: #68a7ab;
+    color:black;
+}
+button.tab-button.active[data-id='business-assets']{
+    background-color: #92d050;
+    color:black;
+}
+button.tab-button.active[data-id='supporting-assets']{
+    background-color: #ffc000;
+    color:black;
+}
+button.tab-button.active[data-id='risks']{
+    background-color: #b789fb;
+    color:black;
+}
+button.tab-button.active[data-id='vulnerabilities']{
+    background-color: #f3748c;
+    color:black;
+}
+button.tab-button.active[data-id='isra-report']{
     background-color: #a6c2b2;
+    color:black;
 }
-
-button[class="tab-button active"] {
-    font-weight: bold;
-    border: 1px solid black;
-}
-
-button[class="tab-button"] {
-    border: 1px solid black;
+button.tab-button:hover{
+    text-decoration: underline;
 }
 
 
@@ -326,7 +358,15 @@ select{
 }
 
 .contentWrapper {
+    width: 55%;
+    min-width: 800px;
     padding: 2%;
-    margin-top: 3rem;
     background-color: white;
+}
+
+.scrollingWrapper{
+    overflow-y: scroll;
+    height: 100%;
+    display: grid;
+    justify-items: center;
 }
