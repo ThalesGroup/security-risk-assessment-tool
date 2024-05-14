@@ -246,7 +246,7 @@ const encryptAs = async () => {
   * save current project (save/save as)
 */
 const saveProject = () => {
-  if (jsonFilePath !== '') save();
+  if (jsonFilePath !== '' && !IsEncrypted(jsonFilePath)) save();
   else saveAs();
 };
 
@@ -552,8 +552,8 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
 
   const validation = () => {
     const saveOrSaveAs = () => {
-      if (labelSelected === 'Save As') saveAs();
-      else if (labelSelected === 'Save') saveProject();
+      if (labelSelected === 'Save') saveProject();
+      else if (labelSelected === 'Save As') saveAs();
       else if (labelSelected === 'Encrypt As') encryptAs();
     };
     const {status, error} = validateClasses();
