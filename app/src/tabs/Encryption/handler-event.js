@@ -48,7 +48,7 @@ secretInput.addEventListener('keydown', () => {
   const regexUpperCase = /[A-Z]/g;
   const regexSpecialCase = /[#$@!%&*?]/g;
   const regexNumber = /[\d]/g;
-  message += ` ${secretInput.value.length >= 8 ? '✔ ' : ''}8 caracters`
+  message += ` ${secretInput.value.length >= 12 ? '✔ ' : ''}12 caracters`
   message += ` ${secretInput.value.match(regexLowerCase) ? '✔ ' : ''}1 lowercase caracter`
   message += ` ${secretInput.value.match(regexUpperCase) ? '✔ ' : ''}1 uppercase caracter`
   message += ` ${secretInput.value.match(regexSpecialCase) ? '✔ ' : ''}1 number`
