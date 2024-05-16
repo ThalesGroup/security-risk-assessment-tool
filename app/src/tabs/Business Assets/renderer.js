@@ -177,7 +177,6 @@ function updateBusinessAssetName(id, field){
       checkbox.value = id;
       checkbox.id = `business-assets__section__checkbox-${id}`;
       checkbox.name = 'business-assets__section-checkboxes';
-      checkbox.style.position = 'absolute';
       $('#business-assets__sections').append(checkbox);
 
       // add section inside sections div
