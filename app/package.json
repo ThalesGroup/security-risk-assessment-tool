@@ -11,7 +11,10 @@
         "dist": "electron-builder",
         "dist-all": "electron-builder -mwl",
         "build-dis": "export QUALIFIER=-DIS && electron-builder -mwl",
-        "build-oss": "export QUALIFIER='' && electron-builder -mwl"
+        "build-oss": "export QUALIFIER='' && electron-builder -mwl",
+        "dist-linux": "electron-builder -l",
+        "dist-mac": "electron-builder -m",
+        "dist-windows": "electron-builder -w"
     },
     "build": {
         "fileAssociations": [
