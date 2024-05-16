@@ -47,52 +47,43 @@ textarea {
 .buttonWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    z-index: 3;
+    box-shadow: 0px 0px 4px black;
 }
 
 .buttonWrapper button {
-    border: none;
     padding: 10px 0px;
     background-color: white;
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
-    color: black !important;
+    color: black;
+    border-width: 0 0 0 1px;
+    border-color: rgba(139, 139, 139, 0.281);
+    border-style: solid;
 }
-
-button[data-id='welcome']{
-    background-color: #e1e1e1;
+button.tab-button.active[data-id='welcome']{
+    border-bottom: 2px solid black;
 }
-
-button[data-id='project-context'] {
-    background-color: #68a7ab;
-}
-
-button[data-id='business-assets'] {
-    background-color: #92d050;
-}
-
-button[data-id='supporting-assets'] {
-    background-color: #ffc000;
-}
-
-button[data-id='risks'] {
-    background-color: #b789fb;
-}
-
-button[data-id='vulnerabilities'] {
-    background-color: #f3748c;
-}
-
-button[data-id='isra-report'] {
-    background-color: #a6c2b2;
-}
-
-button[class="tab-button active"] {
-    font-weight: bold;
-    border: 1px solid black;
-}
-
-button[class="tab-button"] {
-    border: 1px solid black;
+button.tab-button.active[data-id='project-context']{
+    border-bottom: 2px solid #68a7ab;
+    }
+button.tab-button.active[data-id='business-assets']{
+    border-bottom: 2px solid #92d050;
+    }
+button.tab-button.active[data-id='supporting-assets']{
+    border-bottom: 2px solid #ffc000;
+    }
+button.tab-button.active[data-id='risks']{
+    border-bottom: 2px solid #b789fb;
+    }
+button.tab-button.active[data-id='vulnerabilities']{
+    border-bottom: 2px solid #f3748c;
+    }
+button.tab-button.active[data-id='isra-report']{
+    border-bottom: 2px solid #a6c2b2;
+    }
+button.tab-button:hover{
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
 }
 
 
@@ -139,6 +130,9 @@ label {
     pointer-events: none;
     
 }
+button:disabled{
+    color: #aaaaaa8c !important;
+}
 
 .disabled div{
     color: #aaaaaa8c !important;
@@ -166,6 +160,7 @@ button:hover{
 
 button:disabled:hover{
     cursor: default;
+    text-decoration: none;
 }
 
 select option {
