@@ -21,6 +21,11 @@
                 "role": "Editor"
             },
             {
+                "ext": "esra",
+                "description": "Encrypted ISRA File",
+                "role": "Editor"
+            },
+            {
                 "ext": "xml",
                 "description": "XML File",
                 "role": "Editor"

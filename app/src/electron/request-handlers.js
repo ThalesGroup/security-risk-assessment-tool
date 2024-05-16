@@ -226,11 +226,11 @@ const save = () => {
 const encryptAs = async () => {
   const options = {
   // Placeholders
-    title: 'Save file - Electron ISRA Project',
+    title: 'Save Encrypted file - Electron ISRA Project',
     defaultPath: os.homedir(),
-    buttonLabel: 'Save ISRA File',
+    buttonLabel: 'Save Encrypted ISRA File',
     filters: [
-      { name: 'ISRA file type', extensions: ['sra'] },
+      { name: 'Encrypted ISRA file type', extensions: ['esra'] },
     ],
   };
   const fileName = await dialog.showSaveDialog(options);
@@ -536,7 +536,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       title: 'Open file - Electron ISRA Project',
       buttonLabel: 'Open File',
       filters: [
-        { name: 'SRA/JSON/XML', extensions: ['sra','json', 'xml'] },
+        { name: 'SRA/ESRA/JSON/XML', extensions: ['sra','esra','json', 'xml'] },
       ],
     };
     const filePathArr = dialog.showOpenDialogSync(options);
@@ -545,7 +545,7 @@ ipcMain.on('validate:allTabs', async (event, labelSelected) => {
       const filePath = filePathArr[0];
       const fileType = filePath.split('.').pop();
 
-      if (fileType === 'json' || fileType === 'sra') loadJSONFile(getMainWindow(), filePath);
+      if (fileType === 'json' || fileType === 'sra' || fileType === 'esra') loadJSONFile(getMainWindow(), filePath);
       else loadXMLFile(getMainWindow(), filePath);
     }
   };
