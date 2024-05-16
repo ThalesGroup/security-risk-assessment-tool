@@ -113,7 +113,7 @@ header {
     font-size: 24px;
     font-weight: bold;
     margin: 0 100px 20px 100px;
-    padding-top: 2%;
+    padding-top: 0.5rem;
 }
 
 .details {
