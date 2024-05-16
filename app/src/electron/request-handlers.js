@@ -80,7 +80,7 @@ const passwordWindow = (resolveFunc, type) => {
       preload: path.join(__dirname, '/preload.js')
     }
   })
-  //passwordWindow.removeMenu()
+  passwordWindow.removeMenu()
   ipcMain.on('set-secret', (event, secret) => {
     resolveFunc(secret)
     passwordWindow.close()
