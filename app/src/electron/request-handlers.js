@@ -56,6 +56,7 @@ const setCachePass = (value) => {
   resetTimeout()
   clearCachePassOnTiming()
   cached_pass = value
+  getMainWindow().webContents.send('update-cached-secret', true);
 }
 
 const getCachedPass = () => {
@@ -63,16 +64,15 @@ const getCachedPass = () => {
 }
 
 const clearCachePass = () => {
+  getMainWindow().webContents.send('update-cached-secret', false);
   cached_pass = null
 }
 
 const clearCachePassOnTiming = async () => {
   timeout = setTimeout(function(){ 
-    console.log("Time's up!"); 
     clearCachePass()
   }, 15000);
 }
-
 
 const {
   DataStore,
@@ -745,7 +745,12 @@ const loadJSONFile = async (win, filePath) => {
       })
       await settingPassword
       israProject = DataLoad(filePath, password);
+      if (israProject){
+        getMainWindow().webContents.send('update-is-encrypted', true);
+      }
     }else{
+      getMainWindow().webContents.send('update-is-encrypted', false);
+      clearCachePass()
       israProject = DataLoad(filePath);
     }
     win.webContents.send('project:load', israProject.toJSON());
@@ -1458,3 +1463,10 @@ ipcMain.on('israreport:saveGraph',  (event,graph) => {
 // ipcMain.handle('dark-mode:system', () => {
 //   nativeTheme.themeSource = 'system';
 // });
+ipcMain.handle('is-encrypted', (event) => {
+  if(jsonFilePath!== '' && IsEncrypted(jsonFilePath)) return true
+  return false
+  }
+);
+
+ipcMain.handle('is-cached-secret', (event) => isCachedPass());

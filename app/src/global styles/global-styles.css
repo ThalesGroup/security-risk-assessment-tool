@@ -348,3 +348,13 @@ select{
     flex-direction: column;
     align-items: center;
 }
+
+#cached-pass{
+    width: 20px;
+    height: 20px;
+    background-color: grey;
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: none;
+}
