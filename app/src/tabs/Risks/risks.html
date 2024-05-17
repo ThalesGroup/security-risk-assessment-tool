@@ -51,388 +51,389 @@
             <button class="tab-button" data-id="vulnerabilities">Vulnerabilities</button>
             <button class="tab-button" data-id="isra-report">ISRA Report</button>
         </div>
+        <div class="scrollingWrapper">
+            <div class="contentWrapper">
+                <div class="content active" id="risks">
+                    <!-- <header>Risks</header>
 
-        <div class="contentWrapper">
-            <div class="content active" id="risks">
-                <!-- <header>Risks</header>
-
-                <p class="subheading">List of Identified Risks</p>
-                <p class="summary">A Risk is the combination of the probability of an event (likelihood) and its consequence (impact)</p>
-                
-                <div class='filter' style="display: flex;">
-                    <input id="filter-value" type="text" placeholder="Filter..." style="width: 100%">
-                    <button id="filter-clear">X</button>
-                </div>
-                <div class="add-delete-container">
-                    <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
-                </div>
-                <div class="table">
-                    <div class="checkbox" id="risks__table__checkboxes"></div>
-                    <div id="risks__table"></div>
-                </div>
-                <section id="risks__risk__description">
-                    <div>
-                        <h1>Risk description</h1>
-                        <h1>Risk Id: <span class="riskId"></span></h1>
+                    <p class="subheading">List of Identified Risks</p>
+                    <p class="summary">A Risk is the combination of the probability of an event (likelihood) and its consequence (impact)</p>
+                    
+                    <div class='filter' style="display: flex;">
+                        <input id="filter-value" type="text" placeholder="Filter..." style="width: 100%">
+                        <button id="filter-clear">X</button>
                     </div>
-                
-                    <section id="risk__automatic_riskname">
+                    <div class="add-delete-container">
+                        <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
+                    </div>
+                    <div class="table">
+                        <div class="checkbox" id="risks__table__checkboxes"></div>
+                        <div id="risks__table"></div>
+                    </div>
+                    <section id="risks__risk__description">
                         <div>
-                            <p>Risk Name: As a <strong>Threat Agent</strong>, I can <strong>Threat</strong> the <strong>Business Asset</strong> attacking the <strong>Supporting Asset</strong> in
-                                order to <strong>Motivation</strong>, by exploiting the Vulnerability.
-                            </p>
+                            <h1>Risk description</h1>
+                            <h1>Risk Id: <span class="riskId"></span></h1>
+                        </div>
                     
-                            <div id="riskName">
-                                <button style="display: block; margin-left: auto;">Replace with Manual Risk Name</button>
-                                <p class="riskname"></p>
-                            </div id="riskName">
-                    
-                            <div id="risk__manual__riskName">
-                                <button style="display: block; margin-left: auto;">Replace with Automatic Risk Name</button>
-                                <input type="text">
-                            </div>
-                        </div>
-                
-                        <div class="risk__flex">
+                        <section id="risk__automatic_riskname">
                             <div>
-                                <label for="risk__threatAgent">As a <span>Threat Agent</span></label>
-                                <select id="risk__threatAgent" name="risk__threatAgent">
-                                    <option value="" selected>Select...</option>
-                                    <option value="Insider">Insider</option>
-                                    <option value="Criminal">Criminal</option>
-                                    <option value="Competitor">Competitor</option>
-                                    <option value="Criminal organization">Criminal organization</option>
-                                    <option value="Government agency">Government agency</option>
-                                    <option value="Researcher">Researcher</option>
-                                    <option value="Activist">Activist</option>
-                                    <option value="Script Kiddy">Script Kiddy</option>
-                                    <option value="User">User</option>
-                                    <option value="R&D Employee">R&D Employee</option>
-                                    <option value="Operationnal Employee">Operationnal Employee</option>
-                                    <option value="Maintenance Employee">Maintenance Employee</option>
-                                    <option value="IT Employee">IT Employee</option>
-                                </select>
-                                <textarea class="rich-text" id="risk__threatAgent__rich-text"></textarea>
+                                <p>Risk Name: As a <strong>Threat Agent</strong>, I can <strong>Threat</strong> the <strong>Business Asset</strong> attacking the <strong>Supporting Asset</strong> in
+                                    order to <strong>Motivation</strong>, by exploiting the Vulnerability.
+                                </p>
+                            
+                                <div id="riskName">
+                                    <button style="display: block; margin-left: auto;">Replace with Manual Risk Name</button>
+                                    <p class="riskname"></p>
+                                </div id="riskName">
+                            
+                                <div id="risk__manual__riskName">
+                                    <button style="display: block; margin-left: auto;">Replace with Automatic Risk Name</button>
+                                    <input type="text">
+                                </div>
                             </div>
+                        
+                            <div class="risk__flex">
+                                <div>
+                                    <label for="risk__threatAgent">As a <span>Threat Agent</span></label>
+                                    <select id="risk__threatAgent" name="risk__threatAgent">
+                                        <option value="" selected>Select...</option>
+                                        <option value="Insider">Insider</option>
+                                        <option value="Criminal">Criminal</option>
+                                        <option value="Competitor">Competitor</option>
+                                        <option value="Criminal organization">Criminal organization</option>
+                                        <option value="Government agency">Government agency</option>
+                                        <option value="Researcher">Researcher</option>
+                                        <option value="Activist">Activist</option>
+                                        <option value="Script Kiddy">Script Kiddy</option>
+                                        <option value="User">User</option>
+                                        <option value="R&D Employee">R&D Employee</option>
+                                        <option value="Operationnal Employee">Operationnal Employee</option>
+                                        <option value="Maintenance Employee">Maintenance Employee</option>
+                                        <option value="IT Employee">IT Employee</option>
+                                    </select>
+                                    <textarea class="rich-text" id="risk__threatAgent__rich-text"></textarea>
+                                </div>
+                                <div>
+                                    <label for="risk__threat">I can <span>Threat</span></label>
+                                    <select id="risk__threat" name="risk__threat">
+                                        <option value="" selected>Select...</option>
+                                        <option value="lose">lose</option>
+                                        <option value="spoof">spoof</option>
+                                        <option value="tamper with">tamper with</option>
+                                        <option value="repudiate">repudiate</option>
+                                        <option value="disclose">disclose</option>
+                                        <option value="steal">steal</option>
+                                        <option value="deny access to">deny access to</option>
+                                        <option value="gain an unauthorized access to">gain an unauthorized access to</option>
+                                        <option value="flood">flood</option>
+                                    </select>
+                                    <textarea class="rich-text" id="risk__threat__rich-text"></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="risk__flex">
+                                <div>
+                                    <label for="risk__businessAsset">The <span>Business Asset</span></label>
+                                    <select id="risk__businessAsset" name="risk__businessAsset"></select>
+                                </div>
+                                <div>
+                                    <label for="risk__supportingAsset">Compromising the <span>Supporting Asset</span></label>
+                                    <select id="risk__supportingAsset" name="risk__supportingAsset"></select>
+                                </div>
+                            </div>
+                        
                             <div>
-                                <label for="risk__threat">I can <span>Threat</span></label>
-                                <select id="risk__threat" name="risk__threat">
-                                    <option value="" selected>Select...</option>
-                                    <option value="lose">lose</option>
-                                    <option value="spoof">spoof</option>
-                                    <option value="tamper with">tamper with</option>
-                                    <option value="repudiate">repudiate</option>
-                                    <option value="disclose">disclose</option>
-                                    <option value="steal">steal</option>
-                                    <option value="deny access to">deny access to</option>
-                                    <option value="gain an unauthorized access to">gain an unauthorized access to</option>
-                                    <option value="flood">flood</option>
-                                </select>
-                                <textarea class="rich-text" id="risk__threat__rich-text"></textarea>
-                            </div>
-                        </div>
-                
-                        <div class="risk__flex">
-                            <div>
-                                <label for="risk__businessAsset">The <span>Business Asset</span></label>
-                                <select id="risk__businessAsset" name="risk__businessAsset"></select>
-                            </div>
-                            <div>
-                                <label for="risk__supportingAsset">Compromising the <span>Supporting Asset</span></label>
-                                <select id="risk__supportingAsset" name="risk__supportingAsset"></select>
-                            </div>
-                        </div>
-                
-                        <div>
-                            <div style="display: flex; flex-direction: column;">
-                                <label for="risk__motivation">In order to <span>Motivation</span></label>
-                                <input type="text" name="risk__motivation" id="risk__motivation">
-                                <div class="btn btn-primary tooltip">
-                                    <textarea class="rich-text" id="risk__motivation__rich-text"></textarea>
-                                    <div class="top">
-                                        <p>Add your formatted rich text and your pictures</p>
-                                        <i></i>
+                                <div style="display: flex; flex-direction: column;">
+                                    <label for="risk__motivation">In order to <span>Motivation</span></label>
+                                    <input type="text" name="risk__motivation" id="risk__motivation">
+                                    <div class="btn btn-primary tooltip">
+                                        <textarea class="rich-text" id="risk__motivation__rich-text"></textarea>
+                                        <div class="top">
+                                            <p>Add your formatted rich text and your pictures</p>
+                                            <i></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </section>
+                    </section>
+
+                    <section id="risks__risk__evaluation">
+                        <h1>Risk evaluation</h1>
+                    
+                        <div>
+                            <h2>Likelihood evaluation</h2>
+		    				<p>Probability for a threat agent to successfully compromise the business asset based on resources, skills, opportunity and motivation</p>
+                        
+                            <div id="risk__simple__evaluation">
+                                <button style="display: block; margin-left: auto;">Replace with OWASP Likelihood Evaluation Method</button>
+                                <select name="risk__likelihood" id="risk__likelihood">
+                                    <option value="4">Very High</option>
+                                    <option value="3">High</option>
+                                    <option value="2">Medium</option>
+                                    <option value="1">Low</option>
+                                </select>
+                            </div>
+                        
+                            <div id="risk__likehood__table">
+                                <button style="display: block; margin-left: auto;">Replace with Simple Likelihood Evaluation Method</button>
+                                <div class="likelihood-options">
+                                    <div>
+                                        <p>How technically skilled is this group of threat agents?</p>
+                                    </div>
+                                    <div>
+                                        <select name="risk__skillLevel" id="risk__skillLevel">
+                                            <option value="null">Select...</option>
+                                            <option value="9">No technical skill</option>
+                                            <option value="6">Some technical skills</option>
+                                            <option value="5">Advanced computer skills</option>
+                                            <option value="3">Network and programming skills</option>
+                                            <option value="1">Security penetration skills</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="likelihood-options">
+                                    <div>
+                                        <p>How motivated is this group of threat agents to find and exploit this vulnerability?</p>
+                                    </div>
+                                    <div>
+                                        <select name="risk__reward" id="risk__reward">
+                                            <option value="null">Select...</option>
+                                            <option value="9">High reward</option>
+                                            <option value="4">Possible reward</option>
+                                            <option value="1">Low or no reward</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="likelihood-options">
+                                    <div>
+                                        <p>What resources and opportunities are required for this group of threat agents to find and exploit
+                                            this vulnerability?</p>
+                                    </div>
+                                    <div>
+                                        <select name="risk__accessResources" id="risk__accessResources">
+                                            <option value="null">Select...</option>
+                                            <option value="9">No access or resources required</option>
+                                            <option value="7">Some access or resources required</option>
+                                            <option value="4">Special access or resources required</option>
+                                            <option value="0">Full access or expensive resources required</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="likelihood-options">
+                                    <div>
+                                        <p>How large is this group of threat agents?</p>
+                                    </div>
+                                    <div>
+                                        <select name="risk__size" id="risk__size">
+                                            <option value="null">Select...</option>
+                                            <option value="9">Anonymous Internet users</option>
+                                            <option value="6">Authenticated users</option>
+                                            <option value="5">Partners</option>
+                                            <option value="4">Intranet users</option>
+                                            <option value="2">Developers/system administrators</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="likelihood-options">
+                                    <div>
+                                        <p>How likely is an exploit to be detected?</p>
+                                    </div>
+                                    <div>
+                                        <select name="risk__intrusionDetection" id="risk__intrusionDetection">
+                                            <option value="null">Select...</option>
+                                            <option value="9">Not logged</option>
+                                            <option value="8">Logged without review</option>
+                                            <option value="3">Logged and reviewed</option>
+                                            <option value="1">Active detection in application</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="likelihood-options">
+                                    <div>
+                                        <p>What is the probability of occurrence?</p>
+                                    </div>
+                                    <div>
+                                        <select name="risk__occurrence" id="risk__occurrence">
+                                            <option value="null">Select...</option>
+                                            <option value="9">Very high (it will happen)</option>
+                                            <option value="7">High (it already happened in Thales DIS)</option>
+                                            <option value="5">Medium (it already happened in similar companies)</option>
+                                            <option value="3">Low (it happened)</option>
+                                            <option value="1">Very low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="risk__occurrence__threatFactor__table">
+                                    <table style="border: 0;">
+                                        <tbody>
+                                            <tr>
+                                                <td rowspan="5">Occurrence</td>
+                                            </tr>
+                                            <tr>
+                                                <td class='occurrence' data-occurrence="Very High" data-row="1">Very High</td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                                <td style="background-color: red;"><span>High</span></td>
+                                                <td style="background-color: #9f204b;"><span>Very High</span></td>
+                                                <td style="background-color: #9f204b;"><span>High</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class='occurrence' data-occurrence="High" data-row="2">High</td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                                <td style="background-color: red;"><span>High</span></td>
+                                                <td style="background-color: #9f204b;"><span>Very High</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class='occurrence' data-occurrence="Medium" data-row="3">Medium</td>
+                                                <td style="background-color: #38E54D;"><span>Low</span></td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                                <td style="background-color: red;"><span>High</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class='occurrence' data-occurrence="Low" data-row="4">Low</td>
+                                                <td style="background-color: #38E54D;"><span>Low</span></td>
+                                                <td style="background-color: #38E54D;"><span>Low</span></td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                                <td style="background-color: orange;"><span>Medium</span></td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2" style="border: 0;"></td>
+                                                <td class='threatFactor' data-factor="Low" data-col="1">Low</td>
+                                                <td class='threatFactor' data-factor="Medium" data-col="2">Medium</td>
+                                                <td class='threatFactor' data-factor="High" data-col="3">High</td>
+                                                <td class='threatFactor' data-factor="Very High" data-col="4">Very High</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="border: 0;"></td>
+                                                <td colspan="4">Threat Factor</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        
+                            <div>
+                                <p>Justify your likelihood evaluation:</p>
+                                <textarea class="rich-text" id="risk__likelihood__details" cols="30" rows="20"></textarea>
+                            </div>
+                        
+                        </div>
+                    
+                        <div>
+                            <h2>Impact evaluation</h2>
+                            <p>Select the Business Asset security properties you want to take into account for this risk evaluation:</p>
+                            <table id="risk__evaluation__table">
+                                <thead>
+                                    <tr>
+                                        <th>Business Asset Security Properties</th>
+                                        <th>Value</th>
+                                        <th>Take into account</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Confidentialty</td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="risk__confidentialty"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Integrity</td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="risk__integrity"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Availability</td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="risk__availability"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Authenticity</td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="risk__authenticity"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Authorization</td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="risk__authorization"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Non Repudiation</td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="risk__nonrepudiation"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                        <div id="risks__vulnerability__evaluation">
+                            <h2>Vulnerability evaluation</h2>
+                            <p>What is the vulnerability on your supporting asset that should be taken into account for this risk?</p>
+                            <button name="Go to vulnerabilities view" style="width:100%; margin-bottom: 2%;">Go to vulnerabilities view</button>
+
+                            <div class="add-delete-container">
+                                <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
+                            </div>
+                            <section id="risks__vulnerability__attack__path" style="padding: 0;"></section>
+                            <p>The vulnerability scoring of the worst attack path is: <span id="all_attack_paths_score"></span>/10</p>
+                            <h1 style="text-align: center;">Inherent Risk Score: <span id="inherent_risk_score"></span>/20</h1>
                         </div>
                     </section>
-                </section>
-                
-                <section id="risks__risk__evaluation">
-                    <h1>Risk evaluation</h1>
-                
-                    <div>
-                        <h2>Likelihood evaluation</h2>
-						<p>Probability for a threat agent to successfully compromise the business asset based on resources, skills, opportunity and motivation</p>
-                
-                        <div id="risk__simple__evaluation">
-                            <button style="display: block; margin-left: auto;">Replace with OWASP Likelihood Evaluation Method</button>
-                            <select name="risk__likelihood" id="risk__likelihood">
-                                <option value="4">Very High</option>
-                                <option value="3">High</option>
-                                <option value="2">Medium</option>
-                                <option value="1">Low</option>
-                            </select>
-                        </div>
-                
-                        <div id="risk__likehood__table">
-                            <button style="display: block; margin-left: auto;">Replace with Simple Likelihood Evaluation Method</button>
-                            <div class="likelihood-options">
-                                <div>
-                                    <p>How technically skilled is this group of threat agents?</p>
-                                </div>
-                                <div>
-                                    <select name="risk__skillLevel" id="risk__skillLevel">
-                                        <option value="null">Select...</option>
-                                        <option value="9">No technical skill</option>
-                                        <option value="6">Some technical skills</option>
-                                        <option value="5">Advanced computer skills</option>
-                                        <option value="3">Network and programming skills</option>
-                                        <option value="1">Security penetration skills</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="likelihood-options">
-                                <div>
-                                    <p>How motivated is this group of threat agents to find and exploit this vulnerability?</p>
-                                </div>
-                                <div>
-                                    <select name="risk__reward" id="risk__reward">
-                                        <option value="null">Select...</option>
-                                        <option value="9">High reward</option>
-                                        <option value="4">Possible reward</option>
-                                        <option value="1">Low or no reward</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="likelihood-options">
-                                <div>
-                                    <p>What resources and opportunities are required for this group of threat agents to find and exploit
-                                        this vulnerability?</p>
-                                </div>
-                                <div>
-                                    <select name="risk__accessResources" id="risk__accessResources">
-                                        <option value="null">Select...</option>
-                                        <option value="9">No access or resources required</option>
-                                        <option value="7">Some access or resources required</option>
-                                        <option value="4">Special access or resources required</option>
-                                        <option value="0">Full access or expensive resources required</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="likelihood-options">
-                                <div>
-                                    <p>How large is this group of threat agents?</p>
-                                </div>
-                                <div>
-                                    <select name="risk__size" id="risk__size">
-                                        <option value="null">Select...</option>
-                                        <option value="9">Anonymous Internet users</option>
-                                        <option value="6">Authenticated users</option>
-                                        <option value="5">Partners</option>
-                                        <option value="4">Intranet users</option>
-                                        <option value="2">Developers/system administrators</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="likelihood-options">
-                                <div>
-                                    <p>How likely is an exploit to be detected?</p>
-                                </div>
-                                <div>
-                                    <select name="risk__intrusionDetection" id="risk__intrusionDetection">
-                                        <option value="null">Select...</option>
-                                        <option value="9">Not logged</option>
-                                        <option value="8">Logged without review</option>
-                                        <option value="3">Logged and reviewed</option>
-                                        <option value="1">Active detection in application</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="likelihood-options">
-                                <div>
-                                    <p>What is the probability of occurrence?</p>
-                                </div>
-                                <div>
-                                    <select name="risk__occurrence" id="risk__occurrence">
-                                        <option value="null">Select...</option>
-                                        <option value="9">Very high (it will happen)</option>
-                                        <option value="7">High (it already happened in Thales DIS)</option>
-                                        <option value="5">Medium (it already happened in similar companies)</option>
-                                        <option value="3">Low (it happened)</option>
-                                        <option value="1">Very low</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="risk__occurrence__threatFactor__table">
-                                <table style="border: 0;">
-                                    <tbody>
-                                        <tr>
-                                            <td rowspan="5">Occurrence</td>
-                                        </tr>
-                                        <tr>
-                                            <td class='occurrence' data-occurrence="Very High" data-row="1">Very High</td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                            <td style="background-color: red;"><span>High</span></td>
-                                            <td style="background-color: #9f204b;"><span>Very High</span></td>
-                                            <td style="background-color: #9f204b;"><span>High</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class='occurrence' data-occurrence="High" data-row="2">High</td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                            <td style="background-color: red;"><span>High</span></td>
-                                            <td style="background-color: #9f204b;"><span>Very High</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class='occurrence' data-occurrence="Medium" data-row="3">Medium</td>
-                                            <td style="background-color: #38E54D;"><span>Low</span></td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                            <td style="background-color: red;"><span>High</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class='occurrence' data-occurrence="Low" data-row="4">Low</td>
-                                            <td style="background-color: #38E54D;"><span>Low</span></td>
-                                            <td style="background-color: #38E54D;"><span>Low</span></td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                            <td style="background-color: orange;"><span>Medium</span></td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2" style="border: 0;"></td>
-                                            <td class='threatFactor' data-factor="Low" data-col="1">Low</td>
-                                            <td class='threatFactor' data-factor="Medium" data-col="2">Medium</td>
-                                            <td class='threatFactor' data-factor="High" data-col="3">High</td>
-                                            <td class='threatFactor' data-factor="Very High" data-col="4">Very High</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" style="border: 0;"></td>
-                                            <td colspan="4">Threat Factor</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                
-                        <div>
-                            <p>Justify your likelihood evaluation:</p>
-                            <textarea class="rich-text" id="risk__likelihood__details" cols="30" rows="20"></textarea>
-                        </div>
-                
-                    </div>
-                
-                    <div>
-                        <h2>Impact evaluation</h2>
-                        <p>Select the Business Asset security properties you want to take into account for this risk evaluation:</p>
-                        <table id="risk__evaluation__table">
-                            <thead>
-                                <tr>
-                                    <th>Business Asset Security Properties</th>
-                                    <th>Value</th>
-                                    <th>Take into account</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Confidentialty</td>
-                                    <td></td>
-                                    <td><input type="checkbox" id="risk__confidentialty"></td>
-                                </tr>
-                                <tr>
-                                    <td>Integrity</td>
-                                    <td></td>
-                                    <td><input type="checkbox" id="risk__integrity"></td>
-                                </tr>
-                                <tr>
-                                    <td>Availability</td>
-                                    <td></td>
-                                    <td><input type="checkbox" id="risk__availability"></td>
-                                </tr>
-                                <tr>
-                                    <td>Authenticity</td>
-                                    <td></td>
-                                    <td><input type="checkbox" id="risk__authenticity"></td>
-                                </tr>
-                                <tr>
-                                    <td>Authorization</td>
-                                    <td></td>
-                                    <td><input type="checkbox" id="risk__authorization"></td>
-                                </tr>
-                                <tr>
-                                    <td>Non Repudiation</td>
-                                    <td></td>
-                                    <td><input type="checkbox" id="risk__nonrepudiation"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                
-                    <div id="risks__vulnerability__evaluation">
-                        <h2>Vulnerability evaluation</h2>
-                        <p>What is the vulnerability on your supporting asset that should be taken into account for this risk?</p>
-                        <button name="Go to vulnerabilities view" style="width:100%; margin-bottom: 2%;">Go to vulnerabilities view</button>
-
-                        <div class="add-delete-container">
+                    <section id="risks__risk__mitigation__evaluation">
+                        <h1>Risk mitigation</h1>
+                        <p>Define here the different controls and counter measures that could mitigate the risk</p>
+                        <p style="text-align:center; margin-bottom: 0;">Risk mitigation scenario</p>
+                        <div class="add-delete-container" style="padding: 2% 0 0 2%;">
                             <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
                         </div>
-                        <section id="risks__vulnerability__attack__path" style="padding: 0;"></section>
-                        <p>The vulnerability scoring of the worst attack path is: <span id="all_attack_paths_score"></span>/10</p>
-                        <h1 style="text-align: center;">Inherent Risk Score: <span id="inherent_risk_score"></span>/20</h1>
-                    </div>
-                </section>
-                <section id="risks__risk__mitigation__evaluation">
-                    <h1>Risk mitigation</h1>
-                    <p>Define here the different controls and counter measures that could mitigate the risk</p>
-                    <p style="text-align:center; margin-bottom: 0;">Risk mitigation scenario</p>
-                    <div class="add-delete-container" style="padding: 2% 0 0 2%;">
-                        <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
-                    </div>
-                    <section class="mitigations" style="padding: 0;">
+                        <section class="mitigations" style="padding: 0;">
 
+                        </section>
+                        <h1 style="text-align: center;">Mitigated Risk Score: <span id="mitigated_risk_score"></span>/20</h1>
+                        <p style="text-align: center; margin-top: 0; font-size: small;">(taking into account mitigations accepted or done)</p>
                     </section>
-                    <h1 style="text-align: center;">Mitigated Risk Score: <span id="mitigated_risk_score"></span>/20</h1>
-                    <p style="text-align: center; margin-top: 0; font-size: small;">(taking into account mitigations accepted or done)</p>
-                </section>
-                <section id="risks__risk__management__evaluation">
-                    <h1>Risk management</h1>
-                    <div>
+                    <section id="risks__risk__management__evaluation">
+                        <h1>Risk management</h1>
                         <div>
-                            <p style="font-weight: bold; text-align: center;">Decision</p>
-                            <div id="risks__risk__management__options">
-                                <input type="radio" name="risk__management__decision" id="Not Defined" value="">
-                                <label id="Not Defined" style="font-size: small; font-style: italic;">Not Defined</label>
-                                <br>
-                                <input type="radio" name="risk__management__decision" id="Discarded" value="Discarded">
-                                <label id="Discarded" style="font-size: small; font-style: italic;">Discarded</label>
-                                <br>
-                                <br>
-                                <input type="radio" name="risk__management__decision" id="Avoid" value="Avoid">
-                                <label id="Avoid">Avoid (Avoid)</label>
-                                <br>
-                                <input type="radio" name="risk__management__decision" id="Transfer" value="Transfer">
-                                <label id="Transfer">Share (Transfer)</label>
-                                <br>
-                                <input type="radio" name="risk__management__decision" id="Mitigate" value="Mitigate">
-                                <label id="Mitigate">Reduce (Mitigate)</label>
-                                <br>
-                                <input type="radio" name="risk__management__decision" id="Accept" value="Accept">
-                                <label id="Accept">Retain (Accept)</label>
-                                <br>
+                            <div>
+                                <p style="font-weight: bold; text-align: center;">Decision</p>
+                                <div id="risks__risk__management__options">
+                                    <input type="radio" name="risk__management__decision" id="Not Defined" value="">
+                                    <label id="Not Defined" style="font-size: small; font-style: italic;">Not Defined</label>
+                                    <br>
+                                    <input type="radio" name="risk__management__decision" id="Discarded" value="Discarded">
+                                    <label id="Discarded" style="font-size: small; font-style: italic;">Discarded</label>
+                                    <br>
+                                    <br>
+                                    <input type="radio" name="risk__management__decision" id="Avoid" value="Avoid">
+                                    <label id="Avoid">Avoid (Avoid)</label>
+                                    <br>
+                                    <input type="radio" name="risk__management__decision" id="Transfer" value="Transfer">
+                                    <label id="Transfer">Share (Transfer)</label>
+                                    <br>
+                                    <input type="radio" name="risk__management__decision" id="Mitigate" value="Mitigate">
+                                    <label id="Mitigate">Reduce (Mitigate)</label>
+                                    <br>
+                                    <input type="radio" name="risk__management__decision" id="Accept" value="Accept">
+                                    <label id="Accept">Retain (Accept)</label>
+                                    <br>
+                                </div>
+                            </div>
+                            <div>
+                                <p style="text-align: center;">Decision details: (who take the decision, who must do what, what, and when):</p>
+                                <textarea class="rich-text" id="risk__management__detail__rich-text"></textarea>
                             </div>
                         </div>
-                        <div>
-                            <p style="text-align: center;">Decision details: (who take the decision, who must do what, what, and when):</p>
-                            <textarea class="rich-text" id="risk__management__detail__rich-text"></textarea>
-                        </div>
-                    </div>
-                        <h1 style="text-align: center;">Residual Risk Score: <span id="residual_risk_score"></span>/20</h1>
-                        <h1 style="text-align: center;">Residual Risk Level: <span id="residual_risk_level"></span></h1>
-                        <p style="text-align: center; margin-top: 0; font-size: small;">(taking into account mitigations done)</p>
-                </section>
-                <footer></footer> -->
+                            <h1 style="text-align: center;">Residual Risk Score: <span id="residual_risk_score"></span>/20</h1>
+                            <h1 style="text-align: center;">Residual Risk Level: <span id="residual_risk_level"></span></h1>
+                            <p style="text-align: center; margin-top: 0; font-size: small;">(taking into account mitigations done)</p>
+                    </section>
+                    <footer></footer> -->
+                </div>
             </div>
         </div>
     </div>

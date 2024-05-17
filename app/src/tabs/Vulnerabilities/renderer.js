@@ -113,6 +113,8 @@
     });
 
     const getCurrentVulnerabilityId = () => {
+        // Store the current vulnerability id in the browser's volatile storage
+        sessionStorage.setItem("currentVulnerability",vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId);
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
     };
 
@@ -181,8 +183,10 @@
         vulnerabilitiesTable.clearData();
         $('#vulnerabilties__table__checkboxes').empty();
         vulnerabilitiesTable.addData(vulnerabilities);
-        vulnerabilitiesTable.selectRow(vulnerabilities[0].vulnerabilityId);
-        addSelectedVulnerabilityRowData(vulnerabilities[0].vulnerabilityId);
+        // Select the latest vulerability selected (stored in the browser's volatile storage) (default: first vulerability of the table)
+        const selectedVulnerability = sessionStorage.getItem("currentVulnerability") ? sessionStorage.getItem("currentVulnerability") : vulnerabilities[0].vulnerabilityId
+        vulnerabilitiesTable.selectRow(selectedVulnerability);
+        addSelectedVulnerabilityRowData(selectedVulnerability);
 
     };
     
@@ -200,7 +204,7 @@
             cveScore,
             overallLevel,
             supportingAssetRef
-        } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
+        } = vulnerabilitiesData.find((v) => v.vulnerabilityId == id);
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
         $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
@@ -513,7 +517,7 @@
         const { value } = e.target;
         let fixedValue = value;
         if (value.includes('.') && value.split('.')[1].length > 1) {
-            fixedValue = Number.parseFloat(value).toFixed(1); 
+            fixedValue = Number.parseFloat(value).toString().match(/^-?\d+(?:\.\d?)?/)[0]
         };
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', fixedValue);
         const { overallLevel, cveScore } = vulnerability;
