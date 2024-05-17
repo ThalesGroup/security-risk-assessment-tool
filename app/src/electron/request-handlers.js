@@ -39,6 +39,39 @@ const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-
 
 const errorMessages = require('./validation')
 
+/* cache management */ 
+let cached_pass = null
+let timeout
+
+const resetTimeout = () => {
+  if(timeout) clearTimeout(timeout); 
+}
+
+const isCachedPass = () => {
+  if (cached_pass == null) return false
+  return true
+}
+
+const setCachePass = (value) => {
+  resetTimeout()
+  clearCachePassOnTiming()
+  cached_pass = value
+}
+
+const getCachedPass = () => {
+  return cached_pass
+}
+
+const clearCachePass = () => {
+  cached_pass = null
+}
+
+const clearCachePassOnTiming = async () => {
+  timeout = setTimeout(function(){ 
+    console.log("Time's up!"); 
+    clearCachePass()
+  }, 15000);
+}
 
 
 const {
@@ -83,6 +116,7 @@ const passwordWindow = (resolveFunc, type) => {
   passwordWindow.removeMenu()
   ipcMain.on('set-secret', (event, secret) => {
     resolveFunc(secret)
+    setCachePass(secret)
     passwordWindow.close()
   })
   // set to null
@@ -140,11 +174,12 @@ const newISRAProject = (win, app) => {
 let jsonFilePath = '', electronApp = null;
 
 const savetoPath = async (filePath, saveAs = false, encryption = false) => {
-  if (jsonFilePath === '' || saveAs) {
-    // save as new project in selected directory (save as)
+  let password=null
+  if (encryption) {
     try {
-      let password=null
-      if (encryption) {
+      if(isCachedPass()){
+        password = getCachedPass()
+      }else{
         const settingPassword = new Promise((resolveSettingPassword, rejectSettingPassword) => {
           app.whenReady().then(() => {
             passwordWindow(resolveSettingPassword,"encryption")
@@ -154,7 +189,7 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
           })
   
           app.on('window-all-closed', function () {
-            if (process.platform !== 'darwin') app.quit()  
+            if (process.platform !== 'darwin') app.quit()
           })
         });
         settingPassword.then((secret) => {
@@ -162,6 +197,15 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
         })
         await settingPassword
       }
+    } catch (err) {
+      console.log(err);
+      dialog.showMessageBoxSync(getMainWindow(), { message: 'Error getting password' });
+    }
+  }
+
+  if (jsonFilePath === '' || saveAs) {
+    // save as new project in selected directory (save as)
+    try {
       await DataStore(israProject, filePath,password);
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
@@ -176,7 +220,7 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
   } else {
     // override data in existing json file (save)
     try {
-      await DataStore(israProject, jsonFilePath);
+      await DataStore(israProject, jsonFilePath, password);
       oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(getMainWindow(), { message: 'Successfully saved form' });
       if (electronApp) electronApp.exit([0]);
@@ -241,13 +285,24 @@ const encryptAs = async () => {
   }
 };
 
+/**
+  * override data in existing encrypted json file (save)
+*/
+const saveEncrypted = () => {
+  if (israProject.toJSON() !== oldIsraProject){
+    israProject.iteration += 1;
+    getMainWindow().webContents.send('project:iteration', israProject.iteration);
+    savetoPath(jsonFilePath,false,true);
+  }
+};
 
 /**
   * save current project (save/save as)
 */
 const saveProject = () => {
-  if (jsonFilePath !== '' && !IsEncrypted(jsonFilePath)) save();
-  else saveAs();
+  if (jsonFilePath === '' ) saveAs();
+  else if(IsEncrypted(jsonFilePath)) saveEncrypted()
+  else save();
 };
 
 /**
@@ -1390,10 +1445,6 @@ ipcMain.on('israreport:saveGraph',  (event,graph) => {
     ),
   }]);
   contextMenu.popup();
-
-  
-
-  
 });
 // ipcMain.handle('dark-mode:toggle', () => {
 //   if (nativeTheme.shouldUseDarkColors) {
