@@ -861,7 +861,7 @@ function enableInteract(){
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
-      if (!addSelectedRowDataExecuting && risksData.find((risk) => risk.riskId === id)){
+      if (!addSelectedRowDataExecuting){
         addSelectedRowDataExecuting = true;
         const {
           riskId,
