@@ -994,7 +994,6 @@ function enableInteract(){
       // filter
       risksTable.clearFilter();
       $('input[id="filter-value"]').val('');
-      if (risksData.length > 0) $('#risks section').show();
       const rowData = {
         ...risk
       }
