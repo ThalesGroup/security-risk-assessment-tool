@@ -24,11 +24,21 @@
 
 const setButton = document.getElementById('btn')
 const setShowButton = document.getElementById('show-secret')
+const setSaveInput = document.getElementById('save-secret')
 const secretInput = document.getElementById('secret')
+
+let save = false
+
+setSaveInput.addEventListener('change', (e) => {
+  setSaveInput.value = e.target.value == 'true' ? false : true
+})
+
 setButton.addEventListener('click', () => {
   if(secretInput.checkValidity() && secretInput.value){
     const secret = secretInput.value
-    window.encryption.setSecret(secret)
+    if (setSaveInput.value == 'true') save = true
+    console.log(save)
+    window.encryption.setSecret(secret,save)
   }
 })
 

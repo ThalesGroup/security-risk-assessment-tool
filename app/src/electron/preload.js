@@ -157,7 +157,7 @@ contextBridge.exposeInMainWorld('israreport', {
 });
 
 contextBridge.exposeInMainWorld('encryption', {
-  setSecret: (secret) => ipcRenderer.send('set-secret', secret),
+  setSecret: (secret,save) => ipcRenderer.send('set-secret', secret,save),
   updateCachedSecret: (result) => ipcRenderer.on('update-cached-secret', result),
   isCachedSecret: () => ipcRenderer.invoke('is-cached-secret'),
   updateIsEncrypted: (result) => ipcRenderer.on('update-is-encrypted', result),

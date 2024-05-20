@@ -113,10 +113,10 @@ const passwordWindow = (resolveFunc, type) => {
       preload: path.join(__dirname, '/preload.js')
     }
   })
-  passwordWindow.removeMenu()
-  ipcMain.on('set-secret', (event, secret) => {
+  //passwordWindow.removeMenu()
+  ipcMain.on('set-secret', (event, secret,save=false) => {
     resolveFunc(secret)
-    setCachePass(secret)
+    if (save) setCachePass(secret)
     passwordWindow.close()
   })
   // set to null
