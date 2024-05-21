@@ -60,62 +60,63 @@
             <button class="tab-button" data-id="vulnerabilities">Vulnerabilities</button>
             <button class="tab-button active" data-id="isra-report">ISRA Report</button>
         </div>
-
-        <div class="contentWrapper">
-            <div class="content active" id="isra-report">
-                <header>ISRA Report</header>
-                <h1><span id="name"></span> <span id="version"></span></h1>
-                <h2>Iteration/Revision: <span id="iteration"></span>(#<span id="revision"></span>)</h2>
-                <h2>App version: <span id="app"></span></h2>
-                <section>
-                    <h1>Project security risks</h1>
-                    <div class="chart-container" >
-                        <canvas id="riskChart"></canvas>
-                      </div>
-                     
-                    <table id="risks">
-                        <thead>
-                            <th>Id</th>
-                            <th>Risk Description</th>
-                            <th>Inherent Score</th>
-                            <th>Mitigated Score</th>
-                            <th>Residual Score</th>
-                            <th>Risk Level</th>
-                            <th>Mgmt Decision</th>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </section>
-                <section>
-                    <h1>List of project vulnerabilities</h1>
-                    <table id="vulnerabilities">
-                        <thead>
-                            <th>Id</th>
-                            <th>Vulnerability Name</th>
-                            <th>Overall Score</th>
-                            <th>Overall Level</th>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </section>
-                <section>
-                    <h1>List of all accepted security controls</h1>
-                    <table id="riskmanagement">
-                        <thead>
-                            <th>Description</th>
-                            <th>Decision Detail</th>
-                            <th>Cost (md)</th>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </section>
+        <div class="scrollingWrapper">
+            <div class="contentWrapper">
+                <div class="content active" id="isra-report">
+                    <header>ISRA Report</header>
+                    <h1><span id="name"></span> <span id="version"></span></h1>
+                    <h2>Iteration/Revision: <span id="iteration"></span>(#<span id="revision"></span>)</h2>
+                    <h2>App version: <span id="app"></span></h2>
+                    <section>
+                        <h1>Project security risks</h1>
+                        <div class="chart-container" >
+                            <canvas id="riskChart"></canvas>
+                          </div>
+                      
+                        <table id="risks">
+                            <thead>
+                                <th>Id</th>
+                                <th>Risk Description</th>
+                                <th>Inherent Score</th>
+                                <th>Mitigated Score</th>
+                                <th>Residual Score</th>
+                                <th>Risk Level</th>
+                                <th>Mgmt Decision</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </section>
+                    <section>
+                        <h1>List of project vulnerabilities</h1>
+                        <table id="vulnerabilities">
+                            <thead>
+                                <th>Id</th>
+                                <th>Vulnerability Name</th>
+                                <th>Overall Score</th>
+                                <th>Overall Level</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </section>
+                    <section>
+                        <h1>List of all accepted security controls</h1>
+                        <table id="riskmanagement">
+                            <thead>
+                                <th>Description</th>
+                                <th>Decision Detail</th>
+                                <th>Cost (md)</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </section>
+                </div>
+                <div style="background-color: rgb(220, 220, 220); padding: 1%; border: 2px solid black; margin-top: 5%;">
+                    <p style="font-size: small;">Note: To print or export this page: On top left-hand corner, click on File then Print
+                        to create a pdf document. Open it and print it, or copy/paste its content.</p>
+                </div>
             </div>
-            <div style="background-color: rgb(220, 220, 220); padding: 1%; border: 2px solid black; margin-top: 5%;">
-                <p style="font-size: small;">Note: To print or export this page: On top left-hand corner, click on File then Print
-                    to create a pdf document. Open it and print it, or copy/paste its content.</p>
-            </div>
+            <footer></footer>
         </div>
-        <footer></footer>
     </div>
     <script src="../../javascript/common.js"></script>
     <script src="./renderer.js"></script>
