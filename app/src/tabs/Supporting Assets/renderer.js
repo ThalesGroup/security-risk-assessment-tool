@@ -43,7 +43,11 @@
       }
       return true
     };
-    
+
+    const findSupportingAsset = (ref) =>{
+      return fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref) || null;
+    };
+
     const validateSAName = (sa) => {
       if (sa.businessAssetRef.length == 0 || sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || !checkBusinessAssetRefArray(sa.businessAssetRef) || sa.supportingAssetName == ''){
         return '#FF0000';
@@ -65,11 +69,14 @@
     let selectOptions = {};
 
     const validate = (id, field, value) =>{
-      if ((field === 'businessAssetRef' && ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
-          || value.length !== new Set(value).size
-          || value.includes('null')
-          || !checkBusinessAssetRefArray(value)))
-        || (field === 'supportingAssetName' && !value)) {
+      let sa = findSupportingAsset(id)
+      if ((field === 'businessAssetRef'
+          && (value.length === 0 && !$(`${matrixTable}-${id} select`).length
+            || value.length !== new Set(value).size
+            || value.includes('null')
+            || !checkBusinessAssetRefArray(value)
+            || (sa && sa.supportingAssetName =='')))
+        || (field === 'supportingAssetName' && (!value || value=='' || (sa && !checkBusinessAssetRefArray(sa.businessAssetRef))))) {
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
@@ -135,13 +142,13 @@
       const newSelect = document.createElement('select');
       newInput.setAttribute('type', 'checkbox');
       newInput.setAttribute('data-index', index);
-
+      let sa = findSupportingAsset(id)
       Object.entries(selectOptions).forEach(([value, label]) => {
-        const newOption = document.createElement('option');
-        newOption.text = label;
-        newOption.value = value;
-        newSelect.setAttribute('data-index', index);
-        newSelect.add(newOption);
+          const newOption = document.createElement('option');
+          newOption.text = label;
+          newOption.value = value;
+          newSelect.setAttribute('data-index', index);
+          newSelect.add(newOption);
       });
 
       // keep track of prev selected option for each select element
@@ -150,15 +157,15 @@
       };
       newSelect.value = ref;
       prevOption();
-      newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(newSelect.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(newSelect.value) ? 3 : 1}px`);
+      newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(newSelect.value) || (sa && sa.businessAssetRef.includes(newSelect.value))? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(newSelect.value) || (sa && sa.businessAssetRef.includes(newSelect.value)) ? 3 : 1}px`);
 
       // change in selected option due to user input
       $(newSelect).on('change', (e) => {
-        // prevOption();
+        let prevOptions=sa ? sa.businessAssetRef : []
         window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
-        updateSupportingAsset(id, 'businessAssetRef', selected);
-        newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(e.target.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(e.target.value) ? 3 : 1}px`);
+        updateSupportingAsset(id, 'businessAssetRef', selected);      
+        newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(e.target.value) || prevOptions.includes(e.target.value)? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(e.target.value) || prevOptions.includes(e.target.value)? 3 : 1}px`);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
