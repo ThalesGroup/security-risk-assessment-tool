@@ -80,7 +80,7 @@ button.tab-button.active[data-id='vulnerabilities']{
     border-bottom: 2px solid #f3748c;
     }
 button.tab-button.active[data-id='isra-report']{
-    border-bottom: 2px solid #a6c2b2;
+    border-bottom: 2px solid black;
     }
 button.tab-button:hover{
     border-bottom: 2px solid rgba(0, 0, 0, 0.3);
