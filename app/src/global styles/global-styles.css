@@ -48,7 +48,7 @@ textarea {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     z-index: 3;
-    box-shadow: 0px 0px 4px black;
+    box-shadow: 0px 0px 1px black;
 }
 
 .buttonWrapper button {
