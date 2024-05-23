@@ -398,7 +398,7 @@ function enableInteract(){
           </div>
         `).css('background-color', 'rgb(248,220,212)');
         div.css('width', '100%');
-        div.css('margin-left', '3%');
+        div.css('margin-left', '5px');
         div.css('border', '1px solid black');
         div.attr('id', `risk_attack_path_${riskAttackPathId}`);
         div.attr('class', `risk_attack_paths`);
@@ -677,12 +677,11 @@ function enableInteract(){
         checkbox.value = `${riskMitigationId}`;
         checkbox.id = `risks__mitigation__checkboxes__${riskMitigationId}`;
         checkbox.name = 'risks__mitigation__checkboxes';
-        checkbox.style.position = 'absolute';
         mainSection.append(checkbox);
         const section = $('<section>');
         section.attr('id', `risks__mitigation__section__${riskMitigationId}`);
         section.css('background-color', 'rgb(200,212,204)');
-        section.css('margin-left', '20px');
+        section.css('margin-left', '5px');
         section.css('margin-top', '2%');
         section.css('padding', '0');
         const topSection = $('<section>');

@@ -252,3 +252,9 @@ label[name='Discarded'] {
     white-space: normal;
     overflow: visible;
 }
+
+.mitigations > section{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
