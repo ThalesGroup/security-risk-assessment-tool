@@ -684,6 +684,7 @@ function enableInteract(){
         section.css('margin-left', '5px');
         section.css('margin-top', '2%');
         section.css('padding', '0');
+        section.css('width', '100%');
         const topSection = $('<section>');
         topSection.attr('class', 'top');
         topSection.css('background-color', 'transparent');
