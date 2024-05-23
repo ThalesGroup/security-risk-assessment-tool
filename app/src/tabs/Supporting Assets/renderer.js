@@ -72,10 +72,9 @@
     let selectOptions = {};
 
     const validate = (id, field, value) =>{
-      let sa = findSupportingAsset(id)
-      if (!sa) return
-      let saBARef = field === 'businessAssetRef'? value : sa.businessAssetRef
-      let saName = field === 'supportingAssetName'? value : sa.supportingAssetName
+      let sa = supportingAssetsTable.getRow(id).getData()
+      let saBARef = field === 'businessAssetRef'? value : sa?  sa.businessAssetRef : null
+      let saName = field === 'supportingAssetName'? value : sa ? sa.supportingAssetName : null
 
       if (!checkBusinessAssetRefArray(saBARef) || (saBARef.length === 0 && !$(`${matrixTable}-${id} select`).length) || saBARef.length !== new Set(saBARef).size || !saName || saName==''){
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
