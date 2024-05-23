@@ -156,10 +156,7 @@ label {
 
 .attackpathsections {
     display: flex;
-}
-
-input[name="risks__attack__path__checkboxes"]{
-    position: absolute;
+    align-items: flex-start;
 }
 
 /* .risk_attack_paths .and:nth-last-of-type() {
@@ -254,4 +251,10 @@ label[name='Discarded'] {
 .tabulator .tabulator-row .tabulator-cell {
     white-space: normal;
     overflow: visible;
+}
+
+.mitigations > section{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
 }
