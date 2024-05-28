@@ -184,7 +184,8 @@
         $('#vulnerabilties__table__checkboxes').empty();
         vulnerabilitiesTable.addData(vulnerabilities);
         // Select the latest vulerability selected (stored in the browser's volatile storage) (default: first vulerability of the table)
-        const selectedVulnerability = sessionStorage.getItem("currentVulnerability") ? sessionStorage.getItem("currentVulnerability") : vulnerabilities[0].vulnerabilityId
+        const previousVulId = sessionStorage.getItem("currentVulnerability")
+        const selectedVulnerability = previousVulId && vulnerabilities.find((v) => v.vulnerabilityId == previousVulId)? previousVulId : vulnerabilities[0].vulnerabilityId
         vulnerabilitiesTable.selectRow(selectedVulnerability);
         addSelectedVulnerabilityRowData(selectedVulnerability);
 
