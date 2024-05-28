@@ -860,7 +860,7 @@ function enableInteract(){
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
-      if (!addSelectedRowDataExecuting){
+      if (!addSelectedRowDataExecuting && risksData.find((risk) => risk.riskId == id)){
         addSelectedRowDataExecuting = true;
         const {
           riskId,
@@ -1044,7 +1044,8 @@ function enableInteract(){
       disableRiskSelection()
 
       // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
-      const selectedRisk = sessionStorage.getItem("currentRisk") ? sessionStorage.getItem("currentRisk") : fetchedData[0].riskId
+      const previousRiskId = sessionStorage.getItem("currentRisk")
+      const selectedRisk = previousRiskId && fetchedData.find((risk) => risk.riskId == previousRiskId) ? previousRiskId : fetchedData[0].riskId
       risksTable.selectRow(selectedRisk);
       await addSelectedRowData(selectedRisk);
       /* fetchedData.forEach((risk, i) => {
