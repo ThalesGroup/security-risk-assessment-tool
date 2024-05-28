@@ -140,6 +140,13 @@ For all platform packaging, from the `app` directory, run :
 ``` 
 npm run dist-all
 ```
+For a specific platform packaging, from the `app` directory, run :
+
+``` 
+npm run dist-linux
+npm run dist-mac
+npm run dist-windows
+```
 
 The output files should find themselves in the `dist` directory.
 
