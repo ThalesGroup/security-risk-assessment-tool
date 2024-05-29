@@ -265,7 +265,7 @@
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
-                $('#app').text('1.1.0');
+                $('#app').text((await window.welcome.getConfig()).appVersion);
                 $('#iteration').text(ISRAtracking.length);
                 $('#revision').text(iteration);
 
