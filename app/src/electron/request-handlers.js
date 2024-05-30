@@ -845,9 +845,6 @@ const loadData = async (win) => {
 
   }
 
-  
-
-
 /**
   * Download pdf file to selected path
   * @module downloadReport
@@ -923,18 +920,25 @@ const downloadReport = async (app) => {
         newISRAProject(win, app);
       });
 
-      win.webContents.on('did-finish-load', () => { 
-        win.webContents.printToPDF(pdfOptions).then(data => {
-          fs.writeFile(filePath, data, function (err) {
-            if (err) {
-              throw err; 
-            } else {
-              dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
-            }
-          });
-        }).catch((err) => {
-          console.log(err);
-          dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
+      win.webContents.on('did-finish-load', () => {
+        ipcMain.once('israreport:fetchedContent', (result) => {
+          if(result){
+            win.webContents.printToPDF(pdfOptions).then(data => {
+              fs.writeFile(filePath, data, function (err) {
+                if (err) {
+                  throw err; 
+                } else {
+                  dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
+                }
+              });
+            }).catch((err) => {
+              console.log(err);
+              dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
+            });
+          }else{
+            throw Error(`Unable to load data in report`)
+          }
+          
         });
       });
     }

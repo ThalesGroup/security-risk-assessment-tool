@@ -154,4 +154,5 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
 
 contextBridge.exposeInMainWorld('israreport', {
   saveGraph: (graph) => ipcRenderer.send('israreport:saveGraph', graph),
+  fetchedContent: (result) => ipcRenderer.send('israreport:fetchedContent', result),
 });

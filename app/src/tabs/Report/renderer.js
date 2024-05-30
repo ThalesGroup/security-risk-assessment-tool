@@ -339,7 +339,7 @@
                  
                 
 
-                  
+              window.israreport.fetchedContent(true);
             });
 
             window.project.iteration(async (event, iteration) => {
@@ -348,7 +348,9 @@
             enableAllTabs()
             window.removeEventListener('keydown', handleReload);
         });
+
     } catch (err) {
         alert('Failed to load report tab');
+        window.israreport.fetchedContent(false);
     }
 })();
