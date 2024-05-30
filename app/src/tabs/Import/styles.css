@@ -26,6 +26,10 @@ html {
     background-color: #ffffff;
 }
 
+body {
+    overflow-y: scroll !important;
+}
+
 #vulnerabilities section > div:first-of-type{
     display: flex;
     justify-content: space-between;
