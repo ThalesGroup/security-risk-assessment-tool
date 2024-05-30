@@ -335,11 +335,8 @@
                   generateGraph(lowRisk, medRisk, highRisk)
                 }
                 
-                  
-                 
-                
-
-                  
+              // Inform the main process that the data is fetched
+              window.israreport.fetchedContent(true);
             });
 
             window.project.iteration(async (event, iteration) => {
@@ -348,7 +345,8 @@
             enableAllTabs()
             window.removeEventListener('keydown', handleReload);
         });
+
     } catch (err) {
-        alert('Failed to load report tab');
-    }
+      window.israreport.fetchedContent(false);
+      alert('Failed to load report tab');    }
 })();
