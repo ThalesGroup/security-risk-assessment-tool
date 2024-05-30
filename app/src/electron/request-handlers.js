@@ -921,6 +921,7 @@ const downloadReport = async (app) => {
       });
 
       win.webContents.on('did-finish-load', () => {
+        // Remove the navigation and top containers from the report page
         win.webContents.executeJavaScript(`
         document.querySelector('.buttonWrapper').style.display = 'none';
         document.querySelector('.scrollingWrapper').classList.remove("scrollingWrapper");
@@ -928,6 +929,7 @@ const downloadReport = async (app) => {
         document.querySelector('body').style.height = 'auto';
         `)
         .then(() =>{
+          // Wait for the data to be fetched in report page
           ipcMain.once('israreport:fetchedContent', (result) => {
             if(result){
               win.webContents.printToPDF(pdfOptions).then(data => {
@@ -948,6 +950,7 @@ const downloadReport = async (app) => {
           });
         })
         .catch((err) =>{
+          console.log(err);
           dialog.showMessageBoxSync(getMainWindow(), { message: `Failed to execute script : ${err.message}.` });        })
       });
     }

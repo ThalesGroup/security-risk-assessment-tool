@@ -335,10 +335,7 @@
                   generateGraph(lowRisk, medRisk, highRisk)
                 }
                 
-                  
-                 
-                
-
+              // Inform the main process that the data is fetched
               window.israreport.fetchedContent(true);
             });
 
