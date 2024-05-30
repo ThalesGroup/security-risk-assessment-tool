@@ -921,25 +921,34 @@ const downloadReport = async (app) => {
       });
 
       win.webContents.on('did-finish-load', () => {
-        ipcMain.once('israreport:fetchedContent', (result) => {
-          if(result){
-            win.webContents.printToPDF(pdfOptions).then(data => {
-              fs.writeFile(filePath, data, function (err) {
-                if (err) {
-                  throw err; 
-                } else {
-                  dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
-                }
+        win.webContents.executeJavaScript(`
+        document.querySelector('.buttonWrapper').style.display = 'none';
+        document.querySelector('.scrollingWrapper').classList.remove("scrollingWrapper");
+        document.querySelector('body').style.overflow = 'scroll';
+        document.querySelector('body').style.height = 'auto';
+        `)
+        .then(() =>{
+          ipcMain.once('israreport:fetchedContent', (result) => {
+            if(result){
+              win.webContents.printToPDF(pdfOptions).then(data => {
+                fs.writeFile(filePath, data, function (err) {
+                  if (err) {
+                    throw err; 
+                  } else {
+                    dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
+                  }
+                });
+              }).catch((err) => {
+                console.log(err);
+                dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
               });
-            }).catch((err) => {
-              console.log(err);
-              dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
-            });
-          }else{
+            }else{
             throw Error(`Unable to load data in report`)
-          }
-          
-        });
+            }
+          });
+        })
+        .catch((err) =>{
+          dialog.showMessageBoxSync(getMainWindow(), { message: `Failed to execute script : ${err.message}.` });        })
       });
     }
   } catch(err){

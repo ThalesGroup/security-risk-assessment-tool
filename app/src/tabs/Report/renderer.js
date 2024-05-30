@@ -350,7 +350,6 @@
         });
 
     } catch (err) {
-        alert('Failed to load report tab');
-        window.israreport.fetchedContent(false);
-    }
+      window.israreport.fetchedContent(false);
+      alert('Failed to load report tab');    }
 })();
