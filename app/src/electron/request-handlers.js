@@ -286,8 +286,13 @@ const validateClasses = () => {
       if (ref === null) return 
       let foundSupportingAsset = SupportingAsset.find(obj => obj.supportingAssetId == ref);
 
-      if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
-          return false
+      if (
+        foundSupportingAsset.businessAssetRef.length == 0 ||
+        foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size ||
+        !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) ||
+        foundSupportingAsset.supportingAssetName == ''
+      ){
+        return false
       }
       return true
   };
@@ -305,7 +310,13 @@ const validateClasses = () => {
     const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
       found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
-      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+      if (
+        !found ||
+        !found.supportingAssetRef.includes(supportingAssetRef) ||
+        !checkSupportingAssetRefArray(found.supportingAssetRef) || 
+        found.vulnerabilityName === '' || 
+        found.vulnerabilityDescription === ''
+      ) return false
       return true
     };
 
@@ -325,7 +336,13 @@ const validateClasses = () => {
 
   const validateRiskDescription = (risk) => {
     const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = risk;
-    if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || motivation === ''){
+    if (
+      threatAgent === '' || 
+      threatVerb === '' || 
+      ! checkBusinessAssetRef(businessAssetRef) || 
+      ! checkSupportingAssetRef(supportingAssetRef) || 
+      motivation === ''
+    ){
       return false;
     } else return true;
   };
