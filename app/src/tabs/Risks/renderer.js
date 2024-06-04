@@ -411,6 +411,7 @@ function enableInteract(){
         const deleteButton = document.createElement('button');
         deleteButton.className = 'addDelete';
         deleteButton.innerText = 'Delete';
+        deleteButton.value = i;
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
@@ -452,13 +453,14 @@ function enableInteract(){
         });
 
         // delete vulnerabilityRef
-        deleteButton.addEventListener('click', async ()=>{
-          const checkboxes = document.getElementsByName('risks__vulnerability__checkboxes');
+        deleteButton.addEventListener('click', async (e)=>{
+          const attackPath = document.getElementById(`attackpath_${Number(e.target.value) + 1}`)
+          const checkboxes = attackPath.querySelectorAll("input[name='risks__vulnerability__checkboxes']")
           const ids = [];
 
           checkboxes.forEach((box) => {
             if (box.checked) {
-              const vulRef = document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`)
+              const vulRef = attackPath.querySelector(`#vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`)
               const vulId = vulRef.querySelector('select').value
               if (vulId) {
                 ids.push(Number(vulId))
