@@ -25,7 +25,7 @@
 
   let riskChart;
 
-  function generateGraph(lowRisk, medRisk, highRisk) {
+  function generateGraph(lowRisk, medRisk, highRisk, criticalRisk) {
    
     const chartElement = document.getElementById('riskChart');
     const chartData = {
@@ -50,6 +50,13 @@
           {
             label: 'High',
             data: highRisk,
+            stack: 'stack',
+            backgroundColor: '#E73927', 
+            barPercentage: 0.5,
+          },
+          {
+            label: 'Critical',
+            data: criticalRisk,
             stack: 'stack',
             backgroundColor: '#FF0000', 
             barPercentage: 0.5,
@@ -223,7 +230,8 @@
             sortedRisk[residualRiskLevel].forEach((risk) => {
                 const { riskId, residualRiskLevel, inherentRiskScore, mitigatedRiskScore, residualRiskScore,riskManagementDecision, riskName, riskManagementDetail } = risk;
                 let color = 'black';
-                if (residualRiskLevel === 'High') color = 'red';
+                if (residualRiskLevel === 'Critical') color = 'red';
+                else if (residualRiskLevel === 'High') color = '#E73927';
                 else if (residualRiskLevel === 'Medium') color = 'orange';
 
                 $('#risks tbody').append(`<tr>
@@ -239,7 +247,7 @@
                     <td style="color: ${inherentRiskScore === null ? 'red' : 'black'}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
                     <td style="color: ${mitigatedRiskScore === null ? 'red' : 'black'}">${mitigatedRiskScore === null ? 'NaN' : mitigatedRiskScore}/20</td>
                     <td style="color: ${residualRiskScore === null ? 'red' : 'black'}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
-                    <td style="color: ${color}; font-weight: ${residualRiskLevel === 'High' || residualRiskLevel === 'Medium' ? 'bold' : 'normal'};">${residualRiskLevel}</td>
+                    <td style="color: ${color}; font-weight: ${residualRiskLevel === 'Critical' || residualRiskLevel === 'High' || residualRiskLevel === 'Medium' ? 'bold' : 'normal'};">${residualRiskLevel}</td>
                     <td>${riskManagementDecision}</td>
                     </td>`);
             });
@@ -251,14 +259,15 @@
                 const { Vulnerability, Risk, ISRAmeta } = fetchedData
                 const { projectName, projectVersion, iteration, ISRAtracking} = ISRAmeta;
                 const sortedVulnerability = {
-                    high: [],
-                    medium: [],
-                    low: []
+                  high: [],
+                  medium: [],
+                  low: []
                 };
                 const sortedRisk = {
-                    high: [],
-                    medium: [],
-                    low: []
+                  critical: [],
+                  high: [],
+                  medium: [],
+                  low: []
                 };
                 $('#risks tbody').empty();
                 $('#vulnerabilities tbody').empty();
@@ -274,12 +283,17 @@
                 const lowRisk = [0,0,0];
                 const medRisk = [0,0,0];
                 const highRisk = [0,0,0];
+                const criticalRisk = [0,0,0];
+
                 const dataIndex = {'Accept': 0, 'Transfer': 1, 'Mitigate': 2}
                 Risk.forEach((risk) => {
                     const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
-                    
 
-                    if (residualRiskLevel === 'High') {
+                    if (residualRiskLevel === 'Critical') {
+                      sortedRisk['critical'].push(risk);
+                      criticalRisk[dataIndex[riskManagementDecision]] += 1;
+
+                    } else if (residualRiskLevel === 'High') {
                         sortedRisk['high'].push(risk);
                         highRisk[dataIndex[riskManagementDecision]] += 1;
 
@@ -311,6 +325,7 @@
                     <td><strong>Total accepted security control cost:</strong></td>
                     <td>${totalCost}</td>
                 </tr>`);
+                renderRisk(sortedRisk, 'critical');
                 renderRisk(sortedRisk, 'high');
                 renderRisk(sortedRisk, 'medium');
                 renderRisk(sortedRisk, 'low');
@@ -329,10 +344,12 @@
                   riskChart.data.datasets[0].data= lowRisk
                   riskChart.data.datasets[1].data= medRisk
                   riskChart.data.datasets[2].data= highRisk
+                  riskChart.data.datasets[3].data= criticalRisk
+
                   riskChart.update()
                   
                 } else {
-                  generateGraph(lowRisk, medRisk, highRisk)
+                  generateGraph(lowRisk, medRisk, highRisk, criticalRisk)
                 }
                 
               // Inform the main process that the data is fetched
