@@ -216,8 +216,14 @@ function enableInteract(){
       if (ref === null) return 
       let foundSupportingAsset = existSupportingAsset(ref)
 
-      if (foundSupportingAsset == null || foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
-          return false
+      if (
+        foundSupportingAsset == null || 
+        foundSupportingAsset.businessAssetRef.length == 0 || 
+        foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
+        !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
+        foundSupportingAsset.supportingAssetName == ''
+      ){
+        return false
       }
       return true
     };
@@ -236,7 +242,13 @@ function enableInteract(){
     const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
       found = vulnerabilities.find(obj => obj.vulnerabilityId === ref);
-      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+      if (
+        !found ||
+        !found.supportingAssetRef.includes(supportingAssetRef) ||
+        !checkSupportingAssetRefArray(found.supportingAssetRef) || 
+        found.vulnerabilityName === '' || 
+        found.vulnerabilityDescription === ''
+      ) return false
       return true
     };
 
@@ -256,7 +268,14 @@ function enableInteract(){
 
     const validateRiskName = (risk) => {
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
-      if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+      if (
+        threatAgent === '' || 
+        threatVerb === '' || 
+        ! checkBusinessAssetRef(businessAssetRef) || 
+        ! checkSupportingAssetRef(supportingAssetRef) || 
+        ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || 
+        motivation === ''
+      ){
         return '#FF0000';
       } else return '#000000';
     };
