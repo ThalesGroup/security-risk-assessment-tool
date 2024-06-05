@@ -31,9 +31,10 @@ article {
     margin-bottom: 2%;
 }
 
-div[class='content active'] {
-    background-color: #c0dc8c;
+section[id='business-asset-section'] {
+    background-color: #c0dc8c !important ;
     padding: 2%;
+
 }
 
 .business-assets__sections-description{

@@ -174,8 +174,14 @@
           if (ref === null) return 
           let foundSupportingAsset = existSupportingAsset(ref)
         
-          if (foundSupportingAsset == null || foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
-              return false
+          if (
+            foundSupportingAsset == null ||
+            foundSupportingAsset.businessAssetRef.length == 0 || 
+            foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
+            !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
+            foundSupportingAsset.supportingAssetName == ''
+          ){
+            return false
           }
           return true
         };
@@ -194,7 +200,13 @@
         const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
           if (ref === null) return false
           found = fetchedData.Vulnerability.find(obj => obj.vulnerabilityId === ref);
-          if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+          if (
+            !found ||
+            !found.supportingAssetRef.includes(supportingAssetRef) ||
+            !checkSupportingAssetRefArray(found.supportingAssetRef) || 
+            found.vulnerabilityName === '' || 
+            found.vulnerabilityDescription === ''
+          ) return false
           return true
         };
       
@@ -214,7 +226,14 @@
       
         const validateRiskName = (risk) => {
           const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
-          if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+          if (
+            threatAgent === '' || 
+            threatVerb === '' || 
+            ! checkBusinessAssetRef(businessAssetRef) || 
+            ! checkSupportingAssetRef(supportingAssetRef) || 
+            ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || 
+            motivation === ''
+          ){
             return '#FF0000';
           } else return '#000000';
         };
@@ -265,7 +284,7 @@
                 $('#riskmanagement tbody').empty();
                 $('#name').text(projectName === '' ? '[Project Name]' : projectName);
                 $('#version').text(projectVersion === '' ? '[Project Version]' : projectVersion);
-                $('#app').text('1.1.0');
+                $('#app').text((await window.welcome.getConfig()).appVersion);
                 $('#iteration').text(ISRAtracking.length);
                 $('#revision').text(iteration);
 
@@ -335,11 +354,8 @@
                   generateGraph(lowRisk, medRisk, highRisk)
                 }
                 
-                  
-                 
-                
-
-                  
+              // Inform the main process that the data is fetched
+              window.israreport.fetchedContent(true);
             });
 
             window.project.iteration(async (event, iteration) => {
@@ -348,7 +364,8 @@
             enableAllTabs()
             window.removeEventListener('keydown', handleReload);
         });
+
     } catch (err) {
-        alert('Failed to load report tab');
-    }
+      window.israreport.fetchedContent(false);
+      alert('Failed to load report tab');    }
 })();

@@ -56,7 +56,13 @@
         const supportingAssetRef = rowData.supportingAssetRef
         const vulnerabilityDescription = rowData.vulnerabilityDescription
         const vulnerabilityName = rowData.vulnerabilityName
-        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || !checkSupportingAssetRefArray(supportingAssetRef) || vulnerabilityDescription === '' || vulnerabilityName === '')  {
+        if (
+            supportingAssetsData.length === 0 || 
+            supportingAssetRef.length === 0 || 
+            !checkSupportingAssetRefArray(supportingAssetRef) || 
+            vulnerabilityDescription === '' || 
+            vulnerabilityName === ''
+        ) {
             cell.getElement().style.color = '#FF0000';
         }
         else  {
@@ -113,6 +119,8 @@
     });
 
     const getCurrentVulnerabilityId = () => {
+        // Store the current vulnerability id in the browser's volatile storage
+        sessionStorage.setItem("currentVulnerability",vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId);
         return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
     };
 
@@ -146,7 +154,10 @@
         if (ref === null) return 
         let foundSupportingAsset = fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref);
 
-        if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+        if (foundSupportingAsset.businessAssetRef.length == 0 || 
+            foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
+            !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
+            foundSupportingAsset.supportingAssetName == ''){
             return false
         }
         return true
@@ -181,8 +192,11 @@
         vulnerabilitiesTable.clearData();
         $('#vulnerabilties__table__checkboxes').empty();
         vulnerabilitiesTable.addData(vulnerabilities);
-        vulnerabilitiesTable.selectRow(vulnerabilities[0].vulnerabilityId);
-        addSelectedVulnerabilityRowData(vulnerabilities[0].vulnerabilityId);
+        // Select the latest vulerability selected (stored in the browser's volatile storage) (default: first vulerability of the table)
+        const previousVulId = sessionStorage.getItem("currentVulnerability")
+        const selectedVulnerability = previousVulId && vulnerabilities.find((v) => v.vulnerabilityId == previousVulId)? previousVulId : vulnerabilities[0].vulnerabilityId
+        vulnerabilitiesTable.selectRow(selectedVulnerability);
+        addSelectedVulnerabilityRowData(selectedVulnerability);
 
     };
     
@@ -200,7 +214,7 @@
             cveScore,
             overallLevel,
             supportingAssetRef
-        } = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
+        } = vulnerabilitiesData.find((v) => v.vulnerabilityId == id);
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
         $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
@@ -513,7 +527,7 @@
         const { value } = e.target;
         let fixedValue = value;
         if (value.includes('.') && value.split('.')[1].length > 1) {
-            fixedValue = Number.parseFloat(value).toFixed(1); 
+            fixedValue = Number.parseFloat(value).toString().match(/^-?\d+(?:\.\d?)?/)[0]
         };
         const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', fixedValue);
         const { overallLevel, cveScore } = vulnerability;

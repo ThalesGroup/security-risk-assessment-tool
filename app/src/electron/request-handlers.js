@@ -410,8 +410,13 @@ const validateClasses = () => {
       if (ref === null) return 
       let foundSupportingAsset = SupportingAsset.find(obj => obj.supportingAssetId == ref);
 
-      if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
-          return false
+      if (
+        foundSupportingAsset.businessAssetRef.length == 0 ||
+        foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size ||
+        !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) ||
+        foundSupportingAsset.supportingAssetName == ''
+      ){
+        return false
       }
       return true
   };
@@ -429,7 +434,13 @@ const validateClasses = () => {
     const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
       found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
-      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+      if (
+        !found ||
+        !found.supportingAssetRef.includes(supportingAssetRef) ||
+        !checkSupportingAssetRefArray(found.supportingAssetRef) || 
+        found.vulnerabilityName === '' || 
+        found.vulnerabilityDescription === ''
+      ) return false
       return true
     };
 
@@ -449,7 +460,13 @@ const validateClasses = () => {
 
   const validateRiskDescription = (risk) => {
     const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation } = risk;
-    if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || motivation === ''){
+    if (
+      threatAgent === '' || 
+      threatVerb === '' || 
+      ! checkBusinessAssetRef(businessAssetRef) || 
+      ! checkSupportingAssetRef(supportingAssetRef) || 
+      motivation === ''
+    ){
       return false;
     } else return true;
   };
@@ -995,9 +1012,6 @@ const loadData = async (win) => {
 
   }
 
-  
-
-
 /**
   * Download pdf file to selected path
   * @module downloadReport
@@ -1073,19 +1087,38 @@ const downloadReport = async (app) => {
         newISRAProject(win, app);
       });
 
-      win.webContents.on('did-finish-load', () => { 
-        win.webContents.printToPDF(pdfOptions).then(data => {
-          fs.writeFile(filePath, data, function (err) {
-            if (err) {
-              throw err; 
-            } else {
-              dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
+      win.webContents.on('did-finish-load', () => {
+        // Remove the navigation and top containers from the report page
+        win.webContents.executeJavaScript(`
+        document.querySelector('.buttonWrapper').style.display = 'none';
+        document.querySelector('.scrollingWrapper').classList.remove("scrollingWrapper");
+        document.querySelector('body').style.overflow = 'scroll';
+        document.querySelector('body').style.height = 'auto';
+        `)
+        .then(() =>{
+          // Wait for the data to be fetched in report page
+          ipcMain.once('israreport:fetchedContent', (result) => {
+            if(result){
+              win.webContents.printToPDF(pdfOptions).then(data => {
+                fs.writeFile(filePath, data, function (err) {
+                  if (err) {
+                    throw err; 
+                  } else {
+                    dialog.showMessageBoxSync(getMainWindow(), { message: `Successfully saved current ISRA report to ${filePath}.` });
+                  }
+                });
+              }).catch((err) => {
+                console.log(err);
+                dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
+              });
+            }else{
+            throw Error(`Unable to load data in report`)
             }
           });
-        }).catch((err) => {
+        })
+        .catch((err) =>{
           console.log(err);
-          dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid report', message: 'Failed to save current ISRA report.' });      
-        });
+          dialog.showMessageBoxSync(getMainWindow(), { message: `Failed to execute script : ${err.message}.` });        })
       });
     }
   } catch(err){
