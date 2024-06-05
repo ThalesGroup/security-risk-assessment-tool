@@ -216,8 +216,14 @@ function enableInteract(){
       if (ref === null) return 
       let foundSupportingAsset = existSupportingAsset(ref)
 
-      if (foundSupportingAsset == null || foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
-          return false
+      if (
+        foundSupportingAsset == null || 
+        foundSupportingAsset.businessAssetRef.length == 0 || 
+        foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
+        !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
+        foundSupportingAsset.supportingAssetName == ''
+      ){
+        return false
       }
       return true
     };
@@ -236,7 +242,13 @@ function enableInteract(){
     const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
       found = vulnerabilities.find(obj => obj.vulnerabilityId === ref);
-      if (!found || !found.supportingAssetRef.includes(supportingAssetRef)||!checkSupportingAssetRefArray(found.supportingAssetRef) || found.vulnerabilityName === '' || found.vulnerabilityDescription === '') return false
+      if (
+        !found ||
+        !found.supportingAssetRef.includes(supportingAssetRef) ||
+        !checkSupportingAssetRefArray(found.supportingAssetRef) || 
+        found.vulnerabilityName === '' || 
+        found.vulnerabilityDescription === ''
+      ) return false
       return true
     };
 
@@ -256,7 +268,14 @@ function enableInteract(){
 
     const validateRiskName = (risk) => {
       const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
-      if (threatAgent === '' || threatVerb === '' || ! checkBusinessAssetRef(businessAssetRef) || ! checkSupportingAssetRef(supportingAssetRef) || ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || motivation === ''){
+      if (
+        threatAgent === '' || 
+        threatVerb === '' || 
+        ! checkBusinessAssetRef(businessAssetRef) || 
+        ! checkSupportingAssetRef(supportingAssetRef) || 
+        ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || 
+        motivation === ''
+      ){
         return '#FF0000';
       } else return '#000000';
     };
@@ -398,7 +417,7 @@ function enableInteract(){
           </div>
         `).css('background-color', 'rgb(248,220,212)');
         div.css('width', '100%');
-        div.css('margin-left', '3%');
+        div.css('margin-left', '5px');
         div.css('border', '1px solid black');
         div.attr('id', `risk_attack_path_${riskAttackPathId}`);
         div.attr('class', `risk_attack_paths`);
@@ -677,14 +696,14 @@ function enableInteract(){
         checkbox.value = `${riskMitigationId}`;
         checkbox.id = `risks__mitigation__checkboxes__${riskMitigationId}`;
         checkbox.name = 'risks__mitigation__checkboxes';
-        checkbox.style.position = 'absolute';
         mainSection.append(checkbox);
         const section = $('<section>');
         section.attr('id', `risks__mitigation__section__${riskMitigationId}`);
         section.css('background-color', 'rgb(200,212,204)');
-        section.css('margin-left', '20px');
+        section.css('margin-left', '5px');
         section.css('margin-top', '2%');
         section.css('padding', '0');
+        section.css('width', '100%');
         const topSection = $('<section>');
         topSection.attr('class', 'top');
         topSection.css('background-color', 'transparent');
@@ -860,7 +879,7 @@ function enableInteract(){
 
     // render selected row data on page by riskId
     const addSelectedRowData = async (id) =>{
-      if (!addSelectedRowDataExecuting){
+      if (!addSelectedRowDataExecuting && risksData.find((risk) => risk.riskId == id)){
         addSelectedRowDataExecuting = true;
         const {
           riskId,
@@ -994,7 +1013,6 @@ function enableInteract(){
       // filter
       risksTable.clearFilter();
       $('input[id="filter-value"]').val('');
-      if (risksData.length > 0) $('#risks section').show();
       const rowData = {
         ...risk
       }
@@ -1045,7 +1063,8 @@ function enableInteract(){
       disableRiskSelection()
 
       // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
-      const selectedRisk = sessionStorage.getItem("currentRisk") ? sessionStorage.getItem("currentRisk") : fetchedData[0].riskId
+      const previousRiskId = sessionStorage.getItem("currentRisk")
+      const selectedRisk = previousRiskId && fetchedData.find((risk) => risk.riskId == previousRiskId) ? previousRiskId : fetchedData[0].riskId
       risksTable.selectRow(selectedRisk);
       await addSelectedRowData(selectedRisk);
       /* fetchedData.forEach((risk, i) => {

@@ -27,9 +27,12 @@
 (async () => {
   var fetchedData
 
+    const countInArray = (array,ref) =>{
+      return array.reduce((n, x) => n + (x === ref), 0);
+    }
     // Check if the businessAsset is valid
     const checkBusinessAssetRef = (ref) =>{
-      if (ref === null) return false
+      if (ref === null || ref == "null") return false
       let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId == ref);
       return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
     };
@@ -43,9 +46,18 @@
       }
       return true
     };
-    
+
+    const findSupportingAsset = (ref) =>{
+      return fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref) || null;
+    };
+
     const validateSAName = (sa) => {
-      if (sa.businessAssetRef.length == 0 || sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || !checkBusinessAssetRefArray(sa.businessAssetRef) || sa.supportingAssetName == ''){
+      if (
+        sa.businessAssetRef.length == 0 || 
+        sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || 
+        !checkBusinessAssetRefArray(sa.businessAssetRef) || 
+        sa.supportingAssetName == ''
+      ){
         return '#FF0000';
       } else return '#000000';
     };
@@ -65,11 +77,11 @@
     let selectOptions = {};
 
     const validate = (id, field, value) =>{
-      if ((field === 'businessAssetRef' && ((value.length === 0 && !$(`${matrixTable}-${id} select`).length)
-          || value.length !== new Set(value).size
-          || value.includes('null')
-          || !checkBusinessAssetRefArray(value)))
-        || (field === 'supportingAssetName' && !value)) {
+      let sa = supportingAssetsTable.getRow(id).getData()
+      let saBARef = field === 'businessAssetRef'? value : sa?  sa.businessAssetRef : null
+      let saName = field === 'supportingAssetName'? value : sa ? sa.supportingAssetName : null
+
+      if (!checkBusinessAssetRefArray(saBARef) || (saBARef.length === 0 && !$(`${matrixTable}-${id} select`).length) || saBARef.length !== new Set(saBARef).size || !saName || saName==''){
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
@@ -80,6 +92,28 @@
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'black');
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'normal');
       }
+    }
+
+    const updateSelectDesign = (id) => {
+      // Retrieve the current set of selected business asset
+      let currentOptions = []
+      $(`${matrixTable}-${id} td.matrix-sa-ba div select`).map((key,item) => (
+        currentOptions.push(item.value)
+      ))
+    
+      // Retrieve the duplicated selected business asset
+      let mappingDuplicate = {}
+      $(`${matrixTable}-${id} td.matrix-sa-ba div select`).map((key,item) => (
+        mappingDuplicate[item.value] = countInArray(currentOptions,item.value)
+      ))
+
+      // Update the design of the invalid selects
+      $(`${matrixTable}-${id} td.matrix-sa-ba div select`).map((key,item) => (
+        !item.value || 
+        item.value == "null" || 
+        mappingDuplicate[item.value] > 1 ? 
+        item.setAttribute('style', `border-color : red; border-width: 3px`): item.setAttribute('style', `border-color : black; border-width: 1px`)
+      ))
     }
 
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
@@ -135,13 +169,13 @@
       const newSelect = document.createElement('select');
       newInput.setAttribute('type', 'checkbox');
       newInput.setAttribute('data-index', index);
-
+      let sa = findSupportingAsset(id)
       Object.entries(selectOptions).forEach(([value, label]) => {
-        const newOption = document.createElement('option');
-        newOption.text = label;
-        newOption.value = value;
-        newSelect.setAttribute('data-index', index);
-        newSelect.add(newOption);
+          const newOption = document.createElement('option');
+          newOption.text = label;
+          newOption.value = value;
+          newSelect.setAttribute('data-index', index);
+          newSelect.add(newOption);
       });
 
       // keep track of prev selected option for each select element
@@ -150,15 +184,16 @@
       };
       newSelect.value = ref;
       prevOption();
-      newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(newSelect.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(newSelect.value) ? 3 : 1}px`);
+      newSelect.setAttribute('style',!checkBusinessAssetRef(ref) || (sa && countInArray(sa.businessAssetRef,ref) > 1 ) ? `border-color : red; border-width: 3px`: `border-color : black; border-width: 1px`)
 
       // change in selected option due to user input
       $(newSelect).on('change', (e) => {
-        // prevOption();
+        let prevOptions=sa ? sa.businessAssetRef : []
         window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
-        newSelect.setAttribute('style',`border-color:${!checkBusinessAssetRef(e.target.value) ? 'red' : 'black'};border-width: ${!checkBusinessAssetRef(e.target.value) ? 3 : 1}px`);
+        newSelect.setAttribute('style',!checkBusinessAssetRef(e.target.value) || (countInArray(prevOptions,e.target.value) > 0) ? `border-color : red; border-width: 3px`: `border-color : black; border-width: 1px`)
+        updateSelectDesign(id)
       });
 
       // possible change in selected option due to add/delete BusinessAssets
@@ -221,6 +256,8 @@
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => !e.value ? null : e.value).get();
         validate(id, 'businessAssetRef', selected);
         updateSupportingAsset(id, 'businessAssetRef', selected)
+                
+        updateSelectDesign(id)
       });
     };
 

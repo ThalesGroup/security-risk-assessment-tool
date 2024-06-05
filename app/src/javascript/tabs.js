@@ -28,6 +28,15 @@ const tabs = document.querySelector('.wrapper');
 const tabButton = document.querySelectorAll('.tab-button');
 const contents = document.querySelectorAll('.content');
 
+/* tabs mapping */
+const panels = [
+  {name:"welcome", link:"../Welcome/welcome.html"}, 
+  {name:"project-context", link:"../Project Context/project-context.html"}, 
+  {name:"business-assets", link:"../Business Assets/business-assets.html"}, 
+  {name:"supporting-assets", link:"../Supporting Assets/supporting-assets.html"}, 
+  {name:"risks", link:"../Risks/risks.html"}, 
+  {name:"vulnerabilities", link:"../Vulnerabilities/vulnerabilities.html"}, 
+  {name:"isra-report", link:"../Report/report.html"}]
 /**
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
@@ -199,6 +208,23 @@ tabs.onclick = (e) => {
       break;
   }
 };
+
+$(document).keydown(function(e) {
+  const tabKeyCode = 9
+  // Ctrl and Tab keys pressed simultaneously
+  if(e.ctrlKey && e.keyCode === tabKeyCode){
+    // Set the current panel as reference
+    const currentPanel = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
+    const indexCurrent = panels.findIndex(p => p.name == currentPanel);
+    // If shift is also pressed, navigate to the left
+    if(e.shiftKey){
+      location.href = panels[indexCurrent-1 >= 0 ? indexCurrent-1 : panels.length + indexCurrent-1].link;
+    // Else, navigate to the right
+    }else{
+      location.href = panels[(indexCurrent+1) % panels.length].link;
+    }
+  }
+});
 
 // check if user is connected to internet
 // if (!navigator.onLine)
