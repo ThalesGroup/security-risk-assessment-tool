@@ -81,7 +81,19 @@
       let saBARef = field === 'businessAssetRef'? value : sa?  sa.businessAssetRef : null
       let saName = field === 'supportingAssetName'? value : sa ? sa.supportingAssetName : null
 
-      if (!checkBusinessAssetRefArray(saBARef) || (saBARef.length === 0 && !$(`${matrixTable}-${id} select`).length) || saBARef.length !== new Set(saBARef).size || !saName || saName==''){
+      // The Supporting Asset is invalid when...
+      if (
+        // Its Business Asset array is empty or has invalid values
+        !checkBusinessAssetRefArray(saBARef) || 
+        // Its select input has no option and Business Asset array is empty
+        (saBARef.length === 0 && !$(`${matrixTable}-${id} select`).length) || 
+        // Its Business Asset array contains duplicated values
+        saBARef.length !== new Set(saBARef).size || 
+        // Its Name is undefined
+        !saName || 
+        // Its Name is empty
+        saName==''
+      ){
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
