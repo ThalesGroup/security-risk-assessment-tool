@@ -52,7 +52,12 @@
     };
 
     const validateSAName = (sa) => {
-      if (sa.businessAssetRef.length == 0 || sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || !checkBusinessAssetRefArray(sa.businessAssetRef) || sa.supportingAssetName == ''){
+      if (
+        sa.businessAssetRef.length == 0 || 
+        sa.businessAssetRef.length !== new Set(sa.businessAssetRef).size || 
+        !checkBusinessAssetRefArray(sa.businessAssetRef) || 
+        sa.supportingAssetName == ''
+      ){
         return '#FF0000';
       } else return '#000000';
     };
@@ -116,7 +121,10 @@
 
       // Update the design of the invalid selects
       $(`${matrixTable}-${id} td.matrix-sa-ba div select`).map((key,item) => (
-        !item.value || item.value == "null" ||  mappingDuplicate[item.value] > 1 ?  item.setAttribute('style', `border-color : red; border-width: 3px`): item.setAttribute('style', `border-color : black; border-width: 1px`)
+        !item.value || 
+        item.value == "null" || 
+        mappingDuplicate[item.value] > 1 ? 
+        item.setAttribute('style', `border-color : red; border-width: 3px`): item.setAttribute('style', `border-color : black; border-width: 1px`)
       ))
     }
 

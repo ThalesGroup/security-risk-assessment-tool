@@ -56,7 +56,13 @@
         const supportingAssetRef = rowData.supportingAssetRef
         const vulnerabilityDescription = rowData.vulnerabilityDescription
         const vulnerabilityName = rowData.vulnerabilityName
-        if (supportingAssetsData.length === 0 || supportingAssetRef.length === 0 || !checkSupportingAssetRefArray(supportingAssetRef) || vulnerabilityDescription === '' || vulnerabilityName === '')  {
+        if (
+            supportingAssetsData.length === 0 || 
+            supportingAssetRef.length === 0 || 
+            !checkSupportingAssetRefArray(supportingAssetRef) || 
+            vulnerabilityDescription === '' || 
+            vulnerabilityName === ''
+        ) {
             cell.getElement().style.color = '#FF0000';
         }
         else  {
@@ -148,7 +154,10 @@
         if (ref === null) return 
         let foundSupportingAsset = fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref);
 
-        if (foundSupportingAsset.businessAssetRef.length == 0 || foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || foundSupportingAsset.supportingAssetName == ''){
+        if (foundSupportingAsset.businessAssetRef.length == 0 || 
+            foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
+            !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
+            foundSupportingAsset.supportingAssetName == ''){
             return false
         }
         return true
