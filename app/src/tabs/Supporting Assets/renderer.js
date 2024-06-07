@@ -83,15 +83,15 @@
 
       // The Supporting Asset is invalid when...
       if (
-        // its Business Asset array is empty or has invalid values
+        // Its Business Asset array is empty or has invalid values
         !checkBusinessAssetRefArray(saBARef) || 
-        // its Business Asset array is empty or has invalid values
+        // Its select input has no option and Business Asset array is empty
         (saBARef.length === 0 && !$(`${matrixTable}-${id} select`).length) || 
-        // its Business Asset array contains duplicated values
+        // Its Business Asset array contains duplicated values
         saBARef.length !== new Set(saBARef).size || 
-        // its Name is undefined
+        // Its Name is undefined
         !saName || 
-        // its Name is empty
+        // Its Name is empty
         saName==''
       ){
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
