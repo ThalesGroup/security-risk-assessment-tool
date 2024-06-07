@@ -26,6 +26,7 @@ const setButton = document.getElementById('btn')
 const setShowButton = document.getElementById('show-secret')
 const setSaveInput = document.getElementById('save-secret')
 const secretInput = document.getElementById('secret')
+const waitingLabel = document.getElementById('waiting')
 
 let save = false
 
@@ -65,3 +66,15 @@ secretInput.addEventListener('keydown', () => {
   message += ` ${secretInput.value.match(regexNumber) ? '✔ ' : ''}1 special caracter`
   secretInput.title = message;  
 })
+
+if (waitingLabel){
+  console.log(result)
+  window.encryption.isWaiting(async (event, result) => {
+    console.log('result')
+
+    console.log(result)
+    waitingLabel.innerHTML = result
+    //if(result) passDesign.style.display = "flex";
+    //else passDesign.style.display = "none";
+  });
+}

@@ -162,5 +162,6 @@ contextBridge.exposeInMainWorld('encryption', {
   updateCachedSecret: (result) => ipcRenderer.on('update-cached-secret', result),
   isCachedSecret: () => ipcRenderer.invoke('is-cached-secret'),
   updateIsEncrypted: (result) => ipcRenderer.on('update-is-encrypted', result),
-  isEncrypted: () => ipcRenderer.invoke('is-encrypted')
+  isEncrypted: () => ipcRenderer.invoke('is-encrypted'),
+  isWaiting: () => ipcRenderer.invoke('is-waiting')
 })

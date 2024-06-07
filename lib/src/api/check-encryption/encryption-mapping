@@ -1,0 +1,21 @@
+const JWKEncryptionMapping = {
+    alg: {
+        required : true,
+        values : [
+            {
+                name : 'PBES2-HS512+A256KW',
+                description : 'blabla',
+                params : ['p2s','p2c'],
+                hmac : '512',
+                wrapping : 'A256KW',
+            }
+        ]
+    },
+    enc: {
+        required : true,
+        values : [
+
+        ]
+    }
+}
+module.exports = JWKEncryptionMapping;
