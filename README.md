@@ -43,7 +43,7 @@ For developers that wish to configure the tool for their specific needs, the def
 
 ```js
     const config = {
-    appVersion: '1.2.0-alpha02',
+    appVersion: '1.2.0',
     classification: '',
     organizations: ''
 };
@@ -57,7 +57,7 @@ For developers that wish to configure the tool for their specific needs, the def
 
 ```js
   const config = {
-    appVersion: '1.2.0-alpha02',
+    appVersion: '1.2.0',
     classification: 'COMPANY CONFIDENTIAL {PROJECT}'
 };
 
@@ -71,7 +71,7 @@ For developers that wish to configure the tool for their specific needs, the def
 
 ```js
   const config = {
-    appVersion: '1.2.0-alpha02',
+    appVersion: '1.2.0',
     organizations: ['Governance division','IT division', 'FinTech division']
 };
 ```
