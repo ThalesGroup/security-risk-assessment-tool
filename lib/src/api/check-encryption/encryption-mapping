@@ -7,7 +7,7 @@ const JWKEncryptionMapping = {
                 description : 'blabla',
                 params : ['p2s','p2c'],
                 hmac : '512',
-                wrapping : 'A256KW',
+                wrapping : 'A256',
             }
         ]
     },
