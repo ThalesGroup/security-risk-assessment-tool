@@ -3,18 +3,52 @@ const JWKEncryptionMapping = {
         required : true,
         values : [
             {
+                name : 'PBES2-HS256+A128KW',
+                description:'PBES2 with HMAC SHA-256 and "A128KW" wrapping',
+                params : ['p2s','p2c'],
+                hmac : '256',
+                wrapping : 'aes-128-ecb',
+            },
+            {
+                name : 'PBES2-HS384+A192KW',
+                description:'PBES2 with HMAC SHA-384 and "A192KW" wrapping',
+                params : ['p2s','p2c'],
+                hmac : '384',
+                wrapping : 'aes-192-ecb',
+            },
+            {
                 name : 'PBES2-HS512+A256KW',
-                description : 'blabla',
+                description:'PBES2 with HMAC SHA-512 and "A256KW" wrapping',
                 params : ['p2s','p2c'],
                 hmac : '512',
-                wrapping : 'A256',
+                wrapping : 'aes-256-ecb',
             }
         ]
     },
     enc: {
         required : true,
         values : [
-
+            {
+                name : 'A128GCM',
+                description:'AES GCM using 128-bit key',
+                params : ['iv','tag'],
+                keylength : '16',
+                algorithm : 'aes-128-gcm',
+            },
+            {
+                name : 'A192GCM',
+                description:'AES GCM using 192-bit key',
+                params : ['iv','tag'],
+                keylength : '24',
+                algorithm : 'aes-192-gcm',
+            },
+            {
+                name : 'A256GCM',
+                description:'AES GCM using 256-bit key',
+                params : ['iv','tag'],
+                keylength : '32',
+                algorithm : 'aes-256-gcm',
+            },
         ]
     }
 }
