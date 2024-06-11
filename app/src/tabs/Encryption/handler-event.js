@@ -24,11 +24,22 @@
 
 const setButton = document.getElementById('btn')
 const setShowButton = document.getElementById('show-secret')
+const setSaveInput = document.getElementById('save-secret')
 const secretInput = document.getElementById('secret')
+const waitingLabel = document.getElementById('waiting')
+
+let save = false
+
+setSaveInput.addEventListener('change', (e) => {
+  setSaveInput.value = e.target.value == 'true' ? false : true
+})
+
 setButton.addEventListener('click', () => {
   if(secretInput.checkValidity() && secretInput.value){
     const secret = secretInput.value
-    window.encryption.setSecret(secret)
+    if (setSaveInput.value == 'true') save = true
+    console.log(save)
+    window.encryption.setSecret(secret,save)
   }
 })
 
@@ -55,3 +66,15 @@ secretInput.addEventListener('keydown', () => {
   message += ` ${secretInput.value.match(regexNumber) ? '✔ ' : ''}1 special caracter`
   secretInput.title = message;  
 })
+
+if (waitingLabel){
+  console.log(result)
+  window.encryption.isWaiting(async (event, result) => {
+    console.log('result')
+
+    console.log(result)
+    waitingLabel.innerHTML = result
+    //if(result) passDesign.style.display = "flex";
+    //else passDesign.style.display = "none";
+  });
+}

@@ -42,6 +42,9 @@ const errorMessages = require('./validation')
 /* cache management */ 
 let cached_pass = null
 let timeout
+let tries_pass = 0
+let delay_pass = 500
+let wait_until
 
 const resetTimeout = () => {
   if(timeout) clearTimeout(timeout); 
@@ -74,9 +77,17 @@ const clearCachePassOnTiming = async () => {
   }, 15000);
 }
 
+const resetTries = () => {
+  tries_pass = 0; 
+}
+
+const incrementTries = () => {
+  tries_pass ++; 
+  wait_until = new Date().getTime() + tries_pass * delay_pass
+}
+
 const {
   DataStore,
-  DataEncrypt,
   XML2JSON,
   IsEncrypted,
   DataLoad,
@@ -113,10 +124,10 @@ const passwordWindow = (resolveFunc, type) => {
       preload: path.join(__dirname, '/preload.js')
     }
   })
-  passwordWindow.removeMenu()
-  ipcMain.on('set-secret', (event, secret) => {
+  //passwordWindow.removeMenu()
+  ipcMain.once('set-secret', (event, secret,save=false) => {
     resolveFunc(secret)
-    setCachePass(secret)
+    if (save) setCachePass(secret)
     passwordWindow.close()
   })
   // set to null
@@ -762,6 +773,7 @@ const loadJSONFile = async (win, filePath) => {
       })
       await settingPassword
       israProject = DataLoad(filePath, password);
+      resetTries()
       if (israProject){
         getMainWindow().webContents.send('update-is-encrypted', true);
       }
@@ -776,6 +788,9 @@ const loadJSONFile = async (win, filePath) => {
     getMainWindow().title = browserTitle;
     oldIsraProject = israProject.toJSON();
   } catch (err) {
+    if (err.message == "Error: Invalid password") {
+      incrementTries()
+    }
     console.log(err);
     const errorMessage = getError(err)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
@@ -1499,6 +1514,13 @@ ipcMain.on('israreport:saveGraph',  (event,graph) => {
 ipcMain.handle('is-encrypted', (event) => {
   if(jsonFilePath!== '' && IsEncrypted(jsonFilePath)) return true
   return false
+  }
+);
+
+ipcMain.handle('is-waiting', (event) => {
+  console.log('got waiting')
+  console.log(wait_until)
+  return wait_until
   }
 );
 

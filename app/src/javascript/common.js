@@ -49,14 +49,14 @@ window.encryption.updateCachedSecret(async (event, result) => {
 });
 
 window.encryption.updateIsEncrypted(async (event, result) => {
-  if(result) passDesign.style.display = "block";
+  if(result) passDesign.style.display = "flex";
   else passDesign.style.display = "none";
 });
 
 $(document).ready(async () => {
   const isEncrypted = await window.encryption.isEncrypted()
   if(isEncrypted){
-    passDesign.style.display = "block";
+    passDesign.style.display = "flex";
     const isCached = await window.encryption.isCachedSecret()
     if(isCached) passDesign.style.backgroundColor = "green";
     else passDesign.style.backgroundColor = "gray";
