@@ -39,6 +39,18 @@ const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-
 
 const errorMessages = require('./validation')
 
+const { session } = require('electron')
+
+
+app.whenReady().then(async() => {
+  const ext = await session.defaultSession.loadExtension('C:/Users/t0257307/Documents/security-risk-assessment-tool/app/src/electron/extensions')
+  const win = new BrowserWindow({ width: 800, height: 600 })
+  console.log(ext.url)
+
+  win.loadURL(ext.url+'hello.html')
+
+})
+
 /* cache management */ 
 let cached_pass = null
 let timeout
