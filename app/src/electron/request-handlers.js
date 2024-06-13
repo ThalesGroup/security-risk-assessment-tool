@@ -102,7 +102,7 @@ const config = require('../../../lib/src/config')
 /**
   * israProject: holds current class for project
 */
-let israProject, browserTitle = 'ISRA Risk Assessment', oldIsraProject;
+let israProject, browserTitle = 'ISRA Risk Assessment', oldIsraProject, preferencesWindow;
 
 let oldImport = null;
 
@@ -113,6 +113,19 @@ const getMainWindow = () => {
   const ID = process.env.MAIN_WINDOW_ID * 1;
   return BrowserWindow.fromId(ID);
 };
+
+const setPreferencesWindow = (win) => {
+  preferencesWindow = win
+};
+
+const getEncryptionConfig = () => {
+  if (preferencesWindow){
+    let config = preferencesWindow.value('encryption');
+    console.log(config)
+    return config
+  }
+};
+
 
 const passwordWindow = (resolveFunc, type) => {
   const passwordWindow = new BrowserWindow({
@@ -140,6 +153,7 @@ const passwordWindow = (resolveFunc, type) => {
   else if(type == "decryption")
     passwordWindow.loadFile(path.join(__dirname,'../tabs/Encryption/decryption.html'))
 }
+
 
 /**
   * Create new project
@@ -214,10 +228,11 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
     }
   }
 
+  let encryptionConfig = getEncryptionConfig()
   if (jsonFilePath === '' || saveAs) {
     // save as new project in selected directory (save as)
     try {
-      await DataStore(israProject, filePath,password);
+      await DataStore(israProject, filePath, password,encryptionConfig);
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
@@ -231,7 +246,7 @@ const savetoPath = async (filePath, saveAs = false, encryption = false) => {
   } else {
     // override data in existing json file (save)
     try {
-      await DataStore(israProject, jsonFilePath, password);
+      await DataStore(israProject, jsonFilePath, password,encryptionConfig);
       oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(getMainWindow(), { message: 'Successfully saved form' });
       if (electronApp) electronApp.exit([0]);
@@ -1150,7 +1165,8 @@ module.exports = {
   downloadReport,
   exit,
   loadJSONFile,
-  loadXMLFile
+  loadXMLFile,
+  setPreferencesWindow
 };
 
 /**

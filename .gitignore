@@ -4,5 +4,7 @@ node_modules
 coverage
 # App build
 dist
+# User's data
+data
 #API documentation
 **/lib/doc/APIdocumentation

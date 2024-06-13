@@ -2,26 +2,81 @@ const JWKEncryptionMapping = {
     alg: {
         required : true,
         values : [
+            // Simple Symetric
+
+            {
+                name : 'A128KW',
+                description:'AES Key Wrap with default initial value using 128-bit key',
+                wrapping : 'aes-128-ecb',
+                wrapping_length : '128',
+
+            },
+            {
+                name : 'A192KW',
+                description:'AES Key Wrap with default initial value using 192-bit key',
+                wrapping : 'aes-192-ecb',
+                wrapping_length : '192',
+
+            },
+            {
+                name : 'A256KW',
+                description:'AES Key Wrap with default initial value using 256-bit key',
+                wrapping : 'aes-256-ecb',
+                wrapping_length : '256',
+
+            },
+            // Symetric with GCM
+            {
+                name : 'A128GCMKW',
+                description:'AES Key Wrap with default initial value using 128-bit key',
+                params : ['iv','tag'],
+                wrapping : 'aes-128-gcm',
+                wrapping_length : '128',
+            },
+            {
+                name : 'A192GCMKW',
+                description:'AES Key Wrap with default initial value using 192-bit key',
+                params : ['iv','tag'],
+                wrapping : 'aes-192-gcm',
+                wrapping_length : '192',
+            },
+            {
+                name : 'A256GCMKW',
+                description:'AES Key Wrap with default initial value using 256-bit key',
+                params : ['iv','tag'],
+                wrapping : 'aes-256-gcm',
+                wrapping_length : '256',
+
+            },
+            // PBKDF2
             {
                 name : 'PBES2-HS256+A128KW',
                 description:'PBES2 with HMAC SHA-256 and "A128KW" wrapping',
                 params : ['p2s','p2c'],
-                hmac : '256',
+                config : ['p2c'],
+                key_length : '256',
                 wrapping : 'aes-128-ecb',
+                wrapping_length : '128',
+
             },
             {
                 name : 'PBES2-HS384+A192KW',
                 description:'PBES2 with HMAC SHA-384 and "A192KW" wrapping',
                 params : ['p2s','p2c'],
-                hmac : '384',
+                config : ['p2c'],
+                key_length : '384',
                 wrapping : 'aes-192-ecb',
+                wrapping_length : '192',
+
             },
             {
                 name : 'PBES2-HS512+A256KW',
                 description:'PBES2 with HMAC SHA-512 and "A256KW" wrapping',
                 params : ['p2s','p2c'],
-                hmac : '512',
+                config : ['p2c'],
+                key_length : '512',
                 wrapping : 'aes-256-ecb',
+                wrapping_length : '256',
             }
         ]
     },
@@ -32,21 +87,21 @@ const JWKEncryptionMapping = {
                 name : 'A128GCM',
                 description:'AES GCM using 128-bit key',
                 params : ['iv','tag'],
-                keylength : '16',
+                key_length : '16',
                 algorithm : 'aes-128-gcm',
             },
             {
                 name : 'A192GCM',
                 description:'AES GCM using 192-bit key',
                 params : ['iv','tag'],
-                keylength : '24',
+                key_length : '24',
                 algorithm : 'aes-192-gcm',
             },
             {
                 name : 'A256GCM',
                 description:'AES GCM using 256-bit key',
                 params : ['iv','tag'],
-                keylength : '32',
+                key_length : '32',
                 algorithm : 'aes-256-gcm',
             },
         ]

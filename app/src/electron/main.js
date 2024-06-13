@@ -34,10 +34,137 @@ const {
   downloadReport,
   exit,
   loadJSONFile,
-  loadXMLFile
+  loadXMLFile,
+  setPreferencesWindow
 } = require('./request-handlers');
 
+const JWKEncryptionMapping = require('../../../lib/src/api/check-encryption/encryption-mapping');
+
+// Set every option of Key generator for preferences
+let algOptions = []
+JWKEncryptionMapping.alg.values.map((algorithm) => (
+  algOptions.push({
+    label: algorithm.name,
+    value: algorithm.name
+  })
+))
+
+// Set every option of encryption algorithm for preferences
+let encOptions = []
+JWKEncryptionMapping.enc.values.map((algorithm) => (
+  encOptions.push({
+    label: algorithm.name,
+    value: algorithm.name
+  })
+))
+
 app.disableHardwareAcceleration();
+
+let preferencesWindow
+const ElectronPreferences = require('electron-preferences');
+
+function createPreferencesWindow() {
+  const preferences = new ElectronPreferences({
+	  // Override default preference BrowserWindow values
+    browserWindowOverrides: { /* ... */ },
+	
+	  // Create an optional menu bar
+	  menu: Menu.buildFromTemplate([
+      {
+        label: 'Window',
+        role: 'window',
+        submenu: [
+          {
+            label: 'Close',
+            accelerator: 'CmdOrCtrl+W',
+            role: 'close',
+          },
+        ],
+      },
+    ]),
+  
+	  // Provide a custom CSS file, relative to your appPath.
+	  //css: 'preference-styles.css',
+
+	  // Preference file path
+	  dataStore: 'data/preferences.json', // defaults to <userData>/preferences.json
+
+	  // Preference default values
+	  defaults: { 
+	  	encryption: {
+	  		alg: 'PBES2-HS256+A128KW',
+        p2c: 600000,
+        enc: 'A128GCM',
+	  	},
+	   },
+
+	  // Preference sections visible to the UI
+	  sections: [
+	  	{
+	  		id: 'encryption',
+	  		label: 'Encryption',
+	  		icon: 'single-01', // See the list of available icons below
+	  		form: {
+	  			groups: [
+	  				{
+	  					'label': 'Key Generation', // optional
+	  					'fields': [
+	  						{
+	  							label: 'Key Generator Algorithm',
+	  							key: 'alg',
+	  							type: 'radio',
+	  							help: 'Algorithm that will create an encryption key wrapper for esra file',
+                  options: algOptions
+	  						},
+                {
+	  							label: 'Iteration Count',
+	  							key: 'p2c',
+	  							type: 'number',
+	  							help: 'Number of encryptions for the key',
+                  hideFunction: (preferences) => {
+                    // hide when sectionsEnabler.group2 preference is false  
+                    return !(['PBES2-HS256+A128KW','PBES2-HS384+A192KW','PBES2-HS512+A256KW'].includes(preferences.encryption?.alg));
+                  }
+	  						},
+	  					]
+	  				},
+            {
+	  					'label': 'Encryption Algorithm', // optional
+	  					'fields': [
+                {
+	  							label: 'Encryption Algorithm',
+	  							key: 'enc',
+	  							type: 'radio',
+	  							help: 'Algorithm that will encrypt an esra file',
+                  options: encOptions
+	  						},
+	  					]
+	  				},
+	  			]
+	  		}
+	  	},
+	  ],
+  })
+
+  // Subscribing to preference changes.
+  preferences.on('save', (preferences) => {
+    console.log(`Preferences were saved.`, JSON.stringify(preferences, null, 4));
+  });
+
+  // Using a button field with `channel: 'reset'`
+  preferences.on('click', (key) => {
+    if (key === 'resetButton') {
+      resetApp();
+    }
+  });
+
+  preferences.on('close', (e) => {
+    e.preventDefault()
+    preferences.hide()
+  });
+  setPreferencesWindow(preferences)
+  return preferences
+}
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -121,6 +248,15 @@ function createWindow() {
         { role: 'reload' },
       ],
     },
+    {
+      label: 'Settings',
+      submenu: [
+        {
+          label: 'Preferences',
+          click: () => preferencesWindow.show(),
+        },
+      ],
+    },
   ];
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -148,7 +284,7 @@ if (process.argv.length >= 2) {
 app.whenReady().then(() => {
 
   createWindow();
-
+  preferencesWindow = createPreferencesWindow();
   const getMainWindow = () => {
     const ID = process.env.MAIN_WINDOW_ID * 1;
     return BrowserWindow.fromId(ID);
