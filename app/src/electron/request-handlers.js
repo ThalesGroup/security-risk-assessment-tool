@@ -41,6 +41,8 @@ const errorMessages = require('./validation')
 
 /* cache management */ 
 let cached_pass = null
+// Password is cached 15 min
+let cached_time = 900000
 let timeout
 let tries_pass = 0
 let delay_pass = 500
@@ -74,7 +76,7 @@ const clearCachePass = () => {
 const clearCachePassOnTiming = async () => {
   timeout = setTimeout(function(){ 
     clearCachePass()
-  }, 15000);
+  }, cached_time);
 }
 
 const resetTries = () => {
@@ -137,7 +139,7 @@ const passwordWindow = (resolveFunc, type) => {
       preload: path.join(__dirname, '/preload.js')
     }
   })
-  //passwordWindow.removeMenu()
+  passwordWindow.removeMenu()
   ipcMain.once('set-secret', (event, secret,save=false) => {
     resolveFunc(secret)
     if (save) setCachePass(secret)
