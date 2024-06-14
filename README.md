@@ -158,6 +158,7 @@ Documentation for lib is available at [lib/doc/index.html](lib/doc/index.html).
 * Megan Liow for the initial port to Electron.
 * Alvin Siah for the major improvements to the Electron version.
 * Sun Fang who reviewed and helped us improve the JSON Schema
+* Thomas Delplanque who improved error management and corrected several issues.
 * All other people including Philippe Biton, Frank Converset,  Antoine Galland,  Patrick George, Karen Lu, Sebastien Petit, Petr Skripal, who improved, commented and/or worked on the ISRA methodology throughout the years.
 
 Since this methodology has been around for several years internally, we may have missed some names who contributed to it, our apologies if its the case. 
