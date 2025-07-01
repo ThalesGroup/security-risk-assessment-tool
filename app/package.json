@@ -88,10 +88,10 @@
         "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
-        "tinymce": "^6.8.3"
+        "tinymce": "^7.2.0"
     },
     "devDependencies": {
-        "electron": "^22.3.25",
+        "electron": "^28.3.2",
         "electron-builder": "^24.13.3"
     },
     "overrides": {
