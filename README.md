@@ -16,10 +16,10 @@ Creating a security risk assessment of engineering projects involves several ste
 6. In the risks tab, create an attack path of vulnerabilities for each threat. This will create incident scenarios. Complete the attack path with AND and OR combinations can be used. This is the Assessment of incident likelihood and Level of risk determination in ISO 27005. Once this step is completed, the risk level should be available for each incident scenario.
 7. Determine level of acceptance of risks. For each evaluated risk, determine if risk is acceptable or not. This is equivalent to the Risk Evaluation activity in ISO 27005.
 8. For those risks that need to be treated determine how they will be treated:
-Mitigate or Modify: propose the security controls to put into place in the risks tab for each treatment decision, with the expected benefit of the security control (in % on risk level).
-Retain: Risk is accepted as is.
-Avoid:  Avoid the risk by stopping the activity, feature, project or by changing the architecture.
-Share: Share or transfer the risk with the customer or another third-party.
+* Mitigate or Modify: propose the security controls to put into place in the risks tab for each treatment decision, with the expected benefit of the security control (in % on risk level).
+* Retain: Risk is accepted as is.
+* Avoid:  Avoid the risk by stopping the activity, feature, project or by changing the architecture.
+* Share: Share or transfer the risk with the customer or another third-party.
    
 In some cases, vulnerabilities may be found before the risks are actually defined, such as through security testing, then the steps above may be modified accordingly.
 
