@@ -83,8 +83,8 @@ For developers that wish to configure the tool for their specific needs, the def
 
 1. Clone repository
 ```
-git clone git@github.com:ThalesGroup/software-risk-assessment-tool.git
-cd software-risk-assessment-tool
+git clone git@github.com:ThalesGroup/security-risk-assessment-tool.git
+cd security-risk-assessment-tool
 ```
 2. Install dependencies for both app & lib folders and run application
 ```
