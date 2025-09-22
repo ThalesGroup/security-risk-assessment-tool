@@ -319,16 +319,17 @@ function enableInteract(){
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
         vulnerabilityDiv.css('margin-bottom', '1%');
-        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${rowId}`);
-
+        const rowKey = `${riskAttackPathId}-${rowId}`;
+        vulnerabilityDiv.attr('id', `vulnerabilityrefs_${rowKey}`);
         const checkboxRef = !ref.score ? null : '1';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = `${checkboxRef}`;
         checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
         checkbox.name = 'risks__vulnerability__checkboxes';
-        checkbox.setAttribute('data-row-id', rowId);
+        checkbox.setAttribute('data-row-id', rowKey);
         vulnerabilityDiv.append(checkbox);
+
         let select = $('<select>').append(vulnerabilityOptions);
         const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
         if (matchingRef.length === 0) {
@@ -433,22 +434,22 @@ function enableInteract(){
 
         // add vulnerabilityRef
         addButton.addEventListener('click', async ()=>{
-          const numberOfVulnerabilities = document.getElementsByName('risks__vulnerability__checkboxes').length;
-          
+          const numberOfVulnerabilities = div.find('input[name="risks__vulnerability__checkboxes"]').length;
           let vulnerabilityDiv = $('<div>');
           vulnerabilityDiv.css('display', 'flex');
           vulnerabilityDiv.css('padding', '0');
           vulnerabilityDiv.css('margin-bottom', '1%');
-          vulnerabilityDiv.attr('id', `vulnerabilityrefs_${numberOfVulnerabilities}`);
-  
+          const rowKey = `${riskAttackPathId}-${numberOfVulnerabilities}`;
+          vulnerabilityDiv.attr('id', `vulnerabilityrefs_${rowKey}`);
           const checkboxRef = null;
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.value = `${checkboxRef}`;
           checkbox.id =  `risks__vulnerability__checkboxes__${checkboxRef}`;
           checkbox.name = 'risks__vulnerability__checkboxes';
-          checkbox.setAttribute('data-row-id', numberOfVulnerabilities);
+          checkbox.setAttribute('data-row-id', rowKey);
           vulnerabilityDiv.append(checkbox);
+
           let select = $('<select>').append(vulnerabilityOptions);
           select.on('change', async (e)=> {
             const { value } = e.target;
@@ -472,19 +473,21 @@ function enableInteract(){
 
         // delete vulnerabilityRef
         deleteButton.addEventListener('click', async ()=>{
-          const checkboxes = document.getElementsByName('risks__vulnerability__checkboxes');
+          const checkboxes = div.find('input[name="risks__vulnerability__checkboxes"]');
           const ids = [];
-
-          checkboxes.forEach((box) => {
+          checkboxes.each((_, checkboxEl) => {
+            const box = checkboxEl;
             if (box.checked) {
-              const vulRef = document.getElementById(`vulnerabilityrefs_${Number(box.getAttribute('data-row-id'))}`)
-              const vulId = vulRef.querySelector('select').value
-              if (vulId) {
-                ids.push(Number(vulId))
+              const rowKey = box.getAttribute('data-row-id');
+              const vulRef = document.getElementById(`vulnerabilityrefs_${rowKey}`);
+              if (vulRef) {
+                const vulId = vulRef.querySelector('select').value;
+                if (vulId) {
+                  ids.push(Number(vulId));
+                }
               }
             }
           });
-
           await validatePreviousRisk(getCurrentRiskId());
           const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, ids);
           reloadCurrentRisk(risk);
@@ -1534,3 +1537,4 @@ function enableInteract(){
 // window.onload = setTimeout(function () {
 //   alert('Loading...');
 // }, 3000);
+
