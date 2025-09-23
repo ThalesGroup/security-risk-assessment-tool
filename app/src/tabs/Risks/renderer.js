@@ -1,14 +1,14 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2022 THALES. All Rights Reserved.
- *
+*     Copyright © 2025 THALES. All Rights Reserved.
+*
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
- * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 *
 * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
 * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
@@ -358,13 +358,10 @@ function enableInteract(){
           if (value) {
             let risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
             risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
-            reloadCurrentRisk(risk);
           } else {
-
             const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
-            reloadCurrentRisk(risk);
           }
-          
+          reloadCurrentRisk(risk);
           // if (id) setNaNValues(id);
           // else setNaNValues();
         });
@@ -488,6 +485,8 @@ function enableInteract(){
               }
             }
           });
+          // Guard clause to prevent reload
+          if (ids.length === 0) return;
           await validatePreviousRisk(getCurrentRiskId());
           const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, ids);
           reloadCurrentRisk(risk);
@@ -1477,6 +1476,8 @@ function enableInteract(){
       });
       await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.deleteRiskAttackPath(getCurrentRiskId(), checkedRiskAttackPaths);
+      // Guard clause to prevent reload
+      if (checkedRiskAttackPaths.length === 0) return;
       reloadCurrentRisk(risk);
     });
 
@@ -1504,6 +1505,8 @@ function enableInteract(){
       });
       await validatePreviousRisk(getCurrentRiskId());
       const risk = await window.risks.deleteRiskMitigation(getCurrentRiskId(), checkedRiskMitigations);
+      // Guard clause to prevent reload
+      if (checkedRiskMitigations.length === 0) return;
       reloadCurrentRisk(risk);
     });
 
