@@ -358,10 +358,11 @@ function enableInteract(){
           if (value) {
             let risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
             risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
+            reloadCurrentRisk(risk);
           } else {
             const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
+            reloadCurrentRisk(risk);
           }
-          reloadCurrentRisk(risk);
           // if (id) setNaNValues(id);
           // else setNaNValues();
         });
