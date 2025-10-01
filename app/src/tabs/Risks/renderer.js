@@ -360,9 +360,11 @@ function enableInteract(){
             risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
             reloadCurrentRisk(risk);
           } else {
+
             const risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
             reloadCurrentRisk(risk);
           }
+          
           // if (id) setNaNValues(id);
           // else setNaNValues();
         });
