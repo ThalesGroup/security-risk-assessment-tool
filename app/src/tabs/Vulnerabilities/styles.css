@@ -129,15 +129,19 @@ span{
 }
 
 .Low {
-    color: black;
+    color: var(--severity-low);
 }
 
 .Medium {
-    color: orange;
+    color: var(--severity-medium);
 }
 
 .High {
-    color: red;
+    color: var(--severity-high);
+}
+
+.Critical {
+    color: var(--severity-critical);
 }
 
 .table {
