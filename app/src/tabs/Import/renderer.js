@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------
 *
 *     Copyright © 2025 THALES. All Rights Reserved.
- *
+*
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
