@@ -23,6 +23,20 @@
 */
 /* global $ tinymce Tabulator */
 
+const { SEVERITY_COLORS = {} } = window.COLOR_CONSTANTS || {};
+const getSeverityColor = (level) => {
+  switch (level) {
+    case 'Critical':
+      return SEVERITY_COLORS.CRITICAL || '#D32A26';
+    case 'High':
+      return SEVERITY_COLORS.HIGH || '#E35623';
+    case 'Medium':
+      return SEVERITY_COLORS.MEDIUM || '#FAAB24';
+    default:
+      return SEVERITY_COLORS.LOW || '#000000';
+  }
+};
+
 (async () => {
     var fetchedData
     try {
@@ -73,9 +87,7 @@
 
     tableOptions.columns[overallLevelIndex].formatter = (cell) => {
         const overallLevel = cell.getValue()
-        if (overallLevel === 'High') cell.getElement().style.color = '#FF0000';
-        else if (overallLevel === 'Medium') cell.getElement().style.color = '#FFA500';
-        else cell.getElement().style.color = '#000000';
+        cell.getElement().style.color = getSeverityColor(overallLevel);
         return overallLevel;
     }
 

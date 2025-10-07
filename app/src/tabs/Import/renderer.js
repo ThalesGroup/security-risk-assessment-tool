@@ -1,14 +1,14 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2022 THALES. All Rights Reserved.
+*     Copyright © 2025 THALES. All Rights Reserved.
  *
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
- * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 *
 * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
 * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
@@ -24,6 +24,21 @@
 /* global $ tinymce Tabulator */
 
 //const { ipcRenderer } = require('electron').ipcRenderer;
+
+const { SEVERITY_COLORS = {} } = window.COLOR_CONSTANTS || {};
+const getSeverityColor = (level) => {
+  switch (level) {
+    case 'Critical':
+      return SEVERITY_COLORS.CRITICAL || '#D32A26';
+    case 'High':
+      return SEVERITY_COLORS.HIGH || '#E35623';
+    case 'Medium':
+      return SEVERITY_COLORS.MEDIUM || '#FAAB24';
+    default:
+      return SEVERITY_COLORS.LOW || '#000000';
+  }
+};
+
 
 (async () => {
   try {
@@ -112,10 +127,7 @@
 
 risksTableConfig.columns[levelIndex].formatter = (cell) => {
   const residualRiskLevel = cell.getValue()
-  if (residualRiskLevel === 'Critical') cell.getElement().style.color = '#FF0000';
-  else if (residualRiskLevel === 'High') cell.getElement().style.color = '#E73927';
-  else if (residualRiskLevel === 'Medium') cell.getElement().style.color = '#FFA500';
-  else cell.getElement().style.color = '#000000';
+  cell.getElement().style.color = getSeverityColor(residualRiskLevel);
 
   
   return residualRiskLevel;
@@ -151,9 +163,7 @@ risksTableConfig.columns[levelIndex].formatter = (cell) => {
 
 vulnerabilityTableConfig.columns[levelIndex].formatter = (cell) => {
   const overallLevel = cell.getValue()
-  if (overallLevel === 'High') cell.getElement().style.color = '#FF0000';
-  else if (overallLevel === 'Medium') cell.getElement().style.color = '#FFA500';
-  else cell.getElement().style.color = '#000000';
+  cell.getElement().style.color = getSeverityColor(overallLevel);
   return overallLevel;
 }
 
