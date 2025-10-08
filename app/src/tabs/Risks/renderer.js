@@ -28,13 +28,13 @@ const { SEVERITY_COLORS = {} } = window.COLOR_CONSTANTS || {};
 const getSeverityColor = (level) => {
   switch (level) {
     case 'Critical':
-      return SEVERITY_COLORS.CRITICAL || '#D32A26';
+      return SEVERITY_COLORS.CRITICAL;
     case 'High':
-      return SEVERITY_COLORS.HIGH || '#E35623';
+      return SEVERITY_COLORS.HIGH;
     case 'Medium':
-      return SEVERITY_COLORS.MEDIUM || '#FAAB24';
+      return SEVERITY_COLORS.MEDIUM;
     default:
-      return SEVERITY_COLORS.LOW || '#000000';
+      return SEVERITY_COLORS.LOW;
   }
 };
 
