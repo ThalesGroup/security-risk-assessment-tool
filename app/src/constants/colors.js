@@ -7,10 +7,10 @@
     // LOW: '#00FF00',
     LOW: '#000000',
     MEDIUM: '#FAAB24',
-    HIGH: '#ff0000',
-    // HIGH: '#E35623',
-    CRITICAL: '#8B0000'
-    // CRITICAL: '#D32A26'
+    // HIGH: '#ff0000',
+    HIGH: '#E35623',
+    // CRITICAL: '#8B0000'
+    CRITICAL: '#ff0000d5'
   });
 
   const SEVERITY_CONTRAST_COLORS = Object.freeze({

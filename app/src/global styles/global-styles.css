@@ -28,12 +28,12 @@
     --severity-medium: #FAAB24;
     --severity-medium-contrast: #000000;
     --severity-medium-background: #ffa500;
-    --severity-high: #ff0000;
-    /* --severity-high: #E35623; */
+    /* --severity-high: #ff0000; */
+    --severity-high: #E35623;
     --severity-high-contrast: #ffffff;
     --severity-high-background: #ff0000;
-    --severity-critical: #8B0000;
-    /* --severity-critical: #ff0000; */
+    /* --severity-critical: #8B0000; */
+    --severity-critical: #ff0000d5;
     --severity-critical-contrast: #ffffff;
     --severity-very-high-background: #9f204b;
 }
