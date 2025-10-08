@@ -24,6 +24,20 @@
 
 /* global $ tinymce Tabulator */
 
+const { SEVERITY_COLORS = {} } = window.COLOR_CONSTANTS || {};
+const getSeverityColor = (level) => {
+  switch (level) {
+    case 'Critical':
+      return SEVERITY_COLORS.CRITICAL || '#D32A26';
+    case 'High':
+      return SEVERITY_COLORS.HIGH || '#E35623';
+    case 'Medium':
+      return SEVERITY_COLORS.MEDIUM || '#FAAB24';
+    default:
+      return SEVERITY_COLORS.LOW || '#000000';
+  }
+};
+
 // Display the buttons as not usable
 function disableButtons(){
   for (button of document.querySelectorAll('button')) button.disabled = true;
@@ -108,14 +122,9 @@ function enableInteract(){
     
     tableOptions.columns[riskLevelIndex].formatter = (cell) => {
       const residualRiskLevel = cell.getValue()
-      if (residualRiskLevel === 'Critical') cell.getElement().style.color = '#FF0000';
-      else if (residualRiskLevel === 'High') cell.getElement().style.color = '#E73927';
-      else if (residualRiskLevel === 'Medium') cell.getElement().style.color = '#FFA500';
-      else cell.getElement().style.color = '#000000';
-    
+      cell.getElement().style.color = getSeverityColor(residualRiskLevel);
       
       return residualRiskLevel;
-    
     }
     
     const risksTable = new Tabulator('#risks__table', result[1]);
@@ -863,17 +872,11 @@ function enableInteract(){
     };
 
     const styleResidualRiskLevelTable = (id, residualRiskLevel) => {
-      if (residualRiskLevel === 'Critical') risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#FF0000';
-      else if (residualRiskLevel === 'High') risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#E73927';
-      else if (residualRiskLevel === 'Medium') risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#FFA500';
-      else risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = '#000000';
+      risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = getSeverityColor(residualRiskLevel);
     };
 
     const styleResidualRiskLevel = (residualRiskLevel) => {
-      if (residualRiskLevel === 'Critical') $('#residual_risk_level').css('color', '#FF0000');
-      else if (residualRiskLevel === 'High') $('#residual_risk_level').css('color', '#E73927');
-      else if (residualRiskLevel === 'Medium') $('#residual_risk_level').css('color', '#FFA500');
-      else $('#residual_risk_level').css('color', '#000000');
+      $('#residual_risk_level').css('color', getSeverityColor(residualRiskLevel));
     }
 
     const styleRiskName = (value, id) => {
