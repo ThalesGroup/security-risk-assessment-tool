@@ -22,6 +22,21 @@
 * -----------------------------------------------------------------------------
 */
 /* global $ tinymce */
+const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
+const ERROR_COLOR = TEXT_COLOR.ERROR;
+const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
+const getSeverityColor = (level) => {
+  switch (level) {
+    case 'Critical':
+      return SEVERITY_COLORS.CRITICAL;
+    case 'High':
+      return SEVERITY_COLORS.HIGH;
+    case 'Medium':
+      return SEVERITY_COLORS.MEDIUM;
+    default:
+      return SEVERITY_COLORS.LOW;
+  }
+};
 
   let riskChart;
 
@@ -126,14 +141,12 @@
         const renderVulnerability = (sortedVulnerability, overallLevel) => {
             sortedVulnerability[overallLevel].forEach((vulnerability) => {
                 const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
-                let color = 'black';
-                if (overallLevel === 'High') color = 'red';
-                else if (overallLevel === 'Medium') color = 'orange';
+                const color = getSeverityColor(overallLevel);
 
                 $('#vulnerabilities tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
                     <td>${vulnerabilityName}</td>
-                    <td style="color: ${overallScore === null ? 'red' : 'black'}">${overallScore === null ? 'NaN' : overallScore}/10</td>
+                    <td style="color: ${overallScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${overallScore === null ? 'NaN' : overallScore}/10</td>
                     <td style="color: ${color}; font-weight:${overallLevel === 'High' || overallLevel === 'Medium' ? 'bold' : 'normal'};">${overallLevel}</td>
                     </td>`);
             });
@@ -234,16 +247,15 @@
             ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || 
             motivation === ''
           ){
-            return '#FF0000';
-          } else return '#000000';
+            return ERROR_COLOR;
+          } else return DEFAULT_TEXT_COLOR;
         };
 
         const renderRisk = (sortedRisk, residualRiskLevel) => {
             sortedRisk[residualRiskLevel].forEach((risk) => {
                 const { riskId, residualRiskLevel, inherentRiskScore, mitigatedRiskScore, residualRiskScore,riskManagementDecision, riskName, riskManagementDetail } = risk;
-                let color = 'black';
-                if (residualRiskLevel === 'High') color = 'red';
-                else if (residualRiskLevel === 'Medium') color = 'orange';
+                const severityColor = getSeverityColor(residualRiskLevel);
+                const isElevatedRisk = ['Critical', 'High', 'Medium'].includes(residualRiskLevel);
 
                 $('#risks tbody').append(`<tr>
                     <td>${riskId}</td>
@@ -255,10 +267,10 @@
                             <div class="grid-item">${riskManagementDetail}</div>
                         </div>
                     </td>
-                    <td style="color: ${inherentRiskScore === null ? 'red' : 'black'}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
-                    <td style="color: ${mitigatedRiskScore === null ? 'red' : 'black'}">${mitigatedRiskScore === null ? 'NaN' : mitigatedRiskScore}/20</td>
-                    <td style="color: ${residualRiskScore === null ? 'red' : 'black'}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
-                    <td style="color: ${color}; font-weight: ${residualRiskLevel === 'High' || residualRiskLevel === 'Medium' ? 'bold' : 'normal'};">${residualRiskLevel}</td>
+                    <td style="color: ${inherentRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
+                    <td style="color: ${mitigatedRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${mitigatedRiskScore === null ? 'NaN' : mitigatedRiskScore}/20</td>
+                    <td style="color: ${residualRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
+                    <td style="color: ${severityColor}; font-weight: ${isElevatedRisk ? 'bold' : 'normal'};">${residualRiskLevel}</td>
                     <td>${riskManagementDecision}</td>
                     </td>`);
             });

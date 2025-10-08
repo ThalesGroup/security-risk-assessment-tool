@@ -24,18 +24,38 @@
 
 /* global $ tinymce Tabulator */
 
-const { SEVERITY_COLORS = {} } = window.COLOR_CONSTANTS || {};
+const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
+const ERROR_COLOR = TEXT_COLOR.ERROR;
+const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
+const normaliseSeverityLevel = (level) => (level || '').toString().trim().toLowerCase();
 const getSeverityColor = (level) => {
-  switch (level) {
-    case 'Critical':
+  switch (normaliseSeverityLevel(level)) {
+    case 'critical':
+    case 'very high':
       return SEVERITY_COLORS.CRITICAL;
-    case 'High':
+    case 'high':
       return SEVERITY_COLORS.HIGH;
-    case 'Medium':
+    case 'medium':
       return SEVERITY_COLORS.MEDIUM;
     default:
       return SEVERITY_COLORS.LOW;
   }
+};
+const toRgbString = (hex) => {
+  if (!hex || typeof hex !== 'string') return null;
+  const normalised = hex.replace('#', '');
+  if (normalised.length !== 6) return null;
+  const r = parseInt(normalised.slice(0, 2), 16);
+  const g = parseInt(normalised.slice(2, 4), 16);
+  const b = parseInt(normalised.slice(4, 6), 16);
+  if ([r, g, b].some((value) => Number.isNaN(value))) return null;
+  return `rgb(${r}, ${g}, ${b})`;
+};
+const ERROR_COLOR_HEX = ERROR_COLOR.toLowerCase();
+const ERROR_COLOR_RGB = (toRgbString(ERROR_COLOR) || '').toLowerCase();
+const isErrorColor = (value) => {
+  const normalised = (value || '').toString().trim().toLowerCase();
+  return normalised === ERROR_COLOR_HEX || normalised === ERROR_COLOR_RGB;
 };
 
 // Display the buttons as not usable
@@ -112,8 +132,8 @@ function enableInteract(){
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
       cell.getElement().style.color = validateRiskName(cell.getRow().getData())
 
-      const currentColour = cell.getElement().style.color;
-      if (riskManagementDecision === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') cell.getElement().style['text-decoration'] = 'line-through';
+      const currentColour = (cell.getElement().style.color || '').toLowerCase();
+      if (riskManagementDecision === 'Discarded' && !isErrorColor(currentColour)) cell.getElement().style['text-decoration'] = 'line-through';
       else cell.getElement().style['text-decoration'] = 'none';
 
       return cell.getValue();
@@ -285,8 +305,8 @@ function enableInteract(){
         ! checkRiskAttackPaths(riskAttackPaths,supportingAssetRef) || 
         motivation === ''
       ){
-        return '#FF0000';
-      } else return '#000000';
+        return ERROR_COLOR;
+      } else return DEFAULT_TEXT_COLOR;
     };
 
     // add Supporting Assets Select options
@@ -296,7 +316,7 @@ function enableInteract(){
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" style="${checkSupportingAssetRef(sa.supportingAssetId)?'':'color:red'}">${sa.supportingAssetName}</option>`;
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" style="${checkSupportingAssetRef(sa.supportingAssetId)?'':'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
           }
         });
       }
@@ -345,17 +365,17 @@ function enableInteract(){
           placeholderRef.value = ref.vulnerabilityId
           placeholderRef.text = ref.name
           if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
-            placeholderRef.style ="color: red;"
-            select.css('border-color', 'red');
+            placeholderRef.style =`color: ${ERROR_COLOR};`
+            select.css('border-color', ERROR_COLOR);
             select.css('border-width', '3px');
           }
           select.append(placeholderRef)
         }else{
           if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
             for (optionRef of matchingRef){
-              optionRef.style ="color: red;"
+              optionRef.style =`color: ${ERROR_COLOR};`
             }
-            select.css('border-color', 'red');
+            select.css('border-color', ERROR_COLOR);
             select.css('border-width', '3px');
           }
         }
@@ -394,7 +414,7 @@ function enableInteract(){
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? 'style="color: red;"' : ''}>${v.vulnerabilityName}</option>`;
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityName}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -771,7 +791,7 @@ function enableInteract(){
       
         // cost
         const validateCost = (input, cost) => {
-          if (!Number.isInteger(cost))  input.css('border', '1px solid red');
+          if (!Number.isInteger(cost))  input.css('border', `1px solid ${ERROR_COLOR}`);
           else {
             input.css('border', 'none');
             validatePreviousRisk(getCurrentRiskId());
@@ -875,8 +895,8 @@ function enableInteract(){
     }
 
     const styleRiskName = (value, id) => {
-      const currentColour = risksTable.getRow(id).getCell('riskName').getElement().style.color;
-      if (value === 'Discarded' && currentColour !== 'rgb(255, 0, 0)') risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
+      const currentColour = (risksTable.getRow(id).getCell('riskName').getElement().style.color || '').toLowerCase();
+      if (value === 'Discarded' && !isErrorColor(currentColour)) risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
       else risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'none';
     };
 
@@ -926,10 +946,10 @@ function enableInteract(){
         $('select[id="risk__threat"]').val(threatVerb);
         $('#risk__motivation').val(motivation);
         $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
-        $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid red'}`);
+        $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
         addSupportingAssetOptions(businessAssetRef);
         $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || coherentSupportingAsset(supportingAssetRef, businessAssetRef) == null ? '' : supportingAssetRef);
-        $('select[id="risk__supportingAsset"]').prop('style',`border:${coherentSupportingAsset(supportingAssetRef, businessAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid red'}`);
+        $('select[id="risk__supportingAsset"]').prop('style',`border:${coherentSupportingAsset(supportingAssetRef, businessAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
 
         if(isAutomaticRiskName){
           $('#risk__manual__riskName').hide();
@@ -1110,7 +1130,7 @@ function enableInteract(){
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:red'}">${ba.businessAssetName}</option>`;
+        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${ba.businessAssetName}</option>`;
 
       });
       $('#risk__businessAsset').append(businessAssetsOptions);
@@ -1285,14 +1305,14 @@ function enableInteract(){
       const selected = $('#risk__businessAsset').find(":selected").val();
       updateRiskName('businessAssetRef', selected);
       addSupportingAssetOptions(selected)
-      $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(selected) != null && checkBusinessAssetRef(selected) ? 'none' : '3px solid red'}`);
+      $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(selected) != null && checkBusinessAssetRef(selected) ? 'none' : '3px solid ' + ERROR_COLOR}`);
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
-      $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(selected) != null && checkSupportingAssetRef(selected) ? 'none' : '3px solid red'}`);
+      $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(selected) != null && checkSupportingAssetRef(selected) ? 'none' : '3px solid ' + ERROR_COLOR}`);
     });
 
     $('#risk__motivation').on('change', ()=>{

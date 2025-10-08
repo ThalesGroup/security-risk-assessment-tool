@@ -20,9 +20,15 @@
     CRITICAL: '#ffffff'
   });
 
+  const TEXT_COLOR = Object.freeze({
+    DEFAULT: '#000000',
+    ERROR: '#ff0000'
+  });
+
   const exported = Object.freeze({
     SEVERITY_COLORS,
     SEVERITY_CONTRAST_COLORS,
+    TEXT_COLOR,
     LOW: SEVERITY_COLORS.LOW,
     MEDIUM: SEVERITY_COLORS.MEDIUM,
     HIGH: SEVERITY_COLORS.HIGH,
@@ -38,8 +44,7 @@
   }
 
   if (root) {
-    const target = root.COLOR_CONSTANTS || {};
-    Object.assign(target, exported);
+    const target = Object.assign({}, root.COLOR_CONSTANTS || {}, exported);
     root.COLOR_CONSTANTS = Object.freeze(target);
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : undefined));

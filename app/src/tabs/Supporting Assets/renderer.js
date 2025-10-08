@@ -24,6 +24,10 @@
 
 /* global $ Tabulator tinymce */
 
+const { TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
+const ERROR_COLOR = TEXT_COLOR.ERROR;
+const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
+
 (async () => {
   var fetchedData
 
@@ -58,8 +62,8 @@
         !checkBusinessAssetRefArray(sa.businessAssetRef) || 
         sa.supportingAssetName == ''
       ){
-        return '#FF0000';
-      } else return '#000000';
+        return ERROR_COLOR;
+      } else return DEFAULT_TEXT_COLOR;
     };
 
   try {
@@ -94,14 +98,14 @@
         // Its Name is empty
         saName==''
       ){
-        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'red');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', ERROR_COLOR);
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'bold');
-        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'red');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', ERROR_COLOR);
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'bold');
       } else {
-        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', 'black');
+        $(`${matrixTable}-${id} td.matrix-sa-id`).css('color', DEFAULT_TEXT_COLOR);
         $(`${matrixTable}-${id} td.matrix-sa-id`).css('font-weight', 'normal');
-        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', 'black');
+        $(`${matrixTable}-${id} td.matrix-sa-name`).css('color', DEFAULT_TEXT_COLOR);
         $(`${matrixTable}-${id} td.matrix-sa-name`).css('font-weight', 'normal');
       }
     }
@@ -124,7 +128,7 @@
         !item.value || 
         item.value == "null" || 
         mappingDuplicate[item.value] > 1 ? 
-        item.setAttribute('style', `border-color : red; border-width: 3px`): item.setAttribute('style', `border-color : black; border-width: 1px`)
+        item.setAttribute('style', `border-color : ${ERROR_COLOR}; border-width: 3px`): item.setAttribute('style', `border-color : ${DEFAULT_TEXT_COLOR}; border-width: 1px`)
       ))
     }
 
@@ -196,7 +200,7 @@
       };
       newSelect.value = ref;
       prevOption();
-      newSelect.setAttribute('style',!checkBusinessAssetRef(ref) || (sa && countInArray(sa.businessAssetRef,ref) > 1 ) ? `border-color : red; border-width: 3px`: `border-color : black; border-width: 1px`)
+      newSelect.setAttribute('style',!checkBusinessAssetRef(ref) || (sa && countInArray(sa.businessAssetRef,ref) > 1 ) ? `border-color : ${ERROR_COLOR}; border-width: 3px`: `border-color : ${DEFAULT_TEXT_COLOR}; border-width: 1px`)
 
       // change in selected option due to user input
       $(newSelect).on('change', (e) => {
@@ -204,7 +208,7 @@
         window.supportingAssets.updateBusinessAssetRef(id, e.target.value === 'null' ? null : e.target.value, $(e.target).attr('data-index'));
         const selected = $(`${matrixTable}-${id} option:selected`).map((i, e) => e.value).get();
         updateSupportingAsset(id, 'businessAssetRef', selected);
-        newSelect.setAttribute('style',!checkBusinessAssetRef(e.target.value) || (countInArray(prevOptions,e.target.value) > 0) ? `border-color : red; border-width: 3px`: `border-color : black; border-width: 1px`)
+        newSelect.setAttribute('style',!checkBusinessAssetRef(e.target.value) || (countInArray(prevOptions,e.target.value) > 0) ? `border-color : ${ERROR_COLOR}; border-width: 3px`: `border-color : ${DEFAULT_TEXT_COLOR}; border-width: 1px`)
         updateSelectDesign(id)
       });
 
