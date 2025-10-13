@@ -1,14 +1,14 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2022 THALES. All Rights Reserved.
- *
+*     Copyright © 2025 THALES. All Rights Reserved.
+*
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
- * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 *
 * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
 * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
@@ -25,7 +25,7 @@
 
   let riskChart;
 
-  function generateGraph(lowRisk, medRisk, highRisk) {
+  function generateGraph(lowRisk, medRisk, highRisk, criticalRisk) {
    
     const chartElement = document.getElementById('riskChart');
     const chartData = {
@@ -54,7 +54,13 @@
             backgroundColor: '#FF0000', 
             barPercentage: 0.5,
           },
-
+          {
+            label: 'Critical',
+            data: criticalRisk,
+            stack: 'stack',
+            backgroundColor: '#8B0000',
+            barPercentage: 0.5,
+          },
         ]
       };
   
@@ -114,7 +120,22 @@
 
 
 (async () => {
-    let fetchedData
+    let fetchedData;
+    const upsertRiskChart = ({ lowRisk, medRisk, highRisk, criticalRisk }) => {
+      if (!riskChart) {
+        generateGraph(lowRisk, medRisk, highRisk, criticalRisk);
+        return;
+      }
+      const datasetByLabel = riskChart.data.datasets.reduce((m, ds) => {
+        m[ds.label] = ds;
+        return m;
+      }, {});
+      if (datasetByLabel.Critical) datasetByLabel.Critical.data = criticalRisk;
+      if (datasetByLabel.High)     datasetByLabel.High.data     = highRisk;
+      if (datasetByLabel.Medium)   datasetByLabel.Medium.data   = medRisk;
+      if (datasetByLabel.Low)      datasetByLabel.Low.data      = lowRisk;
+      riskChart.update();
+    };
     try {
         function handleReload(event) {
             if (event.ctrlKey && event.key === 'r') {
@@ -156,7 +177,7 @@
         // Check if the businessAssets are valid
         const checkBusinessAssetRefArray = (refArray) =>{
           if(refArray.length){
-            for (ref of refArray){
+            for (const ref of refArray){
               if (!checkBusinessAssetRef(ref)) return false
             }
           }
@@ -171,7 +192,7 @@
       
         // Check if the supportingAsset is valid
         const checkSupportingAssetRef = (ref) =>{
-          if (ref === null) return 
+          if (ref === null) return false;
           let foundSupportingAsset = existSupportingAsset(ref)
         
           if (
@@ -189,7 +210,7 @@
         // Check if the supportingAssets are valid
         const checkSupportingAssetRefArray = (refArray) =>{
           if(refArray.length){
-            for (ref of refArray){
+            for (const ref of refArray){
               if (!checkSupportingAssetRef(ref)) return false
             }
           }
@@ -199,7 +220,7 @@
         // Check if the supportingAsset exists globally
         const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
           if (ref === null) return false
-          found = fetchedData.Vulnerability.find(obj => obj.vulnerabilityId === ref);
+          const found = fetchedData.Vulnerability.find(obj => obj.vulnerabilityId === ref);
           if (
             !found ||
             !found.supportingAssetRef.includes(supportingAssetRef) ||
@@ -238,12 +259,22 @@
           } else return '#000000';
         };
 
-        const renderRisk = (sortedRisk, residualRiskLevel) => {
-            sortedRisk[residualRiskLevel].forEach((risk) => {
+        const renderRisk = (sortedRisk, riskCategory) => {
+            (sortedRisk[riskCategory] || []).forEach((risk) => {
                 const { riskId, residualRiskLevel, inherentRiskScore, mitigatedRiskScore, residualRiskScore,riskManagementDecision, riskName, riskManagementDetail } = risk;
                 let color = 'black';
-                if (residualRiskLevel === 'High') color = 'red';
-                else if (residualRiskLevel === 'Medium') color = 'orange';
+                switch (residualRiskLevel) {
+                  case 'Critical':
+                      color = '#8B0000';
+                      break;
+                  case 'High':
+                      color = 'red';
+                      break;
+                  case 'Medium':
+                      color = 'orange';
+                      break;
+                }
+                const isElevatedRisk = residualRiskLevel === 'Critical' || residualRiskLevel === 'High' || residualRiskLevel === 'Medium';
 
                 $('#risks tbody').append(`<tr>
                     <td>${riskId}</td>
@@ -258,7 +289,7 @@
                     <td style="color: ${inherentRiskScore === null ? 'red' : 'black'}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
                     <td style="color: ${mitigatedRiskScore === null ? 'red' : 'black'}">${mitigatedRiskScore === null ? 'NaN' : mitigatedRiskScore}/20</td>
                     <td style="color: ${residualRiskScore === null ? 'red' : 'black'}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
-                    <td style="color: ${color}; font-weight: ${residualRiskLevel === 'High' || residualRiskLevel === 'Medium' ? 'bold' : 'normal'};">${residualRiskLevel}</td>
+                    <td style="color: ${color}; font-weight: ${isElevatedRisk ? 'bold' : 'normal'};">${residualRiskLevel}</td>
                     <td>${riskManagementDecision}</td>
                     </td>`);
             });
@@ -275,6 +306,7 @@
                     low: []
                 };
                 const sortedRisk = {
+                    critical: [],
                     high: [],
                     medium: [],
                     low: []
@@ -293,21 +325,29 @@
                 const lowRisk = [0,0,0];
                 const medRisk = [0,0,0];
                 const highRisk = [0,0,0];
+                const criticalRisk = [0,0,0];
                 const dataIndex = {'Accept': 0, 'Transfer': 1, 'Mitigate': 2}
                 Risk.forEach((risk) => {
                     const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
-                    
-
-                    if (residualRiskLevel === 'High') {
+                    const idx = dataIndex[riskManagementDecision];
+                    if (idx == null || idx == undefined) return; 
+                    switch (residualRiskLevel){
+                      case 'Critical':
+                        sortedRisk['critical'].push(risk);
+                        criticalRisk[idx] += 1;
+                        break;
+                      case 'High':
                         sortedRisk['high'].push(risk);
-                        highRisk[dataIndex[riskManagementDecision]] += 1;
-
-                    } else if (residualRiskLevel === 'Medium') {
+                        highRisk[idx] += 1;
+                        break;
+                      case 'Medium':
                         sortedRisk['medium'].push(risk);
-                        medRisk[dataIndex[riskManagementDecision]] += 1
-                    } else if (residualRiskLevel === 'Low') {
+                        medRisk[idx] += 1;
+                        break;
+                      case 'Low':
                         sortedRisk['low'].push(risk);
-                        lowRisk[dataIndex[riskManagementDecision]] += 1
+                        lowRisk[idx] += 1;
+                        break;
                     }
 
                     riskMitigation.forEach((mitigation) => {
@@ -330,6 +370,7 @@
                     <td><strong>Total accepted security control cost:</strong></td>
                     <td>${totalCost}</td>
                 </tr>`);
+                renderRisk(sortedRisk, 'critical');
                 renderRisk(sortedRisk, 'high');
                 renderRisk(sortedRisk, 'medium');
                 renderRisk(sortedRisk, 'low');
@@ -344,15 +385,7 @@
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
 
-                if (riskChart) {
-                  riskChart.data.datasets[0].data= lowRisk
-                  riskChart.data.datasets[1].data= medRisk
-                  riskChart.data.datasets[2].data= highRisk
-                  riskChart.update()
-                  
-                } else {
-                  generateGraph(lowRisk, medRisk, highRisk)
-                }
+                upsertRiskChart ({ lowRisk, medRisk, highRisk, criticalRisk });
                 
               // Inform the main process that the data is fetched
               window.israreport.fetchedContent(true);
