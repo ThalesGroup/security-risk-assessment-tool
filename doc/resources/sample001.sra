@@ -1,0 +1,445 @@
+{
+    "ISRAmeta": {
+        "schemaVersion": 3,
+        "classification": "THALES GROUP CONFIDENTIAL {PROJECT}",
+        "iteration": 2,
+        "projectName": "",
+        "projectOrganization": "",
+        "projectVersion": "",
+        "ISRAtracking": [
+            {
+                "trackingIteration": 1,
+                "trackingSecurityOfficer": "",
+                "trackingDate": "2024-07-10",
+                "trackingComment": ""
+            }
+        ],
+        "businessAssetsCount": 1,
+        "supportingAssetsCount": 2,
+        "risksCount": 3,
+        "vulnerabilitiesCount": 5,
+        "latestBusinessAssetId": 1,
+        "latestSupportingAssetId": 2,
+        "latestRiskId": 3,
+        "latestVulnerabilityId": 5
+    },
+    "ProjectContext": {
+        "projectDescription": "",
+        "projectURL": "",
+        "projectDescriptionAttachment": "",
+        "securityProjectObjectives": "",
+        "securityOfficerObjectives": "",
+        "securityAssumptions": ""
+    },
+    "BusinessAsset": [
+        {
+            "businessAssetId": 1,
+            "businessAssetName": "BA1",
+            "businessAssetType": "Data",
+            "businessAssetDescription": "",
+            "businessAssetProperties": {
+                "businessAssetAuthenticity": 3,
+                "businessAssetAuthorization": 3,
+                "businessAssetAvailability": 3,
+                "businessAssetConfidentiality": 3,
+                "businessAssetIntegrity": 3,
+                "businessAssetNonRepudiation": 3
+            }
+        }
+    ],
+    "SupportingAssetsDesc": "",
+    "SupportingAsset": [
+        {
+            "supportingAssetId": 1,
+            "supportingAssetHLDId": "",
+            "supportingAssetName": "SA1",
+            "supportingAssetType": "",
+            "supportingAssetSecurityLevel": -1,
+            "businessAssetRef": [
+                1
+            ]
+        },
+        {
+            "supportingAssetId": 2,
+            "supportingAssetHLDId": "",
+            "supportingAssetName": "SA2",
+            "supportingAssetType": "",
+            "supportingAssetSecurityLevel": -1,
+            "businessAssetRef": [
+                1
+            ]
+        }
+    ],
+    "Risk": [
+        {
+            "riskId": 1,
+            "projectName": "",
+            "projectVersion": "",
+            "riskName": "As a Criminal, I can steal the BA1 compromising the SA1 in order to Get BA1, exploiting the (Vuln1 AND Vuln2) OR (Vuln1 AND Vuln3)",
+            "threatAgent": "Criminal",
+            "threatAgentDetail": "",
+            "threatVerb": "steal",
+            "threatVerbDetail": "",
+            "motivation": "Get BA1",
+            "motivationDetail": "",
+            "businessAssetRef": 1,
+            "supportingAssetRef": 1,
+            "isAutomaticRiskName": true,
+            "riskLikelihood": {
+                "riskLikelihood": 2,
+                "riskLikelihoodDetail": "",
+                "skillLevel": 5,
+                "reward": 4,
+                "accessResources": 4,
+                "size": 9,
+                "intrusionDetection": 9,
+                "threatFactorScore": 6.2,
+                "threatFactorLevel": "High",
+                "occurrence": 5,
+                "occurrenceLevel": "Medium",
+                "isOWASPLikelihood": true
+            },
+            "riskImpact": {
+                "riskImpact": 3,
+                "businessAssetConfidentialityFlag": 1,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 0,
+                "businessAssetAuthenticityFlag": 0,
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
+            },
+            "riskAttackPaths": [
+                {
+                    "riskAttackPathId": 1,
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "Vuln1",
+                            "vulnerabilityId": 1
+                        },
+                        {
+                            "score": 0,
+                            "name": "Vuln2",
+                            "vulnerabilityId": 2
+                        }
+                    ],
+                    "attackPathName": "Vuln1 AND Vuln2",
+                    "attackPathScore": 0
+                },
+                {
+                    "riskAttackPathId": 2,
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "Vuln1",
+                            "vulnerabilityId": 1
+                        },
+                        {
+                            "score": 0,
+                            "name": "Vuln3",
+                            "vulnerabilityId": 3
+                        }
+                    ],
+                    "attackPathName": "Vuln1 AND Vuln3",
+                    "attackPathScore": 0
+                }
+            ],
+            "allAttackPathsName": "(Vuln1 AND Vuln2) OR (Vuln1 AND Vuln3)",
+            "allAttackPathsScore": 0,
+            "inherentRiskScore": 4,
+            "riskMitigation": [
+                {
+                    "riskMitigationId": 1,
+                    "description": "",
+                    "benefits": null,
+                    "cost": null,
+                    "decision": "",
+                    "decisionDetail": ""
+                }
+            ],
+            "mitigationsBenefits": 1,
+            "mitigationsDoneBenefits": 1,
+            "mitigatedRiskScore": 4,
+            "riskManagementDecision": "",
+            "riskManagementDetail": "",
+            "residualRiskScore": 4,
+            "residualRiskLevel": "Low"
+        },
+        {
+            "riskId": 2,
+            "projectName": "",
+            "projectVersion": "",
+            "riskName": "As a Competitor, I can disclose the BA1 compromising the SA2 in order to Copy the product, exploiting the (Vuln4 AND Vuln3) OR (Vuln4 AND Vuln3)",
+            "threatAgent": "Competitor",
+            "threatAgentDetail": "",
+            "threatVerb": "disclose",
+            "threatVerbDetail": "",
+            "motivation": "Copy the product",
+            "motivationDetail": "",
+            "businessAssetRef": 1,
+            "supportingAssetRef": 2,
+            "isAutomaticRiskName": true,
+            "riskLikelihood": {
+                "riskLikelihood": 3,
+                "riskLikelihoodDetail": "",
+                "skillLevel": null,
+                "reward": null,
+                "accessResources": null,
+                "size": null,
+                "intrusionDetection": null,
+                "threatFactorScore": null,
+                "threatFactorLevel": "",
+                "occurrence": null,
+                "occurrenceLevel": "",
+                "isOWASPLikelihood": true
+            },
+            "riskImpact": {
+                "riskImpact": 3,
+                "businessAssetConfidentialityFlag": 1,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 0,
+                "businessAssetAuthenticityFlag": 0,
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
+            },
+            "riskAttackPaths": [
+                {
+                    "riskAttackPathId": 1,
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "Vuln4",
+                            "vulnerabilityId": 4
+                        },
+                        {
+                            "score": 0,
+                            "name": "Vuln3",
+                            "vulnerabilityId": 3
+                        }
+                    ],
+                    "attackPathName": "Vuln4 AND Vuln3",
+                    "attackPathScore": 0
+                },
+                {
+                    "riskAttackPathId": 2,
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "Vuln4",
+                            "vulnerabilityId": 4
+                        },
+                        {
+                            "score": 0,
+                            "name": "Vuln3",
+                            "vulnerabilityId": 3
+                        }
+                    ],
+                    "attackPathName": "Vuln4 AND Vuln3",
+                    "attackPathScore": 0
+                }
+            ],
+            "allAttackPathsName": "(Vuln4 AND Vuln3) OR (Vuln4 AND Vuln3)",
+            "allAttackPathsScore": 0,
+            "inherentRiskScore": 6,
+            "riskMitigation": [
+                {
+                    "riskMitigationId": 1,
+                    "description": "",
+                    "benefits": null,
+                    "cost": null,
+                    "decision": "",
+                    "decisionDetail": ""
+                }
+            ],
+            "mitigationsBenefits": 1,
+            "mitigationsDoneBenefits": 1,
+            "mitigatedRiskScore": 6,
+            "riskManagementDecision": "",
+            "riskManagementDetail": "",
+            "residualRiskScore": 6,
+            "residualRiskLevel": "Medium"
+        },
+        {
+            "riskId": 3,
+            "projectName": "",
+            "projectVersion": "",
+            "riskName": "As a Criminal organization, I can disclose the BA1 compromising the SA2 in order to to rule the world, exploiting the (Vuln5 AND Vuln3) OR (Vuln3)",
+            "threatAgent": "Criminal organization",
+            "threatAgentDetail": "",
+            "threatVerb": "disclose",
+            "threatVerbDetail": "",
+            "motivation": "to rule the world",
+            "motivationDetail": "",
+            "businessAssetRef": 1,
+            "supportingAssetRef": 2,
+            "isAutomaticRiskName": true,
+            "riskLikelihood": {
+                "riskLikelihood": 3,
+                "riskLikelihoodDetail": "",
+                "skillLevel": null,
+                "reward": null,
+                "accessResources": null,
+                "size": null,
+                "intrusionDetection": null,
+                "threatFactorScore": null,
+                "threatFactorLevel": "",
+                "occurrence": null,
+                "occurrenceLevel": "",
+                "isOWASPLikelihood": true
+            },
+            "riskImpact": {
+                "riskImpact": 3,
+                "businessAssetConfidentialityFlag": 1,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 0,
+                "businessAssetAuthenticityFlag": 0,
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
+            },
+            "riskAttackPaths": [
+                {
+                    "riskAttackPathId": 1,
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "Vuln5",
+                            "vulnerabilityId": 5
+                        },
+                        {
+                            "score": 0,
+                            "name": "Vuln3",
+                            "vulnerabilityId": 3
+                        }
+                    ],
+                    "attackPathName": "Vuln5 AND Vuln3",
+                    "attackPathScore": 0
+                },
+                {
+                    "riskAttackPathId": 2,
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "Vuln3",
+                            "vulnerabilityId": 3
+                        }
+                    ],
+                    "attackPathName": "Vuln3",
+                    "attackPathScore": 0
+                }
+            ],
+            "allAttackPathsName": "(Vuln5 AND Vuln3) OR (Vuln3)",
+            "allAttackPathsScore": 0,
+            "inherentRiskScore": 6,
+            "riskMitigation": [
+                {
+                    "riskMitigationId": 1,
+                    "description": "",
+                    "benefits": null,
+                    "cost": null,
+                    "decision": "",
+                    "decisionDetail": ""
+                }
+            ],
+            "mitigationsBenefits": 1,
+            "mitigationsDoneBenefits": 1,
+            "mitigatedRiskScore": 6,
+            "riskManagementDecision": "",
+            "riskManagementDetail": "",
+            "residualRiskScore": 6,
+            "residualRiskLevel": "Medium"
+        }
+    ],
+    "Vulnerability": [
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 1,
+            "vulnerabilityName": "Vuln1",
+            "vulnerabilityFamily": "",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>Description</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 0,
+            "overallScore": 0,
+            "overallLevel": "Low",
+            "supportingAssetRef": [
+                1
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 2,
+            "vulnerabilityName": "Vuln2",
+            "vulnerabilityFamily": "",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>Description</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 0,
+            "overallScore": 0,
+            "overallLevel": "Low",
+            "supportingAssetRef": [
+                1
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 3,
+            "vulnerabilityName": "Vuln3",
+            "vulnerabilityFamily": "",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>Description</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 0,
+            "overallScore": 0,
+            "overallLevel": "Low",
+            "supportingAssetRef": [
+                1,
+                2
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 4,
+            "vulnerabilityName": "Vuln4",
+            "vulnerabilityFamily": "Code Quality Vulnerability",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>does not matter</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 0,
+            "overallScore": 0,
+            "overallLevel": "Low",
+            "supportingAssetRef": [
+                1
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 5,
+            "vulnerabilityName": "Vuln5",
+            "vulnerabilityFamily": "Code Permission Vulnerability",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>does not matter</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 0,
+            "overallScore": 0,
+            "overallLevel": "Low",
+            "supportingAssetRef": [
+                1
+            ]
+        }
+    ]
+}
