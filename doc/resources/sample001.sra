@@ -1,7 +1,7 @@
 {
     "ISRAmeta": {
         "schemaVersion": 3,
-        "classification": "THALES GROUP CONFIDENTIAL {PROJECT}",
+        "classification": "COMPANY CONFIDENTIAL {PROJECT}",
         "iteration": 2,
         "projectName": "",
         "projectOrganization": "",
@@ -38,12 +38,12 @@
             "businessAssetType": "Data",
             "businessAssetDescription": "",
             "businessAssetProperties": {
-                "businessAssetAuthenticity": 3,
-                "businessAssetAuthorization": 3,
-                "businessAssetAvailability": 3,
-                "businessAssetConfidentiality": 3,
-                "businessAssetIntegrity": 3,
-                "businessAssetNonRepudiation": 3
+                "businessAssetAuthenticity": 4,
+                "businessAssetAuthorization": 4,
+                "businessAssetAvailability": 4,
+                "businessAssetConfidentiality": 4,
+                "businessAssetIntegrity": 4,
+                "businessAssetNonRepudiation": 4
             }
         }
     ],
@@ -77,30 +77,30 @@
             "projectVersion": "",
             "riskName": "As a Criminal, I can steal the BA1 compromising the SA1 in order to Get BA1, exploiting the (Vuln1 AND Vuln2) OR (Vuln1 AND Vuln3)",
             "threatAgent": "Criminal",
-            "threatAgentDetail": "",
+            "threatAgentDetail": "<p>test1</p>",
             "threatVerb": "steal",
-            "threatVerbDetail": "",
+            "threatVerbDetail": "<p>test2</p>",
             "motivation": "Get BA1",
-            "motivationDetail": "",
+            "motivationDetail": "<p>Test</p>",
             "businessAssetRef": 1,
             "supportingAssetRef": 1,
             "isAutomaticRiskName": true,
             "riskLikelihood": {
-                "riskLikelihood": 2,
+                "riskLikelihood": 4,
                 "riskLikelihoodDetail": "",
-                "skillLevel": 5,
-                "reward": 4,
-                "accessResources": 4,
-                "size": 9,
-                "intrusionDetection": 9,
-                "threatFactorScore": 6.2,
-                "threatFactorLevel": "High",
-                "occurrence": 5,
-                "occurrenceLevel": "Medium",
-                "isOWASPLikelihood": true
+                "skillLevel": null,
+                "reward": null,
+                "accessResources": null,
+                "size": null,
+                "intrusionDetection": null,
+                "threatFactorScore": null,
+                "threatFactorLevel": "",
+                "occurrence": null,
+                "occurrenceLevel": "",
+                "isOWASPLikelihood": false
             },
             "riskImpact": {
-                "riskImpact": 3,
+                "riskImpact": 4,
                 "businessAssetConfidentialityFlag": 1,
                 "businessAssetIntegrityFlag": 0,
                 "businessAssetAvailabilityFlag": 0,
@@ -113,57 +113,57 @@
                     "riskAttackPathId": 1,
                     "vulnerabilityRef": [
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln1",
                             "vulnerabilityId": 1
                         },
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln2",
                             "vulnerabilityId": 2
                         }
                     ],
                     "attackPathName": "Vuln1 AND Vuln2",
-                    "attackPathScore": 0
+                    "attackPathScore": 10
                 },
                 {
                     "riskAttackPathId": 2,
                     "vulnerabilityRef": [
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln1",
                             "vulnerabilityId": 1
                         },
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln3",
                             "vulnerabilityId": 3
                         }
                     ],
                     "attackPathName": "Vuln1 AND Vuln3",
-                    "attackPathScore": 0
+                    "attackPathScore": 10
                 }
             ],
             "allAttackPathsName": "(Vuln1 AND Vuln2) OR (Vuln1 AND Vuln3)",
-            "allAttackPathsScore": 0,
-            "inherentRiskScore": 4,
+            "allAttackPathsScore": 10,
+            "inherentRiskScore": 20,
             "riskMitigation": [
                 {
                     "riskMitigationId": 1,
                     "description": "",
-                    "benefits": null,
-                    "cost": null,
-                    "decision": "",
+                    "benefits": 0.75,
+                    "cost": 111111111,
+                    "decision": "Rejected",
                     "decisionDetail": ""
                 }
             ],
             "mitigationsBenefits": 1,
             "mitigationsDoneBenefits": 1,
-            "mitigatedRiskScore": 4,
-            "riskManagementDecision": "",
+            "mitigatedRiskScore": 20,
+            "riskManagementDecision": "Mitigate",
             "riskManagementDetail": "",
-            "residualRiskScore": 4,
-            "residualRiskLevel": "Low"
+            "residualRiskScore": 20,
+            "residualRiskLevel": "Critical"
         },
         {
             "riskId": 2,
@@ -194,7 +194,7 @@
                 "isOWASPLikelihood": true
             },
             "riskImpact": {
-                "riskImpact": 3,
+                "riskImpact": 4,
                 "businessAssetConfidentialityFlag": 1,
                 "businessAssetIntegrityFlag": 0,
                 "businessAssetAvailabilityFlag": 0,
@@ -212,7 +212,7 @@
                             "vulnerabilityId": 4
                         },
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln3",
                             "vulnerabilityId": 3
                         }
@@ -229,7 +229,7 @@
                             "vulnerabilityId": 4
                         },
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln3",
                             "vulnerabilityId": 3
                         }
@@ -240,7 +240,7 @@
             ],
             "allAttackPathsName": "(Vuln4 AND Vuln3) OR (Vuln4 AND Vuln3)",
             "allAttackPathsScore": 0,
-            "inherentRiskScore": 6,
+            "inherentRiskScore": 8,
             "riskMitigation": [
                 {
                     "riskMitigationId": 1,
@@ -253,10 +253,10 @@
             ],
             "mitigationsBenefits": 1,
             "mitigationsDoneBenefits": 1,
-            "mitigatedRiskScore": 6,
+            "mitigatedRiskScore": 8,
             "riskManagementDecision": "",
             "riskManagementDetail": "",
-            "residualRiskScore": 6,
+            "residualRiskScore": 8,
             "residualRiskLevel": "Medium"
         },
         {
@@ -288,7 +288,7 @@
                 "isOWASPLikelihood": true
             },
             "riskImpact": {
-                "riskImpact": 3,
+                "riskImpact": 4,
                 "businessAssetConfidentialityFlag": 1,
                 "businessAssetIntegrityFlag": 0,
                 "businessAssetAvailabilityFlag": 0,
@@ -306,7 +306,7 @@
                             "vulnerabilityId": 5
                         },
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln3",
                             "vulnerabilityId": 3
                         }
@@ -318,18 +318,18 @@
                     "riskAttackPathId": 2,
                     "vulnerabilityRef": [
                         {
-                            "score": 0,
+                            "score": 10,
                             "name": "Vuln3",
                             "vulnerabilityId": 3
                         }
                     ],
                     "attackPathName": "Vuln3",
-                    "attackPathScore": 0
+                    "attackPathScore": 10
                 }
             ],
             "allAttackPathsName": "(Vuln5 AND Vuln3) OR (Vuln3)",
-            "allAttackPathsScore": 0,
-            "inherentRiskScore": 6,
+            "allAttackPathsScore": 10,
+            "inherentRiskScore": 18,
             "riskMitigation": [
                 {
                     "riskMitigationId": 1,
@@ -342,11 +342,11 @@
             ],
             "mitigationsBenefits": 1,
             "mitigationsDoneBenefits": 1,
-            "mitigatedRiskScore": 6,
+            "mitigatedRiskScore": 18,
             "riskManagementDecision": "",
             "riskManagementDetail": "",
-            "residualRiskScore": 6,
-            "residualRiskLevel": "Medium"
+            "residualRiskScore": 18,
+            "residualRiskLevel": "Critical"
         }
     ],
     "Vulnerability": [
@@ -361,9 +361,9 @@
             "vulnerabilityDescription": "<p>Description</p>",
             "vulnerabilityDescriptionAttachment": "",
             "vulnerabilityCVE": "",
-            "cveScore": 0,
-            "overallScore": 0,
-            "overallLevel": "Low",
+            "cveScore": 10,
+            "overallScore": 10,
+            "overallLevel": "Critical",
             "supportingAssetRef": [
                 1
             ]
@@ -379,9 +379,9 @@
             "vulnerabilityDescription": "<p>Description</p>",
             "vulnerabilityDescriptionAttachment": "",
             "vulnerabilityCVE": "",
-            "cveScore": 0,
-            "overallScore": 0,
-            "overallLevel": "Low",
+            "cveScore": 10,
+            "overallScore": 10,
+            "overallLevel": "Critical",
             "supportingAssetRef": [
                 1
             ]
@@ -397,9 +397,9 @@
             "vulnerabilityDescription": "<p>Description</p>",
             "vulnerabilityDescriptionAttachment": "",
             "vulnerabilityCVE": "",
-            "cveScore": 0,
-            "overallScore": 0,
-            "overallLevel": "Low",
+            "cveScore": 10,
+            "overallScore": 10,
+            "overallLevel": "Critical",
             "supportingAssetRef": [
                 1,
                 2

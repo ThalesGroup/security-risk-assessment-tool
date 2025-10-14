@@ -330,7 +330,7 @@
                 Risk.forEach((risk) => {
                     const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
                     const idx = dataIndex[riskManagementDecision];
-                    if (idx == null || idx == undefined) return; 
+                    // if (idx == null || idx == undefined) return; 
                     switch (residualRiskLevel){
                       case 'Critical':
                         sortedRisk['critical'].push(risk);
