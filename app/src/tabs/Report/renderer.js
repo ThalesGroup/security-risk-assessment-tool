@@ -262,9 +262,9 @@ const getSeverityColor = (level) => {
                     <td style="padding:0;">
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
-                            <div class="grid-item" style ="color:${validateRiskName(risk)}">${riskName}</div>
+                            <div class="grid-item grid-item--wrap" style ="color:${validateRiskName(risk)}">${riskName}</div>
                             <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
-                            <div class="grid-item">${riskManagementDetail}</div>
+                            <div class="grid-item grid-item--wrap">${riskManagementDetail}</div>
                         </div>
                     </td>
                     <td style="color: ${inherentRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
@@ -381,3 +381,4 @@ const getSeverityColor = (level) => {
       window.israreport.fetchedContent(false);
       alert('Failed to load report tab');    }
 })();
+

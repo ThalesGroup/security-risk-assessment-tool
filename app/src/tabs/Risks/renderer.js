@@ -129,14 +129,17 @@ function enableInteract(){
     };
 
     tableOptions.columns[riskNameIndex].formatter = (cell) => {
+      const cellElement = cell.getElement();
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
-      cell.getElement().style.color = validateRiskName(cell.getRow().getData())
+      const riskData = cell.getRow().getData();
 
       const currentColour = (cell.getElement().style.color || '').toLowerCase();
       if (riskManagementDecision === 'Discarded' && !isErrorColor(currentColour)) cell.getElement().style['text-decoration'] = 'line-through';
       else cell.getElement().style['text-decoration'] = 'none';
 
-      return cell.getValue();
+
+      const riskName = cell.getValue();
+      return `<span class="risks-table__name-text">${riskName}</span>`;
     
     }
     
