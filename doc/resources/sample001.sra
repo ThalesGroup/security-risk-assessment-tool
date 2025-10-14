@@ -17,11 +17,11 @@
         "businessAssetsCount": 1,
         "supportingAssetsCount": 2,
         "risksCount": 6,
-        "vulnerabilitiesCount": 5,
+        "vulnerabilitiesCount": 7,
         "latestBusinessAssetId": 1,
         "latestSupportingAssetId": 2,
         "latestRiskId": 6,
-        "latestVulnerabilityId": 5
+        "latestVulnerabilityId": 7
     },
     "ProjectContext": {
         "projectDescription": "",
@@ -637,6 +637,42 @@
             "overallLevel": "Low",
             "supportingAssetRef": [
                 1
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 6,
+            "vulnerabilityName": "Vuln6",
+            "vulnerabilityFamily": "Code Permission Vulnerability",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>asd</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 6.9,
+            "overallScore": 7,
+            "overallLevel": "Medium",
+            "supportingAssetRef": [
+                2
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 7,
+            "vulnerabilityName": "Vuln7",
+            "vulnerabilityFamily": "Code Permission Vulnerability",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>asd</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 7.9,
+            "overallScore": 8,
+            "overallLevel": "High",
+            "supportingAssetRef": [
+                2
             ]
         }
     ]
