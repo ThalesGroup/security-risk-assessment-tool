@@ -43,7 +43,7 @@
             label: 'Medium',
             data: medRisk,
             stack: 'stack',
-            backgroundColor: '#FFA500', 
+            backgroundColor: '#FAAB24', 
             barPercentage: 0.5,
             
           },
@@ -148,8 +148,9 @@
             sortedVulnerability[overallLevel].forEach((vulnerability) => {
                 const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
                 let color = 'black';
-                if (overallLevel === 'High') color = 'red';
-                else if (overallLevel === 'Medium') color = 'orange';
+                if (overallLevel === 'Critical') color = '#FF0000';
+                else if (overallLevel === 'High') color = '#E35623';
+                else if (overallLevel === 'Medium') color = '#FAAB24';
 
                 $('#vulnerabilities tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
@@ -265,13 +266,13 @@
                 let color = 'black';
                 switch (residualRiskLevel) {
                   case 'Critical':
-                      color = '#8B0000';
+                      color = '#FF0000';
                       break;
                   case 'High':
-                      color = 'red';
+                      color = '#E35623';
                       break;
                   case 'Medium':
-                      color = 'orange';
+                      color = '#FAAB24';
                       break;
                 }
                 const isElevatedRisk = residualRiskLevel === 'Critical' || residualRiskLevel === 'High' || residualRiskLevel === 'Medium';
