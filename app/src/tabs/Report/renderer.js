@@ -51,14 +51,14 @@
             label: 'High',
             data: highRisk,
             stack: 'stack',
-            backgroundColor: '#FF0000', 
+            backgroundColor: '#E35623', 
             barPercentage: 0.5,
           },
           {
             label: 'Critical',
             data: criticalRisk,
             stack: 'stack',
-            backgroundColor: '#8B0000',
+            backgroundColor: '#FF0000',
             barPercentage: 0.5,
           },
         ]
