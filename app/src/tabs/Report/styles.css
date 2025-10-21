@@ -139,8 +139,3 @@ thead {
 #isra-report>div{
     margin-bottom: 2%;
 }
-.grid-item--wrap {
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-}
