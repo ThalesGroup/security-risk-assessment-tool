@@ -16,12 +16,12 @@
         ],
         "businessAssetsCount": 1,
         "supportingAssetsCount": 2,
-        "risksCount": 3,
-        "vulnerabilitiesCount": 5,
+        "risksCount": 6,
+        "vulnerabilitiesCount": 7,
         "latestBusinessAssetId": 1,
         "latestSupportingAssetId": 2,
-        "latestRiskId": 3,
-        "latestVulnerabilityId": 5
+        "latestRiskId": 6,
+        "latestVulnerabilityId": 7
     },
     "ProjectContext": {
         "projectDescription": "",
@@ -150,11 +150,11 @@
             "riskMitigation": [
                 {
                     "riskMitigationId": 1,
-                    "description": "",
+                    "description": "<p>idk test1</p>",
                     "benefits": 0.75,
                     "cost": 111111111,
                     "decision": "Rejected",
-                    "decisionDetail": ""
+                    "decisionDetail": "<p>no money</p>"
                 }
             ],
             "mitigationsBenefits": 1,
@@ -244,17 +244,17 @@
             "riskMitigation": [
                 {
                     "riskMitigationId": 1,
-                    "description": "",
-                    "benefits": null,
+                    "description": "<p>test</p>",
+                    "benefits": 1,
                     "cost": null,
-                    "decision": "",
+                    "decision": "Accepted",
                     "decisionDetail": ""
                 }
             ],
-            "mitigationsBenefits": 1,
+            "mitigationsBenefits": 0,
             "mitigationsDoneBenefits": 1,
-            "mitigatedRiskScore": 8,
-            "riskManagementDecision": "",
+            "mitigatedRiskScore": 0,
+            "riskManagementDecision": "Accept",
             "riskManagementDetail": "",
             "residualRiskScore": 8,
             "residualRiskLevel": "Medium"
@@ -343,10 +343,208 @@
             "mitigationsBenefits": 1,
             "mitigationsDoneBenefits": 1,
             "mitigatedRiskScore": 18,
-            "riskManagementDecision": "",
+            "riskManagementDecision": "Mitigate",
             "riskManagementDetail": "",
             "residualRiskScore": 18,
             "residualRiskLevel": "Critical"
+        },
+        {
+            "riskId": 4,
+            "projectName": "",
+            "projectVersion": "",
+            "riskName": "As a Criminal, I can spoof the BA1 compromising the SA2 in order to asd",
+            "threatAgent": "Criminal",
+            "threatAgentDetail": "",
+            "threatVerb": "spoof",
+            "threatVerbDetail": "",
+            "motivation": "asd",
+            "motivationDetail": "<p>Testcolors</p>",
+            "businessAssetRef": 1,
+            "supportingAssetRef": 2,
+            "isAutomaticRiskName": true,
+            "riskLikelihood": {
+                "riskLikelihood": 3,
+                "riskLikelihoodDetail": "",
+                "skillLevel": null,
+                "reward": null,
+                "accessResources": null,
+                "size": null,
+                "intrusionDetection": null,
+                "threatFactorScore": null,
+                "threatFactorLevel": "",
+                "occurrence": null,
+                "occurrenceLevel": "",
+                "isOWASPLikelihood": true
+            },
+            "riskImpact": {
+                "riskImpact": 4,
+                "businessAssetConfidentialityFlag": 0,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 0,
+                "businessAssetAuthenticityFlag": 1,
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
+            },
+            "riskAttackPaths": [
+                {
+                    "riskAttackPathId": 1,
+                    "vulnerabilityRef": [],
+                    "attackPathName": "",
+                    "attackPathScore": null
+                }
+            ],
+            "allAttackPathsName": "",
+            "allAttackPathsScore": null,
+            "inherentRiskScore": 15,
+            "riskMitigation": [
+                {
+                    "riskMitigationId": 1,
+                    "description": "",
+                    "benefits": 1,
+                    "cost": null,
+                    "decision": "Accepted",
+                    "decisionDetail": ""
+                }
+            ],
+            "mitigationsBenefits": 0,
+            "mitigationsDoneBenefits": 1,
+            "mitigatedRiskScore": 0,
+            "riskManagementDecision": "Mitigate",
+            "riskManagementDetail": "",
+            "residualRiskScore": 15,
+            "residualRiskLevel": "High"
+        },
+        {
+            "riskId": 5,
+            "projectName": "",
+            "projectVersion": "",
+            "riskName": "As a Criminal organization, I can steal the BA1 compromising the SA2 in order to asd",
+            "threatAgent": "Criminal organization",
+            "threatAgentDetail": "",
+            "threatVerb": "steal",
+            "threatVerbDetail": "",
+            "motivation": "asd",
+            "motivationDetail": "",
+            "businessAssetRef": 1,
+            "supportingAssetRef": 2,
+            "isAutomaticRiskName": true,
+            "riskLikelihood": {
+                "riskLikelihood": 1,
+                "riskLikelihoodDetail": "<p>Testcolors</p>",
+                "skillLevel": null,
+                "reward": null,
+                "accessResources": null,
+                "size": null,
+                "intrusionDetection": null,
+                "threatFactorScore": null,
+                "threatFactorLevel": "",
+                "occurrence": null,
+                "occurrenceLevel": "",
+                "isOWASPLikelihood": false
+            },
+            "riskImpact": {
+                "riskImpact": 4,
+                "businessAssetConfidentialityFlag": 1,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 0,
+                "businessAssetAuthenticityFlag": 0,
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
+            },
+            "riskAttackPaths": [
+                {
+                    "riskAttackPathId": 1,
+                    "vulnerabilityRef": [],
+                    "attackPathName": "",
+                    "attackPathScore": null
+                }
+            ],
+            "allAttackPathsName": "",
+            "allAttackPathsScore": null,
+            "inherentRiskScore": 5,
+            "riskMitigation": [
+                {
+                    "riskMitigationId": 1,
+                    "description": "",
+                    "benefits": 1,
+                    "cost": null,
+                    "decision": "",
+                    "decisionDetail": ""
+                }
+            ],
+            "mitigationsBenefits": 1,
+            "mitigationsDoneBenefits": 1,
+            "mitigatedRiskScore": 5,
+            "riskManagementDecision": "Accept",
+            "riskManagementDetail": "",
+            "residualRiskScore": 5,
+            "residualRiskLevel": "Low"
+        },
+        {
+            "riskId": 6,
+            "projectName": "",
+            "projectVersion": "",
+            "riskName": "As a Criminal, I can deny access to the BA1 compromising the SA2 in order to asd",
+            "threatAgent": "Criminal",
+            "threatAgentDetail": "",
+            "threatVerb": "deny access to",
+            "threatVerbDetail": "",
+            "motivation": "asd",
+            "motivationDetail": "<p>TestColors</p>",
+            "businessAssetRef": 1,
+            "supportingAssetRef": 2,
+            "isAutomaticRiskName": true,
+            "riskLikelihood": {
+                "riskLikelihood": 2,
+                "riskLikelihoodDetail": "",
+                "skillLevel": null,
+                "reward": null,
+                "accessResources": null,
+                "size": null,
+                "intrusionDetection": null,
+                "threatFactorScore": null,
+                "threatFactorLevel": "",
+                "occurrence": null,
+                "occurrenceLevel": "",
+                "isOWASPLikelihood": false
+            },
+            "riskImpact": {
+                "riskImpact": 4,
+                "businessAssetConfidentialityFlag": 0,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 1,
+                "businessAssetAuthenticityFlag": 0,
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
+            },
+            "riskAttackPaths": [
+                {
+                    "riskAttackPathId": 1,
+                    "vulnerabilityRef": [],
+                    "attackPathName": "",
+                    "attackPathScore": null
+                }
+            ],
+            "allAttackPathsName": "",
+            "allAttackPathsScore": null,
+            "inherentRiskScore": 10,
+            "riskMitigation": [
+                {
+                    "riskMitigationId": 1,
+                    "description": "",
+                    "benefits": null,
+                    "cost": null,
+                    "decision": "",
+                    "decisionDetail": ""
+                }
+            ],
+            "mitigationsBenefits": 1,
+            "mitigationsDoneBenefits": 1,
+            "mitigatedRiskScore": 10,
+            "riskManagementDecision": "Transfer",
+            "riskManagementDetail": "",
+            "residualRiskScore": 10,
+            "residualRiskLevel": "Medium"
         }
     ],
     "Vulnerability": [
@@ -439,6 +637,42 @@
             "overallLevel": "Low",
             "supportingAssetRef": [
                 1
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 6,
+            "vulnerabilityName": "Vuln6",
+            "vulnerabilityFamily": "Code Permission Vulnerability",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>asd</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 6.9,
+            "overallScore": 7,
+            "overallLevel": "Medium",
+            "supportingAssetRef": [
+                2
+            ]
+        },
+        {
+            "projectName": "",
+            "projectVersion": "",
+            "vulnerabilityId": 7,
+            "vulnerabilityName": "Vuln7",
+            "vulnerabilityFamily": "Code Permission Vulnerability",
+            "vulnerabilityTrackingID": "",
+            "vulnerabilityTrackingURI": "",
+            "vulnerabilityDescription": "<p>asd</p>",
+            "vulnerabilityDescriptionAttachment": "",
+            "vulnerabilityCVE": "",
+            "cveScore": 7.9,
+            "overallScore": 8,
+            "overallLevel": "High",
+            "supportingAssetRef": [
+                2
             ]
         }
     ]
