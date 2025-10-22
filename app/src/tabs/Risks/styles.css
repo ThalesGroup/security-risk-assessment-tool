@@ -258,3 +258,17 @@ label[name='Discarded'] {
     flex-direction: row;
     align-items: flex-start;
 }
+.tabulator .tabulator-row .tabulator-cell.risks-table__name-cell {
+    white-space: normal !important;
+    overflow: visible !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.risks-table__name-text {
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
