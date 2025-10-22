@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2025 THALES. All Rights Reserved.
+*     Copyright © 2022-2025 THALES. All Rights Reserved.
 *
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
@@ -21,6 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
 /* global $ tinymce */
 
   let riskChart;
@@ -145,7 +146,7 @@
           disableAllTabs()
         window.addEventListener('keydown', handleReload);
         const renderVulnerability = (sortedVulnerability, overallLevel) => {
-            sortedVulnerability[overallLevel].forEach((vulnerability) => {
+            (sortedVulnerability[overallLevel] || []).forEach((vulnerability) => {
                 const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
                 let color = 'black';
                 if (overallLevel === 'Critical') color = '#FF0000';
@@ -156,7 +157,7 @@
                     <td>${vulnerabilityId}</td>
                     <td>${vulnerabilityName}</td>
                     <td style="color: ${overallScore === null ? 'red' : 'black'}">${overallScore === null ? 'NaN' : overallScore}/10</td>
-                    <td style="color: ${color}; font-weight:${overallLevel === 'High' || overallLevel === 'Medium' ? 'bold' : 'normal'};">${overallLevel}</td>
+                    <td style="color: ${color}; font-weight:;">${overallLevel}</td>
                     </td>`);
             });
         };
@@ -302,10 +303,11 @@
                 const { Vulnerability, Risk, ISRAmeta } = fetchedData
                 const { projectName, projectVersion, iteration, ISRAtracking} = ISRAmeta;
                 const sortedVulnerability = {
+                    critical: [],
                     high: [],
                     medium: [],
                     low: []
-                };
+                };                
                 const sortedRisk = {
                     critical: [],
                     high: [],
@@ -376,12 +378,24 @@
                 renderRisk(sortedRisk, 'medium');
                 renderRisk(sortedRisk, 'low');
 
-                Vulnerability.forEach((vulnerability) => {
+                                Vulnerability.forEach((vulnerability) => {
                     const { overallLevel } = vulnerability;
-                    if (overallLevel === 'High') sortedVulnerability['high'].push(vulnerability);
-                    else if (overallLevel === 'Medium') sortedVulnerability['medium'].push(vulnerability);
-                    else if (overallLevel === 'Low') sortedVulnerability['low'].push(vulnerability);
+                    switch (overallLevel) {
+                      case 'Critical':
+                        sortedVulnerability['critical'].push(vulnerability);
+                        break;
+                      case 'High':
+                        sortedVulnerability['high'].push(vulnerability);
+                        break;
+                      case 'Medium':
+                        sortedVulnerability['medium'].push(vulnerability);
+                        break;
+                      case 'Low':
+                        sortedVulnerability['low'].push(vulnerability);
+                        break;
+                    }
                 });
+                renderVulnerability(sortedVulnerability, 'critical');
                 renderVulnerability(sortedVulnerability, 'high');
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
