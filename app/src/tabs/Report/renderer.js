@@ -121,7 +121,7 @@
 
 (async () => {
     let fetchedData;
-    const upsertRiskChart = ({ lowRisk, medRisk, highRisk, criticalRisk }) => {
+    const updateRiskChart = ({ lowRisk, medRisk, highRisk, criticalRisk }) => {
       if (!riskChart) {
         generateGraph(lowRisk, medRisk, highRisk, criticalRisk);
         return;
@@ -386,7 +386,7 @@
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
 
-                upsertRiskChart ({ lowRisk, medRisk, highRisk, criticalRisk });
+                updateRiskChart({ lowRisk, medRisk, highRisk, criticalRisk });
                 
               // Inform the main process that the data is fetched
               window.israreport.fetchedContent(true);
