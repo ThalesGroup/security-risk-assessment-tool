@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2025 THALES. All Rights Reserved.
+*     Copyright © 2022-2025 THALES. All Rights Reserved.
 *
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
@@ -21,20 +21,20 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
 :root {
-    --severity-low: #000000;
-    --severity-low-contrast: #ffffff;
-    --severuty-low-background: #38E54D;
+    --severity-low: #61B144;
+    --severity-low-contrast: #000000;
+    --severity-low-background: #61B144;
     --severity-medium: #FAAB24;
     --severity-medium-contrast: #000000;
-    --severity-medium-background: #ffa500;
-    /* --severity-high: #ff0000; */
+    --severity-medium-background: #FAAB24;
     --severity-high: #E35623;
     --severity-high-contrast: #ffffff;
-    --severity-high-background: #ff0000;
-    /* --severity-critical: #8B0000; */
-    --severity-critical: #ff0000d5;
+    --severity-high-background: #E35623;
+    --severity-critical: #D32A26;
     --severity-critical-contrast: #ffffff;
+    --severity-critical-background: #D32A26;
     --severity-very-high-background: #9f204b;
 }
 

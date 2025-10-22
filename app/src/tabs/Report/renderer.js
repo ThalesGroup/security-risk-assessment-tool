@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2022 THALES. All Rights Reserved.
+*     Copyright © 2022-2025 THALES. All Rights Reserved.
  *
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
@@ -50,7 +50,7 @@ const getSeverityColor = (level) => {
             label: 'Low',
             data: lowRisk,
             stack: 'stack',
-            backgroundColor: '#7db700', 
+            backgroundColor: SEVERITY_COLORS.LOW_BACKGROUND,
             
             barPercentage: 0.5,
           },
@@ -58,7 +58,7 @@ const getSeverityColor = (level) => {
             label: 'Medium',
             data: medRisk,
             stack: 'stack',
-            backgroundColor: '#FFA500', 
+            backgroundColor: SEVERITY_COLORS.MEDIUM_BACKGROUND,
             barPercentage: 0.5,
             
           },
@@ -66,7 +66,7 @@ const getSeverityColor = (level) => {
             label: 'High',
             data: highRisk,
             stack: 'stack',
-            backgroundColor: '#FF0000', 
+            backgroundColor: SEVERITY_COLORS.HIGH_BACKGROUND,
             barPercentage: 0.5,
           },
 
