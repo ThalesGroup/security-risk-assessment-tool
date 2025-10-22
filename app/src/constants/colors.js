@@ -25,7 +25,7 @@
 
 /* Shared severity palette mirrored from the CSS custom properties in
  * app/src/global styles/global-styles.css so renderer scripts can
- * consume consistent colour values without duplicating hex codes.
+ * consume consistent color values without duplicating hex codes.
 */
 
 (function (root) {

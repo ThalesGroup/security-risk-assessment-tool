@@ -133,8 +133,8 @@ function enableInteract(){
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
       const riskData = cell.getRow().getData();
 
-      const currentColour = (cell.getElement().style.color || '').toLowerCase();
-      if (riskManagementDecision === 'Discarded' && !isErrorColor(currentColour)) cell.getElement().style['text-decoration'] = 'line-through';
+      const currentColor = (cell.getElement().style.color || '').toLowerCase();
+      if (riskManagementDecision === 'Discarded' && !isErrorColor(currentColor)) cell.getElement().style['text-decoration'] = 'line-through';
       else cell.getElement().style['text-decoration'] = 'none';
 
 
@@ -903,8 +903,8 @@ function enableInteract(){
     }
 
     const styleRiskName = (value, id) => {
-      const currentColour = (risksTable.getRow(id).getCell('riskName').getElement().style.color || '').toLowerCase();
-      if (value === 'Discarded' && !isErrorColor(currentColour)) risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
+      const currentColor = (risksTable.getRow(id).getCell('riskName').getElement().style.color || '').toLowerCase();
+      if (value === 'Discarded' && !isErrorColor(currentColor)) risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'line-through';
       else risksTable.getRow(id).getCell('riskName').getElement().style['text-decoration'] = 'none';
     };
 
