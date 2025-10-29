@@ -1,14 +1,14 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2022 THALES. All Rights Reserved.
- *
+*     Copyright © 2022-2025 THALES. All Rights Reserved.
+*
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
- * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 *
 * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
 * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
@@ -22,6 +22,22 @@
 * -----------------------------------------------------------------------------
 */
 /* global $ tinymce Tabulator */
+
+const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
+const ERROR_COLOR = TEXT_COLOR.ERROR;
+const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
+const getSeverityColor = (level) => {
+  switch (level) {
+    case 'Critical':
+      return SEVERITY_COLORS.CRITICAL;
+    case 'High':
+      return SEVERITY_COLORS.HIGH;
+    case 'Medium':
+      return SEVERITY_COLORS.MEDIUM;
+    default:
+      return SEVERITY_COLORS.LOW;
+  }
+};
 
 (async () => {
     var fetchedData
@@ -63,19 +79,17 @@
             vulnerabilityDescription === '' || 
             vulnerabilityName === ''
         ) {
-            cell.getElement().style.color = '#FF0000';
+            cell.getElement().style.color = ERROR_COLOR;
         }
         else  {
-            cell.getElement().style.color = '#000000';
+            cell.getElement().style.color = DEFAULT_TEXT_COLOR;
         }
         return cell.getValue()
     }
 
     tableOptions.columns[overallLevelIndex].formatter = (cell) => {
         const overallLevel = cell.getValue()
-        if (overallLevel === 'High') cell.getElement().style.color = '#FF0000';
-        else if (overallLevel === 'Medium') cell.getElement().style.color = '#FFA500';
-        else cell.getElement().style.color = '#000000';
+        cell.getElement().style.color = getSeverityColor(overallLevel);
         return overallLevel;
     }
 
@@ -129,7 +143,7 @@
     };
 
     const validateCVEScore = (cveScore) => {
-        if (cveScore < 0 || cveScore > 10) $('input[name="vulnerability__scoring"]').css('border', '1px solid red');
+        if (cveScore < 0 || cveScore > 10) $('input[name="vulnerability__scoring"]').css('border', `1px solid ${ERROR_COLOR}`);
         else $('input[name="vulnerability__scoring"]').css('border', 'none');
     }
 
@@ -175,17 +189,17 @@
     
     const validateVulnerabilityName = (vulnerability) => {
         const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
-        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? '#000000' : '#FF0000'}`);
-        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`);
-        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
-        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid red'}`);
+        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
+        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
+        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
+        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid ' + ERROR_COLOR}`);
 
         if (supportingAssetsData.length === 0 
             || supportingAssetRef.length === 0
             || !checkSupportingAssetRefArray(supportingAssetRef)
             || vulnerabilityDescription === ''
-            || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#FF0000';
-        else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = '#000000';
+            || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = ERROR_COLOR;
+        else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = DEFAULT_TEXT_COLOR;
     };
 
     const updateVulnerabilityFields = (vulnerabilities) => {
@@ -217,14 +231,14 @@
         } = vulnerabilitiesData.find((v) => v.vulnerabilityId == id);
         $('#vulnerabilityId').text(vulnerabilityId);
         $('#vulnerability__name').val(vulnerabilityName);
-        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? '#000000' : '#FF0000'}`);
-        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid red'}`);
+        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
+        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid ' + ERROR_COLOR}`);
         $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
         vulnerabilityURL(vulnerabilityTrackingURI);
         $('#vulnerability__CVE').val(vulnerabilityCVE);
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
         tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
-        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? '#000000' : '#FF0000'}`)
+        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`)
 
         if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 1) {
             $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(1));
@@ -235,7 +249,7 @@
         $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
         validateCVEScore(cveScore);
 
-        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? '#000000' : '#FF0000'}`)
+        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`)
         $('input[name="refs__checkboxes"]').prop('checked', false);
         supportingAssetRef.forEach((ref)=>{
             $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
@@ -300,7 +314,7 @@
         supportingAssets.forEach((sa)=>{
             // add div
             const div = document.createElement('div');
-            if (!checkSupportingAssetRef(sa.supportingAssetId)) div.style = 'color:red'
+            if (!checkSupportingAssetRef(sa.supportingAssetId)) div.style = `color:${ERROR_COLOR}`
 
             // add checkbox
             const checkbox = document.createElement('input');
