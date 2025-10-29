@@ -224,6 +224,19 @@ select option {
     color: #4f4f4f;
 }
 
+.tabulator .tabulator-row .tabulator-cell {
+    white-space: normal !important;
+    overflow: visible !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.text-wrap {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
 .tooltip {
     position:relative;
     text-align:left;

@@ -179,6 +179,7 @@
       const newDiv = document.createElement('div');
       const newInput = document.createElement('input');
       const newSelect = document.createElement('select');
+      newSelect.classList.add('text-wrap');
       newInput.setAttribute('type', 'checkbox');
       newInput.setAttribute('data-index', index);
       let sa = findSupportingAsset(id)
@@ -226,7 +227,7 @@
       const row = `
       <tr id="supporting-asset-business-assets__table-${id}">
         <td class="matrix-sa-id">${id}</td>
-        <td class="matrix-sa-name">${name}</td>
+        <td class="matrix-sa-name text-wrap">${name}</td>
         <td class="matrix-sa-ba">
            <div class="add-delete-container">
               <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>

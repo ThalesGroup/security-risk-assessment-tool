@@ -155,7 +155,7 @@
 
                 $('#vulnerabilities tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
-                    <td>${vulnerabilityName}</td>
+                    <td class="text-wrap">${vulnerabilityName}</td>
                     <td style="color: ${overallScore === null ? 'red' : 'black'}">${overallScore === null ? 'NaN' : overallScore}/10</td>
                     <td style="color: ${color}; font-weight:;">${overallLevel}</td>
                     </td>`);
@@ -283,9 +283,9 @@
                     <td style="padding:0;">
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
-                            <div class="grid-item grid-item--wrap" style ="color:${validateRiskName(risk)}">${riskName}</div>
+                            <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${riskName}</div>
                             <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
-                            <div class="grid-item grid-item--wrap">${riskManagementDetail}</div>
+                            <div class="grid-item text-wrap">${riskManagementDetail}</div>
                         </div>
                     </td>
                     <td style="color: ${inherentRiskScore === null ? 'red' : 'black'}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
@@ -357,8 +357,8 @@
                         const { description, decisionDetail, cost, decision } = mitigation;
                         if(decision === 'Accepted'){
                             $('#riskmanagement tbody').append(`<tr>
-                            <td>${description}</td>
-                            <td>${decisionDetail}</td>
+                            <td class="text-wrap">${description}</td>
+                            <td class="text-wrap">${decisionDetail}</td>
                             <td>${!cost ? '' : cost}</td>
                             </td>`);
 
