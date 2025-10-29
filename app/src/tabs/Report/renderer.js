@@ -1,14 +1,14 @@
 /*----------------------------------------------------------------------------
 *
 *     Copyright © 2022-2025 THALES. All Rights Reserved.
- *
+*
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
- * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 *
 * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
 * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
@@ -21,6 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
 /* global $ tinymce */
 const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
@@ -40,7 +41,7 @@ const getSeverityColor = (level) => {
 
   let riskChart;
 
-  function generateGraph(lowRisk, medRisk, highRisk) {
+  function generateGraph(lowRisk, medRisk, highRisk, criticalRisk) {
    
     const chartElement = document.getElementById('riskChart');
     const chartData = {
@@ -69,7 +70,13 @@ const getSeverityColor = (level) => {
             backgroundColor: SEVERITY_COLORS.HIGH_BACKGROUND,
             barPercentage: 0.5,
           },
-
+          {
+            label: 'Critical',
+            data: criticalRisk,
+            stack: 'stack',
+            backgroundColor: SEVERITY_COLORS.CRITICAL_BACKGROUND,
+            barPercentage: 0.5,
+          },
         ]
       };
   
@@ -129,7 +136,22 @@ const getSeverityColor = (level) => {
 
 
 (async () => {
-    let fetchedData
+    let fetchedData;
+    const updateRiskChart = ({ lowRisk, medRisk, highRisk, criticalRisk }) => {
+      if (!riskChart) {
+        generateGraph(lowRisk, medRisk, highRisk, criticalRisk);
+        return;
+      }
+      const datasetByLabel = riskChart.data.datasets.reduce((m, ds) => {
+        m[ds.label] = ds;
+        return m;
+      }, {});
+      if (datasetByLabel.Critical) datasetByLabel.Critical.data = criticalRisk;
+      if (datasetByLabel.High)     datasetByLabel.High.data     = highRisk;
+      if (datasetByLabel.Medium)   datasetByLabel.Medium.data   = medRisk;
+      if (datasetByLabel.Low)      datasetByLabel.Low.data      = lowRisk;
+      riskChart.update();
+    };
     try {
         function handleReload(event) {
             if (event.ctrlKey && event.key === 'r') {
@@ -139,7 +161,7 @@ const getSeverityColor = (level) => {
           disableAllTabs()
         window.addEventListener('keydown', handleReload);
         const renderVulnerability = (sortedVulnerability, overallLevel) => {
-            sortedVulnerability[overallLevel].forEach((vulnerability) => {
+            (sortedVulnerability[overallLevel] || []).forEach((vulnerability) => {
                 const { vulnerabilityId, vulnerabilityName, overallScore, overallLevel } = vulnerability;
                 const color = getSeverityColor(overallLevel);
 
@@ -147,7 +169,7 @@ const getSeverityColor = (level) => {
                     <td>${vulnerabilityId}</td>
                     <td>${vulnerabilityName}</td>
                     <td style="color: ${overallScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${overallScore === null ? 'NaN' : overallScore}/10</td>
-                    <td style="color: ${color}; font-weight:${overallLevel === 'High' || overallLevel === 'Medium' ? 'bold' : 'normal'};">${overallLevel}</td>
+                    <td style="color: ${color}; font-weight:;">${overallLevel}</td>
                     </td>`);
             });
         };
@@ -169,7 +191,7 @@ const getSeverityColor = (level) => {
         // Check if the businessAssets are valid
         const checkBusinessAssetRefArray = (refArray) =>{
           if(refArray.length){
-            for (ref of refArray){
+            for (const ref of refArray){
               if (!checkBusinessAssetRef(ref)) return false
             }
           }
@@ -184,7 +206,7 @@ const getSeverityColor = (level) => {
       
         // Check if the supportingAsset is valid
         const checkSupportingAssetRef = (ref) =>{
-          if (ref === null) return 
+          if (ref === null) return false;
           let foundSupportingAsset = existSupportingAsset(ref)
         
           if (
@@ -202,7 +224,7 @@ const getSeverityColor = (level) => {
         // Check if the supportingAssets are valid
         const checkSupportingAssetRefArray = (refArray) =>{
           if(refArray.length){
-            for (ref of refArray){
+            for (const ref of refArray){
               if (!checkSupportingAssetRef(ref)) return false
             }
           }
@@ -212,7 +234,7 @@ const getSeverityColor = (level) => {
         // Check if the supportingAsset exists globally
         const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
           if (ref === null) return false
-          found = fetchedData.Vulnerability.find(obj => obj.vulnerabilityId === ref);
+          const found = fetchedData.Vulnerability.find(obj => obj.vulnerabilityId === ref);
           if (
             !found ||
             !found.supportingAssetRef.includes(supportingAssetRef) ||
@@ -251,8 +273,8 @@ const getSeverityColor = (level) => {
           } else return DEFAULT_TEXT_COLOR;
         };
 
-        const renderRisk = (sortedRisk, residualRiskLevel) => {
-            sortedRisk[residualRiskLevel].forEach((risk) => {
+        const renderRisk = (sortedRisk, riskCategory) => {
+            (sortedRisk[riskCategory] || []).forEach((risk) => {
                 const { riskId, residualRiskLevel, inherentRiskScore, mitigatedRiskScore, residualRiskScore,riskManagementDecision, riskName, riskManagementDetail } = risk;
                 const severityColor = getSeverityColor(residualRiskLevel);
                 const isElevatedRisk = ['Critical', 'High', 'Medium'].includes(residualRiskLevel);
@@ -282,11 +304,13 @@ const getSeverityColor = (level) => {
                 const { Vulnerability, Risk, ISRAmeta } = fetchedData
                 const { projectName, projectVersion, iteration, ISRAtracking} = ISRAmeta;
                 const sortedVulnerability = {
+                    critical: [],
                     high: [],
                     medium: [],
                     low: []
-                };
+                };                
                 const sortedRisk = {
+                    critical: [],
                     high: [],
                     medium: [],
                     low: []
@@ -305,21 +329,29 @@ const getSeverityColor = (level) => {
                 const lowRisk = [0,0,0];
                 const medRisk = [0,0,0];
                 const highRisk = [0,0,0];
+                const criticalRisk = [0,0,0];
                 const dataIndex = {'Accept': 0, 'Transfer': 1, 'Mitigate': 2}
                 Risk.forEach((risk) => {
                     const { residualRiskLevel, riskMitigation, riskManagementDecision } = risk;
-                    
-
-                    if (residualRiskLevel === 'High') {
+                    const idx = dataIndex[riskManagementDecision];
+                    // if (idx == null || idx == undefined) return; 
+                    switch (residualRiskLevel){
+                      case 'Critical':
+                        sortedRisk['critical'].push(risk);
+                        criticalRisk[idx] += 1;
+                        break;
+                      case 'High':
                         sortedRisk['high'].push(risk);
-                        highRisk[dataIndex[riskManagementDecision]] += 1;
-
-                    } else if (residualRiskLevel === 'Medium') {
+                        highRisk[idx] += 1;
+                        break;
+                      case 'Medium':
                         sortedRisk['medium'].push(risk);
-                        medRisk[dataIndex[riskManagementDecision]] += 1
-                    } else if (residualRiskLevel === 'Low') {
+                        medRisk[idx] += 1;
+                        break;
+                      case 'Low':
                         sortedRisk['low'].push(risk);
-                        lowRisk[dataIndex[riskManagementDecision]] += 1
+                        lowRisk[idx] += 1;
+                        break;
                     }
 
                     riskMitigation.forEach((mitigation) => {
@@ -342,29 +374,34 @@ const getSeverityColor = (level) => {
                     <td><strong>Total accepted security control cost:</strong></td>
                     <td>${totalCost}</td>
                 </tr>`);
+                renderRisk(sortedRisk, 'critical');
                 renderRisk(sortedRisk, 'high');
                 renderRisk(sortedRisk, 'medium');
                 renderRisk(sortedRisk, 'low');
 
-                Vulnerability.forEach((vulnerability) => {
+                                Vulnerability.forEach((vulnerability) => {
                     const { overallLevel } = vulnerability;
-                    if (overallLevel === 'High') sortedVulnerability['high'].push(vulnerability);
-                    else if (overallLevel === 'Medium') sortedVulnerability['medium'].push(vulnerability);
-                    else if (overallLevel === 'Low') sortedVulnerability['low'].push(vulnerability);
+                    switch (overallLevel) {
+                      case 'Critical':
+                        sortedVulnerability['critical'].push(vulnerability);
+                        break;
+                      case 'High':
+                        sortedVulnerability['high'].push(vulnerability);
+                        break;
+                      case 'Medium':
+                        sortedVulnerability['medium'].push(vulnerability);
+                        break;
+                      case 'Low':
+                        sortedVulnerability['low'].push(vulnerability);
+                        break;
+                    }
                 });
+                renderVulnerability(sortedVulnerability, 'critical');
                 renderVulnerability(sortedVulnerability, 'high');
                 renderVulnerability(sortedVulnerability, 'medium');
                 renderVulnerability(sortedVulnerability, 'low'); 
 
-                if (riskChart) {
-                  riskChart.data.datasets[0].data= lowRisk
-                  riskChart.data.datasets[1].data= medRisk
-                  riskChart.data.datasets[2].data= highRisk
-                  riskChart.update()
-                  
-                } else {
-                  generateGraph(lowRisk, medRisk, highRisk)
-                }
+                updateRiskChart({ lowRisk, medRisk, highRisk, criticalRisk });
                 
               // Inform the main process that the data is fetched
               window.israreport.fetchedContent(true);
