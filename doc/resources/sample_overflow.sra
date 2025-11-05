@@ -2,7 +2,7 @@
     "ISRAmeta": {
         "schemaVersion": 3,
         "classification": "COMPANY CONFIDENTIAL {PROJECT}",
-        "iteration": 3,
+        "iteration": 2,
         "projectName": "overflowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
         "projectOrganization": "",
         "projectVersion": "testaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -616,15 +616,15 @@
             "riskId": 9,
             "projectName": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
             "projectVersion": "testaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "riskName": "As a , I can  the  compromising the  in order to ",
-            "threatAgent": "",
+            "riskName": "As a Insider, I can spoof the BA1 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa compromising the SA1 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa in order to asdfaf, exploiting the testing long name overflow aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "threatAgent": "Insider",
             "threatAgentDetail": "",
-            "threatVerb": "",
+            "threatVerb": "spoof",
             "threatVerbDetail": "",
-            "motivation": "",
+            "motivation": "asdfaf",
             "motivationDetail": "",
-            "businessAssetRef": null,
-            "supportingAssetRef": null,
+            "businessAssetRef": 1,
+            "supportingAssetRef": 1,
             "isAutomaticRiskName": true,
             "riskLikelihood": {
                 "riskLikelihood": 3,
@@ -641,25 +641,31 @@
                 "isOWASPLikelihood": true
             },
             "riskImpact": {
-                "riskImpact": null,
-                "businessAssetConfidentialityFlag": 1,
-                "businessAssetIntegrityFlag": 1,
-                "businessAssetAvailabilityFlag": 1,
+                "riskImpact": 4,
+                "businessAssetConfidentialityFlag": 0,
+                "businessAssetIntegrityFlag": 0,
+                "businessAssetAvailabilityFlag": 0,
                 "businessAssetAuthenticityFlag": 1,
-                "businessAssetAuthorizationFlag": 1,
-                "businessAssetNonRepudiationFlag": 1
+                "businessAssetAuthorizationFlag": 0,
+                "businessAssetNonRepudiationFlag": 0
             },
             "riskAttackPaths": [
                 {
                     "riskAttackPathId": 1,
-                    "vulnerabilityRef": [],
-                    "attackPathName": "",
-                    "attackPathScore": null
+                    "vulnerabilityRef": [
+                        {
+                            "score": 0,
+                            "name": "testing long name overflow aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            "vulnerabilityId": 8
+                        }
+                    ],
+                    "attackPathName": "testing long name overflow aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "attackPathScore": 0
                 }
             ],
-            "allAttackPathsName": "",
-            "allAttackPathsScore": null,
-            "inherentRiskScore": 0,
+            "allAttackPathsName": "testing long name overflow aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "allAttackPathsScore": 0,
+            "inherentRiskScore": 8,
             "riskMitigation": [
                 {
                     "riskMitigationId": 1,
@@ -672,11 +678,11 @@
             ],
             "mitigationsBenefits": 1,
             "mitigationsDoneBenefits": 1,
-            "mitigatedRiskScore": 0,
+            "mitigatedRiskScore": 8,
             "riskManagementDecision": "",
             "riskManagementDetail": "",
-            "residualRiskScore": 0,
-            "residualRiskLevel": "Low"
+            "residualRiskScore": 8,
+            "residualRiskLevel": "Medium"
         }
     ],
     "Vulnerability": [
@@ -821,7 +827,9 @@
             "cveScore": 0,
             "overallScore": 0,
             "overallLevel": "Low",
-            "supportingAssetRef": []
+            "supportingAssetRef": [
+                1
+            ]
         }
     ]
 }
