@@ -1,26 +1,26 @@
 /*----------------------------------------------------------------------------
-*
-*     Copyright © 2022-2025 THALES. All Rights Reserved.
-*
-* -----------------------------------------------------------------------------
-* THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
-* THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
-* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
-* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
-*
-* THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
-* CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
-* PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
-* NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
-* SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
-* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
-* PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
-* SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
-* HIGH RISK ACTIVITIES.
-* -----------------------------------------------------------------------------
-*/
+ *
+ *     Copyright © 2022-2025 THALES. All Rights Reserved.
+ *
+ * -----------------------------------------------------------------------------
+ * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+ * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+ * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+ * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+ *
+ * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
+ * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+ * PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
+ * NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
+ * SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
+ * SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+ * PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
+ * SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
+ * HIGH RISK ACTIVITIES.
+ * -----------------------------------------------------------------------------
+ */
 /* global $ tinymce Tabulator */
 
 const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
@@ -28,11 +28,11 @@ const ERROR_COLOR = TEXT_COLOR.ERROR;
 const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 const getSeverityColor = (level) => {
   switch (level) {
-    case 'Critical':
+    case "Critical":
       return SEVERITY_COLORS.CRITICAL;
-    case 'High':
+    case "High":
       return SEVERITY_COLORS.HIGH;
-    case 'Medium':
+    case "Medium":
       return SEVERITY_COLORS.MEDIUM;
     default:
       return SEVERITY_COLORS.LOW;
@@ -40,266 +40,362 @@ const getSeverityColor = (level) => {
 };
 
 (async () => {
-    var fetchedData
-    try {
+  var fetchedData;
+  try {
     function handleReload(event) {
-        if (event.ctrlKey && event.key === 'r') {
-          event.preventDefault();
-        }
+      if (event.ctrlKey && event.key === "r") {
+        event.preventDefault();
       }
-    
-      disableAllTabs()
-    window.addEventListener('keydown', handleReload);
+    }
+
+    disableAllTabs();
+    window.addEventListener("keydown", handleReload);
     const result = await window.render.vulnerabilities();
     let vulnerabilitiesData, supportingAssetsData, businessAssetsData;
-    $('#vulnerabilities').append(result[0]);
+    $("#vulnerabilities").append(result[0]);
     const tableOptions = result[1];
-    const checkBoxIndex = 0
-    const vulNameIndex = 3
-    const overallLevelIndex = 4
+    const checkBoxIndex = 0;
+    const vulNameIndex = 3;
+    const overallLevelIndex = 4;
 
     tableOptions.columns[checkBoxIndex].formatter = (cell) => {
-        const vulnerabililityId = cell.getRow().getIndex();
-        if (vulnerabililityId) {
-            return `
+      const vulnerabililityId = cell.getRow().getIndex();
+      if (vulnerabililityId) {
+        return `
         <input type="checkbox" name="vulnerabilties__table__checkboxes" value="${vulnerabililityId}" id="vulnerabilties__table__checkboxes__${vulnerabililityId}"/>
     `;
-        }
+      }
     };
 
     tableOptions.columns[vulNameIndex].formatter = (cell) => {
-        const rowData = cell.getRow().getData();
-        const supportingAssetRef = rowData.supportingAssetRef
-        const vulnerabilityDescription = rowData.vulnerabilityDescription
-        const vulnerabilityName = rowData.vulnerabilityName
-        if (
-            supportingAssetsData.length === 0 || 
-            supportingAssetRef.length === 0 || 
-            !checkSupportingAssetRefArray(supportingAssetRef) || 
-            vulnerabilityDescription === '' || 
-            vulnerabilityName === ''
-        ) {
-            cell.getElement().style.color = ERROR_COLOR;
-        }
-        else  {
-            cell.getElement().style.color = DEFAULT_TEXT_COLOR;
-        }
-        return cell.getValue()
-    }
+      const rowData = cell.getRow().getData();
+      const supportingAssetRef = rowData.supportingAssetRef;
+      const vulnerabilityDescription = rowData.vulnerabilityDescription;
+      const vulnerabilityName = rowData.vulnerabilityName;
+      if (
+        supportingAssetsData.length === 0 ||
+        supportingAssetRef.length === 0 ||
+        !checkSupportingAssetRefArray(supportingAssetRef) ||
+        vulnerabilityDescription === "" ||
+        vulnerabilityName === ""
+      ) {
+        cell.getElement().style.color = ERROR_COLOR;
+      } else {
+        cell.getElement().style.color = DEFAULT_TEXT_COLOR;
+      }
+      return cell.getValue();
+    };
 
     tableOptions.columns[overallLevelIndex].formatter = (cell) => {
-        const overallLevel = cell.getValue()
-        cell.getElement().style.color = getSeverityColor(overallLevel);
-        return overallLevel;
-    }
+      const overallLevel = cell.getValue();
+      cell.getElement().style.color = getSeverityColor(overallLevel);
+      return overallLevel;
+    };
 
-    const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
-    
+    const vulnerabilitiesTable = new Tabulator(
+      "#vulnerabilties__table",
+      result[1]
+    );
 
     // filter
     const clearFunction = () => {
-        vulnerabilitiesTable.clearFilter();
-        $('input[id="filter-value"]').val('');
-        if (vulnerabilitiesData.length > 0) $('#vulnerabilities section').show();
+      vulnerabilitiesTable.clearFilter();
+      $('input[id="filter-value"]').val("");
+      if (vulnerabilitiesData.length > 0) $("#vulnerabilities section").show();
     };
 
-    $('input[id="filter-value"]').on('change', (e)=> {
-        const { value } = e.target;
-        if(value === ''){
-            clearFunction();
-        }else {
-            const filterOptions = [
-                [
-                    { field: "vulnerabilityId", type: "like", value: value },
-                    { field: "projectVersion", type: "like", value: value },
-                    { field: "vulnerabilityName", type: "like", value: value },
-                    { field: "overallLevel", type: "like", value: value },
-                ]
-            ];
-            vulnerabilitiesTable.setFilter(filterOptions);
-            const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
-            if (filteredRows[0]) {
-                vulnerabilitiesData.forEach((v) => {
-                    vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-                });
-                vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
-                addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
-            } else $('#vulnerabilities section').hide();
-        }
+    $('input[id="filter-value"]').on("change", (e) => {
+      const { value } = e.target;
+      if (value === "") {
+        clearFunction();
+      } else {
+        const filterOptions = [
+          [
+            { field: "vulnerabilityId", type: "like", value: value },
+            { field: "projectVersion", type: "like", value: value },
+            { field: "vulnerabilityName", type: "like", value: value },
+            { field: "overallLevel", type: "like", value: value },
+          ],
+        ];
+        vulnerabilitiesTable.setFilter(filterOptions);
+        const filteredRows = vulnerabilitiesTable.searchData(filterOptions);
+        if (filteredRows[0]) {
+          vulnerabilitiesData.forEach((v) => {
+            vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
+          });
+          vulnerabilitiesTable.selectRow(filteredRows[0].vulnerabilityId);
+          addSelectedVulnerabilityRowData(filteredRows[0].vulnerabilityId);
+        } else $("#vulnerabilities section").hide();
+      }
     });
 
-    $('button[id="filter-clear"]').on('click', () => { 
-        clearFunction();
+    $('button[id="filter-clear"]').on("click", () => {
+      clearFunction();
     });
 
     const getCurrentVulnerabilityId = () => {
-        // Store the current vulnerability id in the browser's volatile storage
-        sessionStorage.setItem("currentVulnerability",vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId);
-        return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
+      // Store the current vulnerability id in the browser's volatile storage
+      sessionStorage.setItem(
+        "currentVulnerability",
+        vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId
+      );
+      return vulnerabilitiesTable.getSelectedData()[0].vulnerabilityId;
     };
 
     const getCurrentVulnerability = () => {
-        return vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
+      return vulnerabilitiesData.find(
+        (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+      );
     };
 
     const validateCVEScore = (cveScore) => {
-        if (cveScore < 0 || cveScore > 10) $('input[name="vulnerability__scoring"]').css('border', `1px solid ${ERROR_COLOR}`);
-        else $('input[name="vulnerability__scoring"]').css('border', 'none');
-    }
+      if (cveScore < 0 || cveScore > 10)
+        $('input[name="vulnerability__scoring"]').css(
+          "border",
+          `1px solid ${ERROR_COLOR}`
+        );
+      else $('input[name="vulnerability__scoring"]').css("border", "none");
+    };
 
     // Check if the businessAsset is valid
-    const checkBusinessAssetRef = (ref) =>{
-        if (ref === null) return false
-        let foundBusinessAsset = fetchedData.BusinessAsset.find(obj => obj.businessAssetId == ref);
-        return foundBusinessAsset && foundBusinessAsset.businessAssetName !== '' ? true : false
-      };
-      
-      // Check if the businessAssets are valid
-    const checkBusinessAssetRefArray = (refArray) =>{
-        if(refArray.length){
-          for (ref of refArray){
-            if (!checkBusinessAssetRef(ref)) return false
-          }
+    const checkBusinessAssetRef = (ref) => {
+      if (ref === null) return false;
+      let foundBusinessAsset = fetchedData.BusinessAsset.find(
+        (obj) => obj.businessAssetId == ref
+      );
+      return foundBusinessAsset && foundBusinessAsset.businessAssetName !== ""
+        ? true
+        : false;
+    };
+
+    // Check if the businessAssets are valid
+    const checkBusinessAssetRefArray = (refArray) => {
+      if (refArray.length) {
+        for (ref of refArray) {
+          if (!checkBusinessAssetRef(ref)) return false;
         }
-        return true
+      }
+      return true;
     };
     // Check if the supportingAsset is valid
-    const checkSupportingAssetRef = (ref) =>{
-        if (ref === null) return 
-        let foundSupportingAsset = fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref);
+    const checkSupportingAssetRef = (ref) => {
+      if (ref === null) return false;
+      const foundSupportingAsset = fetchedData.SupportingAsset.find(
+        (obj) => obj.supportingAssetId == ref
+      );
+      if (!foundSupportingAsset) return false;
 
-        if (foundSupportingAsset.businessAssetRef.length == 0 || 
-            foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
-            !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
-            foundSupportingAsset.supportingAssetName == ''){
-            return false
-        }
-        return true
-      };
+      const { businessAssetRef = [], supportingAssetName } =
+        foundSupportingAsset;
+
+      if (
+        businessAssetRef.length === 0 ||
+        businessAssetRef.length !== new Set(businessAssetRef).size ||
+        !checkBusinessAssetRefArray(businessAssetRef) ||
+        supportingAssetName === ""
+      ) {
+        return false;
+      }
+      return true;
+    };
 
     // Check if the supportingAssets are valid
-    const checkSupportingAssetRefArray = (refArray) =>{
-        if(refArray.length){
-          for (ref of refArray){
-            if (!checkSupportingAssetRef(ref)) return false
-          }
+    const checkSupportingAssetRefArray = (refArray) => {
+      if (refArray.length) {
+        for (ref of refArray) {
+          if (!checkSupportingAssetRef(ref)) return false;
         }
-        return true
-      };
-    
-    const validateVulnerabilityName = (vulnerability) => {
-        const { supportingAssetRef, vulnerabilityDescription, vulnerabilityName, vulnerabilityId } = vulnerability; 
-        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
-        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
-        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
-        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid ' + ERROR_COLOR}`);
+      }
+      return true;
+    };
 
-        if (supportingAssetsData.length === 0 
-            || supportingAssetRef.length === 0
-            || !checkSupportingAssetRefArray(supportingAssetRef)
-            || vulnerabilityDescription === ''
-            || vulnerabilityName === '') vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = ERROR_COLOR;
-        else vulnerabilitiesTable.getRow(vulnerabilityId).getCell('vulnerabilityName').getElement().style.color = DEFAULT_TEXT_COLOR;
+    const validateVulnerabilityName = (vulnerability) => {
+      const {
+        supportingAssetRef,
+        vulnerabilityDescription,
+        vulnerabilityName,
+        vulnerabilityId,
+      } = vulnerability;
+      $("#select__refs__id").prop(
+        "style",
+        `color:${
+          supportingAssetRef.length &&
+          checkSupportingAssetRefArray(supportingAssetRef)
+            ? DEFAULT_TEXT_COLOR
+            : ERROR_COLOR
+        }`
+      );
+      $("#vulnerability__details__id").prop(
+        "style",
+        `color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`
+      );
+      $("#vulnerability__name__id").prop(
+        "style",
+        `color:${vulnerabilityName !== "" ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`
+      );
+      $("#vulnerability__name").prop(
+        "style",
+        `border:${
+          vulnerabilityName !== "" ? "none" : "3px solid " + ERROR_COLOR
+        }`
+      );
+
+      if (
+        supportingAssetsData.length === 0 ||
+        supportingAssetRef.length === 0 ||
+        !checkSupportingAssetRefArray(supportingAssetRef) ||
+        vulnerabilityDescription === "" ||
+        vulnerabilityName === ""
+      )
+        vulnerabilitiesTable
+          .getRow(vulnerabilityId)
+          .getCell("vulnerabilityName")
+          .getElement().style.color = ERROR_COLOR;
+      else
+        vulnerabilitiesTable
+          .getRow(vulnerabilityId)
+          .getCell("vulnerabilityName")
+          .getElement().style.color = DEFAULT_TEXT_COLOR;
     };
 
     const updateVulnerabilityFields = (vulnerabilities) => {
-        vulnerabilitiesTable.clearData();
-        $('#vulnerabilties__table__checkboxes').empty();
-        vulnerabilitiesTable.addData(vulnerabilities);
-        // Select the latest vulerability selected (stored in the browser's volatile storage) (default: first vulerability of the table)
-        const previousVulId = sessionStorage.getItem("currentVulnerability")
-        const selectedVulnerability = previousVulId && vulnerabilities.find((v) => v.vulnerabilityId == previousVulId)? previousVulId : vulnerabilities[0].vulnerabilityId
-        vulnerabilitiesTable.selectRow(selectedVulnerability);
-        addSelectedVulnerabilityRowData(selectedVulnerability);
-
+      vulnerabilitiesTable.clearData();
+      $("#vulnerabilties__table__checkboxes").empty();
+      vulnerabilitiesTable.addData(vulnerabilities);
+      // Select the latest vulerability selected (stored in the browser's volatile storage) (default: first vulerability of the table)
+      const previousVulId = sessionStorage.getItem("currentVulnerability");
+      const selectedVulnerability =
+        previousVulId &&
+        vulnerabilities.find((v) => v.vulnerabilityId == previousVulId)
+          ? previousVulId
+          : vulnerabilities[0].vulnerabilityId;
+      vulnerabilitiesTable.selectRow(selectedVulnerability);
+      addSelectedVulnerabilityRowData(selectedVulnerability);
     };
-    
 
-    const addSelectedVulnerabilityRowData = async (id) =>{
-        const {
-            vulnerabilityId,
-            vulnerabilityName,
-            vulnerabilityTrackingID,
-            vulnerabilityTrackingURI,
-            vulnerabilityCVE,
-            vulnerabilityFamily,
-            vulnerabilityDescription,
-            vulnerabilityDescriptionAttachment,
-            cveScore,
-            overallLevel,
-            supportingAssetRef
-        } = vulnerabilitiesData.find((v) => v.vulnerabilityId == id);
-        $('#vulnerabilityId').text(vulnerabilityId);
-        $('#vulnerability__name').val(vulnerabilityName);
-        $("#vulnerability__name__id").prop('style',`color:${vulnerabilityName !== '' ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`);
-        $("#vulnerability__name").prop('style',`border:${vulnerabilityName !== '' ? 'none' : '3px solid ' + ERROR_COLOR}`);
-        $('#vulnerability__trackingID').val(vulnerabilityTrackingID);
-        vulnerabilityURL(vulnerabilityTrackingURI);
-        $('#vulnerability__CVE').val(vulnerabilityCVE);
-        $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
-        tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
-        $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`)
+    const addSelectedVulnerabilityRowData = async (id) => {
+      const {
+        vulnerabilityId,
+        vulnerabilityName,
+        vulnerabilityTrackingID,
+        vulnerabilityTrackingURI,
+        vulnerabilityCVE,
+        vulnerabilityFamily,
+        vulnerabilityDescription,
+        vulnerabilityDescriptionAttachment,
+        cveScore,
+        overallLevel,
+        supportingAssetRef,
+      } = vulnerabilitiesData.find((v) => v.vulnerabilityId == id);
+      $("#vulnerabilityId").text(vulnerabilityId);
+      $("#vulnerability__name").val(vulnerabilityName);
+      $("#vulnerability__name__id").prop(
+        "style",
+        `color:${vulnerabilityName !== "" ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`
+      );
+      $("#vulnerability__name").prop(
+        "style",
+        `border:${
+          vulnerabilityName !== "" ? "none" : "3px solid " + ERROR_COLOR
+        }`
+      );
+      $("#vulnerability__trackingID").val(vulnerabilityTrackingID);
+      vulnerabilityURL(vulnerabilityTrackingURI);
+      $("#vulnerability__CVE").val(vulnerabilityCVE);
+      $('select[id="vulnerability__family"]').val(
+        !vulnerabilityFamily ? "" : vulnerabilityFamily
+      );
+      tinymce
+        .get("vulnerability__details")
+        .setContent(vulnerabilityDescription);
+      $("#vulnerability__details__id").prop(
+        "style",
+        `color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`
+      );
 
-        if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 1) {
-            $('#vulnerability__scoring').val(Number.parseFloat(cveScore).toFixed(1));
-        } else $('#vulnerability__scoring').val(cveScore);
-        $('#vulnerability__scoring__round').text(Math.round(cveScore));
+      if (
+        !Number.isInteger(cveScore) &&
+        cveScore.toString().split(".")[1].length > 1
+      ) {
+        $("#vulnerability__scoring").val(
+          Number.parseFloat(cveScore).toFixed(1)
+        );
+      } else $("#vulnerability__scoring").val(cveScore);
+      $("#vulnerability__scoring__round").text(Math.round(cveScore));
 
-        $('#vulnerability__level').removeClass();
-        $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        validateCVEScore(cveScore);
+      $("#vulnerability__level").removeClass();
+      $("#vulnerability__level").text(overallLevel).addClass(overallLevel);
+      validateCVEScore(cveScore);
 
-        $("#select__refs__id").prop('style',`color:${supportingAssetRef.length && checkSupportingAssetRefArray(supportingAssetRef) ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`)
-        $('input[name="refs__checkboxes"]').prop('checked', false);
-        supportingAssetRef.forEach((ref)=>{
-            $(`input[id="refs__checkboxes__${ref}"]`).prop('checked', true);
-        });
+      $("#select__refs__id").prop(
+        "style",
+        `color:${
+          supportingAssetRef.length &&
+          checkSupportingAssetRefArray(supportingAssetRef)
+            ? DEFAULT_TEXT_COLOR
+            : ERROR_COLOR
+        }`
+      );
+      $('input[name="refs__checkboxes"]').prop("checked", false);
+      supportingAssetRef.forEach((ref) => {
+        $(`input[id="refs__checkboxes__${ref}"]`).prop("checked", true);
+      });
 
-        const fileName = await window.vulnerabilities.decodeAttachment(vulnerabilityId ,vulnerabilityDescriptionAttachment);
-        $('#vulnerability__file--insert').text(fileName);
+      const fileName = await window.vulnerabilities.decodeAttachment(
+        vulnerabilityId,
+        vulnerabilityDescriptionAttachment
+      );
+      $("#vulnerability__file--insert").text(fileName);
     };
 
     const validatePreviousVulnerability = async (id) => {
-        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === id);
-        const isVulnerabilityExist = await window.vulnerabilities.isVulnerabilityExist(vulnerability.vulnerabilityId);
+      let vulnerability = vulnerabilitiesData.find(
+        (v) => v.vulnerabilityId === id
+      );
+      const isVulnerabilityExist =
+        await window.vulnerabilities.isVulnerabilityExist(
+          vulnerability.vulnerabilityId
+        );
 
-        if(isVulnerabilityExist){
-            const vulnerabilities = await window.validate.vulnerabilities(vulnerability);
-            vulnerabilitiesData = vulnerabilities;
-        };  
+      if (isVulnerabilityExist) {
+        const vulnerabilities = await window.validate.vulnerabilities(
+          vulnerability
+        );
+        vulnerabilitiesData = vulnerabilities;
+      }
     };
 
     vulnerabilitiesTable.on("rowDeselected", (row) => {
-        validatePreviousVulnerability(row.getIndex());
+      validatePreviousVulnerability(row.getIndex());
     });
 
     // row is clicked & selected
-    vulnerabilitiesTable.on('rowClick', (e, row) => {
-        vulnerabilitiesTable.selectRow(row.getIndex());
-        addSelectedVulnerabilityRowData(row.getIndex());
+    vulnerabilitiesTable.on("rowClick", (e, row) => {
+      vulnerabilitiesTable.selectRow(row.getIndex());
+      addSelectedVulnerabilityRowData(row.getIndex());
     });
 
-    const addVulnerability = (vulnerability) =>{
-        // filter
-        vulnerabilitiesTable.clearFilter();
-        $('input[id="filter-value"]').val('');
-        if (vulnerabilitiesData.length > 0) $('#vulnerabilities section').show();
+    const addVulnerability = (vulnerability) => {
+      // filter
+      vulnerabilitiesTable.clearFilter();
+      $('input[id="filter-value"]').val("");
+      if (vulnerabilitiesData.length > 0) $("#vulnerabilities section").show();
 
-        // add vulnerability data
-        vulnerabilitiesTable.addData([vulnerability]);
-        if (vulnerabilitiesData.length === 1) {
-            vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
-            addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
-        }
-        // add checkbox
-        // const checkbox = document.createElement('input');
-        // checkbox.type = 'checkbox';
-        // checkbox.value = `${vulnerability.vulnerabilityId}`;
-        // checkbox.id = `vulnerabilties__table__checkboxes__${vulnerability.vulnerabilityId}`;
-        // checkbox.name = 'vulnerabilties__table__checkboxes';
-        // $('#vulnerabilties__table__checkboxes').append(checkbox);
+      // add vulnerability data
+      vulnerabilitiesTable.addData([vulnerability]);
+      if (vulnerabilitiesData.length === 1) {
+        vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
+        addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
+      }
+      // add checkbox
+      // const checkbox = document.createElement('input');
+      // checkbox.type = 'checkbox';
+      // checkbox.value = `${vulnerability.vulnerabilityId}`;
+      // checkbox.id = `vulnerabilties__table__checkboxes__${vulnerability.vulnerabilityId}`;
+      // checkbox.name = 'vulnerabilties__table__checkboxes';
+      // $('#vulnerabilties__table__checkboxes').append(checkbox);
 
-        /* if (vulnerabilitiesData.length === 1) {
+      /* if (vulnerabilitiesData.length === 1) {
             vulnerabilitiesTable.selectRow(vulnerability.vulnerabilityId);
             
             addSelectedVulnerabilityRowData(vulnerability.vulnerabilityId);
@@ -309,78 +405,87 @@ const getSeverityColor = (level) => {
         } */
     };
 
-    const updateSupportingAssets = (supportingAssets) =>{
-        $('.refs').empty();
-        supportingAssets.forEach((sa)=>{
-            // add div
-            const div = document.createElement('div');
-            if (!checkSupportingAssetRef(sa.supportingAssetId)) div.style = `color:${ERROR_COLOR}`
+    const updateSupportingAssets = (supportingAssets) => {
+      $(".refs").empty();
+      supportingAssets.forEach((sa) => {
+        // add div
+        const div = document.createElement("div");
+        if (!checkSupportingAssetRef(sa.supportingAssetId))
+          div.style = `color:${ERROR_COLOR}`;
 
-            // add checkbox
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = `${sa.supportingAssetId}`;
-            checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
-            checkbox.name = 'refs__checkboxes';
-            checkbox.addEventListener('change', async (e) =>{
-                let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-                if (e.target.checked) {
-                    const v = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'addSupportingAssetRef', e.target.value);
-                    vulnerability.supportingAssetRef = v.supportingAssetRef;
-                }
-                else {
-                    const v = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'deleteSupportingAssetRef', e.target.value);
-                    vulnerability.supportingAssetRef = v.supportingAssetRef;
-                }
-                validateVulnerabilityName(vulnerability);
-            })
-            div.append(checkbox);
-
-            // add label
-            const label = document.createElement('label');
-            label.classList.add('text-wrap');
-            label.innerHTML = sa.supportingAssetName;
-            div.append(label);
-            $('.refs').append(div);
-            
-        
+        // add checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = `${sa.supportingAssetId}`;
+        checkbox.id = `refs__checkboxes__${sa.supportingAssetId}`;
+        checkbox.name = "refs__checkboxes";
+        checkbox.addEventListener("change", async (e) => {
+          let vulnerability = vulnerabilitiesData.find(
+            (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+          );
+          if (e.target.checked) {
+            const v = await window.vulnerabilities.updateVulnerability(
+              getCurrentVulnerabilityId(),
+              "addSupportingAssetRef",
+              e.target.value
+            );
+            vulnerability.supportingAssetRef = v.supportingAssetRef;
+          } else {
+            const v = await window.vulnerabilities.updateVulnerability(
+              getCurrentVulnerabilityId(),
+              "deleteSupportingAssetRef",
+              e.target.value
+            );
+            vulnerability.supportingAssetRef = v.supportingAssetRef;
+          }
+          validateVulnerabilityName(vulnerability);
         });
-    }
+        div.append(checkbox);
 
-    const loadVulnerabilities = (data) =>{
-        
-        vulnerabilitiesData = data.Vulnerability;
-        supportingAssetsData = data.SupportingAsset;
-        businessAssetsData = data.BusinessAsset;
-        if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
-        else{
-            $('#vulnerabilities section').show();  
-            updateSupportingAssets(data.SupportingAsset);
-            updateVulnerabilityFields(vulnerabilitiesData);
-        }
+        // add label
+        const label = document.createElement("label");
+        label.classList.add("text-wrap");
+        label.innerHTML = sa.supportingAssetName;
+        div.append(label);
+        $(".refs").append(div);
+      });
+    };
+
+    const loadVulnerabilities = (data) => {
+      vulnerabilitiesData = data.Vulnerability;
+      supportingAssetsData = data.SupportingAsset;
+      businessAssetsData = data.BusinessAsset;
+      if (vulnerabilitiesData.length === 0)
+        $("#vulnerabilities section").hide();
+      else {
+        $("#vulnerabilities section").show();
+        updateSupportingAssets(data.SupportingAsset);
+        updateVulnerabilityFields(vulnerabilitiesData);
+      }
     };
 
     $(document).ready(async function () {
-        window.project.load(async (event, data) => {
+      window.project.load(async (event, data) => {
         fetchedData = await JSON.parse(data);
-            await tinymce.init({
-                selector: '.rich-text',
-                promotion: false,
-                height: 300,
-                min_height: 300,
-                verify_html: true,
-                statusbar: false,
-                link_target_list: false,
-                plugins: 'link lists image autoresize',
-                toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
-                file_picker_callback: function (callback, value, meta) {
-                    // Provide image and alt text for the image dialog
-                    if (meta.filetype == 'image') {
-                        var input = document.createElement('input');
-                        input.setAttribute('type', 'file');
-                        input.setAttribute('accept', 'image/*');
+        await tinymce.init({
+          selector: ".rich-text",
+          promotion: false,
+          height: 300,
+          min_height: 300,
+          verify_html: true,
+          statusbar: false,
+          link_target_list: false,
+          plugins: "link lists image autoresize",
+          toolbar:
+            "undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist",
+          file_picker_callback: function (callback, value, meta) {
+            // Provide image and alt text for the image dialog
+            if (meta.filetype == "image") {
+              var input = document.createElement("input");
+              input.setAttribute("type", "file");
+              input.setAttribute("accept", "image/*");
 
-                        /*
+              /*
                           Note: In modern browsers input[type="file"] is functional without
                           even adding it to the DOM, but that might not be the case in some older
                           or quirky browsers like IE, so you might want to add it to the DOM
@@ -388,192 +493,242 @@ const getSeverityColor = (level) => {
                           once you do not need it anymore.
                         */
 
-                        input.onchange = function () {
-                            var file = this.files[0];
+              input.onchange = function () {
+                var file = this.files[0];
 
-                            var reader = new FileReader();
-                            reader.onload = function () {
-                                /*
+                var reader = new FileReader();
+                reader.onload = function () {
+                  /*
                                   Note: Now we need to register the blob in TinyMCEs image blob
                                   registry. In the next release this part hopefully won't be
                                   necessary, as we are looking to handle it internally.
                                 */
-                                var id = 'blobid' + (new Date()).getTime();
-                                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                                var base64 = reader.result.split(',')[1];
-                                var blobInfo = blobCache.create(id, file, base64);
-                                blobCache.add(blobInfo);
+                  var id = "blobid" + new Date().getTime();
+                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var base64 = reader.result.split(",")[1];
+                  var blobInfo = blobCache.create(id, file, base64);
+                  blobCache.add(blobInfo);
 
-                                /* call the callback and populate the Title field with the file name */
-                                callback(blobInfo.blobUri(), { title: file.name });
-                            };
-                            reader.readAsDataURL(file);
-                        };
+                  /* call the callback and populate the Title field with the file name */
+                  callback(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+              };
 
-                        input.click();
-                    }
-                },
-                setup: function (ed) {
-                    ed.on('change', function (e) {
-                        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-                        vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
-                        validateVulnerabilityName(vulnerability);
-                        validatePreviousVulnerability(getCurrentVulnerabilityId());
-                    });
-                    ed.on('click', function (event) {
-                        const target = event.target;
-            
-                        if (target.tagName === 'A') {
-                          event.preventDefault();
-                          const href = target.getAttribute('href');
-                          if (href) {
-                            window.utility.openURL(href, navigator.onLine);
-                          }
-                        }
-                      });
-                }
+              input.click();
+            }
+          },
+          setup: function (ed) {
+            ed.on("change", function (e) {
+              let vulnerability = vulnerabilitiesData.find(
+                (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+              );
+              vulnerability.vulnerabilityDescription =
+                tinymce.activeEditor.getContent();
+              validateVulnerabilityName(vulnerability);
+              validatePreviousVulnerability(getCurrentVulnerabilityId());
             });
+            ed.on("click", function (event) {
+              const target = event.target;
 
-            loadVulnerabilities(fetchedData);
-            enableAllTabs()
-            window.removeEventListener('keydown', handleReload);
+              if (target.tagName === "A") {
+                event.preventDefault();
+                const href = target.getAttribute("href");
+                if (href) {
+                  window.utility.openURL(href, navigator.onLine);
+                }
+              }
+            });
+          },
         });
+
+        loadVulnerabilities(fetchedData);
+        enableAllTabs();
+        window.removeEventListener("keydown", handleReload);
+      });
     });
 
-    const deleteVulnerabilities = async (checkboxes) =>{
-        const checkedVulnerabilities = [];
-        checkboxes.forEach((box) => {
-          if (box.checked) checkedVulnerabilities.push(Number(box.value));
+    const deleteVulnerabilities = async (checkboxes) => {
+      const checkedVulnerabilities = [];
+      checkboxes.forEach((box) => {
+        if (box.checked) checkedVulnerabilities.push(Number(box.value));
+      });
+
+      await window.vulnerabilities.deleteVulnerability(checkedVulnerabilities);
+      checkedVulnerabilities.forEach((id) => {
+        const index = vulnerabilitiesData.findIndex((object) => {
+          return object.vulnerabilityId === id;
         });
-  
-        await window.vulnerabilities.deleteVulnerability(checkedVulnerabilities);
-        checkedVulnerabilities.forEach((id) => {
-            const index = vulnerabilitiesData.findIndex(object => {
-                return object.vulnerabilityId === id;
-            });
-            // $(`#vulnerabilties__table__checkboxes__${id}`).remove();
-  
-            vulnerabilitiesTable.getRow(Number(id)).delete();
-            vulnerabilitiesData.splice(index, 1);
+        // $(`#vulnerabilties__table__checkboxes__${id}`).remove();
+
+        vulnerabilitiesTable.getRow(Number(id)).delete();
+        vulnerabilitiesData.splice(index, 1);
+      });
+
+      if (vulnerabilitiesData.length === 0)
+        $("#vulnerabilities section").hide();
+      else {
+        vulnerabilitiesData.forEach((v) => {
+          vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
         });
-        
-        if (vulnerabilitiesData.length === 0) $('#vulnerabilities section').hide();
-        else {
-            vulnerabilitiesData.forEach((v) => {
-                vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-            });
-            vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
-            addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
-        }
+        vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
+        addSelectedVulnerabilityRowData(vulnerabilitiesData[0].vulnerabilityId);
+      }
     };
 
     // add Vulnerability button
-    $('#vulnerabilities .add-delete-container button').first().on('click', async () => {
+    $("#vulnerabilities .add-delete-container button")
+      .first()
+      .on("click", async () => {
         const vulnerability = await window.vulnerabilities.addVulnerability();
         // update vulnerabilitiesData
-        $('#vulnerabilities section').show();
+        $("#vulnerabilities section").show();
         vulnerabilitiesData.push(vulnerability[0]);
         addVulnerability(vulnerability[0]);
-        if (vulnerabilitiesData.length === 0) vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
-        
+        if (vulnerabilitiesData.length === 0)
+          vulnerabilitiesTable.selectRow(
+            vulnerabilitiesData[0].vulnerabilityId
+          );
+
         // vulnerabilitiesData.forEach((v)=>{
         //     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
         // });
 
         // addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
-    });
-
-    // delete Vulnerability button
-    $('#vulnerabilities .add-delete-container button:nth-of-type(2)').on('click', async () => {
-        const checkboxes = document.getElementsByName('vulnerabilties__table__checkboxes');
-        deleteVulnerabilities(checkboxes);
-    });
-
-    const vulnerabilityURL = (value) => {
-        getCurrentVulnerability().vulnerabilityTrackingURI = value;
-        
-        const hyperlink = $('#vulnerability__url--hyperlink');
-        const insert = $('#vulnerability__url--insert');
-  
-        if (value !== '' && value !== 'cancelled') {
-          hyperlink.show();
-          insert.hide();
-          hyperlink.attr('href', value);
-          hyperlink.text(value);
-        } else if (value === '') {
-          insert.show();
-          hyperlink.attr('href', value);
-          hyperlink.hide();
-        }
-    };
-
-    $('#vulnerability__url--hyperlink').on('click', (e) => {
-        e.preventDefault();
-        window.vulnerabilities.openURL($('#vulnerability__url--hyperlink').attr('href'), navigator.onLine);
       });
 
-    $('#vulnerability__url--insert').on('click', async () => {
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), $('#vulnerability__url--hyperlink').attr('href'));
-        vulnerabilityURL(url);
+    // delete Vulnerability button
+    $("#vulnerabilities .add-delete-container button:nth-of-type(2)").on(
+      "click",
+      async () => {
+        const checkboxes = document.getElementsByName(
+          "vulnerabilties__table__checkboxes"
+        );
+        deleteVulnerabilities(checkboxes);
+      }
+    );
+
+    const vulnerabilityURL = (value) => {
+      getCurrentVulnerability().vulnerabilityTrackingURI = value;
+
+      const hyperlink = $("#vulnerability__url--hyperlink");
+      const insert = $("#vulnerability__url--insert");
+
+      if (value !== "" && value !== "cancelled") {
+        hyperlink.show();
+        insert.hide();
+        hyperlink.attr("href", value);
+        hyperlink.text(value);
+      } else if (value === "") {
+        insert.show();
+        hyperlink.attr("href", value);
+        hyperlink.hide();
+      }
+    };
+
+    $("#vulnerability__url--hyperlink").on("click", (e) => {
+      e.preventDefault();
+      window.vulnerabilities.openURL(
+        $("#vulnerability__url--hyperlink").attr("href"),
+        navigator.onLine
+      );
     });
 
-    $('#vulnerability__url--img').on('click', async () => {
-        const url = await window.vulnerabilities.urlPrompt(getCurrentVulnerabilityId(), $('#vulnerability__url--hyperlink').attr('href'));
-        vulnerabilityURL(url);
+    $("#vulnerability__url--insert").on("click", async () => {
+      const url = await window.vulnerabilities.urlPrompt(
+        getCurrentVulnerabilityId(),
+        $("#vulnerability__url--hyperlink").attr("href")
+      );
+      vulnerabilityURL(url);
     });
 
-    $('#vulnerability__attachment').on('click', () => {
-        window.vulnerabilities.attachment(getCurrentVulnerabilityId());
-        window.vulnerabilities.fileName(async (event, result) => {
-            const fileName = result;
-            $('#vulnerability__file--insert').text(fileName);
-        });
+    $("#vulnerability__url--img").on("click", async () => {
+      const url = await window.vulnerabilities.urlPrompt(
+        getCurrentVulnerabilityId(),
+        $("#vulnerability__url--hyperlink").attr("href")
+      );
+      vulnerabilityURL(url);
     });
 
-    $('input[name="vulnerability__name"]').on('change', async (e)=> {
-        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'vulnerabilityName', e.target.value);
-        vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), vulnerabilityName: e.target.value }]);
-        let updatedVulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-        updatedVulnerability.vulnerabilityName = vulnerability.vulnerabilityName;
-        validateVulnerabilityName(updatedVulnerability);
+    $("#vulnerability__attachment").on("click", () => {
+      window.vulnerabilities.attachment(getCurrentVulnerabilityId());
+      window.vulnerabilities.fileName(async (event, result) => {
+        const fileName = result;
+        $("#vulnerability__file--insert").text(fileName);
+      });
     });
 
-    $('input[name="vulnerability__scoring"]').on('change', async (e)=>{
-        const { value } = e.target;
-        let fixedValue = value;
-        if (value.includes('.') && value.split('.')[1].length > 1) {
-            fixedValue = Number.parseFloat(value).toString().match(/^-?\d+(?:\.\d?)?/)[0]
-        };
-        const vulnerability = await window.vulnerabilities.updateVulnerability(getCurrentVulnerabilityId(), 'cveScore', fixedValue);
-        const { overallLevel, cveScore } = vulnerability;
-        vulnerabilitiesTable.updateData([{ vulnerabilityId: getCurrentVulnerabilityId(), overallLevel: overallLevel }]);
-        $('#vulnerability__level').removeClass();
-        $('#vulnerability__level').text(overallLevel).addClass(overallLevel);
-        validateCVEScore(cveScore);
-        $('#vulnerability__scoring').val(cveScore); 
-        $('#vulnerability__scoring__round').text(Math.round(cveScore));
+    $('input[name="vulnerability__name"]').on("change", async (e) => {
+      const vulnerability = await window.vulnerabilities.updateVulnerability(
+        getCurrentVulnerabilityId(),
+        "vulnerabilityName",
+        e.target.value
+      );
+      vulnerabilitiesTable.updateData([
+        {
+          vulnerabilityId: getCurrentVulnerabilityId(),
+          vulnerabilityName: e.target.value,
+        },
+      ]);
+      let updatedVulnerability = vulnerabilitiesData.find(
+        (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+      );
+      updatedVulnerability.vulnerabilityName = vulnerability.vulnerabilityName;
+      validateVulnerabilityName(updatedVulnerability);
     });
 
-    $('input[name="vulnerability__trackingID"]').on('change', (e)=> {
-        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-        vulnerability.vulnerabilityTrackingID = e.target.value;
-        validatePreviousVulnerability(getCurrentVulnerabilityId());
+    $('input[name="vulnerability__scoring"]').on("change", async (e) => {
+      const { value } = e.target;
+      let fixedValue = value;
+      if (value.includes(".") && value.split(".")[1].length > 1) {
+        fixedValue = Number.parseFloat(value)
+          .toString()
+          .match(/^-?\d+(?:\.\d?)?/)[0];
+      }
+      const vulnerability = await window.vulnerabilities.updateVulnerability(
+        getCurrentVulnerabilityId(),
+        "cveScore",
+        fixedValue
+      );
+      const { overallLevel, cveScore } = vulnerability;
+      vulnerabilitiesTable.updateData([
+        {
+          vulnerabilityId: getCurrentVulnerabilityId(),
+          overallLevel: overallLevel,
+        },
+      ]);
+      $("#vulnerability__level").removeClass();
+      $("#vulnerability__level").text(overallLevel).addClass(overallLevel);
+      validateCVEScore(cveScore);
+      $("#vulnerability__scoring").val(cveScore);
+      $("#vulnerability__scoring__round").text(Math.round(cveScore));
     });
 
-    $('input[name="vulnerability__CVE"]').on('change', (e) => {
-        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-        vulnerability.vulnerabilityCVE = e.target.value;
-        validatePreviousVulnerability(getCurrentVulnerabilityId());
+    $('input[name="vulnerability__trackingID"]').on("change", (e) => {
+      let vulnerability = vulnerabilitiesData.find(
+        (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+      );
+      vulnerability.vulnerabilityTrackingID = e.target.value;
+      validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
-    $('select[name="vulnerability__family"]').on('change', (e) => {
-        let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-        vulnerability.vulnerabilityFamily = e.target.value;
-        validatePreviousVulnerability(getCurrentVulnerabilityId());
+    $('input[name="vulnerability__CVE"]').on("change", (e) => {
+      let vulnerability = vulnerabilitiesData.find(
+        (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+      );
+      vulnerability.vulnerabilityCVE = e.target.value;
+      validatePreviousVulnerability(getCurrentVulnerabilityId());
     });
 
-    } catch (err) {
-        console.log(err)
-        alert('Failed to load vulnerabilities tab');
-    }
+    $('select[name="vulnerability__family"]').on("change", (e) => {
+      let vulnerability = vulnerabilitiesData.find(
+        (v) => v.vulnerabilityId === getCurrentVulnerabilityId()
+      );
+      vulnerability.vulnerabilityFamily = e.target.value;
+      validatePreviousVulnerability(getCurrentVulnerabilityId());
+    });
+  } catch (err) {
+    console.log(err);
+    alert("Failed to load vulnerabilities tab");
+  }
 })();
