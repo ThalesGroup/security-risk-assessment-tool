@@ -200,7 +200,9 @@
 		<my:vulnerabilityCVE></my:vulnerabilityCVE>
 		<my:vulnerabilityDescription>CVSS</my:vulnerabilityDescription>
 		<my:vulnerabilityDescriptionAttachment xsi:nil="true"></my:vulnerabilityDescriptionAttachment>
+		<my:supportingAssetRef>1</my:supportingAssetRef>
 		<my:supportingAssetRef></my:supportingAssetRef>
+		<my:supportingAssetRef> 1 </my:supportingAssetRef>
 		<my:vulnerabilityCVSS>
 			<my:vulnerabilityBaseScoreMetrics>
 				<my:vulnerabilityExploitabilityMetrics>
@@ -242,6 +244,7 @@
 									<my:vulnerabilityDescription></my:vulnerabilityDescription>
 									<my:vulnerabilityDescriptionAttachment xsi:nil="true"></my:vulnerabilityDescriptionAttachment>
 									<my:supportingAssetRef></my:supportingAssetRef>
+									<my:supportingAssetRef>1</my:supportingAssetRef>
 									<my:vulnerabilityCVSS>
 										<my:vulnerabilityBaseScoreMetrics>
 											<my:vulnerabilityExploitabilityMetrics>
