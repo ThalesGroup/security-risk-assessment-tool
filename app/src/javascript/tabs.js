@@ -43,6 +43,7 @@ const panels = [
  */
 window.project.load(async (event, data) => {
   const { projectName, classification } = await JSON.parse(data).ISRAmeta;
+  $('footer').addClass('text-wrap');
   if(projectName === '') $('footer').text(classification);
   else $('footer').text(classification.substring(0, classification.indexOf('{') + 1) + projectName + classification[classification.length - 1]);
 });

@@ -115,6 +115,8 @@ function enableInteract(){
     window.addEventListener('keydown', handleReload);
     const result = await window.render.risks();
     $('#risks').append(result[0]);
+    $('#riskName .riskname').addClass('text-wrap');
+    $('#risk__businessAsset, #risk__supportingAsset').addClass('text-wrap');
     const tableOptions = result[1];
     const checkBoxIndex = 0
     const riskNameIndex = 3
@@ -139,7 +141,7 @@ function enableInteract(){
 
 
       const riskName = cell.getValue();
-      return `<span class="risks-table__name-text">${riskName}</span>`;
+      return `<span class="risks-table__name-text text-wrap">${riskName}</span>`;
     
     }
     
@@ -319,7 +321,7 @@ function enableInteract(){
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" style="${checkSupportingAssetRef(sa.supportingAssetId)?'':'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
           }
         });
       }
@@ -362,7 +364,7 @@ function enableInteract(){
         checkbox.setAttribute('data-row-id', rowKey);
         vulnerabilityDiv.append(checkbox);
 
-        let select = $('<select>').append(vulnerabilityOptions);
+        let select = $('<select>').addClass('text-wrap').append(vulnerabilityOptions);
         const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
         if (matchingRef.length === 0) {
           const placeholderRef = document.createElement('option')
@@ -482,7 +484,7 @@ function enableInteract(){
           checkbox.setAttribute('data-row-id', rowKey);
           vulnerabilityDiv.append(checkbox);
 
-          let select = $('<select>').append(vulnerabilityOptions);
+          let select = $('<select>').addClass('text-wrap').append(vulnerabilityOptions);
           select.on('change', async (e)=> {
             const { value } = e.target;
             await validatePreviousRisk(getCurrentRiskId());

@@ -338,6 +338,7 @@ const getSeverityColor = (level) => {
 
             // add label
             const label = document.createElement('label');
+            label.classList.add('text-wrap');
             label.innerHTML = sa.supportingAssetName;
             div.append(label);
             $('.refs').append(div);

@@ -148,7 +148,3 @@ span{
     grid-template-columns: auto;
 }
 
-.tabulator .tabulator-row .tabulator-cell {
-    white-space: normal;
-    overflow: visible;
-}
