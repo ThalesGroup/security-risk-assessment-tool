@@ -1,14 +1,14 @@
 /*----------------------------------------------------------------------------
 *
-*     Copyright © 2022 THALES. All Rights Reserved.
- *
+*     Copyright © 2022-2025 THALES. All Rights Reserved.
+*
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
 * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
- * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 *
 * THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
 * CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
@@ -21,6 +21,23 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
+
+:root {
+    --severity-low: #61B144;
+    --severity-low-contrast: #000000;
+    --severity-low-background: #61B144;
+    --severity-medium: #FAAB24;
+    --severity-medium-contrast: #000000;
+    --severity-medium-background: #FAAB24;
+    --severity-high: #E35623;
+    --severity-high-contrast: #ffffff;
+    --severity-high-background: #E35623;
+    --severity-critical: #D32A26;
+    --severity-critical-contrast: #ffffff;
+    --severity-critical-background: #D32A26;
+    --severity-very-high-background: #9f204b;
+}
+
 html {
     height: 100%;
 }
@@ -30,7 +47,6 @@ body {
     margin:0;
 }
 /*tabs*/
-
 .wrapper {
     width: 100%;
     height: 100%;
@@ -92,14 +108,12 @@ button.tab-button:hover{
     padding: 10px 20px;
     background-color: #dedede;
 } */
-
 .content .active {
     display: block;
     padding: 10px 20px;
 }
 
 /*tabs*/
-
 footer{
     text-align: center;
     margin-top: 10px;
@@ -218,7 +232,6 @@ select option {
 }
 
 /*tooltip*/
-
 .tabulator-tooltip {
     font-family: Arial, Helvetica, sans-serif;
     color: #4f4f4f;
@@ -264,7 +277,6 @@ select option {
     height:12px;
     overflow:hidden;
 } */
-
 /* .tooltip .top i::after {
     content:'';
     position:absolute;
@@ -275,9 +287,7 @@ select option {
     background-color:#FFFFFF;
     border:1px solid transparent;box-shadow:0 1px 8px transparent;
 } */
-
 /*tooltip*/
-
 article, section{
     padding: 10px;
     margin-bottom: 10px;

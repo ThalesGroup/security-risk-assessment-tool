@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
 *
-* Copyright © 2022 THALES. All Rights Reserved.
+* Copyright © 2022-2025 THALES. All Rights Reserved.
 *
 * -----------------------------------------------------------------------------
 * THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
@@ -138,4 +138,9 @@ thead {
 
 #isra-report>div{
     margin-bottom: 2%;
+}
+.grid-item--wrap {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }

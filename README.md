@@ -27,6 +27,8 @@ In some cases, vulnerabilities may be found before the risks are actually define
 
 Just download the zip file for your platform and unzip it and execute `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
 
+Supported URI schemes for vulnerabilities URL are as follows: ftp, http, https, mailto, tel and urn
+
 # Development information
 
 # Prerequisites ##
