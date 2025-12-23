@@ -282,20 +282,26 @@ const validateClasses = () => {
     };
     
     // Check if the supportingAsset exists globally
-    const checkSupportingAssetRef = (ref) =>{
-      if (ref === null) return 
-      let foundSupportingAsset = SupportingAsset.find(obj => obj.supportingAssetId == ref);
-
+    const checkSupportingAssetRef = (ref) => {
+      if (ref === null) return false;
+      const foundSupportingAsset = SupportingAsset.find(
+        (obj) => obj.supportingAssetId == ref
+      );
+      if (!foundSupportingAsset) return false;
+      const { businessAssetRef = [], supportingAssetName } = foundSupportingAsset;
       if (
-        foundSupportingAsset.businessAssetRef.length == 0 ||
-        foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size ||
-        !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) ||
-        foundSupportingAsset.supportingAssetName == ''
-      ){
-        return false
+        businessAssetRef.length === 0 ||
+        businessAssetRef.length !== new Set(businessAssetRef).size ||
+        !checkBusinessAssetRefArray(businessAssetRef) ||
+        supportingAssetName === ""
+      ) {
+        return false;
       }
-      return true
-  };
+      return true;
+    };
+
+
+
     // Check if the supportingAssets are valid
     const checkSupportingAssetRefArray = (refArray) =>{
       if(refArray.length){

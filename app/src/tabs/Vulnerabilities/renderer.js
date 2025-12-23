@@ -164,18 +164,26 @@ const getSeverityColor = (level) => {
         return true
     };
     // Check if the supportingAsset is valid
-    const checkSupportingAssetRef = (ref) =>{
-        if (ref === null) return 
-        let foundSupportingAsset = fetchedData.SupportingAsset.find(obj => obj.supportingAssetId == ref);
+    const checkSupportingAssetRef = (ref) => {
+      if (ref === null) return false;
+      const foundSupportingAsset = fetchedData.SupportingAsset.find(
+        (obj) => obj.supportingAssetId == ref
+      );
+      if (!foundSupportingAsset) return false;
 
-        if (foundSupportingAsset.businessAssetRef.length == 0 || 
-            foundSupportingAsset.businessAssetRef.length !== new Set(foundSupportingAsset.businessAssetRef).size || 
-            !checkBusinessAssetRefArray(foundSupportingAsset.businessAssetRef) || 
-            foundSupportingAsset.supportingAssetName == ''){
-            return false
-        }
-        return true
-      };
+      const { businessAssetRef = [], supportingAssetName } =
+        foundSupportingAsset;
+
+      if (
+        businessAssetRef.length === 0 ||
+        businessAssetRef.length !== new Set(businessAssetRef).size ||
+        !checkBusinessAssetRefArray(businessAssetRef) ||
+        supportingAssetName === ""
+      ) {
+        return false;
+      }
+      return true;
+    };
 
     // Check if the supportingAssets are valid
     const checkSupportingAssetRefArray = (refArray) =>{
