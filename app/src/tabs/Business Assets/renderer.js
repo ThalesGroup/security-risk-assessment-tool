@@ -43,7 +43,7 @@ function updateBusinessAssetName(id, field){
     $('#business-assets').append(result[0]);
 
     // update businessAssets & risk
-    const updateOtherTabs = (tableOptions, businessAssetName) => {
+    const updateOtherTabs = (tableOptions) => {
       const options = tableOptions;
 
       const update = (cell) => {
@@ -52,16 +52,33 @@ function updateBusinessAssetName(id, field){
       };
 
       // name
-      // options.columns[0].cellEdited = (cell) => {
-      //   update(cell);
-      // };
       options.columns[0].formatter = (cell) => {
         const id = cell.getRow().getIndex();
-        if (id) {
-          return `
-            <textarea id="${id}" rows="2" cols="16" name="businessAssetName" onchange="updateBusinessAssetName(${id}, 'businessAssetName')">${businessAssetName}</textarea>
-          `;
-        }
+        if (!id) return '';
+
+        const textarea = document.createElement('textarea');
+        textarea.id = `${id}`;
+        textarea.name = 'businessAssetName';
+        textarea.rows = 2;
+        textarea.cols = 16;
+        textarea.value = cell.getValue() || '';
+
+        const stop = (e) => e.stopPropagation();
+        textarea.addEventListener('mousedown', stop, true);
+        textarea.addEventListener('click', stop, true);
+        textarea.addEventListener('dblclick', (e) => {
+          e.stopPropagation();
+          textarea.focus();
+          textarea.select();
+        }, true);
+        textarea.addEventListener('keydown', stop, true);
+        textarea.addEventListener('change', (e) => {
+          const { value } = e.target;
+          cell.setValue(value, true);
+          window.businessAssets.updateBusinessAsset(id, 'businessAssetName', value);
+        });
+
+        return textarea;
       };
 
       // asset values
@@ -190,9 +207,9 @@ function updateBusinessAssetName(id, field){
       result[1].columns[0].title = `${id} Name`;
       // cell edited callback function
       const options = JSON.parse(JSON.stringify(result[1]));
+      updateOtherTabs(options);
       const businessAssetsTable = new Tabulator(`#business-assets__section-table__${id}`, options);
       addTableData(businessAssetsTable, asset);
-      updateOtherTabs(options, asset.businessAssetName);
 
       // add rich text box
       section.append('<p class="business-assets__sections-description">Description</p>');
