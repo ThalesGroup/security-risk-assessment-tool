@@ -41,6 +41,32 @@ const getSeverityColor = (level) => {
       return SEVERITY_COLORS.LOW;
   }
 };
+const severityRank = (level) => {
+  switch (normaliseSeverityLevel(level)) {
+    case 'critical':
+      return 5;
+    case 'very high':
+      return 4;
+    case 'high':
+      return 3;
+    case 'medium':
+      return 2;
+    case 'low':
+      return 1;
+    default:
+      return 0;
+  }
+};
+const riskLevelSorter = (a, b, aRow, bRow) => {
+  const rankA = severityRank(a);
+  const rankB = severityRank(b);
+  if (rankA === rankB) {
+    const nameA = (aRow?.getData()?.riskName || '').toString();
+    const nameB = (bRow?.getData()?.riskName || '').toString();
+    return nameA.localeCompare(nameB);
+  }
+  return rankA - rankB;
+};
 const toRgbString = (hex) => {
   if (!hex || typeof hex !== 'string') return null;
   const normalised = hex.replace('#', '');
@@ -151,10 +177,73 @@ function enableInteract(){
       
       return residualRiskLevel;
     }
+    tableOptions.columns[riskLevelIndex].sorter = riskLevelSorter;
     
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
+    let currentSort = null;
+    let sortButton = null;
+
+    const sortSymbols = {
+      asc: '&uarr;',
+      desc: '&darr;',
+      none: '&darr;',
+    };
+
+    const updateSortButton = () => {
+      if (!sortButton) return;
+      if (!currentSort) sortButton.innerHTML = sortSymbols.none;
+      else if (currentSort.dir === 'asc') sortButton.innerHTML = sortSymbols.asc;
+      else sortButton.innerHTML = sortSymbols.desc;
+    };
+
+    const applyCurrentSort = () => {
+      if (!currentSort) risksTable.clearSort();
+      else risksTable.setSort([currentSort]);
+      updateSortButton();
+    };
+
+    const setSortDirection = (dir) => {
+      currentSort = { column: 'residualRiskLevel', dir };
+      applyCurrentSort();
+    };
+
+    const toggleSortDirection = () => {
+      const nextDir = currentSort?.dir === 'desc' ? 'asc' : 'desc';
+      setSortDirection(nextDir);
+    };
+
+    const attachSortButton = () => {
+      if (sortButton) return;
+      const riskLevelColumn = risksTable.getColumn('residualRiskLevel');
+      if (!riskLevelColumn) return;
+      const titleElement = riskLevelColumn.getElement().querySelector('.tabulator-col-title');
+      if (!titleElement) return;
+      titleElement.style.display = 'inline-flex';
+      titleElement.style.alignItems = 'center';
+      titleElement.style.gap = '0.35em';
+      
+      const wrapper = document.createElement('span');
+      wrapper.className = 'risk-level-sort';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'risk-level-sort-btn';
+      button.title = 'Sort by Risk Level';
+      button.innerHTML = sortSymbols.none;
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleSortDirection();
+      });
+      wrapper.appendChild(button);
+      titleElement.appendChild(wrapper);
+      sortButton = button;
+    };
+    risksTable.on('tableBuilt', () => {
+      attachSortButton();
+      updateSortButton();
+    });
 
     // filter
     const clearFunction = () => {
@@ -1050,6 +1139,7 @@ function enableInteract(){
         ...risk
       }
       risksTable.addData([rowData]);
+      applyCurrentSort();
 
     };
 
@@ -1080,6 +1170,7 @@ function enableInteract(){
         }
       });
 
+      if (risksData.length > 0) applyCurrentSort();
       if (currentRiskId) addSelectedRowData(currentRiskId);
     };
 
@@ -1093,6 +1184,7 @@ function enableInteract(){
         ...risk
       }))
       risksTable.addData(tableData);
+      applyCurrentSort();
       disableRiskSelection()
 
       // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
