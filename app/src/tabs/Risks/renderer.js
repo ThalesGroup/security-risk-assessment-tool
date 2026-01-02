@@ -344,6 +344,24 @@ function enableInteract(){
       }
     }
 
+    const goToVulnerabilityTab = (vulnerabilityId) => {
+      if (vulnerabilityId) sessionStorage.setItem("currentVulnerability", vulnerabilityId);
+      location.href = '../Vulnerabilities/vulnerabilities.html';
+    };
+
+    const createVulnerabilityNavButton = (selectElement) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'risk__vulnerability__open';
+      button.innerText = 'Open';
+      button.addEventListener('click', () => {
+        const { value } = selectElement;
+        if (!value) return;
+        goToVulnerabilityTab(value);
+      });
+      return button;
+    };
+
     // add vulnerability ref
     const addVulnerabilityRef = (refs, div, vulnerabilityOptions, riskAttackPathId, supportingAssetRef) => {
       let numberOfVulnerabilities = refs.length;
@@ -353,6 +371,7 @@ function enableInteract(){
         vulnerabilityDiv.css('display', 'flex');
         vulnerabilityDiv.css('padding', '0');
         vulnerabilityDiv.css('margin-bottom', '1%');
+        vulnerabilityDiv.addClass('risk__vulnerability-ref');
         const rowKey = `${riskAttackPathId}-${rowId}`;
         vulnerabilityDiv.attr('id', `vulnerabilityrefs_${rowKey}`);
         const checkboxRef = !ref.score ? null : '1';
@@ -365,11 +384,12 @@ function enableInteract(){
         vulnerabilityDiv.append(checkbox);
 
         let select = $('<select>').addClass('text-wrap').append(vulnerabilityOptions);
+        const viewButton = createVulnerabilityNavButton(select[0]);
         const matchingRef = select.find(`option[value="${ref.vulnerabilityId}"]`)
         if (matchingRef.length === 0) {
           const placeholderRef = document.createElement('option')
           placeholderRef.value = ref.vulnerabilityId
-          placeholderRef.text = ref.name
+          placeholderRef.text = `${ref.vulnerabilityId} - ${ref.name || 'Unknown vulnerability'}`
           if (!checkVulnerabilityRef(ref.vulnerabilityId,supportingAssetRef)){
             placeholderRef.style =`color: ${ERROR_COLOR};`
             select.css('border-color', ERROR_COLOR);
@@ -388,6 +408,7 @@ function enableInteract(){
         
         select.on('change', async (e)=> {
           const { value } = e.target;
+          viewButton.disabled = !value;
           await validatePreviousRisk(getCurrentRiskId());
           if (value) {
             let risk = await window.risks.deleteRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, [previousVulId]);
@@ -403,6 +424,7 @@ function enableInteract(){
           // else setNaNValues();
         });
         vulnerabilityDiv.append(select);
+        vulnerabilityDiv.append(viewButton);
         let visibility = 'visible';
         if (numberOfVulnerabilities === 0) visibility = 'hidden';
         vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
@@ -413,6 +435,7 @@ function enableInteract(){
         })
         select.val(selectedOption.val());
         const previousVulId = selectedOption.val();
+        viewButton.disabled = !select.val();
       });
     };
 
@@ -420,7 +443,7 @@ function enableInteract(){
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityName}</option>`;
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityId} - ${v.vulnerabilityName}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -473,6 +496,7 @@ function enableInteract(){
           vulnerabilityDiv.css('display', 'flex');
           vulnerabilityDiv.css('padding', '0');
           vulnerabilityDiv.css('margin-bottom', '1%');
+          vulnerabilityDiv.addClass('risk__vulnerability-ref');
           const rowKey = `${riskAttackPathId}-${numberOfVulnerabilities}`;
           vulnerabilityDiv.attr('id', `vulnerabilityrefs_${rowKey}`);
           const checkboxRef = null;
@@ -485,8 +509,11 @@ function enableInteract(){
           vulnerabilityDiv.append(checkbox);
 
           let select = $('<select>').addClass('text-wrap').append(vulnerabilityOptions);
+          const viewButton = createVulnerabilityNavButton(select[0]);
+          viewButton.disabled = !select.val();
           select.on('change', async (e)=> {
             const { value } = e.target;
+            viewButton.disabled = !value;
             await validatePreviousRisk(getCurrentRiskId());
           
             const risk = await window.risks.addRiskVulnerabilityRef(getCurrentRiskId(), riskAttackPathId, value);
@@ -496,6 +523,7 @@ function enableInteract(){
 
           });
           vulnerabilityDiv.append(select);
+          vulnerabilityDiv.append(viewButton);
           let visibility = 'visible';
           if (numberOfVulnerabilities + 1 === 0) visibility = 'hidden';
           vulnerabilityDiv.append(`<span style="margin-left: 2%; margin-right: 2%; visibility: ${visibility}" class="and">AND<span>`);
@@ -1340,7 +1368,7 @@ function enableInteract(){
 
   // Risk Likelihood
     $('[name="Go to vulnerabilities view"]').on('click', ()=>{
-      location.href = '../Vulnerabilities/vulnerabilities.html';
+      goToVulnerabilityTab();
     });
 
     const calculateThreatFactorScore = async () =>{

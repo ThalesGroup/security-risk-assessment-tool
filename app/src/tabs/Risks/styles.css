@@ -144,6 +144,20 @@ tbody {
     padding: 0;
 }
 
+.risk__vulnerability-ref {
+    align-items: center;
+    gap: 8px;
+}
+
+.risk__vulnerability__open {
+    margin-left: 4px;
+    white-space: nowrap;
+}
+
+.risk__vulnerability__open:disabled {
+    opacity: 0.6;
+}
+
 label {
     font-style: normal;
     font-weight: normal;
@@ -256,4 +270,3 @@ label[name='Discarded'] {
 .risks-table__name-text {
     display: inline;
 }
-
