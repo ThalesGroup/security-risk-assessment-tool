@@ -44,8 +44,6 @@ const getSeverityColor = (level) => {
 const severityRank = (level) => {
   switch (normaliseSeverityLevel(level)) {
     case 'critical':
-      return 5;
-    case 'very high':
       return 4;
     case 'high':
       return 3;
