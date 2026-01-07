@@ -1135,8 +1135,6 @@ function enableInteract(){
         ...risk
       }
       risksTable.addData([rowData]);
-      currentSort = [{ column: "riskId", dir: "asc" }];
-      applyCurrentSort();
     };
 
     const deleteRisks = async (checkboxes) =>{
@@ -1201,6 +1199,11 @@ function enableInteract(){
       if(risksData.length === 0) $('#risks section').show();
       risksData.push(risk);
       addRisk(risk);
+      currentSort = sortConfigForValue('id-asc');
+      sessionStorage.setItem('risksSort', 'id-asc');
+      const sortSelect = document.getElementById('sort-risk');
+      if (sortSelect && sortSelect.value !== 'id-asc') sortSelect.value = 'id-asc';
+      applyCurrentSort();
       risksTable.deselectRow();
       risksTable.selectRow(risk.riskId);
       disableInteract()
