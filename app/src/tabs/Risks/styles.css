@@ -132,6 +132,49 @@ section {
     height: 1.5em;
 }
 
+.risks-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+}
+
+.risks-filter__search {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    flex: 1;
+}
+
+.risks-filter__search input {
+    width: 100%;
+}
+
+.risks-filter__sort {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+}
+
+.risks-sort-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5%;
+}
+
+.risks-filter__sort label {
+    font-weight: 600;
+}
+
+#sort-risk {
+    width: auto;
+    border: none;
+    background: transparent;
+    color: #1a5fb4;
+    font-weight: 600;
+    padding: 0;
+    cursor: pointer;
+}
+
 tbody {
     text-align: center;
 }
