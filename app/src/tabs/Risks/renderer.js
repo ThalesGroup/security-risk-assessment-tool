@@ -180,7 +180,14 @@ function enableInteract(){
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
-    let currentSort = { column: 'riskId', dir: 'asc' };
+    const sortConfigForValue = (value) => {
+      if (value === 'level-asc') return { column: 'residualRiskLevel', dir: 'asc' };
+      if (value === 'level-desc') return { column: 'residualRiskLevel', dir: 'desc' };
+      if (value === 'id-desc') return { column: 'riskId', dir: 'desc' };
+      return { column: 'riskId', dir: 'asc' };
+    };
+    const storedSortValue = sessionStorage.getItem('risksSort') || 'id-asc';
+    let currentSort = sortConfigForValue(storedSortValue);
 
     const applyCurrentSort = () => {
       if (!currentSort) risksTable.clearSort();
@@ -189,12 +196,13 @@ function enableInteract(){
 
     const sortSelect = document.getElementById('sort-risk');
     if (sortSelect) {
+      if (sortSelect.value !== storedSortValue) {
+        sortSelect.value = storedSortValue;
+      }
       sortSelect.addEventListener('change', (event) => {
         const { value } = event.target;
-        if (value === 'level-asc') currentSort = { column: 'residualRiskLevel', dir: 'asc' };
-        else if (value === 'level-desc') currentSort = { column: 'residualRiskLevel', dir: 'desc' };
-        else if (value === 'id-desc') currentSort = { column: 'riskId', dir: 'desc' };
-        else currentSort = { column: 'riskId', dir: 'asc' };
+        currentSort = sortConfigForValue(value);
+        sessionStorage.setItem('risksSort', value);
         applyCurrentSort();
       });
     }
@@ -1645,4 +1653,3 @@ function enableInteract(){
 // window.onload = setTimeout(function () {
 //   alert('Loading...');
 // }, 3000);
-
