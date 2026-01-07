@@ -59,9 +59,9 @@ const riskLevelSorter = (a, b, aRow, bRow) => {
   const rankA = severityRank(a);
   const rankB = severityRank(b);
   if (rankA === rankB) {
-    const nameA = (aRow?.getData()?.riskName || '').toString();
-    const nameB = (bRow?.getData()?.riskName || '').toString();
-    return nameA.localeCompare(nameB);
+    const idA = Number(aRow?.getData()?.riskId ?? 0);
+    const idB = Number(bRow?.getData()?.riskId ?? 0);
+    return idA - idB;
   }
   return rankA - rankB;
 };
@@ -180,68 +180,24 @@ function enableInteract(){
     const risksTable = new Tabulator('#risks__table', result[1]);
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
-    let currentSort = null;
-    let sortButton = null;
-
-    const sortSymbols = {
-      asc: '&uarr;',
-      desc: '&darr;',
-      none: '&darr;',
-    };
-
-    const updateSortButton = () => {
-      if (!sortButton) return;
-      if (!currentSort) sortButton.innerHTML = sortSymbols.none;
-      else if (currentSort.dir === 'asc') sortButton.innerHTML = sortSymbols.asc;
-      else sortButton.innerHTML = sortSymbols.desc;
-    };
+    let currentSort = { column: 'riskId', dir: 'asc' };
 
     const applyCurrentSort = () => {
       if (!currentSort) risksTable.clearSort();
       else risksTable.setSort([currentSort]);
-      updateSortButton();
     };
 
-    const setSortDirection = (dir) => {
-      currentSort = { column: 'residualRiskLevel', dir };
-      applyCurrentSort();
-    };
-
-    const toggleSortDirection = () => {
-      const nextDir = currentSort?.dir === 'desc' ? 'asc' : 'desc';
-      setSortDirection(nextDir);
-    };
-
-    const attachSortButton = () => {
-      if (sortButton) return;
-      const riskLevelColumn = risksTable.getColumn('residualRiskLevel');
-      if (!riskLevelColumn) return;
-      const titleElement = riskLevelColumn.getElement().querySelector('.tabulator-col-title');
-      if (!titleElement) return;
-      titleElement.style.display = 'inline-flex';
-      titleElement.style.alignItems = 'center';
-      titleElement.style.gap = '0.35em';
-      
-      const wrapper = document.createElement('span');
-      wrapper.className = 'risk-level-sort';
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'risk-level-sort-btn';
-      button.title = 'Sort by Risk Level';
-      button.innerHTML = sortSymbols.none;
-      button.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        toggleSortDirection();
+    const sortSelect = document.getElementById('sort-risk');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (event) => {
+        const { value } = event.target;
+        if (value === 'level-asc') currentSort = { column: 'residualRiskLevel', dir: 'asc' };
+        else if (value === 'level-desc') currentSort = { column: 'residualRiskLevel', dir: 'desc' };
+        else if (value === 'id-desc') currentSort = { column: 'riskId', dir: 'desc' };
+        else currentSort = { column: 'riskId', dir: 'asc' };
+        applyCurrentSort();
       });
-      wrapper.appendChild(button);
-      titleElement.appendChild(wrapper);
-      sortButton = button;
-    };
-    risksTable.on('tableBuilt', () => {
-      attachSortButton();
-      updateSortButton();
-    });
+    }
 
     // filter
     const clearFunction = () => {
