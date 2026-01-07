@@ -58,11 +58,7 @@ const severityRank = (level) => {
 const riskLevelSorter = (a, b, aRow, bRow) => {
   const rankA = severityRank(a);
   const rankB = severityRank(b);
-  if (rankA === rankB) {
-    const idA = Number(aRow?.getData()?.riskId ?? 0);
-    const idB = Number(bRow?.getData()?.riskId ?? 0);
-    return idA - idB;
-  }
+  if (rankA === rankB) return 0;
   return rankA - rankB;
 };
 const toRgbString = (hex) => {
@@ -181,17 +177,27 @@ function enableInteract(){
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
     const sortConfigForValue = (value) => {
-      if (value === 'level-asc') return { column: 'residualRiskLevel', dir: 'asc' };
-      if (value === 'level-desc') return { column: 'residualRiskLevel', dir: 'desc' };
-      if (value === 'id-desc') return { column: 'riskId', dir: 'desc' };
-      return { column: 'riskId', dir: 'asc' };
+      if (value === 'level-asc') {
+        return [
+          { column: 'riskId', dir: 'asc' },
+          { column: 'residualRiskLevel', dir: 'asc' },
+        ];
+      }
+      if (value === 'level-desc') {
+        return [
+          { column: 'riskId', dir: 'asc' },
+          { column: 'residualRiskLevel', dir: 'desc' },
+        ];
+      }
+      if (value === 'id-desc') return [{ column: 'riskId', dir: 'desc' }];
+      return [{ column: 'riskId', dir: 'asc' }];
     };
     const storedSortValue = sessionStorage.getItem('risksSort') || 'id-asc';
     let currentSort = sortConfigForValue(storedSortValue);
 
     const applyCurrentSort = () => {
       if (!currentSort) risksTable.clearSort();
-      else risksTable.setSort([currentSort]);
+      else risksTable.setSort(currentSort);
     };
 
     const sortSelect = document.getElementById('sort-risk');
@@ -1129,8 +1135,8 @@ function enableInteract(){
         ...risk
       }
       risksTable.addData([rowData]);
+      currentSort = [{ column: "riskId", dir: "asc" }];
       applyCurrentSort();
-
     };
 
     const deleteRisks = async (checkboxes) =>{
@@ -1195,12 +1201,11 @@ function enableInteract(){
       if(risksData.length === 0) $('#risks section').show();
       risksData.push(risk);
       addRisk(risk);
-      if (risksData.length === 1) {
-        risksTable.selectRow(risk.riskId);
-        disableInteract()
-        await addSelectedRowData(risk.riskId);
-        enableInteract()
-      }
+      risksTable.deselectRow();
+      risksTable.selectRow(risk.riskId);
+      disableInteract()
+      await addSelectedRowData(risk.riskId);
+      enableInteract()
     });
 
     // delete Risk button
