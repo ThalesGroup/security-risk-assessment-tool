@@ -100,6 +100,8 @@ app:
 npm start
 ```
 
+> **Note for corporate proxy environments:** If installing from source behind a corporate VPN or proxy, Electron may fail during `npm install` with certificate errors such as `RequestError: unable to get local issuer certificate`. If this happens, verify that Git, npm, and Electron are using the correct proxy host and port for your environment. If the issue persists, ask your IT/security team for the corporate root CA certificate and configure Node/npm to trust it instead of disabling TLS verification.
+
 ## Test ##
 
 Executes all test files within test folder in lib
