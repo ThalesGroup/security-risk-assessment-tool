@@ -117,6 +117,9 @@ button.tab-button:hover{
 footer{
     text-align: center;
     margin-top: 10px;
+    padding: 0 16px 16px;
+    width: 100%;
+    box-sizing: border-box;
     font-weight: bold;
     font-size: 16px;
     color: rgb(255, 141, 0);
@@ -248,6 +251,46 @@ select option {
     white-space: normal;
     word-break: break-word;
     overflow-wrap: anywhere;
+}
+
+select, select.text-wrap {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+select option {
+    display: block !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    box-sizing: border-box !important;
+    text-overflow: clip !important;
+}
+
+select {
+    overflow-x: visible !important;
+}
+
+.risk-level {
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-left: 0.5rem;
+    font-style: italic;
+}
+
+.risk__vulnerability-ref,
+.risk__vulnerability-ref select {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
 }
 
 .tooltip {

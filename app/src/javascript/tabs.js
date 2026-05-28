@@ -63,6 +63,7 @@ const validateTabs = (tab) => {
       $('#welcome__isra-meta--project-name').val(),
       $('#welcome__isra-meta--organization').val(),
       $('#welcome__isra-meta--project-version').val(),
+      $('#welcome__isra-meta--targeted-level-of-trust').val(),
     ]);
   };
 

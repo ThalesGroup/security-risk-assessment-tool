@@ -114,6 +114,10 @@
           promotion: false,
           height: 300,
           min_height: 300,
+          menubar: 'file edit view insert format',
+          menu: {
+            file: { title: 'File', items: 'newdocument' },
+          },
           verify_html: true,
           statusbar: false,
           link_target_list: false,

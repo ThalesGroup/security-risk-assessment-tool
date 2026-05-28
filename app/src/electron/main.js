@@ -22,10 +22,24 @@
 * -----------------------------------------------------------------------------
 */
 
+const Module = require('module');
 const {
   app, BrowserWindow, Menu,
 } = require('electron');
 const path = require('path');
+
+const appNodeModules = path.join(__dirname, '../../node_modules');
+if (process.env.NODE_PATH) {
+  process.env.NODE_PATH += path.delimiter + appNodeModules;
+} else {
+  process.env.NODE_PATH = appNodeModules;
+}
+Module.globalPaths.push(appNodeModules);
+Module._initPaths();
+if (require.main && Array.isArray(require.main.paths)) {
+  require.main.paths.unshift(appNodeModules);
+}
+
 const {
   validationErrors,
   loadFile,
@@ -108,11 +122,10 @@ function createWindow() {
       ],
     },
 
-    // for development
     {
       label: 'Window',
       submenu: [
-        { role: 'toggleDevTools' },
+        ...(!app.isPackaged ? [{ role: 'toggleDevTools' }] : []),
         { role: 'togglefullscreen' },
         { role: 'reload' },
       ],
