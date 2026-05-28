@@ -6,6 +6,7 @@
         "projectName": "",
         "projectOrganization": "",
         "projectVersion": "",
+        "targetedLevelOfTrust": "1",
         "ISRAtracking": [],
         "businessAssetsCount": 0,
         "supportingAssetsCount": 0,
