@@ -196,7 +196,7 @@
 		<my:vulnerabilityName>V1</my:vulnerabilityName>
 		<my:vulnerabilityFamily>API Abuse‎</my:vulnerabilityFamily>
 		<my:vulnerabilityTrackingID></my:vulnerabilityTrackingID>
-		<my:vulnerabilityTrackingURI>http:///</my:vulnerabilityTrackingURI>
+		<my:vulnerabilityTrackingURI>http:///////</my:vulnerabilityTrackingURI>
 		<my:vulnerabilityCVE></my:vulnerabilityCVE>
 		<my:vulnerabilityDescription>CVSS</my:vulnerabilityDescription>
 		<my:vulnerabilityDescriptionAttachment xsi:nil="true"></my:vulnerabilityDescriptionAttachment>
@@ -243,7 +243,7 @@
 									<my:vulnerabilityCVE>https://www.google.com/</my:vulnerabilityCVE>
 									<my:vulnerabilityDescription></my:vulnerabilityDescription>
 									<my:vulnerabilityDescriptionAttachment xsi:nil="true"></my:vulnerabilityDescriptionAttachment>
-									<my:supportingAssetRef></my:supportingAssetRef>
+									<my:supportingAssetRef>1</my:supportingAssetRef>
 									<my:supportingAssetRef>1</my:supportingAssetRef>
 									<my:vulnerabilityCVSS>
 										<my:vulnerabilityBaseScoreMetrics>
