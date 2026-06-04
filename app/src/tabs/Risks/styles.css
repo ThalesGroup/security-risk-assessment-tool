@@ -122,6 +122,40 @@ section {
     width: 100%;
 }
 
+#risk__businessAsset,
+#risk__supportingAsset {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.risk-select-shell {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.risk-select-shell select {
+    width: 100%;
+}
+
+.risk-select-display {
+    position: absolute;
+    left: 4px;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    background: white;
+    color: black;
+    font: inherit;
+    font-size: 13px;
+    line-height: normal;
+}
+
 #risk__likehood__table div p {
     margin: 0;
     font-size: 0.8em;
@@ -153,6 +187,7 @@ section {
     display: flex;
     align-items: center;
     gap: 0.35em;
+    white-space: nowrap;
 }
 
 .risks-sort-row {

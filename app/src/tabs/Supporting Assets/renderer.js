@@ -27,6 +27,18 @@
 const { TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
 const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
+const truncateSelectLabel = (text, maxLength = 60) => {
+  if (typeof text !== 'string') return '';
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}...` : text;
+};
+const updateSelectDisplay = (select) => {
+  if (!select) return;
+  let shell = select.parentElement;
+  if (!shell || !shell.classList.contains('supporting-assets-select-shell')) return;
+  const selected = select.selectedOptions && select.selectedOptions[0];
+  const display = shell.querySelector('.supporting-assets-select-display');
+  if (display) display.textContent = selected ? selected.textContent.trim() : '';
+};
 
 (async () => {
   var fetchedData
@@ -189,8 +201,11 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
       let sa = findSupportingAsset(id)
       Object.entries(selectOptions).forEach(([value, label]) => {
           const newOption = document.createElement('option');
-          newOption.text = label;
+          const optionText = truncateSelectLabel(label);
+          newOption.text = optionText;
+          newOption.label = optionText;
           newOption.value = value;
+          newOption.title = label;
           newSelect.setAttribute('data-index', index);
           newSelect.add(newOption);
       });
@@ -211,6 +226,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
         updateSupportingAsset(id, 'businessAssetRef', selected);
         newSelect.setAttribute('style',!checkBusinessAssetRef(e.target.value) || (countInArray(prevOptions,e.target.value) > 0) ? `border-color : ${ERROR_COLOR}; border-width: 3px`: `border-color : ${DEFAULT_TEXT_COLOR}; border-width: 1px`)
         updateSelectDesign(id)
+        updateSelectDisplay(newSelect);
       });
 
       // possible change in selected option due to add/delete BusinessAssets
@@ -220,11 +236,20 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
           $(newSelect).trigger('change');
           prevOption();
         }
+        updateSelectDisplay(newSelect);
       });
 
       newDiv.appendChild(newInput);
-      newDiv.appendChild(newSelect);
+      const selectShell = document.createElement('span');
+      selectShell.className = 'supporting-assets-select-shell';
+      selectShell.appendChild(newSelect);
+      const selectDisplay = document.createElement('span');
+      selectDisplay.className = 'supporting-assets-select-display';
+      selectDisplay.setAttribute('aria-hidden', 'true');
+      selectShell.appendChild(selectDisplay);
+      newDiv.appendChild(selectShell);
       matrixRow.append(newDiv);
+      updateSelectDisplay(newSelect);
     };
 
     const addMatrixRow = (id, name) => {
@@ -331,6 +356,10 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
           promotion: false,
           height: 300,
           min_height: 300,
+          menubar: 'file edit view insert format',
+          menu: {
+            file: { title: 'File', items: 'newdocument' },
+          },
           verify_html: true,
           statusbar: false,
           link_target_list: false,

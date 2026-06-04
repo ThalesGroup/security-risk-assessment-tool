@@ -31,6 +31,8 @@ function updateBusinessAssetName(id, field){
 
 (async () => {
   let addBusinessAssetSectionExecuting = false;
+  let currentRiskFilter = 'both';
+  let businessAssetsRiskRefs = new Set();
   try {
     function handleReload(event) {
       if (event.ctrlKey && event.key === 'r') {
@@ -113,6 +115,10 @@ function updateBusinessAssetName(id, field){
         promotion: false,
         height: 200,
         min_height: 200,
+        menubar: 'file edit view insert format',
+        menu: {
+          file: { title: 'File', items: 'newdocument' },
+        },
         verify_html: true,
         statusbar: false,
         link_target_list: false,
@@ -187,6 +193,42 @@ function updateBusinessAssetName(id, field){
       window.removeEventListener('keydown', handleReload);
     };
 
+    const hasRiskAssociation = (id) => businessAssetsRiskRefs.has(String(id));
+
+    const applyRiskAssociationFilter = () => {
+      document.querySelectorAll('#business-assets__sections > section.section').forEach((section) => {
+        const id = section.id.replace('business-assets__section__', '');
+        const hasRisk = hasRiskAssociation(id);
+        const visible = currentRiskFilter === 'both' || (currentRiskFilter === 'with' && hasRisk) || (currentRiskFilter === 'without' && !hasRisk);
+        section.style.display = visible ? '' : 'none';
+        const checkbox = document.getElementById(`business-assets__section__checkbox-${id}`);
+        if (checkbox) checkbox.style.display = visible ? '' : 'none';
+      });
+    };
+
+    const setRiskAssociationState = (id) => {
+      const section = document.getElementById(`business-assets__section__${id}`);
+      if (!section) return;
+      const hasRisk = hasRiskAssociation(id);
+      section.classList.toggle('business-assets__section--without-risks', !hasRisk);
+      section.classList.toggle('business-assets__section--with-risks', hasRisk);
+      section.dataset.riskAssociation = hasRisk ? 'with' : 'without';
+      let badge = section.querySelector('.business-assets__risk-status');
+      if (!badge) {
+        badge = document.createElement('p');
+        badge.className = 'business-assets__risk-status';
+        section.prepend(badge);
+      }
+      badge.textContent = hasRisk ? 'Risks associated' : 'No risks associated';
+    };
+
+    const refreshRiskAssociationStates = () => {
+      document.querySelectorAll('#business-assets__sections > section.section').forEach((section) => {
+        setRiskAssociationState(section.id.replace('business-assets__section__', ''));
+      });
+      applyRiskAssociationFilter();
+    };
+
     const addSection = async (id, asset) => {
       // add checkbox
       const checkbox = document.createElement('input');
@@ -200,6 +242,7 @@ function updateBusinessAssetName(id, field){
       $('#business-assets__sections').append(`<section class="section" id="business-assets__section__${id}"></section>`);
       const section = $(`#business-assets__section__${id}`);
       section.css('margin-left', '20px');
+      setRiskAssociationState(id);
 
       // add table
       section.append(`<div id="business-assets__section-table__${id}"></div>`);
@@ -215,6 +258,7 @@ function updateBusinessAssetName(id, field){
       section.append('<p class="business-assets__sections-description">Description</p>');
       section.append(`<textarea class="business-assets-rich-text" id="business-assets__section-text-${id}" name="business-assets__section-text-${id}"></textarea>`);
       await addDesc(id, asset.businessAssetDescription);
+      applyRiskAssociationFilter();
     };
 
     const addBusinessAssetSection = async (businessAssets) => {
@@ -232,10 +276,18 @@ function updateBusinessAssetName(id, field){
 
     $(document).ready(function () {
       window.project.load(async (event, data) => {
+        const parsedData = await JSON.parse(data);
+        businessAssetsRiskRefs = new Set(parsedData.Risk.map((risk) => risk.businessAssetRef).filter((ref) => ref != null && ref !== '').map(String));
         tinymce.remove('.business-assets-rich-text');
         $('#business-assets__sections').empty();
-        addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
+        addBusinessAssetSection(parsedData.BusinessAsset);
+        refreshRiskAssociationStates();
       });
+    });
+
+    $('#business-assets__risk-filter').on('change', (event) => {
+      currentRiskFilter = event.target.value;
+      applyRiskAssociationFilter();
     });
 
     $('#business-assets__section--add').on('click', async () => {

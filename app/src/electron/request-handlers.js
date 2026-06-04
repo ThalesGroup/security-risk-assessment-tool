@@ -888,18 +888,17 @@ const downloadReport = async (app) => {
     if (!fileName.canceled) {
       const { filePath } = fileName;
 
-      const cssHeader = [], cssFooter = [];
+      const cssHeader = [];
       cssHeader.push('<style>');
-      cssHeader.push('div { margin: 0px; padding: 0px; display: flex; justify-content: center; }');
-      cssHeader.push('header { font-size:11px; font-weight:normal; font-family: Arial, Helvetica, sans-serif; }');
+      cssHeader.push('.isra-pdf-header, .isra-pdf-footer { width:100%; max-width:100%; box-sizing:border-box; padding: 0; margin: 0 auto; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; }');
+      cssHeader.push('.isra-pdf-footer { position: relative; bottom: 0; padding: 18px 0 32px; margin: 0; min-height: 64px; }');
+      cssHeader.push('.isra-pdf-header header, .isra-pdf-footer .classification-text, .isra-pdf-footer .page-number-line { display:block; width:100%; max-width:100%; text-align:center; font-size:11px; font-weight:normal; font-family: Arial, Helvetica, sans-serif; white-space: normal; overflow-wrap:anywhere; word-break: break-word; margin:0; padding:0; box-sizing:border-box; }');
+      cssHeader.push('.isra-pdf-header header, .isra-pdf-footer .classification-text { padding-left:72px; padding-right:72px; }');
+      cssHeader.push('.isra-pdf-footer .classification-text { color: rgb(255, 141, 0); font-weight:bold; margin-bottom: 8px; }');
+      cssHeader.push('.isra-pdf-footer .page-number-line { text-align:left; padding-left:28px; padding-right:28px; }');
       cssHeader.push('</style>');
       const cssH = cssHeader.join('');
-
-      cssFooter.push('<style>');
-      cssFooter.push('h1 { font-weight: bold; font-size: 11px; color:rgb(255, 141, 0); text-align: center; margin: 0px; font-family: Arial, Helvetica, sans-serif; }');
-      cssFooter.push('h2 { font-size:11px; font-weight:normal; margin: 0px; font-family: Arial, Helvetica, sans-serif; }');
-      cssFooter.push('</style>');
-      const cssF = cssFooter.join('');
+      const cssF = '';
       
       let name = '';
       const { projectName } = israProject;
@@ -916,19 +915,19 @@ const downloadReport = async (app) => {
         printSelectionOnly: true,
         landscape: false,
         displayHeaderFooter: true,
-        headerTemplate: cssH + `<div><header>ISRA Report - ${projectName === '' ? '[Project Name]' : projectName}<header/></div>`,
-        footerTemplate: cssF + 
-        `<div>
-            <h1>${classification.substring(0, classification.indexOf('{') + 1) + name + classification[classification.length - 1]}</h1><br>
-            <h2 style="position: absolute; left: 10px; "><span class="pageNumber"></span>/<span class="totalPages"></span></h2>
+        headerTemplate: cssH + `<div class="isra-pdf-header" style="width:100%; box-sizing:border-box; padding:0; margin:0 auto; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-end;"><header style="width:100%; max-width:100%; text-align:center; font-size:11px; font-weight:normal; font-family:Arial, Helvetica, sans-serif; white-space:normal; overflow-wrap:anywhere; word-break:break-word; margin:0; padding:0 72px; box-sizing:border-box;">ISRA Report - ${projectName === '' ? '[Project Name]' : projectName}</header></div>`,
+        footerTemplate: cssH + 
+        `<div class="isra-pdf-footer" style="width:100%; max-width:100%; box-sizing:border-box; padding:20px 0 32px; margin:0 auto; min-height:64px; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-end;">
+            <div class="classification-text" style="color:rgb(255, 141, 0); font-weight:bold; margin-bottom:8px; width:100%; text-align:center; display:block; padding:0 72px; box-sizing:border-box;">${classification.substring(0, classification.indexOf('{') + 1) + name + classification[classification.length - 1]}</div>
+            <div class="page-number-line" style="width:100%; text-align:left; display:block; padding:0 28px; box-sizing:border-box;">Page <span class="pageNumber"></span> / <span class="totalPages"></span></div>
         </div>
        `, 
        // in inches (1 inch = 2.54 cm)
         margins: {
-          top: 0.5,
-          bottom: 0.5,
-          // right: 0,
-          // left: 0
+          top: 1.2,
+          bottom: 2.0,
+          left: 0.9,
+          right: 0.9,
         } 
       };
 
@@ -1214,7 +1213,7 @@ const riskMitigationSchema = jsonSchema.properties.Risk.items.properties.riskMit
 
 ipcMain.handle('render:risks', () => renderRisks());
 ipcMain.handle('risks:addRisk', () => addRisk(israProject));
-ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
+ipcMain.handle('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
 ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
   return updateRiskName(israProject, getMainWindow(), id, field, value);
 });

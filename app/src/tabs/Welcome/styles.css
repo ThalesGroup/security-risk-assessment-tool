@@ -53,6 +53,22 @@ html {
     width: 80%;
 }
 
+.welcome__tracking-comment-cell {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
+
+.welcome__tracking-comment-cell textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 6em;
+    resize: vertical;
+    white-space: pre-wrap;
+    border: 0;
+    background: transparent;
+}
+
 .table {
     grid-template-columns: auto;
 }

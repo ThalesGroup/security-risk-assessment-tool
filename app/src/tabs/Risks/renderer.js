@@ -61,6 +61,65 @@ const riskLevelSorter = (a, b, aRow, bRow) => {
   if (rankA === rankB) return 0;
   return rankA - rankB;
 };
+const mapScoreToRiskLevel = (score) => {
+  const value = Number(score);
+  if (Number.isNaN(value)) return '';
+  if (value <= 5) return 'Low';
+  if (value <= 10) return 'Medium';
+  if (value <= 15) return 'High';
+  return 'Critical';
+};
+const styleRiskLevel = (selector, score) => {
+  const level = mapScoreToRiskLevel(score);
+  const text = level ? ` ${level}` : '';
+  const color = level ? getSeverityColor(level) : '';
+  $(selector).text(text).css('color', color).css('display', 'inline-block');
+};
+const setRiskScoreLabel = (selector, score) => {
+  const $label = $(selector);
+  $label.empty().css('color', '');
+  if (score == null || score === '') return;
+  const level = mapScoreToRiskLevel(score);
+  $label.append(document.createTextNode(`${score}/20`));
+  if (level) {
+    $label.append($('<span>').text(` ${level}`).css('color', getSeverityColor(level)));
+  }
+};
+const escapeOptionTitle = (text) => {
+  if (typeof text !== 'string') return '';
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+};
+const truncateSelectedOptionLabel = (text, maxLength = 60) => {
+  if (typeof text !== 'string') return '';
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}...` : text;
+};
+const truncateSelectedOptionLabelForSelect = (select) => {
+  if (!select) return;
+  Array.from(select.options).forEach((option) => {
+    if (option.dataset.shortLabel) {
+      option.textContent = option.dataset.shortLabel;
+      option.label = option.dataset.shortLabel;
+    }
+  });
+  const selected = select.selectedOptions && select.selectedOptions[0];
+  if (!selected || !selected.dataset.fullLabel) return;
+  selected.textContent = selected.dataset.shortLabel;
+  selected.label = selected.dataset.shortLabel;
+  select.title = selected.dataset.fullLabel;
+};
+const updateTruncatedSelectDisplay = (select) => {
+  if (!select) return;
+  truncateSelectedOptionLabelForSelect(select);
+  let shell = select.parentElement;
+  if (!shell || !shell.classList.contains('risk-select-shell')) {
+    $(select).wrap('<span class="risk-select-shell"></span>');
+    $(select).after('<span class="risk-select-display" aria-hidden="true"></span>');
+    shell = select.parentElement;
+  }
+  const selected = select.selectedOptions && select.selectedOptions[0];
+  const display = shell.querySelector('.risk-select-display');
+  if (display) display.textContent = selected ? (selected.dataset.shortLabel || selected.textContent.trim()) : '';
+};
 const toRgbString = (hex) => {
   if (!hex || typeof hex !== 'string') return null;
   const normalised = hex.replace('#', '');
@@ -124,6 +183,7 @@ function enableInteract(){
 
 (async () => {
   let addSelectedRowDataExecuting = false;
+  let isDeletingRisks = false;
 
   try {
     function handleReload(event) {
@@ -179,14 +239,14 @@ function enableInteract(){
     const sortConfigForValue = (value) => {
       if (value === 'level-asc') {
         return [
-          { column: 'riskId', dir: 'asc' },
           { column: 'residualRiskLevel', dir: 'asc' },
+          { column: 'riskId', dir: 'asc' },
         ];
       }
       if (value === 'level-desc') {
         return [
-          { column: 'riskId', dir: 'asc' },
           { column: 'residualRiskLevel', dir: 'desc' },
+          { column: 'riskId', dir: 'asc' },
         ];
       }
       if (value === 'id-desc') return [{ column: 'riskId', dir: 'desc' }];
@@ -196,8 +256,37 @@ function enableInteract(){
     let currentSort = sortConfigForValue(storedSortValue);
 
     const applyCurrentSort = () => {
-      if (!currentSort) risksTable.clearSort();
-      else risksTable.setSort(currentSort);
+      if (!currentSort || !Array.isArray(risksData) || risksData.length === 0) {
+        risksTable.clearSort();
+        return;
+      }
+
+      const selectedRiskId = risksTable.getSelectedData()[0]?.riskId;
+      const [primarySort] = currentSort;
+      const { column, dir } = primarySort;
+      const sortedData = [...risksData];
+
+      if (column === 'residualRiskLevel') {
+        sortedData.sort((a, b) => {
+          const rankA = severityRank(a.residualRiskLevel);
+          const rankB = severityRank(b.residualRiskLevel);
+          if (rankA === rankB) return a.riskId - b.riskId;
+          return dir === 'asc' ? rankA - rankB : rankB - rankA;
+        });
+      } else if (column === 'riskId') {
+        sortedData.sort((a, b) => {
+          const idA = Number(a.riskId);
+          const idB = Number(b.riskId);
+          return dir === 'asc' ? idA - idB : idB - idA;
+        });
+      }
+
+      risksData = sortedData;
+      return risksTable.setData(risksData).then(() => {
+        if (selectedRiskId != null) {
+          risksTable.selectRow(selectedRiskId);
+        }
+      });
     };
 
     const sortSelect = document.getElementById('sort-risk');
@@ -378,11 +467,15 @@ function enableInteract(){
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
+            const optionText = escapeOptionTitle(sa.supportingAssetName);
+            const optionStyle = checkSupportingAssetRef(sa.supportingAssetId) ? '' : `color:${ERROR_COLOR}`;
+            const shortOptionText = escapeOptionTitle(truncateSelectedOptionLabel(sa.supportingAssetName));
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" label="${shortOptionText}" title="${optionText}" data-full-label="${optionText}" data-short-label="${shortOptionText}" style="${optionStyle}">${shortOptionText}</option>`;
           }
         });
       }
       $('#risk__supportingAsset').append(supportingAssetOptions);
+      updateTruncatedSelectDisplay(document.getElementById('risk__supportingAsset'));
     };
 
     const setNaNValues = (riskAttackPathId) => {
@@ -500,7 +593,10 @@ function enableInteract(){
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityId} - ${v.vulnerabilityName}</option>`;
+        const optionText = `${v.vulnerabilityId} - ${v.vulnerabilityName}`;
+        const fullOptionText = escapeOptionTitle(optionText);
+        const shortOptionText = escapeOptionTitle(truncateSelectedOptionLabel(optionText));
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" label="${shortOptionText}" title="${fullOptionText}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${shortOptionText}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -719,6 +815,10 @@ function enableInteract(){
           height: 250,
           min_height: 250,
           width,
+          menubar: 'file edit view insert format',
+          menu: {
+            file: { title: 'File', items: 'newdocument' },
+          },
           verify_html: true,
           statusbar: false,
           deep: true,
@@ -999,108 +1099,106 @@ function enableInteract(){
     const addSelectedRowData = async (id) =>{
       if (!addSelectedRowDataExecuting && risksData.find((risk) => risk.riskId == id)){
         addSelectedRowDataExecuting = true;
-        const {
-          riskId,
-          riskName,
-          threatAgent,
-          threatAgentDetail, 
-          threatVerb,
-          threatVerbDetail,
-          motivation, 
-          motivationDetail,
-          businessAssetRef,
-          supportingAssetRef,
-          isAutomaticRiskName,
-          allAttackPathsScore,
-          inherentRiskScore,
-          riskAttackPaths,
-          riskLikelihood,
-          riskImpact,
-          riskMitigation,
-          mitigatedRiskScore,
-          riskManagementDecision,
-          riskManagementDetail,
-          residualRiskScore,
-          residualRiskLevel
-        } = risksData.find((risk) => risk.riskId == id);
+        try {
+          const {
+            riskId,
+            riskName,
+            threatAgent,
+            threatAgentDetail, 
+            threatVerb,
+            threatVerbDetail,
+            motivation, 
+            motivationDetail,
+            businessAssetRef,
+            supportingAssetRef,
+            isAutomaticRiskName,
+            allAttackPathsScore,
+            inherentRiskScore,
+            riskAttackPaths,
+            riskLikelihood,
+            riskImpact,
+            riskMitigation,
+            mitigatedRiskScore,
+            riskManagementDecision,
+            riskManagementDetail,
+            residualRiskScore,
+            residualRiskLevel
+          } = risksData.find((risk) => risk.riskId == id);
 
-        const {
-          riskLikelihoodDetail,
-          threatFactorLevel,
-          occurrenceLevel,
-          isOWASPLikelihood
-        } = riskLikelihood;
+          const {
+            riskLikelihoodDetail,
+            threatFactorLevel,
+            occurrenceLevel,
+            isOWASPLikelihood
+          } = riskLikelihood;
 
-        // Set Risk description data
-        $('.riskId').text(riskId);
-        tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
-        tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
-        tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
-        
-        $('select[id="risk__threatAgent"]').val(threatAgent);
-        $('select[id="risk__threat"]').val(threatVerb);
-        $('#risk__motivation').val(motivation);
-        $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
-        $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
-        addSupportingAssetOptions(businessAssetRef);
-        $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || coherentSupportingAsset(supportingAssetRef, businessAssetRef) == null ? '' : supportingAssetRef);
-        $('select[id="risk__supportingAsset"]').prop('style',`border:${coherentSupportingAsset(supportingAssetRef, businessAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
+          $('.riskId').text(riskId);
+          tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+          tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
+          tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+          
+          $('select[id="risk__threatAgent"]').val(threatAgent);
+          $('select[id="risk__threat"]').val(threatVerb);
+          $('#risk__motivation').val(motivation);
+          $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
+          $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
+          updateTruncatedSelectDisplay(document.getElementById('risk__businessAsset'));
+          addSupportingAssetOptions(businessAssetRef);
+          $('select[id="risk__supportingAsset"]').val(existBusinessAsset(businessAssetRef) == null || coherentSupportingAsset(supportingAssetRef, businessAssetRef) == null ? '' : supportingAssetRef);
+          $('select[id="risk__supportingAsset"]').prop('style',`border:${coherentSupportingAsset(supportingAssetRef, businessAssetRef) != null && checkSupportingAssetRef(supportingAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
+          updateTruncatedSelectDisplay(document.getElementById('risk__supportingAsset'));
 
-        if(isAutomaticRiskName){
-          $('#risk__manual__riskName').hide();
-          $('#riskName').show();
-          $('.riskname').text(riskName);
-        }else{
-          $('#risk__manual__riskName').show();
-          $('#riskName').hide();
-          $('#risk__manual__riskName input').val(riskName);
-        }; 
+          if(isAutomaticRiskName){
+            $('#risk__manual__riskName').hide();
+            $('#riskName').show();
+            $('.riskname').text(riskName);
+          }else{
+            $('#risk__manual__riskName').show();
+            $('#riskName').hide();
+            $('#risk__manual__riskName input').val(riskName);
+          }; 
 
-        // Set Risk evaluation data
-        // risk likelihood
-        $('#risks__vulnerability__attack__path').empty();
-        setSecurityPropertyValues(riskLikelihood);
-        updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
-        tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
+          $('#risks__vulnerability__attack__path').empty();
+          setSecurityPropertyValues(riskLikelihood);
+          updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
+          tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
 
-        if(isOWASPLikelihood){
-          $('#risk__simple__evaluation').hide();
-          $('#risk__likehood__table').show();
-        }else{
-          $('#risk__simple__evaluation').show();
-          $('#risk__likehood__table').hide();
-        }
-
-        // risk impact
-        updateEvaluationTable(riskImpact, businessAssetRef);
-        addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
-        $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
-        $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
-
-        //risk mitigation
-        $('#risks__risk__mitigation__evaluation section').empty();
-        await addMitigationSection(riskMitigation, riskManagementDecision);
-        $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
-
-        //risk management
-        $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
-        tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
-        $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
-        $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
-        styleResidualRiskLevel(residualRiskLevel);
-
-        // set 'NaN' values
-        riskAttackPaths.forEach((path) => {
-          const { vulnerabilityRef, riskAttackPathId } = path;
-          for(let i=0; i<vulnerabilityRef.length; i++){
-            if (vulnerabilityRef[i].name !== '' && vulnerabilityRef[i].score === null) {
-              setNaNValues(riskAttackPathId);
-              break;
-            } else setNaNValues();
+          if(isOWASPLikelihood){
+            $('#risk__simple__evaluation').hide();
+            $('#risk__likehood__table').show();
+          }else{
+            $('#risk__simple__evaluation').show();
+            $('#risk__likehood__table').hide();
           }
-        })
-        enableInteract()
-        addSelectedRowDataExecuting = false;
+
+          updateEvaluationTable(riskImpact, businessAssetRef);
+          addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
+          $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
+          setRiskScoreLabel('#inherent_risk_score', inherentRiskScore);
+
+          $('#risks__risk__mitigation__evaluation section').empty();
+          await addMitigationSection(riskMitigation, riskManagementDecision);
+          setRiskScoreLabel('#mitigated_risk_score', mitigatedRiskScore);
+
+          $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
+          tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
+          $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
+          $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
+          styleResidualRiskLevel(residualRiskLevel);
+
+          riskAttackPaths.forEach((path) => {
+            const { vulnerabilityRef, riskAttackPathId } = path;
+            for(let i=0; i<vulnerabilityRef.length; i++){
+              if (vulnerabilityRef[i].name !== '' && vulnerabilityRef[i].score === null) {
+                setNaNValues(riskAttackPathId);
+                break;
+              } else setNaNValues();
+            }
+          })
+        } finally {
+          enableInteract()
+          addSelectedRowDataExecuting = false;
+        }
       }
     };
 
@@ -1115,7 +1213,7 @@ function enableInteract(){
     };
 
     risksTable.on("rowDeselected", (row) => {
-      validatePreviousRisk(row.getIndex());
+      if (!isDeletingRisks) validatePreviousRisk(row.getIndex());
     });
 
 
@@ -1139,33 +1237,31 @@ function enableInteract(){
 
     const deleteRisks = async (checkboxes) =>{
       const checkedRisks = [];
-      let currentRiskId;
       checkboxes.forEach((box) => {
         if (box.checked) checkedRisks.push(Number(box.value));
       });
+      if (checkedRisks.length === 0) return;
 
-      await window.risks.deleteRisk(checkedRisks);
-      checkedRisks.forEach((id) => {
-        const index = risksData.findIndex(object => {
-          return object.riskId === id;
-        });
-
-        risksTable.getRow(Number(id)).delete();
-
-        // update risksData`
-        risksData.splice(index, 1);
-        if(risksData.length === 0)  $('#risks section').hide();
-        else {
-          risksData.forEach((risk)=>{
-            risksTable.deselectRow(risk.riskId);
-          })
-          risksTable.selectRow(risksData[0].riskId);
-          currentRiskId = risksData[0].riskId;
+      disableInteract();
+      isDeletingRisks = true;
+      try {
+        await window.risks.deleteRisk(checkedRisks);
+        const deletedIds = new Set(checkedRisks);
+        risksData = risksData.filter((risk) => !deletedIds.has(risk.riskId));
+        await risksTable.setData(risksData);
+        if (risksData.length === 0) {
+          $('#risks section').hide();
+          return;
         }
-      });
-
-      if (risksData.length > 0) applyCurrentSort();
-      if (currentRiskId) addSelectedRowData(currentRiskId);
+        $('#risks section').show();
+        await applyCurrentSort();
+        const currentRiskId = risksData[0].riskId;
+        risksTable.selectRow(currentRiskId);
+        await addSelectedRowData(currentRiskId);
+      } finally {
+        isDeletingRisks = false;
+        enableInteract();
+      }
     };
 
     const updateRisksFields = async (fetchedData) => {
@@ -1230,10 +1326,14 @@ function enableInteract(){
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${ba.businessAssetName}</option>`;
+        const optionText = escapeOptionTitle(ba.businessAssetName);
+        const optionStyle = checkBusinessAssetRef(ba.businessAssetId) ? '' : `color:${ERROR_COLOR}`;
+        const shortOptionText = escapeOptionTitle(truncateSelectedOptionLabel(ba.businessAssetName));
+        businessAssetsOptions += `<option value="${ba.businessAssetId}" label="${shortOptionText}" title="${optionText}" data-full-label="${optionText}" data-short-label="${shortOptionText}" style="${optionStyle}">${shortOptionText}</option>`;
 
       });
       $('#risk__businessAsset').append(businessAssetsOptions);
+      updateTruncatedSelectDisplay(document.getElementById('risk__businessAsset'));
     }
 
     $(document).ready(async function () {
@@ -1245,12 +1345,32 @@ function enableInteract(){
 
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
+
+        $('body').on('change blur', '#risk__businessAsset, #risk__supportingAsset', function () {
+          updateTruncatedSelectDisplay(this);
+        });
+        $('body').on('change', 'select:not(#risk__businessAsset):not(#risk__supportingAsset)', function () {
+          const selected = this.selectedOptions && this.selectedOptions[0];
+          this.title = selected ? selected.textContent.trim() : '';
+        });
+        $('select').each(function () {
+          if (this.id === 'risk__businessAsset' || this.id === 'risk__supportingAsset') {
+            updateTruncatedSelectDisplay(this);
+          } else {
+            const selected = this.selectedOptions && this.selectedOptions[0];
+            this.title = selected ? selected.textContent.trim() : '';
+          }
+        });
         
         await tinymce.init({
           selector: '.rich-text',
           promotion: false,
           height: 300,
           min_height: 300,
+          menubar: 'file edit view insert format',
+          menu: {
+            file: { title: 'File', items: 'newdocument' },
+          },
           verify_html: true,
           statusbar: false,
           link_target_list: false,
@@ -1349,8 +1469,8 @@ function enableInteract(){
       risksData[riskIndex] = risk;
       risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: risk.riskName, residualRiskLevel: risk.residualRiskLevel }]);
       if(risk.inherentRiskScore != null){
-        $('#inherent_risk_score').text(risk.inherentRiskScore);
-        $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
+        setRiskScoreLabel('#inherent_risk_score', risk.inherentRiskScore);
+        setRiskScoreLabel('#mitigated_risk_score', risk.mitigatedRiskScore);
         $('#residual_risk_score').text(risk.residualRiskScore);
         $('#residual_risk_level').text(risk.residualRiskLevel);
         styleResidualRiskLevel(risk.residualRiskLevel);
@@ -1406,6 +1526,7 @@ function enableInteract(){
       updateRiskName('businessAssetRef', selected);
       addSupportingAssetOptions(selected)
       $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(selected) != null && checkBusinessAssetRef(selected) ? 'none' : '3px solid ' + ERROR_COLOR}`);
+      updateTruncatedSelectDisplay(document.getElementById('risk__businessAsset'));
     });
 
     $('#risk__supportingAsset').on('change', ()=>{
@@ -1413,6 +1534,7 @@ function enableInteract(){
       const selected = $('#risk__supportingAsset').find(":selected").val();
       updateRiskName('supportingAssetRef', selected);
       $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(selected) != null && checkSupportingAssetRef(selected) ? 'none' : '3px solid ' + ERROR_COLOR}`);
+      updateTruncatedSelectDisplay(document.getElementById('risk__supportingAsset'));
     });
 
     $('#risk__motivation').on('change', ()=>{
