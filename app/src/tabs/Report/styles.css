@@ -1,0 +1,141 @@
+/*----------------------------------------------------------------------------
+*
+* Copyright © 2022-2025 THALES. All Rights Reserved.
+*
+* -----------------------------------------------------------------------------
+* THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+* THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+*
+* THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
+* CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+* PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
+* NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
+* SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
+* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+* PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
+* SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
+* HIGH RISK ACTIVITIES.
+* -----------------------------------------------------------------------------
+*/
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 2%;
+    font-size: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin: 0;
+    padding: 2%;
+    font-size: 16px;
+}
+
+section {
+    padding: 0;
+    padding-bottom: 5%;
+    margin-bottom: 5%;
+}
+
+#isra-report > p {
+    text-align: center;
+    font-weight: bold;
+}
+
+#isra-report section:nth-of-type(1) h1 {
+    background-color: #b789fb;
+    margin-bottom: 2%;
+}
+
+#isra-report section:nth-of-type(2) h1 {
+    background-color: #f1778b;
+    margin-bottom: 2%;
+}
+
+#isra-report section:nth-of-type(3) h1 {
+    background-color: #c4d6cb;
+    margin-bottom: 2%;
+}
+
+#isra-report section:nth-of-type(1) {
+    background-color: #f0e4e4;
+}
+
+#isra-report section:nth-of-type(2) {
+    background-color: #f2dbd7;
+}
+
+#isra-report section:nth-of-type(3) {
+    background-color: #e1eae5;
+}
+
+#risks,
+#vulnerabilities,
+#riskmanagement {
+    width: 95%;
+    margin: auto;
+}
+
+#risks tbody tr td:first-of-type {
+    background-color: #d8d8d8;
+}
+
+#risks tbody tr td,
+#vulnerabilities tbody tr td {
+    text-align: center;
+}
+
+#risks tbody tr td:nth-of-type(2),
+#vulnerabilities tbody tr td:nth-of-type(2) {
+    text-align: left;
+}
+
+#vulnerabilities tbody tr td:nth-of-type(3), 
+#vulnerabilities tbody tr td:nth-of-type(4) {
+    width: 10%;
+}
+
+.grid-item {
+    border: 0.5px solid rgba(0, 0, 0, 0.8);
+    padding: 2%;
+}
+
+.grid-header {
+    color: #564f6b;
+}
+
+.grid-header,
+thead {
+    background-color: #f8f4f4;
+}
+
+/* strong {
+    float: right;
+} */
+
+#riskmanagement,
+#riskmanagement tbody tr:last-child td {
+    border: 0;
+}
+
+#riskmanagement tbody tr td:nth-of-type(3){
+    text-align: right;
+}
+
+#report tbody {
+    text-align: center;
+}
+
+#report tbody tr td:nth-of-type(3), 
+#report tbody tr td:nth-of-type(4) {
+    text-align: left;
+}
+
+#isra-report>div{
+    margin-bottom: 2%;
+}

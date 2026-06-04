@@ -1,0 +1,32 @@
+{
+    "ISRAmeta": {
+        "schemaVersion": 3,
+        "classification": "COMPANY CONFIDENTIAL {PROJECT}",
+        "iteration": 1,
+        "projectName": "",
+        "projectOrganization": "",
+        "projectVersion": "",
+        "ISRAtracking": [],
+        "businessAssetsCount": 0,
+        "supportingAssetsCount": 0,
+        "risksCount": 0,
+        "vulnerabilitiesCount": 0,
+        "latestBusinessAssetId": null,
+        "latestSupportingAssetId": null,
+        "latestRiskId": null,
+        "latestVulnerabilityId": null
+    },
+    "ProjectContext": {
+        "projectDescription": "",
+        "projectURL": "",
+        "projectDescriptionAttachment": "",
+        "securityProjectObjectives": "",
+        "securityOfficerObjectives": "",
+        "securityAssumptions": ""
+    },
+    "BusinessAsset": [],
+    "SupportingAssetsDesc": "",
+    "SupportingAsset": [],
+    "Risk": [],
+    "Vulnerability": []
+}

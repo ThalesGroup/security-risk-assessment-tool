@@ -1,0 +1,315 @@
+/*----------------------------------------------------------------------------
+*
+*     Copyright © 2022 THALES. All Rights Reserved.
+ *
+* -----------------------------------------------------------------------------
+* THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+* THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+ * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+ * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+*
+* THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
+* CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+* PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
+* NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
+* SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
+* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+* PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
+* SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
+* HIGH RISK ACTIVITIES.
+* -----------------------------------------------------------------------------
+*/
+
+html {
+    background-color: #b789fb;
+}
+
+#risks__risk__description > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    padding: 2%;
+}
+
+/* #risks section {
+    background-color: rgb(199, 199, 199);
+} */
+
+section {
+    margin-bottom: 0;
+}
+
+#risks > section:first-of-type {
+    background-color: #f0e4e4;
+}
+
+#risks > section:nth-of-type(2) {
+    background-color: #e8bcac;
+}
+
+#risks > section:nth-of-type(3) {
+    background-color: #e8ece4;
+}
+
+#risks > section:nth-of-type(4) {
+    background-color: #a0bccc;
+}
+
+/* #risks button{
+    padding: 1em;
+} */
+
+#risk__manual__riskName input{
+    width: 100%;
+    margin: 2% 0 2% 0;
+}
+
+.risk__flex {
+    display: flex;
+}
+
+.risk__flex > div{
+    flex: 1;
+    border: 1px solid black;
+    padding: 1%;
+}
+
+.tox-tinymce{
+    margin-top: 10px;
+}
+
+#risk__simple__evaluation,
+#risk__manual__riskName {
+    display: none;
+    margin-bottom: 1em;
+}
+
+#risk__simple__evaluation button,
+#risk__likehood__table button:nth-of-type(1),
+#riskName {
+    margin-bottom: 1em;
+}
+
+#risks h1{
+    font-size: 1.5em;
+    margin-bottom: 0;
+}
+
+#risks h2{
+    font-size: 1em;
+}
+
+#risk__likehood__table div {
+    display: flex;
+    /* justify-content: space-between; */
+    /* margin-bottom: 1em; */
+}
+
+#risk__likehood__table .likelihood-options{
+    display: grid;
+    grid-template-columns: 50% auto;
+}
+
+#risk__likehood__table .likelihood-options div {
+    display: flex;
+    border: 1px solid black;
+    align-items: center;
+    padding: 2%;
+}
+
+#risk__likehood__table .likelihood-options select {
+    width: 100%;
+}
+
+#risk__likehood__table div p {
+    margin: 0;
+    font-size: 0.8em;
+}
+
+#risk__likehood__table div select {
+    width: 10em;
+    height: 1.5em;
+}
+
+.risks-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+}
+
+.risks-filter__search {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    flex: 1;
+}
+
+.risks-filter__search input {
+    width: 100%;
+}
+
+.risks-filter__sort {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+}
+
+.risks-sort-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5%;
+}
+
+.risks-filter__sort label {
+    font-weight: 600;
+}
+
+#sort-risk {
+    width: auto;
+    border: none;
+    background: transparent;
+    color: #1a5fb4;
+    font-weight: 600;
+    padding: 0;
+    cursor: pointer;
+}
+
+tbody {
+    text-align: center;
+}
+
+#risk__occurrence__threatFactor__table tbody:first-of-type tr:nth-of-type(n+2)  td:nth-of-type(n+2) {
+    font-weight: bold;
+}
+
+#risks__vulnerability__evaluation div{
+    padding: 0;
+}
+
+.risk__vulnerability-ref {
+    align-items: center;
+    gap: 8px;
+}
+
+.risk__vulnerability__open {
+    margin-left: 4px;
+    white-space: nowrap;
+}
+
+.risk__vulnerability__open:disabled {
+    opacity: 0.6;
+}
+
+label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.table {
+    grid-template-columns: auto;
+}
+
+.attackpathsections {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* .risk_attack_paths .and:nth-last-of-type() {
+    visibility: hidden;
+} */
+
+.bottom,
+.top {
+    /* display: flex;
+    justify-content: space-evenly; */
+    padding: 0;
+    margin: 0;
+}
+
+.top {
+    display: grid;
+    grid-template-columns: auto 15% 15%;
+}
+
+.top input[type='number']{
+    display: inline-block;
+    width: 97%;
+}
+
+.bottom {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.bottom section,
+.top section {
+    border: 1px solid black;
+}
+
+.NaN {
+    color: red;
+}
+
+#risk__evaluation__table {
+    width: 60%;
+    margin: auto;
+}
+
+#risk__evaluation__table tbody tr td:first-of-type {
+    text-align: left;
+}
+
+#risks__risk__management__evaluation > div {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+#risks__risk__management__evaluation > div > div {
+    border: 1px solid black;
+    padding: 1%;
+}
+
+#risk__automatic_riskname>div:first-of-type {
+    padding: 1%;
+    border: 1px solid black;
+}
+
+#risk__automatic_riskname > div:first-of-type > p:first-of-type {
+    font-size: small;
+    font-style: italic;
+}
+
+#risk__automatic_riskname > div:last-of-type {
+    border: 1px solid black;
+    padding: 1%;
+}
+
+#risk__automatic_riskname label {
+    font-style: italic;
+}
+
+#risk__automatic_riskname label span {
+    font-style: normal;
+    font-weight: bold;
+}
+
+select[name='risk__likelihood'] {
+    width: 15%;
+}
+
+label[name='Not defined'],
+label[name='Discarded'] {
+    font-style: italic;
+    font-size: small;
+}
+
+.mitigations > section{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+.risks-table__name-text {
+    display: inline;
+}

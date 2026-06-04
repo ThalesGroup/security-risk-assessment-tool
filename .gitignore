@@ -1,0 +1,8 @@
+# Dependency directories
+node_modules
+# jest test coverage
+coverage
+# App build
+dist
+#API documentation
+**/lib/doc/APIdocumentation
