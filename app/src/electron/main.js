@@ -26,6 +26,11 @@ const {
   app, BrowserWindow, Menu,
 } = require('electron');
 const path = require('path');
+
+app.commandLine.appendSwitch('disable-gpu');
+app.setPath('userData', path.join(app.getPath('appData'), 'sratool'));
+app.commandLine.appendSwitch('disk-cache-dir', path.join(app.getPath('userData'), 'Cache'));
+
 const {
   validationErrors,
   loadFile,
