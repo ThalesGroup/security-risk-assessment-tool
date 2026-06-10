@@ -42,6 +42,39 @@ section[id='business-asset-section'] {
     font-weight:bold
 }
 
+.business-assets-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 1em;
+    white-space: nowrap;
+}
+
+.business-assets-filter label {
+    font-weight: bold;
+}
+
+.business-assets__risk-status {
+    display: inline-block;
+    margin: 0 0 0.5em 0;
+    padding: 0.25em 0.5em;
+    border: 1px solid #4f6f17;
+    background-color: #e7f2ce;
+    font-size: small;
+    font-weight: bold;
+}
+
+.business-assets__section--without-risks {
+    outline: 3px solid #d32a26;
+    outline-offset: 2px;
+}
+
+.business-assets__section--without-risks .business-assets__risk-status {
+    border-color: #d32a26;
+    background-color: #ffe6e2;
+    color: #8a1f1b;
+}
+
 #business-assets span{
     font-weight: bold;
 }

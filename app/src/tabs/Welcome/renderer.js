@@ -34,6 +34,33 @@
     disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.welcome();
+    result[1].editable = true;
+    result[1].cellClick = function (e, cell) {
+      cell.edit();
+      return false;
+    };
+    result[1].cellEdited = function (cell) {
+      window.welcome.updateTrackingRow(cell.getRow().getData());
+    };
+    const trackingCommentColumn = result[1].columns.find((column) => column.field === 'trackingComment');
+    if (trackingCommentColumn) {
+      trackingCommentColumn.formatter = (cell) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = cell.getValue() || '';
+        textarea.rows = 4;
+        textarea.addEventListener('mousedown', (event) => event.stopPropagation(), true);
+        textarea.addEventListener('click', (event) => event.stopPropagation(), true);
+        textarea.addEventListener('keydown', (event) => event.stopPropagation(), true);
+        textarea.addEventListener('input', (event) => {
+          cell.getRow().getData().trackingComment = event.target.value;
+        });
+        textarea.addEventListener('change', (event) => {
+          cell.setValue(event.target.value, true);
+          window.welcome.updateTrackingRow(cell.getRow().getData());
+        });
+        return textarea;
+      };
+    }
     $('#welcome').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
       const id = cell.getRow().getIndex();
@@ -69,6 +96,10 @@
 
     const projectVersion = (value) => {
       $('#welcome__isra-meta--project-version').val(value);
+    };
+
+    const targetedLevelOfTrust = (value) => {
+      $('#welcome__isra-meta--targeted-level-of-trust').val(['1', '2', '3', '4'].includes(value) ? value : '1');
     };
 
     const setSessionStorage = () =>{
@@ -122,6 +153,7 @@
       projectName(fetchedData.projectName);
       projectVersion(fetchedData.projectVersion);
       organization(fetchedData.projectOrganization);
+      targetedLevelOfTrust(fetchedData.targetedLevelOfTrust);
       iterationsHistory(fetchedData.ISRAtracking);
     };
 
@@ -180,6 +212,15 @@
     $('input[id="welcome__isra-meta--project-version"]').on('change', async (e) => {
       const { value } = e.target;
       await window.welcome.updateProjectNameAndVersionRef('projectVersion', value);
+    });
+
+    $('select[id="welcome__isra-meta--targeted-level-of-trust"]').on('change', () => {
+      window.validate.welcome([
+        $('#welcome__isra-meta--project-name').val(),
+        $('#welcome__isra-meta--organization').val(),
+        $('#welcome__isra-meta--project-version').val(),
+        $('#welcome__isra-meta--targeted-level-of-trust').val(),
+      ]);
     });
   } catch (err) {
     alert('Failed to load welcome tab');

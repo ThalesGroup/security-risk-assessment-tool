@@ -27,6 +27,8 @@ h1 {
     margin: 0;
     padding: 2%;
     font-size: 20px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 h2 {
@@ -34,6 +36,34 @@ h2 {
     margin: 0;
     padding: 2%;
     font-size: 16px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+#isra-report > header {
+    margin: 0;
+    padding-top: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#isra-report h1,
+#isra-report h2 {
+    max-width: calc(100% - 40px);
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+#isra-report h1 span.text-wrap,
+#isra-report h2 span.text-wrap,
+#isra-report #name,
+#isra-report #version {
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 section {
@@ -138,4 +168,19 @@ thead {
 
 #isra-report>div{
     margin-bottom: 2%;
+}
+
+#isra-report footer {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 96px 32px;
+    margin: 0;
+    min-height: 64px;
+}
+
+.scrollingWrapper > footer {
+    padding-left: 96px;
+    padding-right: 96px;
+    padding-bottom: 32px;
+    min-height: 64px;
 }

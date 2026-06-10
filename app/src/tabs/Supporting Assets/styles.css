@@ -36,6 +36,28 @@ html {
     padding-top: 10px;
 }
 
+.supporting-assets-select-shell {
+    position: relative;
+    display: inline-block;
+}
+
+.supporting-assets-select-display {
+    position: absolute;
+    left: 4px;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    background: white;
+    color: black;
+    font: inherit;
+    font-size: 13px;
+    line-height: normal;
+}
+
 .table {
     grid-template-columns: auto;
 }
