@@ -15,7 +15,7 @@
 * PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
 * NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
 * SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
-* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+* SOFTWARE COULD LEAD DIRECTLY TO DEATH, aPERSONAL INJURY, OR SEVERE
 * PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
 * SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
 * HIGH RISK ACTIVITIES.
@@ -55,4 +55,27 @@ html {
 
 .table {
     grid-template-columns: auto;
+}
+
+.tracking-comment-textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 60px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font: inherit;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.tracking-comment-textarea:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.tabulator-cell:has(.tracking-comment-textarea) {
+  padding: 0;
 }
