@@ -77,6 +77,17 @@ const isErrorColor = (value) => {
   const normalised = (value || '').toString().trim().toLowerCase();
   return normalised === ERROR_COLOR_HEX || normalised === ERROR_COLOR_RGB;
 };
+const escapeHtml = (value) => (value || '').toString().replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}[char]));
+const setSelectTitle = (select) => {
+  const selectedOption = select.options[select.selectedIndex];
+  select.title = selectedOption ? selectedOption.textContent : '';
+};
 
 // Display the buttons as not usable
 function disableButtons(){
@@ -378,11 +389,13 @@ function enableInteract(){
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
+            const label = escapeHtml(sa.supportingAssetName);
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" title="${label}" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${label}</option>`;
           }
         });
       }
       $('#risk__supportingAsset').append(supportingAssetOptions);
+      setSelectTitle(document.getElementById('risk__supportingAsset'));
     };
 
     const setNaNValues = (riskAttackPathId) => {
@@ -465,6 +478,7 @@ function enableInteract(){
         
         select.on('change', async (e)=> {
           const { value } = e.target;
+          setSelectTitle(e.target);
           viewButton.disabled = !value;
           await validatePreviousRisk(getCurrentRiskId());
           if (value) {
@@ -492,6 +506,7 @@ function enableInteract(){
         })
         select.val(selectedOption.val());
         const previousVulId = selectedOption.val();
+        setSelectTitle(select[0]);
         viewButton.disabled = !select.val();
       });
     };
@@ -500,7 +515,9 @@ function enableInteract(){
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityId} - ${v.vulnerabilityName}</option>`;
+        const label = `${v.vulnerabilityId} - ${v.vulnerabilityName}`;
+        const escapedLabel = escapeHtml(label);
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" title="${escapedLabel}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${escapedLabel}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -1230,10 +1247,12 @@ function enableInteract(){
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${ba.businessAssetName}</option>`;
+        const label = escapeHtml(ba.businessAssetName);
+        businessAssetsOptions += `<option value="${ba.businessAssetId}" title="${label}" style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${label}</option>`;
 
       });
       $('#risk__businessAsset').append(businessAssetsOptions);
+      setSelectTitle(document.getElementById('risk__businessAsset'));
     }
 
     $(document).ready(async function () {
@@ -1403,6 +1422,7 @@ function enableInteract(){
 
     $('#risk__businessAsset').on('change', ()=>{
       const selected = $('#risk__businessAsset').find(":selected").val();
+      setSelectTitle(document.getElementById('risk__businessAsset'));
       updateRiskName('businessAssetRef', selected);
       addSupportingAssetOptions(selected)
       $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(selected) != null && checkBusinessAssetRef(selected) ? 'none' : '3px solid ' + ERROR_COLOR}`);
@@ -1411,6 +1431,7 @@ function enableInteract(){
     $('#risk__supportingAsset').on('change', ()=>{
       const id = risksTable.getSelectedData()[0].riskId;
       const selected = $('#risk__supportingAsset').find(":selected").val();
+      setSelectTitle(document.getElementById('risk__supportingAsset'));
       updateRiskName('supportingAssetRef', selected);
       $('select[id="risk__supportingAsset"]').prop('style',`border:${existSupportingAsset(selected) != null && checkSupportingAssetRef(selected) ? 'none' : '3px solid ' + ERROR_COLOR}`);
     });
