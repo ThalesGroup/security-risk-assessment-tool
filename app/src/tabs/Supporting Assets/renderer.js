@@ -324,32 +324,33 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
       supportingAssetTable(fetchedData.SupportingAsset, fetchedData.BusinessAsset);
     };
 
-    $(document).ready(async function () {
-      window.project.load(async (event, data) => {
-        await tinymce.init({
-          selector: '.rich-text',
-          promotion: false,
-          height: 300,
-          min_height: 300,
-          verify_html: true,
-          statusbar: false,
-          link_target_list: false,
-          plugins: 'link lists image autoresize',
-          toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
-          file_picker_callback: function (callback, value, meta) {
-            // Provide image and alt text for the image dialog
-            if (meta.filetype == 'image') {
-              var input = document.createElement('input');
-              input.setAttribute('type', 'file');
-              input.setAttribute('accept', 'image/*');
+      $(document).ready(async function () {
+        window.project.load(async (event, data) => {
+          await tinymce.init({
+            selector: '.rich-text ',
+            promotion: false,
+            height: 300,
+            min_height: 300,
+            verify_html: true,
+            statusbar: false,
+            link_target_list: false,
+            removed_menuitems: 'newdocument',
+            plugins: 'link lists image autoresize',
+            toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
+            file_picker_callback: function (callback, value, meta) {
+              // Provide image and alt text for the image dialog
+              if (meta.filetype == 'image') {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
 
-              /*
-                Note: In modern browsers input[type="file"] is functional without
-                even adding it to the DOM, but that might not be the case in some older
-                or quirky browsers like IE, so you might want to add it to the DOM
-                just in case, and visually hide it. And do not forget do remove it
-                once you do not need it anymore.
-              */
+                /*
+                  Note: In modern browsers input[type="file"] is functional without
+                  even adding it to the DOM, but that might not be the case in some older
+                  or quirky browsers like IE, so you might want to add it to the DOM
+                  just in case, and visually hide it. And do not forget do remove it
+                  once you do not need it anymore.
+                */
 
               input.onchange = function () {
                 var file = this.files[0];
@@ -376,7 +377,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
               input.click();
             }
           },
-
+              
           setup: function (ed) {
             ed.on('change', function (e) {
               const desc = tinymce.get('product-architecture-diagram__text').getContent()

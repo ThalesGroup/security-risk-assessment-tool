@@ -112,7 +112,7 @@ function createWindow() {
     {
       label: 'Window',
       submenu: [
-        { role: 'toggleDevTools' },
+        ...(!app.isPackaged ? [{ role: 'toggleDevTools' }] : []),
         { role: 'togglefullscreen' },
         { role: 'reload' },
       ],
