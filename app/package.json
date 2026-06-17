@@ -15,7 +15,7 @@
         "dist-linux": "electron-builder -l",
         "dist-mac": "electron-builder -m",
         "dist-windows": "electron-builder -w"
-    },
+        },
     "build": {
         "fileAssociations": [
             {
@@ -37,13 +37,14 @@
             {
                 "from": "../lib",
                 "to": "lib",
-                "filter": [
-                    "**/*",
-                    "!**/node_modules/.bin",
-                    "!**/test/**"
-                ]
+                "filter": ["**/*", "!/node_modules", "!/test/**"]
+            },
+            {
+                "from": "../lib/node_modules",
+                "to": "lib/node_modules",
+                "filter": ["**/*", "!**/.bin"]
             }
-        ],
+            ],
         "mac": {
             "icon": "src/asset/isra-app-icon-512.png",
             "mergeASARs": false,
@@ -83,16 +84,16 @@
         },
         "appId": "com.thalesgroup.dis.sratool"
     },
-    "postinstall": "electron-builder install-app-deps",
     "dependencies": {
         "chart.js": "^4.3.2",
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
-        "tinymce": "^6.8.6"
+        "tinymce": "^6.8.6",
+        "xml2js": "^0.5.0"
     },
     "devDependencies": {
         "electron": "^22.3.27",
-        "electron-builder": "^24.13.3"
+        "electron-builder": "^26.15.3"
     },
     "overrides": {
         "got": "^11.8.5",
