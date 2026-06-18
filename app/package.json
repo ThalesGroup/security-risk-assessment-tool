@@ -1,112 +1,120 @@
 {
-  "name": "sratool",
-  "version": "1.3.0-alpha01",
-  "author": "Thales DIS",
-  "license": "BSD-4-Clause",
-  "description": "Security Risk Assessment tool",
-  "main": "./src/electron/main.js",
-  "engines": {
-    "node": ">=24.16.0"
-  },
-  "scripts": {
-    "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "dist-all": "electron-builder -mwl",
-    "build-dis": "export QUALIFIER=-DIS && electron-builder -mwl",
-    "build-oss": "export QUALIFIER='' && electron-builder -mwl",
-    "dist-linux": "electron-builder -l",
-    "dist-mac": "electron-builder -m",
-    "dist-windows": "electron-builder -w"a
-  },
-  "build": {
-    "fileAssociations": [
-      {
-        "ext": "sra",
-        "description": "ISRA File",
-        "role": "Editor"
-      },
-      {
-        "ext": "xml",
-        "description": "XML File",
-        "role": "Editor"
-      }
-    ],
-    "nsis": {
-      "perMachine": true
-    },
-    "artifactName": "${name}-${version}-${os}-${arch}${env.QUALIFIER}.${ext}",
-    "extraResources": [
-      {
-        "from": "../lib",
-        "to": "lib",
-        "filter": ["**/*", "!/node_modules", "!/test/**"]
-      },
-      {
-        "from": "../lib/node_modules",
-        "to": "lib/node_modules",
-        "filter": ["**/*", "!**/.bin"]
-      }
-    ],
-    "mac": {
-      "icon": "src/asset/isra-app-icon-512.png",
-      "mergeASARs": false,
-      "category": "public.app-category.business",
-      "target": [
-        {
-          "target": "zip",
-          "arch": "x64"
-        },
-        {
-          "target": "tar.gz",
-          "arch": "arm64"
-        }
-      ]
-    },
-    "win": {
-      "icon": "src/asset/isra-app-icon-512.png",
-      "target": [
-        {
-          "target": "zip",
-          "arch": "x64"
-        },
-        {
-          "target": "nsis",
-          "arch": "x64"
-        }
-      ]
-    },
-    "linux": {
-      "icon": "src/asset/isra-app-icon-512.png",
-      "target": [
-        {
-          "target": "tar.gz",
-          "arch": "x64"
-        }
-      ]
-    },
-    "appId": "com.thalesgroup.dis.sratool"
-  },
-  "dependencies": {
-    "chart.js": "^4.3.2",
-    "jquery": "^3.6.1",
-    "tabulator-tables": "^5.3.4",
-    "tinymce": "^6.8.6",
-    "xml2js": "^0.6.2"
-  },
-  "devDependencies": {
-    "electron": "^22.3.27",
-    "electron-builder": "^26.15.3"
-  },
-  "overrides": {
-    "got": "^11.8.5",
-    "tinymce": "^6.8.6",
-    "form-data": "^4.0.5",
-    "js-yaml": "^4.1.1",
-    "glob": "^10.5.0",
-    "tmp": "^0.2.5",
-    "app-builder-lib":{
-     "@noble/hashes": "1.8.0"
-    }
-}
+    "name": "sratool",
+    "version": "1.3.0-alpha01",
+    "author": "Thales DIS",
+    "license": "BSD-4-Clause",
+    "description": "Security Risk Assessment tool",
+    "main": "./src/electron/main.js",
+    "engines": {
+        "node": ">=22.13.0"
+    },
+    "scripts": {
+        "start": "electron .",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder",
+        "dist-all": "electron-builder -mwl",
+        "build-dis": "export QUALIFIER=-DIS && electron-builder -mwl",
+        "build-oss": "export QUALIFIER='' && electron-builder -mwl",
+        "dist-linux": "electron-builder -l",
+        "dist-mac": "electron-builder -m",
+        "dist-windows": "electron-builder -w"
+    },
+    "build": {
+        "fileAssociations": [
+            {
+                "ext": "sra",
+                "description": "ISRA File",
+                "role": "Editor"
+            },
+            {
+                "ext": "xml",
+                "description": "XML File",
+                "role": "Editor"
+            }
+        ],
+        "nsis": {
+            "perMachine": true
+        },
+        "artifactName": "${name}-${version}-${os}-${arch}${env.QUALIFIER}.${ext}",
+        "extraResources": [
+            {
+                "from": "../lib",
+                "to": "lib",
+                "filter": [
+                    "**/*",
+                    "!**/node_modules",
+                    "!**/test/**"
+                ]
+            },
+            {
+                "from": "../lib/node_modules",
+                "to": "lib/node_modules",
+                "filter": [
+                    "**/*",
+                    "!**/.bin"
+                ]
+            }
+        ],
+        "mac": {
+            "icon": "src/asset/isra-app-icon-512.png",
+            "mergeASARs": false,
+            "category": "public.app-category.business",
+            "target": [
+                {
+                    "target": "zip",
+                    "arch": "x64"
+                },
+                {
+                    "target": "tar.gz",
+                    "arch": "arm64"
+                }
+            ]
+        },
+        "win": {
+            "icon": "src/asset/isra-app-icon-512.png",
+            "target": [
+                {
+                    "target": "zip",
+                    "arch": "x64"
+                },
+                {
+                    "target": "nsis",
+                    "arch": "x64"
+                }
+            ]
+        },
+        "linux": {
+            "icon": "src/asset/isra-app-icon-512.png",
+            "target": [
+                {
+                    "target": "tar.gz",
+                    "arch": "x64"
+                }
+            ]
+        },
+        "appId": "com.thalesgroup.dis.sratool"
+    },
+    "dependencies": {
+        "chart.js": "^4.3.2",
+        "jquery": "^3.6.1",
+        "tabulator-tables": "^5.3.4",
+        "tinymce": "^6.8.6",
+        "update": "^0.7.4",
+        "xml2js": "^0.6.2"
+    },
+    "devDependencies": {
+        "electron": "^22.3.27",
+        "electron-builder": "^26.15.3"
+    },
+    "overrides": {
+        "got": "^11.8.5",
+        "tinymce": "^6.8.6",
+        "form-data": "^4.0.5",
+        "js-yaml": "^4.1.1",
+        "glob": "^10.5.0",
+        "tmp": "^0.2.5",
+        "app-builder-lib": {
+            "@noble/hashes": "1.8.0"
+        }
+    }
 }
