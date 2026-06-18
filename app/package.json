@@ -5,6 +5,9 @@
     "license": "BSD-4-Clause",
     "description": "Security Risk Assessment tool",
     "main": "./src/electron/main.js",
+    "engines": {
+        "node": ">=22.13.0"
+    },
     "scripts": {
         "start": "electron .",
         "pack": "electron-builder --dir",
@@ -15,7 +18,7 @@
         "dist-linux": "electron-builder -l",
         "dist-mac": "electron-builder -m",
         "dist-windows": "electron-builder -w"
-        },
+    },
     "build": {
         "fileAssociations": [
             {
@@ -37,14 +40,21 @@
             {
                 "from": "../lib",
                 "to": "lib",
-                "filter": ["**/*", "!/node_modules", "!/test/**"]
+                "filter": [
+                    "**/*",
+                    "!**/node_modules",
+                    "!**/test/**"
+                ]
             },
             {
                 "from": "../lib/node_modules",
                 "to": "lib/node_modules",
-                "filter": ["**/*", "!**/.bin"]
+                "filter": [
+                    "**/*",
+                    "!**/.bin"
+                ]
             }
-            ],
+        ],
         "mac": {
             "icon": "src/asset/isra-app-icon-512.png",
             "mergeASARs": false,
@@ -89,6 +99,7 @@
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
         "tinymce": "^6.8.6",
+        "update": "^0.7.4",
         "xml2js": "^0.6.2"
     },
     "devDependencies": {
@@ -101,6 +112,9 @@
         "form-data": "^4.0.5",
         "js-yaml": "^4.1.1",
         "glob": "^10.5.0",
-        "tmp": "^0.2.5"
+        "tmp": "^0.2.5",
+        "app-builder-lib": {
+            "@noble/hashes": "1.8.0"
+        }
     }
 }
