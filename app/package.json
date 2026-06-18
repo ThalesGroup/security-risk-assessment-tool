@@ -99,7 +99,6 @@
         "jquery": "^3.6.1",
         "tabulator-tables": "^5.3.4",
         "tinymce": "^6.8.6",
-        "update": "^0.7.4",
         "xml2js": "^0.6.2"
     },
     "devDependencies": {
