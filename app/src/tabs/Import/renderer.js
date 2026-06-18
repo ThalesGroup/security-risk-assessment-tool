@@ -112,6 +112,9 @@ const getSeverityColor = (level) => {
         },
         {
           title: 'Risk Level', field: 'residualRiskLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 80
+        },
+        {
+          title: 'Mgnt Decision', field: 'riskManagementDecision', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 140
         }
       ],
   }
