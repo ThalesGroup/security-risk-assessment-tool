@@ -378,6 +378,9 @@ const getSeverityColor = (level) => {
                 min_height: 300,
                 verify_html: true,
                 statusbar: false,
+                menu: {
+                  file: { title: 'File', items: 'restoredraft | preview | print' },
+                },
                 link_target_list: false,
                 plugins: 'link lists image autoresize',
                 toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | numlist bullist',
