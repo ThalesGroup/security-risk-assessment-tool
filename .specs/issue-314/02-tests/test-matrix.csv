@@ -1,7 +1,0 @@
-tc_id,level,ac_refs,req_refs,lld_refs,framework,location,targets,status
-TC-1,unit,AC-2,REQ-2;NFR-2,LLD-2,Jest,lib/test/unit/risk/transferred-risk.test.js::"Schema validation of new fields",—,red
-TC-2,unit,AC-2,REQ-2,LLD-2,Jest,lib/test/unit/risk/transferred-risk.test.js::"Risk Class getter/setter and serialization",—,red
-TC-3,unit,AC-4;AC-5,REQ-3;NFR-2,LLD-2,Jest,lib/test/unit/risk/transferred-risk.test.js::"Validation functions for transferred fields",—,red
-TC-4,integration,AC-3,REQ-4,LLD-1,Jest,lib/test/unit/risk/transferred-risk.test.js::"Backend Event handler short-circuit and score sync",—,red
-TC-5,integration,AC-1;AC-5,REQ-1;REQ-3,LLD-UI-1,Jest,app/test/vulnerability/transferred-renderer.test.js,—,red
-TC-6,integration,AC-6,REQ-1;REQ-3,LLD-UI-1,Jest,app/test/vulnerability/transferred-renderer.test.js,—,red
