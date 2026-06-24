@@ -1206,6 +1206,9 @@ function enableInteract(){
       applyCurrentSort();
       risksTable.deselectRow();
       risksTable.selectRow(risk.riskId);
+      risksTable.scrollToRow(risk.riskId, "bottom", false).catch((err) => {
+        console.log("Error scrolling to new risk row:", err);
+      });
       disableInteract()
       await addSelectedRowData(risk.riskId);
       enableInteract()
