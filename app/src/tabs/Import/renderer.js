@@ -21,7 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-/* global $ tinymce Tabulator */
+/* global $ hugerte Tabulator */
 
 //const { ipcRenderer } = require('electron').ipcRenderer;
 

@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ Tabulator tinymce */
+/* global $ Tabulator hugerte */
 
 const { TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
@@ -316,7 +316,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 
     const supportingAssetsDesc = (desc) => {
       // initialised in project-context.js
-      tinymce.get('product-architecture-diagram__text').setContent(desc);
+      hugerte.get('product-architecture-diagram__text').setContent(desc);
     };
 
     const updateSupportingAssetFields = (fetchedData) => {
@@ -326,7 +326,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 
     $(document).ready(async function () {
       window.project.load(async (event, data) => {
-        await tinymce.init({
+        await hugerte.init({
           selector: '.rich-text',
           promotion: false,
           height: 300,
@@ -357,12 +357,12 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in hugertes image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
                   var id = 'blobid' + (new Date()).getTime();
-                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var blobCache = hugerte.activeEditor.editorUpload.blobCache;
                   var base64 = reader.result.split(',')[1];
                   var blobInfo = blobCache.create(id, file, base64);
                   blobCache.add(blobInfo);
@@ -379,7 +379,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 
           setup: function (ed) {
             ed.on('change', function (e) {
-              const desc = tinymce.get('product-architecture-diagram__text').getContent()
+              const desc = hugerte.get('product-architecture-diagram__text').getContent()
               const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
               window.validate.supportingAssets(tableData, desc);
 
