@@ -1,0 +1,141 @@
+/*----------------------------------------------------------------------------
+*
+*     Copyright © 2022-2025 THALES. All Rights Reserved.
+*
+* -----------------------------------------------------------------------------
+* THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+* THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+*
+* THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
+* CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+* PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
+* NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
+* SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
+* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+* PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
+* SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
+* HIGH RISK ACTIVITIES.
+* -----------------------------------------------------------------------------
+*/
+
+/* The dashboard wants the full width, not the default narrow 55% column. */
+.contentWrapper {
+    width: 92%;
+    min-width: 800px;
+}
+
+.dashboard__title {
+    text-align: center;
+    margin: 0;
+}
+
+.dashboard__subtitle {
+    text-align: center;
+    font-size: 16px;
+    font-weight: normal;
+    color: #4f4f4f;
+    margin-top: 4px;
+}
+
+.dashboard__empty {
+    text-align: center;
+    color: #4f4f4f;
+    border: 1px dashed #b0b0b0;
+    border-radius: 8px;
+    padding: 40px 20px;
+    margin-top: 20px;
+    background-color: #fafafa;
+}
+
+/* ---- KPI cards ---- */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    padding: 0;
+}
+
+.kpi-card {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 16px 10px;
+    text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-top: 4px solid #4f7bc0;
+}
+
+.kpi-card--warn {
+    border-top-color: var(--severity-high);
+}
+
+.kpi-value {
+    font-size: 30px;
+    font-weight: bold;
+    color: #2b2b2b;
+}
+
+.kpi-label {
+    font-size: 12px;
+    color: #6a6a6a;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* ---- charts ---- */
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    padding: 0;
+    margin-top: 18px;
+}
+
+.chart-card {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 14px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.chart-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+    text-align: center;
+    color: #2b2b2b;
+}
+
+.chart-box {
+    position: relative;
+    height: 240px;
+}
+
+/* ---- top risks ---- */
+.top-risks {
+    margin-top: 18px;
+    padding: 0;
+}
+
+.top-risks h3 {
+    font-size: 15px;
+    color: #2b2b2b;
+}
+
+.level-chip {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .chart-grid { grid-template-columns: 1fr; }
+}

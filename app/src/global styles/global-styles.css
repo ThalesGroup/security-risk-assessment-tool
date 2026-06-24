@@ -62,7 +62,7 @@ textarea {
 
 .buttonWrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(8, 1fr);
     z-index: 3;
     box-shadow: 0px 0px 1px black;
 }
@@ -76,6 +76,9 @@ textarea {
     border-width: 0 0 0 1px;
     border-color: rgba(139, 139, 139, 0.281);
     border-style: solid;
+}
+button.tab-button.active[data-id='dashboard']{
+    border-bottom: 2px solid #4f7bc0;
 }
 button.tab-button.active[data-id='welcome']{
     border-bottom: 2px solid black;
