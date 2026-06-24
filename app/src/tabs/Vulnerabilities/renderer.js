@@ -84,7 +84,7 @@ const getSeverityColor = (level) => {
         else  {
             cell.getElement().style.color = DEFAULT_TEXT_COLOR;
         }
-        return cell.getValue()
+        return `<span class="text-wrap">${cell.getValue()}</span>`;
     }
 
     tableOptions.columns[overallLevelIndex].formatter = (cell) => {
