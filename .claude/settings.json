@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(d);const f=(j.tool_input||{}).file_path||'';if(f.includes('lib')&&(f.endsWith('.js')||f.endsWith('.mjs'))){const p=require('path');const s=require('child_process').spawnSync('npx',['eslint','--fix',f],{cwd:p.join(process.cwd(),'lib'),shell:true,encoding:'utf8'});if(s.stdout)process.stdout.write(s.stdout);if(s.stderr)process.stderr.write(s.stderr);}}catch(e){}});\"",
+            "description": "Auto-lint lib JS files with ESLint after edit"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(d);const f=(j.tool_input||{}).file_path||'';if(f.endsWith('package-lock.json')){process.stderr.write('BLOCKED: Do not edit package-lock.json directly. Run npm install instead.\\n');process.exit(2);}}catch(e){}});\"",
+            "description": "Block direct edits to package-lock.json"
+          }
+        ]
+      }
+    ]
+  }
+}
