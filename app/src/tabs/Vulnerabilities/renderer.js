@@ -21,7 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-/* global $ tinymce Tabulator */
+/* global $ hugerte Tabulator */
 
 const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
@@ -245,7 +245,7 @@ const getSeverityColor = (level) => {
         vulnerabilityURL(vulnerabilityTrackingURI);
         $('#vulnerability__CVE').val(vulnerabilityCVE);
         $('select[id="vulnerability__family"]').val(!vulnerabilityFamily ? '' : vulnerabilityFamily);
-        tinymce.get('vulnerability__details').setContent(vulnerabilityDescription);
+        hugerte.get('vulnerability__details').setContent(vulnerabilityDescription);
         $("#vulnerability__details__id").prop('style',`color:${vulnerabilityDescription ? DEFAULT_TEXT_COLOR : ERROR_COLOR}`)
 
         if (!Number.isInteger(cveScore) && cveScore.toString().split('.')[1].length > 1) {
@@ -371,7 +371,7 @@ const getSeverityColor = (level) => {
     $(document).ready(async function () {
         window.project.load(async (event, data) => {
         fetchedData = await JSON.parse(data);
-            await tinymce.init({
+            await hugerte.init({
                 selector: '.rich-text',
                 promotion: false,
                 height: 300,
@@ -402,12 +402,12 @@ const getSeverityColor = (level) => {
                             var reader = new FileReader();
                             reader.onload = function () {
                                 /*
-                                  Note: Now we need to register the blob in TinyMCEs image blob
+                                  Note: Now we need to register the blob in hugertes image blob
                                   registry. In the next release this part hopefully won't be
                                   necessary, as we are looking to handle it internally.
                                 */
                                 var id = 'blobid' + (new Date()).getTime();
-                                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                                var blobCache = hugerte.activeEditor.editorUpload.blobCache;
                                 var base64 = reader.result.split(',')[1];
                                 var blobInfo = blobCache.create(id, file, base64);
                                 blobCache.add(blobInfo);
@@ -424,7 +424,7 @@ const getSeverityColor = (level) => {
                 setup: function (ed) {
                     ed.on('change', function (e) {
                         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
-                        vulnerability.vulnerabilityDescription = tinymce.activeEditor.getContent();
+                        vulnerability.vulnerabilityDescription = hugerte.activeEditor.getContent();
                         validateVulnerabilityName(vulnerability);
                         validatePreviousVulnerability(getCurrentVulnerabilityId());
                     });
