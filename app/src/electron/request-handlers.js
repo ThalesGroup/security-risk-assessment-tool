@@ -624,13 +624,14 @@ const exit = (e, app) => {
 */
 const loadJSONFile = async (win, filePath) => {
   try {
-    
+
     israProject = DataLoad(filePath);
     win.webContents.send('project:load', israProject.toJSON());
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
     oldIsraProject = israProject.toJSON();
+    notifySanitizedURIs(israProject);
   } catch (err) {
     console.log(err);
     const errorMessage = getError(err)
@@ -650,11 +651,33 @@ const loadXMLFile = (win, filePath) => {
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
+    notifySanitizedURIs(israProject);
   } catch (err) {
     console.log(err);
     const errorMessage = getError(err)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${errorMessage}` });
   }
+};
+
+// Surface URIs that the loader silently dropped because they did not match
+// the allowed URL pattern. Schemes accepted: http, https, ftp, mailto, tel,
+// urn. Anything else (typos, missing scheme) is wiped to "" — without this
+// dialog the user has no signal it happened.
+const notifySanitizedURIs = (project) => {
+  if (!project || !Array.isArray(project.sanitizationReport) || project.sanitizationReport.length === 0) return;
+  const lines = project.sanitizationReport.map(
+    ({ vulnerabilityName, original }) => `  • ${vulnerabilityName || '(unnamed vulnerability)'}: ${original}`
+  );
+  const count = project.sanitizationReport.length;
+  dialog.showMessageBoxSync(getMainWindow(), {
+    type: 'warning',
+    title: 'Tracking URLs removed',
+    message: `${count} invalid tracking URL${count === 1 ? '' : 's'} ${count === 1 ? 'was' : 'were'} removed during open.`,
+    detail:
+      `${lines.join('\n')}\n\n` +
+      'Allowed schemes: http, https, ftp, mailto, tel, urn.\n' +
+      'The originals are shown above so you can correct them in the source file if needed.',
+  });
 };
 
 /**
