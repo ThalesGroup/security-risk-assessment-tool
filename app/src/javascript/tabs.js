@@ -227,6 +227,42 @@ $(document).keydown(function(e) {
   }
 });
 
+// Preserve and restore scroll positions of panels
+window.addEventListener('beforeunload', () => {
+  const activeTabElement = document.querySelector('.tab-button.active');
+  const scrollWrapper = document.querySelector('.scrollingWrapper');
+  if (activeTabElement && scrollWrapper) {
+    const activeTab = activeTabElement.getAttribute('data-id');
+    sessionStorage.setItem(`scroll-${activeTab}`, scrollWrapper.scrollTop);
+  }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const activeTabElement = document.querySelector('.tab-button.active');
+  const scrollWrapper = document.querySelector('.scrollingWrapper');
+  
+  if (activeTabElement && scrollWrapper) {
+    const activeTab = activeTabElement.getAttribute('data-id');
+    const savedScroll = sessionStorage.getItem(`scroll-${activeTab}`);
+    
+    if (savedScroll !== null) {
+      const targetScroll = parseInt(savedScroll, 10);
+      let attempts = 0;
+      
+      const interval = setInterval(() => {
+        if (scrollWrapper.scrollHeight > scrollWrapper.clientHeight) {
+          scrollWrapper.scrollTop = targetScroll;
+        }
+        
+        attempts++;
+        if (Math.abs(scrollWrapper.scrollTop - targetScroll) < 5 || attempts >= 15) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  }
+});
+
 // check if user is connected to internet
 // if (!navigator.onLine)
 
