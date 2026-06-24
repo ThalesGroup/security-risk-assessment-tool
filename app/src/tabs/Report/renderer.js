@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ tinymce */
+/* global $ hugerte */
 const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
 const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;

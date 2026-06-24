@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ tinymce Tabulator */
+/* global $ hugerte Tabulator */
 
 const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
@@ -713,7 +713,7 @@ function enableInteract(){
 
     const addRichTextArea = async(selector, desc, width, riskMitigationId) => {
       const promiseSetup = new Promise((resolveSetup, rejectSetup) => {
-        tinymce.init({
+        hugerte.init({
           selector,
           promotion: false,
           height: 250,
@@ -746,12 +746,12 @@ function enableInteract(){
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
                   var id = 'blobid' + (new Date()).getTime();
-                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var blobCache = hugerte.activeEditor.editorUpload.blobCache;
                   var base64 = reader.result.split(',')[1];
                   var blobInfo = blobCache.create(id, file, base64);
                   blobCache.add(blobInfo);
@@ -777,7 +777,7 @@ function enableInteract(){
 
             editor.on('change', function (e) {
               const { id } = e.target;
-              let richText = tinymce.get(id).getContent();
+              let richText = hugerte.get(id).getContent();
               const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
               const { riskMitigation } = risk;
               const mitigation = riskMitigation.find((mitigation) => mitigation.riskMitigationId === riskMitigationId);
@@ -1033,9 +1033,9 @@ function enableInteract(){
 
         // Set Risk description data
         $('.riskId').text(riskId);
-        tinymce.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
-        tinymce.get('risk__threat__rich-text').setContent(threatVerbDetail);
-        tinymce.get('risk__motivation__rich-text').setContent(motivationDetail);
+        hugerte.get('risk__threatAgent__rich-text').setContent(threatAgentDetail);
+        hugerte.get('risk__threat__rich-text').setContent(threatVerbDetail);
+        hugerte.get('risk__motivation__rich-text').setContent(motivationDetail);
         
         $('select[id="risk__threatAgent"]').val(threatAgent);
         $('select[id="risk__threat"]').val(threatVerb);
@@ -1061,7 +1061,7 @@ function enableInteract(){
         $('#risks__vulnerability__attack__path').empty();
         setSecurityPropertyValues(riskLikelihood);
         updateOccurrenceThreatFactorTable(threatFactorLevel, occurrenceLevel);
-        tinymce.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
+        hugerte.get('risk__likelihood__details').setContent(riskLikelihoodDetail);
 
         if(isOWASPLikelihood){
           $('#risk__simple__evaluation').hide();
@@ -1084,7 +1084,7 @@ function enableInteract(){
 
         //risk management
         $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
-        tinymce.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
+        hugerte.get('risk__management__detail__rich-text').setContent(riskManagementDetail);
         $('#residual_risk_score').text(residualRiskScore == null ? '' : residualRiskScore);
         $('#residual_risk_level').text(residualRiskLevel == null ? '' : residualRiskLevel);
         styleResidualRiskLevel(residualRiskLevel);
@@ -1246,7 +1246,7 @@ function enableInteract(){
         vulnerabilities = fetchedData.Vulnerability;
         assetsRelationshipSetUp(fetchedData);
         
-        await tinymce.init({
+        await hugerte.init({
           selector: '.rich-text',
           promotion: false,
           height: 300,
@@ -1274,12 +1274,12 @@ function enableInteract(){
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
                   var id = 'blobid' + (new Date()).getTime();
-                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var blobCache = hugerte.activeEditor.editorUpload.blobCache;
                   var base64 = reader.result.split(',')[1];
                   var blobInfo = blobCache.create(id, file, base64);
                   blobCache.add(blobInfo);
@@ -1294,7 +1294,7 @@ function enableInteract(){
           setup: function (ed) {
             ed.on('change', function (e) {
               const { id } = e.target;
-              let richText = tinymce.get(id).getContent();
+              let richText = hugerte.get(id).getContent();
               const risk = risksData.find((risk) => risk.riskId === getCurrentRiskId());
               const { riskLikelihood } = risk;
               if (id === 'risk__threatAgent__rich-text') risk.threatAgentDetail = richText;

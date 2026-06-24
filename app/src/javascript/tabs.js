@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ Tabulator tinymce */
+/* global $ Tabulator hugerte */
 
 const tabs = document.querySelector('.wrapper');
 const tabButton = document.querySelectorAll('.tab-button');
@@ -68,10 +68,10 @@ const validateTabs = (tab) => {
 
   const validateProjectContext = () => {
     window.validate.projectContext([
-      tinymce.get('project-description__text').getContent(),
-      tinymce.get('project-objectives__text').getContent(),
-      tinymce.get('officer-objectives__text').getContent(),
-      tinymce.get('assumptions__text').getContent(),
+      hugerte.get('project-description__text').getContent(),
+      hugerte.get('project-objectives__text').getContent(),
+      hugerte.get('officer-objectives__text').getContent(),
+      hugerte.get('assumptions__text').getContent(),
     ]);
   };
 
@@ -79,14 +79,14 @@ const validateTabs = (tab) => {
     const checkboxIds = document.getElementsByName('business-assets__section-checkboxes');
     checkboxIds.forEach((id) => {
       const tableData = Tabulator.findTable(`#business-assets__section-table__${id.value}`)[0].getData()[0];
-      tableData.businessAssetDescription = tinymce.get(`business-assets__section-text-${id.value}`).getContent();
+      tableData.businessAssetDescription = hugerte.get(`business-assets__section-text-${id.value}`).getContent();
       window.validate.businessAssets(tableData);
     });
   };
 
   const validateSupportingAsset = () => {
     const tableData = Tabulator.findTable('#supporting-assets__section-table')[0].getData();
-    const desc = tinymce.get('product-architecture-diagram__text').getContent();
+    const desc = hugerte.get('product-architecture-diagram__text').getContent();
     window.validate.supportingAssets(tableData, desc);
   };
 
@@ -97,20 +97,20 @@ const validateTabs = (tab) => {
     const selectedTableData = Tabulator.findTable('#risks__table')[0].getSelectedData()[0];
     if (selectedTableData){
       data.riskId = selectedTableData.riskId;
-      data.threatAgentDetail = tinymce.get('risk__threatAgent__rich-text').getContent();
-      data.threatVerbDetail = tinymce.get('risk__threat__rich-text').getContent();
-      data.motivationDetail = tinymce.get('risk__motivation__rich-text').getContent();
-      data.riskLikelihood.riskLikelihoodDetail = tinymce.get('risk__likelihood__details').getContent();
+      data.threatAgentDetail = hugerte.get('risk__threatAgent__rich-text').getContent();
+      data.threatVerbDetail = hugerte.get('risk__threat__rich-text').getContent();
+      data.motivationDetail = hugerte.get('risk__motivation__rich-text').getContent();
+      data.riskLikelihood.riskLikelihoodDetail = hugerte.get('risk__likelihood__details').getContent();
       data.riskMitigation = [];
       $('.mitigations section .top').each((index)=> {
         const mitigation = {};
         mitigation.riskMitigationId = index + 1;
-        mitigation.description = tinymce.get(`security__control__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
+        mitigation.description = hugerte.get(`security__control__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
         mitigation.cost = $(`#risk__mitigation__cost__${index + 1}`).val() === '' ? null : Number($(`#risk__mitigation__cost__${index + 1}`).val());
-        mitigation.decisionDetail = tinymce.get(`comment__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
+        mitigation.decisionDetail = hugerte.get(`comment__desc__rich-text__${data.riskId}__${index + 1}`).getContent();
         data.riskMitigation.push(mitigation);
       });
-      data.riskManagementDetail = tinymce.get('risk__management__detail__rich-text').getContent();
+      data.riskManagementDetail = hugerte.get('risk__management__detail__rich-text').getContent();
       window.validate.risks(data);
     }
   };
@@ -121,7 +121,7 @@ const validateTabs = (tab) => {
     if (selectedTableData){
       data.vulnerabilityId = selectedTableData.vulnerabilityId;
       data.vulnerabilityTrackingID = $('input[name="vulnerability__trackingID"]').val();
-      data.vulnerabilityDescription = tinymce.get('vulnerability__details').getContent();
+      data.vulnerabilityDescription = hugerte.get('vulnerability__details').getContent();
       data.vulnerabilityCVE = $('input[name="vulnerability__CVE"]').val();
       data.vulnerabilityFamily = $('select[name="vulnerability__family"]').val();
       window.validate.vulnerabilities(data);

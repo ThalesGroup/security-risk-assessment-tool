@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ Tabulator tinymce */
+/* global $ Tabulator hugerte */
 
 function updateBusinessAssetName(id, field){
   const value = document.querySelector(`textarea[id="${id}"][name="businessAssetName"]`).value;  
@@ -108,7 +108,7 @@ function updateBusinessAssetName(id, field){
     };
 
     const addDesc = async (id, desc) => {
-      await tinymce.init({
+      await hugerte.init({
         selector: `#business-assets__section-text-${id}`,
         promotion: false,
         height: 200,
@@ -139,12 +139,12 @@ function updateBusinessAssetName(id, field){
               var reader = new FileReader();
               reader.onload = function () {
                 /*
-                  Note: Now we need to register the blob in TinyMCEs image blob
+                  Note: Now we need to register the blob in HugeRTEs image blob
                   registry. In the next release this part hopefully won't be
                   necessary, as we are looking to handle it internally.
                 */
                 var id = 'blobid' + (new Date()).getTime();
-                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                var blobCache = hugerte.activeEditor.editorUpload.blobCache;
                 var base64 = reader.result.split(',')[1];
                 var blobInfo = blobCache.create(id, file, base64);
                 blobCache.add(blobInfo);
@@ -164,7 +164,7 @@ function updateBusinessAssetName(id, field){
             editor.setContent(content);
           });
           editor.on('change', function (e) {
-            let richText = tinymce.get(e.target.id).getContent();
+            let richText = hugerte.get(e.target.id).getContent();
             const id = e.target.id.replace(/\D/g,'')
             const tableData = Tabulator.findTable(`#business-assets__section-table__${id}`)[0].getData()[0];
             tableData.businessAssetDescription = richText
@@ -232,7 +232,7 @@ function updateBusinessAssetName(id, field){
 
     $(document).ready(function () {
       window.project.load(async (event, data) => {
-        tinymce.remove('.business-assets-rich-text');
+        hugerte.remove('.business-assets-rich-text');
         $('#business-assets__sections').empty();
         addBusinessAssetSection(await JSON.parse(data).BusinessAsset);
       });
@@ -251,7 +251,7 @@ function updateBusinessAssetName(id, field){
 
       await window.businessAssets.deleteBusinessAsset(checkedSections);
       checkedSections.forEach((id) => {
-        tinymce.remove(`#business-assets__section-text-${id}`);
+        hugerte.remove(`#business-assets__section-text-${id}`);
         $(`#business-assets__section__${id}`).remove();
         $(`input[id="business-assets__section__checkbox-${id}"]`).remove();
       });

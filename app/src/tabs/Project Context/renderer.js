@@ -21,7 +21,7 @@
 * HIGH RISK ACTIVITIES.
 * -----------------------------------------------------------------------------
 */
-/* global $ tinymce */
+/* global $ hugerte */
 
 (async () => {
   try {
@@ -37,7 +37,7 @@
     $('#project-context').append(result[0]);
 
     const projectDescription = (value) => {
-      tinymce.get('project-description__text').setContent(value);
+      hugerte.get('project-description__text').setContent(value);
     };
 
     const projectURL = (value) => {
@@ -86,15 +86,15 @@
     };
 
     const projectObjectives = (value) => {
-      tinymce.get('project-objectives__text').setContent(value);
+      hugerte.get('project-objectives__text').setContent(value);
     };
 
     const officerObjectives = (value) => {
-      tinymce.get('officer-objectives__text').setContent(value);
+      hugerte.get('officer-objectives__text').setContent(value);
     };
 
     const assumptions = (value) => {
-      tinymce.get('assumptions__text').setContent(value);
+      hugerte.get('assumptions__text').setContent(value);
     };
 
     const updateProjectContextFields = (fetchedData) => {
@@ -108,7 +108,7 @@
 
     $(document).ready(function () {
       window.project.load(async (event, data) => {
-        await tinymce.init({
+        await hugerte.init({
           tooltip: 'Add your formatted picures!!',
           selector: '.rich-text',
           promotion: false,
@@ -140,12 +140,12 @@
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
                   var id = 'blobid' + (new Date()).getTime();
-                  var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                  var blobCache = hugerte.activeEditor.editorUpload.blobCache;
                   var base64 = reader.result.split(',')[1];
                   var blobInfo = blobCache.create(id, file, base64);
                   blobCache.add(blobInfo);
@@ -163,10 +163,10 @@
           setup: function (ed) {
             ed.on('change', function (e) {
               window.validate.projectContext([
-                tinymce.get('project-description__text').getContent(),
-                tinymce.get('project-objectives__text').getContent(),
-                tinymce.get('officer-objectives__text').getContent(),
-                tinymce.get('assumptions__text').getContent(),
+                hugerte.get('project-description__text').getContent(),
+                hugerte.get('project-objectives__text').getContent(),
+                hugerte.get('officer-objectives__text').getContent(),
+                hugerte.get('assumptions__text').getContent(),
               ]);
 
 
