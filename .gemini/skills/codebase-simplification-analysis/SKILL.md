@@ -61,7 +61,7 @@ Rate each file from **0 to 10** on simplification potential:
 
 ---
 
-### Phase 3: Create Work Queue
+### Phase 3: Create Work Queue & Present Plan
 Use the task-creation mechanisms (e.g. `TaskCreate` or equivalent system workflow) to build a prioritized work queue of files needing simplification (score >= 5).
 
 Format each task entry as follows:
@@ -69,10 +69,17 @@ Format each task entry as follows:
 * **Description**: `Score: {N}/10 | Reason: {brief reason detailing criteria matched}`
 * **Active Form**: `Simplifying {filename}`
 
+#### Plan Presentation & Confirmation (Mandatory Checkpoint)
+Before starting Phase 4 (Parallel Simplification), you **MUST** present the prioritized work queue to the user as a clear, formatted table/list (the Plan).
+* Detail each candidate file, its simplification score, and the specific reasons/areas for improvement.
+* **Stop and ask the user for explicit approval** to proceed with execution using the `ask_user` tool or a direct confirmation question.
+* Do **NOT** start any subagents or make any code modifications until the user explicitly confirms and approves the plan.
+* Allow the user to remove specific files or customize the scope of the simplification before proceeding.
+
 ---
 
-### Phase 4: Parallel Simplification
-For each file in the prioritized queue, launch a background subagent (such as `generalist`) concurrently:
+### Phase 4: Parallel Simplification (After User Approval)
+Once (and only after) the user has explicitly confirmed and approved the plan, proceed with simplification. For each file in the approved work queue, launch a background subagent (such as `generalist`) concurrently:
 
 ```markdown
 Launch background subagent:
