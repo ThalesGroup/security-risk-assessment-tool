@@ -140,7 +140,7 @@
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in hugertes image blob
+                    Note: Now we need to register the blob HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
