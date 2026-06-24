@@ -1,0 +1,78 @@
+{
+  "feature_key": "issue-314",
+  "workspace_path": ".specs/issue-314",
+  "title": "Provide a dedicated flow for risks transferred from a dependency",
+  "stage": "implement-complete",
+  "stages": {
+    "init": {
+      "done": true,
+      "at": "2026-06-24T18:00:00Z"
+    },
+    "design": {
+      "done": true,
+      "at": "2026-06-24T18:30:00Z",
+      "gates": {
+        "lld_complete": true,
+        "acceptance_covers_all_reqs": true,
+        "plan_ordered_and_sized": true,
+        "risks_registered": true
+      }
+    },
+    "tests": {
+      "done": true,
+      "at": "2026-06-24T18:40:00Z",
+      "gates": {
+        "red_state_confirmed": true
+      }
+    },
+    "implement": {
+      "done": true,
+      "at": "2026-06-24T19:38:00Z",
+      "gates": {
+        "green_state_confirmed": true
+      }
+    }
+  },
+  "counters": {
+    "REQ": 4,
+    "NFR": 2,
+    "AC": 6,
+    "LLD": 3,
+    "TASK": 6,
+    "RISK": 2,
+    "TC": 6,
+    "Q": 1
+  },
+  "open_clarifications": 0,
+  "open_risks": 2,
+  "toolchain": {
+    "build_system": "npm",
+    "test_framework": "jest",
+    "build_command": "npm install",
+    "test_command": "npm run test"
+  },
+  "host_integrations": {
+    "knowledge_base": null,
+    "formal_docs_root": null,
+    "jira_mcp": false,
+    "github_mcp": false,
+    "gitlab_mcp": false,
+    "ci": "github-actions"
+  },
+  "artifacts": [
+    { "path": "00-inputs/inputs.yaml", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "00-inputs/context-manifest.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "00-inputs/pm-requirements.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "traceability.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "clarifications.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "README.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "01-design/lld.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "01-design/acceptance.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "01-design/plan.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "01-design/risks.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "02-tests/tests.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "02-tests/test-matrix.csv", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "03-impl/impl-log.md", "generator": "skill-spec-driven-dev@0.2.0" },
+    { "path": "03-impl/verify-report.md", "generator": "skill-spec-driven-dev@0.2.0" }
+  ]
+}
