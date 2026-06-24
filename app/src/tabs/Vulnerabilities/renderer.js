@@ -84,13 +84,13 @@ const getSeverityColor = (level) => {
         else  {
             cell.getElement().style.color = DEFAULT_TEXT_COLOR;
         }
-        return cell.getValue()
+        return escapeHtml(cell.getValue());
     }
 
     tableOptions.columns[overallLevelIndex].formatter = (cell) => {
         const overallLevel = cell.getValue()
         cell.getElement().style.color = getSeverityColor(overallLevel);
-        return overallLevel;
+        return escapeHtml(overallLevel);
     }
 
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
@@ -347,7 +347,7 @@ const getSeverityColor = (level) => {
             // add label
             const label = document.createElement('label');
             label.classList.add('text-wrap');
-            label.innerHTML = sa.supportingAssetName;
+            label.textContent = sa.supportingAssetName;
             div.append(label);
             $('.refs').append(div);
             
