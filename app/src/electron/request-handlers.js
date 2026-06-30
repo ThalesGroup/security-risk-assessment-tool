@@ -36,6 +36,7 @@ const fs = require('fs');
 const parser = require('../../../lib/src/api/xml-json/parser');
 const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra');
 const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
+const cleanupVulnerabilitySupportingAssets = require('../../../lib/src/api/xml-json/alter-isra/cleanup-vulnerability-refs');  
 
 const errorMessages = require('./validation')
 
@@ -740,9 +741,12 @@ function getJSON(filePath){
           }
         }
       }
+      const vulnerabilitySupportingAssetCleanup = cleanupVulnerabilitySupportingAssets(jsonData);
 
       const importedISRA = validateJsonSchema(jsonData);
-      return importedISRA
+      importedISRA.vulnerabilitySupportingAssetCleanup = vulnerabilitySupportingAssetCleanup;
+
+      return importedISRA;
     } catch (error) {
       console.log(error);
       const errorMessage = getError(error)
@@ -786,7 +790,7 @@ function getXML(filePath) {
       const importedISRA = validateJsonSchema(israJSONData);
       return importedISRA
 
-  } catch (error) {
+  } catch {
     console.log(error);
     const errorMessage = getError(error)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File \n\n${errorMessage}` });
@@ -847,8 +851,7 @@ const loadData = async (win) => {
         show: false,
         webPreferences: {
           preload: path.join(__dirname, './preload.js'),
-          contextIsolation: true,
-          nodeIntegration: false,
+          
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'../tabs/Import/import_dialog.html'));
@@ -937,8 +940,6 @@ const downloadReport = async (app) => {
         show: false,
         webPreferences: {
           preload: path.join(__dirname, './preload.js'),
-          contextIsolation: true,
-          nodeIntegration: false,
         },
       });
       win.loadFile(path.join(__dirname, '../tabs/Report/report.html'));
