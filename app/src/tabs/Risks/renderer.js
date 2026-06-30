@@ -1170,6 +1170,7 @@ function enableInteract(){
 
     const updateRisksFields = async (fetchedData) => {
       risksTable.clearData();
+      // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
