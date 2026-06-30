@@ -312,27 +312,27 @@ const validateClasses = () => {
       return true
     };
 
-    // Check if the vulnerability exists and has valid name/description.
-    // SA-match is NOT enforced here: cross-SA vulnerability refs are a valid
-    // workflow (UI already marks mismatches in red as a visual hint).
-    const checkVulnerabilityRef = (ref) =>{
+    // Check if the supportingAsset exists globally
+    const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
       if (ref === null) return false
-      const found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
-      if (!found) return true; // dangling ref — cleaned up on load, skip here
+      found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
       if (
-        found.vulnerabilityName === '' ||
+        !found ||
+        !found.supportingAssetRef.includes(supportingAssetRef) ||
+        !checkSupportingAssetRefArray(found.supportingAssetRef) || 
+        found.vulnerabilityName === '' || 
         found.vulnerabilityDescription === ''
       ) return false
       return true
     };
 
     // Check if each vulnerability in attackPaths exist globally
-    const checkRiskAttackPaths = (attackPaths) =>{
+    const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
       if(attackPaths.length){
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
             for (const ref of attackPath.vulnerabilityRef) {
-              if (!checkVulnerabilityRef(ref)) return false
+              if (!checkVulnerabilityRef(ref,supportingAssetRef)) return false
             }
           }
         }
@@ -354,8 +354,8 @@ const validateClasses = () => {
   };
 
   const validateRiskEvaluation = (risk) => {
-    const { riskAttackPaths } = risk;
-    if (!checkRiskAttackPaths(riskAttackPaths)){
+    const { supportingAssetRef, riskAttackPaths } = risk;
+    if (!checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
       return false;
     } else return true;
   };
@@ -786,7 +786,7 @@ function getXML(filePath) {
       const importedISRA = validateJsonSchema(israJSONData);
       return importedISRA
 
-  } catch {
+  } catch (error) {
     console.log(error);
     const errorMessage = getError(error)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File \n\n${errorMessage}` });
@@ -847,6 +847,8 @@ const loadData = async (win) => {
         show: false,
         webPreferences: {
           preload: path.join(__dirname, './preload.js'),
+          contextIsolation: true,
+          nodeIntegration: false,
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'../tabs/Import/import_dialog.html'));
@@ -935,6 +937,8 @@ const downloadReport = async (app) => {
         show: false,
         webPreferences: {
           preload: path.join(__dirname, './preload.js'),
+          contextIsolation: true,
+          nodeIntegration: false,
         },
       });
       win.loadFile(path.join(__dirname, '../tabs/Report/report.html'));

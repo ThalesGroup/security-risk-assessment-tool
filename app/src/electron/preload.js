@@ -24,12 +24,7 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Helper: register an ipcRenderer listener and explicitly return undefined so that
-// contextBridge does not attempt to serialize the IpcRenderer instance that
-// ipcRenderer.on() returns in Electron v28+. The IpcRendererEvent is also stripped
-// before forwarding arguments to the renderer callback because the event object
-// contains non-serializable Electron internals (e.g. WebContents) that contextBridge
-// cannot clone via the Structured Clone Algorithm.
+
 const onIpc = (channel, data) => {
   ipcRenderer.on(channel, (_event, ...args) => data(...args));
 };
