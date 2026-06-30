@@ -369,7 +369,7 @@ const getSeverityColor = (level) => {
     };
 
     $(document).ready(async function () {
-        window.project.load(async (data) => {
+        window.project.load(async (event, data) => {
         fetchedData = await JSON.parse(data);
             await hugerte.init({
                 selector: '.rich-text',
@@ -402,7 +402,7 @@ const getSeverityColor = (level) => {
                             var reader = new FileReader();
                             reader.onload = function () {
                                 /*
-                                  Note: Now we need to register the blob in TinyMCEs image blob
+                                  Note: Now we need to register the blob in HugeRTEs image blob
                                   registry. In the next release this part hopefully won't be
                                   necessary, as we are looking to handle it internally.
                                 */
@@ -532,7 +532,7 @@ const getSeverityColor = (level) => {
 
     $('#vulnerability__attachment').on('click', () => {
         window.vulnerabilities.attachment(getCurrentVulnerabilityId());
-        window.vulnerabilities.fileName(async (result) => {
+        window.vulnerabilities.fileName(async (event, result) => {
             const fileName = result;
             $('#vulnerability__file--insert').text(fileName);
         });

@@ -24,22 +24,25 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
-
-const onIpc = (channel, data) => {
-  ipcRenderer.on(channel, (_event, ...args) => data(...args));
-};
+// contextBridge.exposeInMainWorld('darkMode', {
+//   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
+//   system: () => ipcRenderer.invoke('dark-mode:system'),
+// });
 
 contextBridge.exposeInMainWorld('project', {
-  load: (data) => { onIpc('project:load', data); },
-  iteration: (iteration) => { onIpc('project:iteration', iteration); },
+  load: (data, classification) => ipcRenderer.on('project:load', data, classification),
+  iteration: (iteration) => ipcRenderer.on('project:iteration', iteration),
+  // validationErrors: (state) => ipcRenderer.on('project:validationErrors', state),
 });
 
 contextBridge.exposeInMainWorld('import', {
   sendImports: (data) => ipcRenderer.send('import:sendImports', data),
+
 });
 
 contextBridge.exposeInMainWorld('utility', {
   openURL: (url, userStatus) => ipcRenderer.send('utility:openURL', url, userStatus),
+
 });
 
 
@@ -48,13 +51,14 @@ contextBridge.exposeInMainWorld(
     send: (channel, func) => {
       let validChannels = ['import:submit'];
       if (validChannels.includes(channel)) {
+        // Deliberately strip event as it includes `sender` 
         ipcRenderer.send(channel, func);
       }
     },
     receive: (channel, func) => {
       let validChannels = ['import:load'];
       if (validChannels.includes(channel)) {
-        // Deliberately strip event as it includes `sender`
+        // Deliberately strip event as it includes `sender` 
         ipcRenderer.on(channel, (event, ...args) => func(...args));
       }
     }
@@ -69,6 +73,7 @@ contextBridge.exposeInMainWorld('render', {
   supportingAssets: () => ipcRenderer.invoke('render:supportingAssets'),
   risks: () => ipcRenderer.invoke('render:risks'),
   vulnerabilities: () => ipcRenderer.invoke('render:vulnerabilities'),
+
 });
 
 contextBridge.exposeInMainWorld('validate', {
@@ -78,8 +83,7 @@ contextBridge.exposeInMainWorld('validate', {
   supportingAssets: (data, desc) => ipcRenderer.send('validate:supportingAssets', data, desc),
   vulnerabilities: (data) => ipcRenderer.invoke('validate:vulnerabilities', data),
   risks: (data) => ipcRenderer.invoke('validate:risks', data),
-  allTabs: (filePath) => { onIpc('validate:allTabs', filePath); },
-  sendAllTabs: (labelSelected) => ipcRenderer.send('validate:allTabs', labelSelected),
+  allTabs: (filePath) => ipcRenderer.on('validate:allTabs', filePath),
 });
 
 contextBridge.exposeInMainWorld('welcome', {
@@ -96,7 +100,7 @@ contextBridge.exposeInMainWorld('projectContext', {
   urlPrompt: (currentURL) => ipcRenderer.invoke('projectContext:urlPrompt', currentURL),
   attachment: () => ipcRenderer.send('projectContext:attachment'),
   decodeAttachment: (fileName) => ipcRenderer.invoke('projectContext:decodeAttachment', fileName),
-  fileName: (fileName) => { onIpc('projectContext:fileName', fileName); },
+  fileName: (fileName) => ipcRenderer.on('projectContext:fileName', fileName),
 });
 
 contextBridge.exposeInMainWorld('businessAssets', {
@@ -112,12 +116,13 @@ contextBridge.exposeInMainWorld('supportingAssets', {
   addBusinessAssetRef: (id, value) => ipcRenderer.send('supportingAssets:addBusinessAssetRef', id, value),
   deleteBusinessAssetRef: (id, indexes) => ipcRenderer.send('supportingAssets:deleteBusinessAssetRef', id, indexes),
   updateBusinessAssetRef: (id, value, index) => ipcRenderer.invoke('supportingAssets:updateBusinessAssetRef', id, value, index),
+  // getBusinessAssets: (label, value) => ipcRenderer.on('supportingAssets:getBusinessAssets', label, value),
 });
 
 contextBridge.exposeInMainWorld('risks', {
   addRisk: () => ipcRenderer.invoke('risks:addRisk'),
   deleteRisk: (ids) => ipcRenderer.send('risks:deleteRisk', ids),
-  load: (data) => { onIpc('risks:load', data); },
+  load: (data) => ipcRenderer.on('risks:load', data),
   updateRiskName: (id, field, value) => ipcRenderer.invoke('risks:updateRiskName', id, field, value),
   updateRiskLikelihood: (id, field, value) => ipcRenderer.invoke('risks:updateRiskLikelihood', id, field, value),
   updateRiskImpact: (id, field, value) => ipcRenderer.invoke('risks:updateRiskImpact', id, field, value),
@@ -143,7 +148,7 @@ contextBridge.exposeInMainWorld('vulnerabilities', {
   openURL: (url, userStatus) => ipcRenderer.send('vulnerabilities:openURL', url, userStatus),
   attachment: (id) => ipcRenderer.send('vulnerabilities:attachment', id),
   decodeAttachment: (id, fileName) => ipcRenderer.invoke('vulnerabilities:decodeAttachment', id, fileName),
-  fileName: (result) => { onIpc('vulnerabilities:fileName', result); },
+  fileName: (result) => ipcRenderer.on('vulnerabilities:fileName', result),
   isVulnerabilityExist: (id) => ipcRenderer.invoke('vulnerabilities:isVulnerabilityExist', id)
 });
 
