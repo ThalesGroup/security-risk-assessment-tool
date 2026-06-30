@@ -1170,15 +1170,25 @@ function enableInteract(){
 
     const updateRisksFields = async (fetchedData) => {
       risksTable.clearData();
-      // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
+
       const tableData = fetchedData.map(risk => ( {
         ...risk
       }))
+
       risksTable.addData(tableData);
       applyCurrentSort();
+
+      fetchedData.forEach((risk) => {
+        const row = risksTable.getRow(risk.riskId);
+        if (!row) return;
+
+        row.getCell('riskName').getElement().style.color = validateRiskName(risk);
+        styleRiskName(risk.riskManagementDecision, risk.riskId);
+      });
+
       disableRiskSelection()
 
       // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
@@ -1191,6 +1201,8 @@ function enableInteract(){
 
       }); */
     };
+
+    
 
     // add Risk button
     $('#risks .add-delete-container button').first().on('click', async () => {
