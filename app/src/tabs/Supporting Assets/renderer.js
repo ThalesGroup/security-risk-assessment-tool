@@ -325,7 +325,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
     };
 
     $(document).ready(async function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (data) => {
         await hugerte.init({
           selector: '.rich-text',
           promotion: false,
@@ -357,7 +357,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in hugertes image blob
+                    Note: Now we need to register the blob in TinyMCEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */

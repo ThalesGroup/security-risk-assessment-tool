@@ -139,7 +139,7 @@ function updateBusinessAssetName(id, field){
               var reader = new FileReader();
               reader.onload = function () {
                 /*
-                  Note: Now we need to register the blob in HugeRTEs image blob
+                  Note: Now we need to register the blob in TinyMCEs image blob
                   registry. In the next release this part hopefully won't be
                   necessary, as we are looking to handle it internally.
                 */
@@ -231,7 +231,7 @@ function updateBusinessAssetName(id, field){
     };
 
     $(document).ready(function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (data) => {
         hugerte.remove('.business-assets-rich-text');
         $('#business-assets__sections').empty();
         addBusinessAssetSection(await JSON.parse(data).BusinessAsset);

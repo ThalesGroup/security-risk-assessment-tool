@@ -312,27 +312,27 @@ const validateClasses = () => {
       return true
     };
 
-    // Check if the supportingAsset exists globally
-    const checkVulnerabilityRef = (ref,supportingAssetRef) =>{
+    // Check if the vulnerability exists and has valid name/description.
+    // SA-match is NOT enforced here: cross-SA vulnerability refs are a valid
+    // workflow (UI already marks mismatches in red as a visual hint).
+    const checkVulnerabilityRef = (ref) =>{
       if (ref === null) return false
-      found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
+      const found = Vulnerability.find(obj => obj.vulnerabilityId === ref.vulnerabilityId);
+      if (!found) return true; // dangling ref — cleaned up on load, skip here
       if (
-        !found ||
-        !found.supportingAssetRef.includes(supportingAssetRef) ||
-        !checkSupportingAssetRefArray(found.supportingAssetRef) || 
-        found.vulnerabilityName === '' || 
+        found.vulnerabilityName === '' ||
         found.vulnerabilityDescription === ''
       ) return false
       return true
     };
 
     // Check if each vulnerability in attackPaths exist globally
-    const checkRiskAttackPaths = (attackPaths,supportingAssetRef) =>{      
+    const checkRiskAttackPaths = (attackPaths) =>{
       if(attackPaths.length){
         for (const attackPath of attackPaths) {
           if(attackPath.vulnerabilityRef.length){
             for (const ref of attackPath.vulnerabilityRef) {
-              if (!checkVulnerabilityRef(ref,supportingAssetRef)) return false
+              if (!checkVulnerabilityRef(ref)) return false
             }
           }
         }
@@ -354,8 +354,8 @@ const validateClasses = () => {
   };
 
   const validateRiskEvaluation = (risk) => {
-    const { supportingAssetRef, riskAttackPaths } = risk;
-    if (!checkRiskAttackPaths(riskAttackPaths,supportingAssetRef)){
+    const { riskAttackPaths } = risk;
+    if (!checkRiskAttackPaths(riskAttackPaths)){
       return false;
     } else return true;
   };
@@ -847,7 +847,6 @@ const loadData = async (win) => {
         show: false,
         webPreferences: {
           preload: path.join(__dirname, './preload.js'),
-          
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'../tabs/Import/import_dialog.html'));
