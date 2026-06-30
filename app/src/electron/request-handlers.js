@@ -36,7 +36,6 @@ const fs = require('fs');
 const parser = require('../../../lib/src/api/xml-json/parser');
 const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra');
 const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
-const cleanupVulnerabilitySupportingAssets = require('../../../lib/src/api/xml-json/alter-isra/cleanup-vulnerability-refs');  
 
 const errorMessages = require('./validation')
 
@@ -741,12 +740,9 @@ function getJSON(filePath){
           }
         }
       }
-      const vulnerabilitySupportingAssetCleanup = cleanupVulnerabilitySupportingAssets(jsonData);
 
       const importedISRA = validateJsonSchema(jsonData);
-      importedISRA.vulnerabilitySupportingAssetCleanup = vulnerabilitySupportingAssetCleanup;
-
-      return importedISRA;
+      return importedISRA
     } catch (error) {
       console.log(error);
       const errorMessage = getError(error)
