@@ -746,7 +746,7 @@ function enableInteract(){
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
@@ -1168,7 +1168,7 @@ function enableInteract(){
       if (currentRiskId) addSelectedRowData(currentRiskId);
     };
 
-    const updateRisksFields = async (fetchedData) => {
+     const updateRisksFields = async (fetchedData) => {
       risksTable.clearData();
       // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
@@ -1191,6 +1191,8 @@ function enableInteract(){
 
       }); */
     };
+
+    
 
     // add Risk button
     $('#risks .add-delete-container button').first().on('click', async () => {
@@ -1264,8 +1266,7 @@ function enableInteract(){
               input.setAttribute('accept', 'image/*');
               /*
                 Note: In modern browsers input[type="file"] is functional without
-               window.project.load(async (event, data) => {
-ght not be the case in some older
+                even adding it to the DOM, but that might not be the case in some older
                 or quirky browsers like IE, so you might want to add it to the DOM
                 just in case, and visually hide it. And do not forget do remove it
                 once you do not need it anymore.
@@ -1275,7 +1276,7 @@ ght not be the case in some older
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
