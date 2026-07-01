@@ -22,10 +22,33 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ hugerte */
+/* global $ hugerte DOMPurify */
 const { SEVERITY_COLORS = {}, TEXT_COLOR = {} } = window.COLOR_CONSTANTS || {};
 const ERROR_COLOR = TEXT_COLOR.ERROR;
 const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
+
+// XSS guards. Every user-controlled value reaching jQuery's .append() (which
+// parses its argument as HTML) must pass through one of these:
+//   - escapeHtml: for plain-text fields (names, decisions, levels). Renders
+//     literal characters; angle brackets, quotes etc. cannot break out.
+//   - sanitizeHtml: for fields whose schema is "htmlString" (rich text from
+//     the in-app editor — riskManagementDetail, riskMitigation description /
+//     decisionDetail). Strips <script>, on* handlers, javascript: URLs while
+//     preserving safe formatting tags. Falls back to escape if DOMPurify
+//     isn't loaded so the report still renders safely.
+const escapeHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}[c]));
+const sanitizeHtml = (html) => {
+  if (typeof DOMPurify !== 'undefined' && DOMPurify && typeof DOMPurify.sanitize === 'function') {
+    return DOMPurify.sanitize(String(html == null ? '' : html));
+  }
+  return escapeHtml(html);
+};
 const getSeverityColor = (level) => {
   switch (level) {
     case 'Critical':
@@ -167,9 +190,9 @@ const getSeverityColor = (level) => {
 
                 $('#vulnerabilities tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
-                    <td class="text-wrap">${vulnerabilityName}</td>
+                    <td class="text-wrap">${escapeHtml(vulnerabilityName)}</td>
                     <td style="color: ${overallScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${overallScore === null ? 'NaN' : overallScore}/10</td>
-                    <td style="color: ${color}; font-weight:;">${overallLevel}</td>
+                    <td style="color: ${color}; font-weight:;">${escapeHtml(overallLevel)}</td>
                     </td>`);
             });
         };
@@ -284,16 +307,16 @@ const getSeverityColor = (level) => {
                     <td style="padding:0;">
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
-                            <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${riskName}</div>
+                            <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${escapeHtml(riskName)}</div>
                             <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
-                            <div class="grid-item text-wrap">${riskManagementDetail}</div>
+                            <div class="grid-item text-wrap">${sanitizeHtml(riskManagementDetail)}</div>
                         </div>
                     </td>
                     <td style="color: ${inherentRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
                     <td style="color: ${mitigatedRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${mitigatedRiskScore === null ? 'NaN' : mitigatedRiskScore}/20</td>
                     <td style="color: ${residualRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${residualRiskScore === null ? 'NaN' : residualRiskScore}/20</td>
-                    <td style="color: ${severityColor}; font-weight: ${isElevatedRisk ? 'bold' : 'normal'};">${residualRiskLevel}</td>
-                    <td>${riskManagementDecision}</td>
+                    <td style="color: ${severityColor}; font-weight: ${isElevatedRisk ? 'bold' : 'normal'};">${escapeHtml(residualRiskLevel)}</td>
+                    <td>${escapeHtml(riskManagementDecision)}</td>
                     </td>`);
             });
         };
@@ -358,8 +381,8 @@ const getSeverityColor = (level) => {
                         const { description, decisionDetail, cost, decision } = mitigation;
                         if(decision === 'Accepted'){
                             $('#riskmanagement tbody').append(`<tr>
-                            <td class="text-wrap">${description}</td>
-                            <td class="text-wrap">${decisionDetail}</td>
+                            <td class="text-wrap">${sanitizeHtml(description)}</td>
+                            <td class="text-wrap">${sanitizeHtml(decisionDetail)}</td>
                             <td>${!cost ? '' : cost}</td>
                             </td>`);
 
