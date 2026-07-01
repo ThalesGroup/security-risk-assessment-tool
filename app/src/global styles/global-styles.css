@@ -225,10 +225,7 @@ select option {
     flex-wrap: wrap;
 }
 
-/* .checkbox input[type="checkbox"],
-.checkbox input[type="radio"] {
-    accent-color: #007aff; 
-} */
+
 
 .hyperlink-attachment-image{
     width: 20px;
