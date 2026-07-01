@@ -41,7 +41,7 @@ const panels = [
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
  */
-window.project.load(async (data) => {
+window.project.load(async (event, data) => {
   const { projectName, classification } = await JSON.parse(data).ISRAmeta;
   $('footer').addClass('text-wrap');
   if(projectName === '') $('footer').text(classification);
@@ -155,10 +155,10 @@ const validateTabs = (tab) => {
 /**
  * get & validate data of current tab
  */
-window.validate.allTabs((labelSelected) => {
+window.validate.allTabs((event, labelSelected) => {
   const currentActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
   validateTabs(currentActiveTab);
-  window.validate.sendAllTabs(labelSelected);
+  event.sender.send('validate:allTabs', labelSelected);
 });
 
 /**

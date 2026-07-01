@@ -299,7 +299,7 @@ const getSeverityColor = (level) => {
         };
 
         $(document).ready(function () {
-            window.project.load(async (data) => {
+            window.project.load(async (event, data) => {
                 fetchedData = await JSON.parse(data);
                 const { Vulnerability, Risk, ISRAmeta } = fetchedData
                 const { projectName, projectVersion, iteration, ISRAtracking} = ISRAmeta;
@@ -407,7 +407,7 @@ const getSeverityColor = (level) => {
               window.israreport.fetchedContent(true);
             });
 
-            window.project.iteration(async (iteration) => {
+            window.project.iteration(async (event, iteration) => {
                 $('#revision').text(iteration);
             });
             enableAllTabs()

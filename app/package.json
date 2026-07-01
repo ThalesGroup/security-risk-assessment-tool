@@ -57,6 +57,7 @@
         ],
         "mac": {
             "icon": "src/asset/isra-app-icon-512.png",
+            "mergeASARs": false,
             "category": "public.app-category.business",
             "target": [
                 {
@@ -101,7 +102,7 @@
         "xml2js": "^0.6.2"
     },
     "devDependencies": {
-        "electron": "^42.5.0",
+        "electron": "^22.3.27",
         "electron-builder": "^26.15.3"
     },
     "overrides": {
