@@ -126,12 +126,9 @@ function createWindow() {
 let filePath = '';
 
 
-app.on('open-file', function(event, path) {
+app.on('open-file', function(event, openedPath) {
   event.preventDefault();
-  filePath = path;
-
-  
-  
+  filePath = openedPath;
 })
 
 if (process.argv.length >= 2) { 
