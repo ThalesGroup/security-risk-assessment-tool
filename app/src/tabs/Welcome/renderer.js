@@ -126,7 +126,7 @@
     };
 
     $(document).ready(function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (data) => {
         isra= await JSON.parse(data).ISRAmeta
         updateWelcomeFields(isra);
         classificationLabel = isra.classification;

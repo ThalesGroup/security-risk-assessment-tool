@@ -369,7 +369,7 @@ const getSeverityColor = (level) => {
     };
 
     $(document).ready(async function () {
-        window.project.load(async (event, data) => {
+        window.project.load(async (data) => {
         fetchedData = await JSON.parse(data);
             await hugerte.init({
                 selector: '.rich-text',
@@ -532,7 +532,7 @@ const getSeverityColor = (level) => {
 
     $('#vulnerability__attachment').on('click', () => {
         window.vulnerabilities.attachment(getCurrentVulnerabilityId());
-        window.vulnerabilities.fileName(async (event, result) => {
+        window.vulnerabilities.fileName(async (result) => {
             const fileName = result;
             $('#vulnerability__file--insert').text(fileName);
         });

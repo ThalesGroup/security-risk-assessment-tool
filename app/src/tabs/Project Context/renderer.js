@@ -75,7 +75,7 @@
 
     $('#project-description__attachment').on('click', () => {
       window.projectContext.attachment();
-      window.projectContext.fileName(async (event, fileName) => {
+      window.projectContext.fileName(async (fileName) => {
         $('#project-description__file--insert').text(fileName);
       });
     });
@@ -107,7 +107,7 @@
     };
 
     $(document).ready(function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (data) => {
         await hugerte.init({
           tooltip: 'Add your formatted picures!!',
           selector: '.rich-text',
@@ -140,7 +140,7 @@
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob HugeRTEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */

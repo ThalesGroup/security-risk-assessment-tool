@@ -231,7 +231,7 @@ function updateBusinessAssetName(id, field){
     };
 
     $(document).ready(function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (data) => {
         hugerte.remove('.business-assets-rich-text');
         $('#business-assets__sections').empty();
         addBusinessAssetSection(await JSON.parse(data).BusinessAsset);

@@ -1168,7 +1168,7 @@ function enableInteract(){
       if (currentRiskId) addSelectedRowData(currentRiskId);
     };
 
-    const updateRisksFields = async (fetchedData) => {
+     const updateRisksFields = async (fetchedData) => {
       risksTable.clearData();
       // $('#risks__table__checkboxes').empty();
       $('#risk__simple__evaluation').hide();
@@ -1191,6 +1191,8 @@ function enableInteract(){
 
       }); */
     };
+
+    
 
     // add Risk button
     $('#risks .add-delete-container button').first().on('click', async () => {
@@ -1237,7 +1239,7 @@ function enableInteract(){
     }
 
     $(document).ready(async function () {
-      window.project.load(async (event, data) => {
+      window.project.load(async (data) => {
         const fetchedData = await JSON.parse(data);
         risksData = fetchedData.Risk;
         if (risksData.length === 0) $('#risks section').hide();
