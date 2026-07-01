@@ -1264,7 +1264,8 @@ function enableInteract(){
               input.setAttribute('accept', 'image/*');
               /*
                 Note: In modern browsers input[type="file"] is functional without
-                even adding it to the DOM, but that might not be the case in some older
+               window.project.load(async (event, data) => {
+ght not be the case in some older
                 or quirky browsers like IE, so you might want to add it to the DOM
                 just in case, and visually hide it. And do not forget do remove it
                 once you do not need it anymore.
