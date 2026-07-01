@@ -36,8 +36,11 @@ Supported URI schemes for vulnerabilities URL are as follows: ftp, http, https, 
 To install and use the tool, the following prerequisites are required:
 
 1. [Node.js](https://nodejs.org/en/) (required for Electron, use node v20 or v22 LTS support versions, others are untested or may not work)
-2. Ensure, if behind a proxy, that HTTP_PROXY and HTTPS_PROXY environment variables are set as needed.
-3. Ensure, if behind a proxy, that environment variables "ELECTRON_GET_USE_PROXY=true" and GLOBAL_AGENT_HTTP_PROXY are set as needed.
+2. Ensure, if behind a proxy, the following environment variables are set:
+- HTTP_PROXY
+- HTTPS_PROXY
+- ELECTRON_GET_USE_PROXY=true
+
 
 # Configurating the defaults ##
 
