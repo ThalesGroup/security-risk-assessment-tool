@@ -746,7 +746,7 @@ function enableInteract(){
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
@@ -1174,22 +1174,11 @@ function enableInteract(){
       $('#risk__simple__evaluation').hide();
       $('#risk__likehood__table').show();
       $('#risks__risk__mitigation__evaluation section').empty();
-
       const tableData = fetchedData.map(risk => ( {
         ...risk
       }))
-
       risksTable.addData(tableData);
       applyCurrentSort();
-
-      fetchedData.forEach((risk) => {
-        const row = risksTable.getRow(risk.riskId);
-        if (!row) return;
-
-        row.getCell('riskName').getElement().style.color = validateRiskName(risk);
-        styleRiskName(risk.riskManagementDecision, risk.riskId);
-      });
-
       disableRiskSelection()
 
       // Select the latest risk selected (stored in the browser's volatile storage) (default: first risk of the table)
@@ -1202,8 +1191,6 @@ function enableInteract(){
 
       }); */
     };
-
-    
 
     // add Risk button
     $('#risks .add-delete-container button').first().on('click', async () => {
@@ -1250,7 +1237,7 @@ function enableInteract(){
     }
 
     $(document).ready(async function () {
-      window.project.load(async (data) => {
+      window.project.load(async (event, data) => {
         const fetchedData = await JSON.parse(data);
         risksData = fetchedData.Risk;
         if (risksData.length === 0) $('#risks section').hide();
@@ -1287,7 +1274,7 @@ function enableInteract(){
                 var reader = new FileReader();
                 reader.onload = function () {
                   /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
+                    Note: Now we need to register the blob in HugeRTEs image blob
                     registry. In the next release this part hopefully won't be
                     necessary, as we are looking to handle it internally.
                   */
