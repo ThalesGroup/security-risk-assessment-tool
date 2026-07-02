@@ -176,7 +176,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 
     tableOptions.columns[3].formatter = (cell) => {
       cell.getElement().style.color = validateSAName(cell.getRow().getData())
-      return cell.getValue();
+      return `<span class="text-wrap">${cell.getValue()}</span>`;
     }
     const addBusinessAsset = (id, ref, index) => {
       const matrixRow = $(`${matrixTable}-${id} td.matrix-sa-ba`);

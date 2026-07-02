@@ -981,6 +981,28 @@ function enableInteract(){
       await Promise.all(promises)
     };
 
+    const toggleTransferredRiskSections = (isTransferred) => {
+      if (isTransferred) {
+        $('#risk__dependencyOriginContainer').css('display', 'flex');
+        $('#risk__transferredScoreContainer').css('display', 'flex');
+        $('#risk__automatic_riskname').hide();
+        $('#risks__risk__evaluation').hide();
+        $('#risks__vulnerability__evaluation').hide();
+        $('#risks__risk__mitigation__evaluation').hide();
+        $('#risks__risk__management__options').closest('div').hide();
+        $('#risk__management__detail__rich-text').closest('div').hide();
+      } else {
+        $('#risk__dependencyOriginContainer').hide();
+        $('#risk__transferredScoreContainer').hide();
+        $('#risk__automatic_riskname').show();
+        $('#risks__risk__evaluation').show();
+        $('#risks__vulnerability__evaluation').show();
+        $('#risks__risk__mitigation__evaluation').show();
+        $('#risks__risk__management__options').closest('div').show();
+        $('#risk__management__detail__rich-text').closest('div').show();
+      }
+    };
+
     const styleResidualRiskLevelTable = (id, residualRiskLevel) => {
       risksTable.getRow(id).getCell('residualRiskLevel').getElement().style.color = getSeverityColor(residualRiskLevel);
     };
@@ -1011,6 +1033,8 @@ function enableInteract(){
           businessAssetRef,
           supportingAssetRef,
           isAutomaticRiskName,
+          isTransferredFromDependency,
+          dependencyOrigin,
           allAttackPathsScore,
           inherentRiskScore,
           riskAttackPaths,
@@ -1420,6 +1444,29 @@ function enableInteract(){
     $('#risk__motivation').on('change', ()=>{
       const input = $('#risk__motivation').val();
       updateRiskName('motivation', input);
+    });
+
+    $('#risk__isTransferredFromDependency').on('change', async () => {
+      const isChecked = $('#risk__isTransferredFromDependency').is(':checked');
+      toggleTransferredRiskSections(isChecked);
+      await updateRiskName('isTransferredFromDependency', isChecked);
+    });
+
+    $('#risk__dependencyOrigin').on('change', async () => {
+      const value = $('#risk__dependencyOrigin').val();
+      await updateRiskName('dependencyOrigin', value);
+    });
+
+    $('#risk__transferredScore').on('change', async () => {
+      const value = $('#risk__transferredScore').val();
+      const parsed = parseInt(value);
+      if (isNaN(parsed) || parsed < 0 || parsed > 20) {
+        $('#risk__transferredScore').css('border', `3px solid ${ERROR_COLOR}`);
+        return;
+      } else {
+        $('#risk__transferredScore').css('border', 'none');
+      }
+      await updateRiskName('transferredScore', value);
     });
 
   /**
