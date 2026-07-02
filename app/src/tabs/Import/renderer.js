@@ -82,6 +82,9 @@ const getSeverityColor = (level) => {
       columns: [ 
         {
           title: 'Import?', field: 'checkbox', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', headerWordWrap: true, width: 80
+        },
+        {
+          title: 'Supporting Asset Name', field: 'supportingAssetName', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', headerWordWrap: true
         }
       ],
   }
@@ -109,6 +112,9 @@ const getSeverityColor = (level) => {
         },
         {
           title: 'Risk Level', field: 'residualRiskLevel', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 80
+        },
+        {
+          title: 'Mgmt Decision', field: 'riskManagementDecision', headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 140
         }
       ],
   }
