@@ -890,13 +890,14 @@ const downloadReport = async (app) => {
 
       const cssHeader = [], cssFooter = [];
       cssHeader.push('<style>');
-      cssHeader.push('div { margin: 0px; padding: 0px; display: flex; justify-content: center; }');
-      cssHeader.push('header { font-size:11px; font-weight:normal; font-family: Arial, Helvetica, sans-serif; }');
+      cssHeader.push('div { margin: 0px; padding: 4px 10px; display: flex; justify-content: center; box-sizing: border-box; width: 100%; }');
+      cssHeader.push('header { font-size:11px; font-weight:normal; font-family: Arial, Helvetica, sans-serif; white-space: normal; word-break: break-word; overflow-wrap: anywhere; max-width: 90%; text-align: center; line-height: 1.4; }');
       cssHeader.push('</style>');
       const cssH = cssHeader.join('');
 
+
       cssFooter.push('<style>');
-      cssFooter.push('h1 { font-weight: bold; font-size: 11px; color:rgb(255, 141, 0); text-align: center; margin: 0px; font-family: Arial, Helvetica, sans-serif; }');
+      cssFooter.push('h1 { font-weight: bold; font-size: 11px; color:rgb(255, 141, 0); text-align: center; margin: 0px; padding: 0 10px; font-family: Arial, Helvetica, sans-serif; white-space: normal; word-break: break-word; overflow-wrap: anywhere; max-width: 90%; line-height: 1.4; }');
       cssFooter.push('h2 { font-size:11px; font-weight:normal; margin: 0px; font-family: Arial, Helvetica, sans-serif; }');
       cssFooter.push('</style>');
       const cssF = cssFooter.join('');
@@ -920,13 +921,13 @@ const downloadReport = async (app) => {
         footerTemplate: cssF + 
         `<div>
             <h1>${classification.substring(0, classification.indexOf('{') + 1) + name + classification[classification.length - 1]}</h1><br>
-            <h2 style="position: absolute; left: 10px; "><span class="pageNumber"></span>/<span class="totalPages"></span></h2>
+            <h2 style="position: absolute; left: 20px; bottom: 10px;"><span class="pageNumber"></span>/<span class="totalPages"></span></h2>
         </div>
        `, 
        // in inches (1 inch = 2.54 cm)
         margins: {
-          top: 0.5,
-          bottom: 0.5,
+          top: 0.9,
+          bottom: 1,
           // right: 0,
           // left: 0
         } 
