@@ -313,3 +313,10 @@ label[name='Discarded'] {
 .risks-table__name-text {
     display: inline;
 }
+
+#risk__businessAsset,
+#risk__supportingAsset {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

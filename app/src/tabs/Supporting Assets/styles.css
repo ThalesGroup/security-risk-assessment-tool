@@ -51,3 +51,11 @@ html {
  .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
      white-space: normal !important;
  }
+
+
+.ba-select {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
