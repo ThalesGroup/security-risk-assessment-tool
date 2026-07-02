@@ -183,18 +183,18 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
       const newDiv = document.createElement('div');
       const newInput = document.createElement('input');
       const newSelect = document.createElement('select');
-      newSelect.classList.add('text-wrap');
+      newSelect.classList.add('ba-select');
       newInput.setAttribute('type', 'checkbox');
       newInput.setAttribute('data-index', index);
       let sa = findSupportingAsset(id)
       Object.entries(selectOptions).forEach(([value, label]) => {
           const newOption = document.createElement('option');
-          newOption.text = label;
+          newOption.title = label;
+          newOption.text = label.length > 40 ? label.slice(0, 40) + '\u2026' : label;
           newOption.value = value;
           newSelect.setAttribute('data-index', index);
           newSelect.add(newOption);
       });
-
       // keep track of prev selected option for each select element
       const prevOption = () => {
         $(newSelect).data('prevOption', $(newSelect).val());
