@@ -9,7 +9,7 @@ jobs:
       - name: use node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.11.1'
+          node-version: '26.3.1'
       - run: npm install
         working-directory: lib
       - run: npm install
