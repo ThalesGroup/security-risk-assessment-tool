@@ -39,7 +39,7 @@ const panels = [
   {name:"isra-report", link:"../Report/report.html"}]
 
 const SCROLL_KEY = 'scrollPosition__';
-const scrollBox = document.querySelector('.scrollingWrapper');
+  const scrollBox = document.querySelector('.scrollingWrapper');
 let restoring = false;
 
 const panelId = () => document.getElementsByClassName('tab-button active')[0]?.getAttribute('data-id');
@@ -59,7 +59,7 @@ const restoreScrollPosition = () => {
 
   restoring = true;
   let hits = 0;
-  const deadline = performance.now() + 500;
+  const deadline = performance.now() + 300;
   (function tick() {
     scrollBox.scrollTop = target;
     hits = scrollBox.scrollTop === target ? hits + 1 : 0;
@@ -222,7 +222,6 @@ tabs.onclick = (e) => {
   if(id){
     const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     validateTabs(previousActiveTab);
-    // Capture the definitive scroll position before leaving this panel
     saveScrollPosition();
   }
 
