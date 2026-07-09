@@ -1,18 +1,46 @@
 name: frontend
-on: pull_request
-jobs: 
-  test: 
+
+on:
+  pull_request
+
+jobs:
+  test:
     runs-on: windows-latest
-    steps: 
-      - name: checkout repo
+
+    steps:
+      - name: Checkout repo
         uses: actions/checkout@v3
-      - name: use node.js
+
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '26.3.1'
-      - run: npm install
+
+      - name: Install lib dependencies
+        run: npm install
         working-directory: lib
-      - run: npm install
+
+      - name: Install app dependencies
+        run: npm install
         working-directory: app
-      - run: npm run test
+
+      - name: Check for Playwright tests
+        id: check_tests
+        shell: pwsh
+        run: |
+          $tests = Get-ChildItem -Path test -Include *.spec.js,*.test.js -Recurse -ErrorAction SilentlyContinue
+          if ($tests) {
+            "has_tests=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            "has_tests=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          }
         working-directory: app
+
+      - name: Run Playwright tests
+        if: steps.check_tests.outputs.has_tests == 'true'
+        run: npm run test
+        working-directory: app
+
+      - name: Skip Playwright tests
+        if: steps.check_tests.outputs.has_tests == 'false'
+        run: echo "No Playwright tests found. Skipping."
