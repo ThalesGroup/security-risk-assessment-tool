@@ -148,7 +148,7 @@ span{
     grid-template-columns: auto;
 }
 
-.score__input-row {
+.score__row {
     display: flex;
     align-items: center;
     justify-content: center;
