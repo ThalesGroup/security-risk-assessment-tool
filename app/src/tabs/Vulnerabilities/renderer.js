@@ -561,6 +561,11 @@ const getSeverityColor = (level) => {
         $('#vulnerability__scoring').val(cveScore); 
         $('#vulnerability__scoring__round').text(Math.round(cveScore));
     });
+    
+    $('#vulnerability__scoring__cvss-link').on('click', (e) => {
+        e.preventDefault();
+        window.utility.openURL('https://www.first.org/cvss/', navigator.onLine);
+    });
 
     $('input[name="vulnerability__trackingID"]').on('change', (e)=> {
         let vulnerability = vulnerabilitiesData.find((v) => v.vulnerabilityId === getCurrentVulnerabilityId());
