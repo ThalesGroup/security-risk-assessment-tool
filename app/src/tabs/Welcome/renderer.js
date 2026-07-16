@@ -75,6 +75,10 @@
       sessionStorage.setItem('validate-isra-meta-organization', document.getElementById('welcome__isra-meta--organization').checkValidity());
     }
 
+    const targetedLevelOfTrust = (value) => {
+      $('#welcome__isra-meta--targeted-level-of-trust').val(value);
+    };
+
     $('#welcome__isra-meta--organization').click((e)=>{
       setSessionStorage();
     })
@@ -120,6 +124,7 @@
     const updateWelcomeFields = (fetchedData) => {
       appVersion(fetchedData.appVersion);
       projectName(fetchedData.projectName);
+      targetedLevelOfTrust(fetchedData.targetedLevelOfTrust);
       projectVersion(fetchedData.projectVersion);
       organization(fetchedData.projectOrganization);
       iterationsHistory(fetchedData.ISRAtracking);
