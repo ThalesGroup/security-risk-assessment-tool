@@ -151,13 +151,24 @@ span{
 .score__row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 6px;
+}
+
+.score__row label {
+    margin: 0;
+}
+
+.score__row > span {
+    display: inline-flex;
+    align-items: center;
 }
 
 .info-tooltip {
     position: relative;
+    top: -3px;
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .info-tooltip__icon {
@@ -182,7 +193,7 @@ span{
 
 .info-tooltip__popup {
     position: absolute;
-    bottom: calc(100% + 10px);
+    bottom: calc(100% + 12px);
     left: 50%;
     width: 260px;
     background-color: #ffffff;
@@ -211,9 +222,13 @@ span{
     border-top-color: #ffffff;
 }
 
+.info-tooltip__popup p {
+    margin: 0;
+}
+
 .info-tooltip__popup a {
     display: inline-block;
-    margin-top: 6px;
+    margin-top: 0;
     color: #0f62fe;
     word-break: break-all;
 }
