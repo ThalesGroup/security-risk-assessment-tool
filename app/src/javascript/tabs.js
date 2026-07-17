@@ -30,7 +30,8 @@ const contents = document.querySelectorAll('.content');
 
 /* tabs mapping */
 const panels = [
-  {name:"welcome", link:"../Welcome/welcome.html"}, 
+  {name:"dashboard", link:"../Dashboard/dashboard.html"},
+  {name:"welcome", link:"../Welcome/welcome.html"},
   {name:"project-context", link:"../Project Context/project-context.html"}, 
   {name:"business-assets", link:"../Business Assets/business-assets.html"}, 
   {name:"supporting-assets", link:"../Supporting Assets/supporting-assets.html"}, 
@@ -184,6 +185,9 @@ tabs.onclick = (e) => {
   }
 
   switch (id) {
+    case 'dashboard':
+      location.href = '../Dashboard/dashboard.html';
+      break;
     case 'welcome':
       location.href = '../Welcome/welcome.html';
       break;

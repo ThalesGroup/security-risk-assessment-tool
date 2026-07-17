@@ -1,4 +1,6 @@
 function disableAllTabs() {
+  const dashboardBtn = document.querySelector('button.tab-button[data-id="dashboard"]');
+  if (dashboardBtn) dashboardBtn.disabled = true;
   document.querySelector('button.tab-button[data-id="welcome"]').disabled = true;
   document.querySelector('button.tab-button[data-id="project-context"]').disabled = true;
   document.querySelector('button.tab-button[data-id="business-assets"]').disabled = true;
@@ -9,6 +11,8 @@ function disableAllTabs() {
 }
 
 function enableAllTabs() {
+  const dashboardBtn = document.querySelector('button.tab-button[data-id="dashboard"]');
+  if (dashboardBtn) dashboardBtn.disabled = false;
   document.querySelector('button.tab-button[data-id="welcome"]').disabled = false;
   document.querySelector('button.tab-button[data-id="project-context"]').disabled = false;
   document.querySelector('button.tab-button[data-id="business-assets"]').disabled = false;
