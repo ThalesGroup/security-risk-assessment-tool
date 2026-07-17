@@ -482,13 +482,9 @@ const getSeverityColor = (level) => {
         $('#vulnerabilities section').show();
         vulnerabilitiesData.push(vulnerability[0]);
         addVulnerability(vulnerability[0]);
-        if (vulnerabilitiesData.length === 0) vulnerabilitiesTable.selectRow(vulnerabilitiesData[0].vulnerabilityId);
-        
-        // vulnerabilitiesData.forEach((v)=>{
-        //     vulnerabilitiesTable.deselectRow(v.vulnerabilityId);
-        // });
-
-        // addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
+        vulnerabilitiesTable.deselectRow();
+        vulnerabilitiesTable.selectRow(vulnerability[0].vulnerabilityId);
+        await addSelectedVulnerabilityRowData(vulnerability[0].vulnerabilityId);
     });
 
     // delete Vulnerability button
