@@ -96,6 +96,7 @@
     },
     "dependencies": {
         "chart.js": "^4.3.2",
+        "dompurify": "^3.2.4",
         "jquery": "^3.6.1",
         "hugerte": "^1.0.11",
         "tabulator-tables": "^5.3.4",

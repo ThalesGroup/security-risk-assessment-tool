@@ -162,7 +162,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
     tableOptions.columns[3].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
       updateSupportingAsset(id, cell.getField(), cell.getValue());
-      $(`${matrixTable}-${id} td.matrix-sa-name`).html(cell.getValue());
+      $(`${matrixTable}-${id} td.matrix-sa-name`).text(cell.getValue());
     };
 
     tableOptions.columns[0].formatter = (cell) => {
@@ -176,7 +176,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 
     tableOptions.columns[3].formatter = (cell) => {
       cell.getElement().style.color = validateSAName(cell.getRow().getData())
-      return cell.getValue();
+      return escapeHtml(cell.getValue());
     }
     const addBusinessAsset = (id, ref, index) => {
       const matrixRow = $(`${matrixTable}-${id} td.matrix-sa-ba`);

@@ -161,15 +161,15 @@ function enableInteract(){
 
 
       const riskName = cell.getValue();
-      return `<span class="risks-table__name-text text-wrap">${riskName}</span>`;
-    
+      return `<span class="risks-table__name-text text-wrap">${escapeHtml(riskName)}</span>`;
+
     }
-    
+
     tableOptions.columns[riskLevelIndex].formatter = (cell) => {
       const residualRiskLevel = cell.getValue()
       cell.getElement().style.color = getSeverityColor(residualRiskLevel);
-      
-      return residualRiskLevel;
+
+      return escapeHtml(residualRiskLevel);
     }
     tableOptions.columns[riskLevelIndex].sorter = riskLevelSorter;
     
@@ -378,7 +378,7 @@ function enableInteract(){
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${escapeHtml(sa.supportingAssetName)}</option>`;
           }
         });
       }
@@ -500,7 +500,7 @@ function enableInteract(){
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityId} - ${v.vulnerabilityName}</option>`;
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityId} - ${escapeHtml(v.vulnerabilityName)}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -1232,7 +1232,7 @@ function enableInteract(){
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${ba.businessAssetName}</option>`;
+        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${escapeHtml(ba.businessAssetName)}</option>`;
 
       });
       $('#risk__businessAsset').append(businessAssetsOptions);
