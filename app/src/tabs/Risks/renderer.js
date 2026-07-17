@@ -155,6 +155,8 @@ function enableInteract(){
       const riskManagementDecision = cell.getRow().getData().riskManagementDecision;
       cell.getElement().style.color = validateRiskName(cell.getRow().getData());
 
+      cellElement.style.color = validateRiskName(riskData);
+
       const currentColor = (cell.getElement().style.color || '').toLowerCase();
       if (riskManagementDecision === 'Discarded' && !isErrorColor(currentColor)) cell.getElement().style['text-decoration'] = 'line-through';
       else cell.getElement().style['text-decoration'] = 'none';
@@ -358,7 +360,13 @@ function enableInteract(){
     };
 
     const validateRiskName = (risk) => {
-      const { threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
+      const { isAutomaticRiskName, riskName, threatAgent, threatVerb, businessAssetRef, supportingAssetRef, motivation,riskAttackPaths } = risk;
+      if (!isAutomaticRiskName) {
+        if (riskName === '' || riskName === 'Please name your risk or switch to automatic risk name') {
+          return ERROR_COLOR;
+        }
+        return DEFAULT_TEXT_COLOR;
+      }
       if (
         threatAgent === '' || 
         threatVerb === '' || 
@@ -1054,6 +1062,20 @@ function enableInteract(){
           $('#risk__manual__riskName').show();
           $('#riskName').hide();
           $('#risk__manual__riskName input').val(riskName);
+          const isManualRiskNameEmpty = riskName === '' || riskName === 'Please name your risk or switch to automatic risk name';
+          if (isManualRiskNameEmpty) {
+            $('#risk__manual__riskName input').css({
+              'border-color': ERROR_COLOR,
+              'border-width': '3px',
+              'border-style': 'solid'
+            });
+          } else {
+            $('#risk__manual__riskName input').css({
+              'border-color': '',
+              'border-width': '',
+              'border-style': ''
+            });
+          }
         }; 
 
         // Set Risk evaluation data
