@@ -154,5 +154,7 @@ span{
 
 .tabulator .tabulator-row .tabulator-cell {
     white-space: normal;
-    overflow: visible;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
