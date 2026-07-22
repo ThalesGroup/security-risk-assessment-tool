@@ -39,7 +39,8 @@ const panels = [
   {name:"isra-report", link:"../Report/report.html"}]
 
 const SCROLL_KEY = 'scrollPosition__';
-  const scrollBox = document.querySelector('.scrollingWrapper');
+const SCROLL_RESTORE_TIMEOUT_MS = 2000;
+const scrollBox = document.querySelector('.scrollingWrapper');
 let restoring = false;
 
 const panelId = () => document.getElementsByClassName('tab-button active')[0]?.getAttribute('data-id');
@@ -59,11 +60,11 @@ const restoreScrollPosition = () => {
 
   restoring = true;
   let hits = 0;
-  const deadline = performance.now() + 300;
+  const deadline = performance.now() + SCROLL_RESTORE_TIMEOUT_MS;
   (function tick() {
     scrollBox.scrollTop = target;
     hits = scrollBox.scrollTop === target ? hits + 1 : 0;
-    if (hits >= 6 || performance.now() >= deadline) return reveal();
+    if (hits >= 10 || performance.now() >= deadline) return reveal();
     requestAnimationFrame(tick);
   })();
 };
