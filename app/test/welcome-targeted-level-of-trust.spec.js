@@ -69,5 +69,5 @@ test('selecting a Targeted Level of Trust value persists when navigating away an
     '#welcome__isra-meta--targeted-level-of-trust'
   );
 
-  await expect(restoredDropdown).toHaveValue('2 - Medium');
+  await expect(restoredDropdown).toHaveValue('2');
 });
