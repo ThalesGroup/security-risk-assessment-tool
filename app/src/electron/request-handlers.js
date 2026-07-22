@@ -157,7 +157,6 @@ const saveAs = async () => {
   if (!fileName.canceled) {
     const { filePath } = fileName;
     savetoPath(filePath, true);
-    // getMainWindow().webContents.send('validate:allTabs', filePath);
   }
 };
 
@@ -169,7 +168,6 @@ const save = () => {
     israProject.iteration += 1;
     getMainWindow().webContents.send('project:iteration', israProject.iteration);
     savetoPath(jsonFilePath);
-    // getMainWindow().webContents.send('validate:allTabs', jsonFilePath);
   }
 };
 
@@ -927,9 +925,7 @@ const downloadReport = async (app) => {
        // in inches (1 inch = 2.54 cm)
         margins: {
           top: 0.9,
-          bottom: 1,
-          // right: 0,
-          // left: 0
+          bottom: 1
         } 
       };
 
@@ -1345,15 +1341,3 @@ ipcMain.on('israreport:saveGraph',  (event,graph) => {
 
   
 });
-// ipcMain.handle('dark-mode:toggle', () => {
-//   if (nativeTheme.shouldUseDarkColors) {
-//     nativeTheme.themeSource = 'light';
-//   } else {
-//     nativeTheme.themeSource = 'dark';
-//   }
-//   return nativeTheme.shouldUseDarkColors;
-// });
-
-// ipcMain.handle('dark-mode:system', () => {
-//   nativeTheme.themeSource = 'system';
-// });

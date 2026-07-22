@@ -4,5 +4,8 @@ node_modules
 coverage
 # App build
 dist
+# Playwright local output
+test-results
+playwright-report
 #API documentation
 **/lib/doc/APIdocumentation
