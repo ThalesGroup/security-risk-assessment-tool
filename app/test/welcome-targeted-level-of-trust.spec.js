@@ -31,11 +31,10 @@ test('Targeted Level of Trust dropdown is rendered with the configured options',
 
   await expect(dropdown.locator('option')).toHaveText([
     'Select...',
-    '0 - Low',
-    '1 - Medium',
-    '2 - High',
-    '3 - Very High',
-    '4 - Critical',
+    '1',
+    '2',
+    '3',
+    '4',
   ]);
 });
 
@@ -52,7 +51,7 @@ test('selecting a Targeted Level of Trust value persists when navigating away an
     '#welcome__isra-meta--targeted-level-of-trust'
   );
 
-  await dropdown.selectOption('2 - High');
+  await dropdown.selectOption('2');
 
   await window.locator(
     '.tab-button[data-id="project-context"]'
@@ -70,5 +69,5 @@ test('selecting a Targeted Level of Trust value persists when navigating away an
     '#welcome__isra-meta--targeted-level-of-trust'
   );
 
-  await expect(restoredDropdown).toHaveValue('2 - High');
+  await expect(restoredDropdown).toHaveValue('2 - Medium');
 });
