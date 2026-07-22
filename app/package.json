@@ -109,9 +109,12 @@
     "overrides": {
         "got": "^11.8.5",
         "form-data": "^4.0.5",
-        "js-yaml": "^4.2.0",
+        "js-yaml": "4.3.0",
         "glob": "^10.5.0",
         "tmp": "^0.2.5",
+        "brace-expansion": "5.0.7",
+        "fast-uri": "3.1.4",
+        "tar": "7.5.19",
         "app-builder-lib": {
             "@noble/hashes": "1.8.0"
         }
