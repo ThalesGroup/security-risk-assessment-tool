@@ -378,7 +378,8 @@ function enableInteract(){
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" class="text-wrap" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${sa.supportingAssetName}</option>`;
+            const saLabel = sa.supportingAssetName.length > 40 ? sa.supportingAssetName.slice(0, 40) + '\u2026' : sa.supportingAssetName;
+            supportingAssetOptions += `<option value="${sa.supportingAssetId}" title="${sa.supportingAssetName}" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${saLabel}</option>`;
           }
         });
       }
@@ -1232,7 +1233,8 @@ function enableInteract(){
       $('#risk__businessAsset').empty();
       let businessAssetsOptions = '<option value="">Select...</option>';
       businessAssets.forEach((ba)=>{
-        businessAssetsOptions += `<option value="${ba.businessAssetId}"style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${ba.businessAssetName}</option>`;
+        const baLabel = ba.businessAssetName.length > 40 ? ba.businessAssetName.slice(0, 40) + '\u2026' : ba.businessAssetName;
+        businessAssetsOptions += `<option value="${ba.businessAssetId}" title="${ba.businessAssetName}" style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${baLabel}</option>`;
 
       });
       $('#risk__businessAsset').append(businessAssetsOptions);
