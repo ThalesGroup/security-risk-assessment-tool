@@ -42,8 +42,8 @@ section[id='business-asset-section'] {
     font-weight:bold
 }
 
-#business-assets span{
-    font-weight: bold;
+.asset-properties > li > span {
+  font-weight: bold;
 }
 #business-assets article{
     background-color: white;
