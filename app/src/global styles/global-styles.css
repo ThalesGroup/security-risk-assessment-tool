@@ -331,6 +331,9 @@ table, th, td {
 
 select{
     width: 100%;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .table {
