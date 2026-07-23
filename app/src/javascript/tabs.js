@@ -37,6 +37,48 @@ const panels = [
   {name:"risks", link:"../Risks/risks.html"}, 
   {name:"vulnerabilities", link:"../Vulnerabilities/vulnerabilities.html"}, 
   {name:"isra-report", link:"../Report/report.html"}]
+
+const SCROLL_KEY = 'scrollPosition__';
+const SCROLL_RESTORE_TIMEOUT_MS = 2000;
+const scrollBox = document.querySelector('.scrollingWrapper');
+let restoring = false;
+
+const panelId = () => document.getElementsByClassName('tab-button active')[0]?.getAttribute('data-id');
+
+const saveScrollPosition = () => {
+  if (!scrollBox || restoring) return;
+  const id = panelId();
+  if (id) sessionStorage.setItem(SCROLL_KEY + id, scrollBox.scrollTop);
+};
+
+const restoreScrollPosition = () => {
+  if (!scrollBox) return;
+  const id = panelId();
+  const target = id ? Number(sessionStorage.getItem(SCROLL_KEY + id)) : 0;
+  const reveal = () => { scrollBox.style.visibility = 'visible'; restoring = false; };
+  if (!target) return reveal();
+
+  restoring = true;
+  let hits = 0;
+  const deadline = performance.now() + SCROLL_RESTORE_TIMEOUT_MS;
+  (function tick() {
+    scrollBox.scrollTop = target;
+    hits = scrollBox.scrollTop === target ? hits + 1 : 0;
+    if (hits >= 10 || performance.now() >= deadline) return reveal();
+    requestAnimationFrame(tick);
+  })();
+};
+
+if (scrollBox) {
+  let pending = false;
+  scrollBox.addEventListener('scroll', () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => { saveScrollPosition(); pending = false; });
+  }, { passive: true });
+  restoreScrollPosition();
+}
+
 /**
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
@@ -181,6 +223,7 @@ tabs.onclick = (e) => {
   if(id){
     const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     validateTabs(previousActiveTab);
+    saveScrollPosition();
   }
 
   switch (id) {
@@ -214,6 +257,8 @@ $(document).keydown(function(e) {
   const tabKeyCode = 9
   // Ctrl and Tab keys pressed simultaneously
   if(e.ctrlKey && e.keyCode === tabKeyCode){
+    // Capture the definitive scroll position before leaving this panel
+    saveScrollPosition();
     // Set the current panel as reference
     const currentPanel = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     const indexCurrent = panels.findIndex(p => p.name == currentPanel);
@@ -248,3 +293,5 @@ $(document).keydown(function(e) {
 //   element[key] = data.get(key);
 //   return result;
 // }, {})
+
+
