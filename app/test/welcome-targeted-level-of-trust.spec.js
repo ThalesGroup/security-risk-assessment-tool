@@ -1,12 +1,20 @@
 const { test, expect, _electron: electron } = require('@playwright/test');
 const path = require('path');
+const os = require('os');
+const fs = require('fs');
 
 let electronApp;
 let window;
+let userDataDir;
 
 test.beforeAll(async () => {
+  userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'isra-tlot-'));
+
   electronApp = await electron.launch({
-    args: [path.join(__dirname, '..')],
+    args: [
+      `--user-data-dir=${userDataDir}`,
+      path.join(__dirname, '..'),
+    ],
   });
 
   window = await electronApp.firstWindow();
@@ -22,6 +30,8 @@ test.afterAll(async () => {
   });
 
   await electronApp.close();
+
+  fs.rmSync(userDataDir, { recursive: true, force: true });
 });
 
 test('Targeted Level of Trust dropdown is rendered with the configured options', async () => {
