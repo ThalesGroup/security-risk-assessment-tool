@@ -24,6 +24,10 @@ jobs:
         run: npm install
         working-directory: app
 
+      - name: Prepare Electron binary
+        run: node -e "console.log('Electron binary:', require('electron'))"
+        working-directory: app
+
       - name: Check for Playwright tests
         id: check_tests
         shell: pwsh
@@ -39,9 +43,10 @@ jobs:
 
       - name: Run Playwright tests
         if: steps.check_tests.outputs.has_tests == 'true'
-        run: npm run test
+        run: npm run test -- --workers=1
         working-directory: app
 
       - name: Skip Playwright tests
         if: steps.check_tests.outputs.has_tests == 'false'
         run: echo "No Playwright tests found. Skipping."
+
