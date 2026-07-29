@@ -4,7 +4,7 @@
   "description": "Web-based application of ISRA (lib)",
   "main": "./api/index.js",
   "scripts": {
-    "test": "jest --coverage --testPathPattern=test",
+    "test": "jest --coverage --testPathPatterns=test",
     "jsdoc": "jsdoc -c doc/config/jsdoc.json"
   },
   "author": "ThalesDIS",
