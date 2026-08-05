@@ -117,6 +117,7 @@ contextBridge.exposeInMainWorld('supportingAssets', {
 contextBridge.exposeInMainWorld('risks', {
   addRisk: () => ipcRenderer.invoke('risks:addRisk'),
   deleteRisk: (ids) => ipcRenderer.send('risks:deleteRisk', ids),
+  cloneRisk: (riskId) => ipcRenderer.invoke('risks:cloneRisk', riskId),
   load: (data) => { onIpc('risks:load', data); },
   updateRiskName: (id, field, value) => ipcRenderer.invoke('risks:updateRiskName', id, field, value),
   updateRiskLikelihood: (id, field, value) => ipcRenderer.invoke('risks:updateRiskLikelihood', id, field, value),
