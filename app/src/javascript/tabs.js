@@ -254,7 +254,6 @@ tabs.onclick = (e) => {
   if(id){
     const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     validateTabs(previousActiveTab);
-    saveScrollPosition();
   }
 
   switch (id) {
