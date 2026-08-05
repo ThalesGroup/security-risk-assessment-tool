@@ -38,11 +38,82 @@ const panels = [
   {name:"vulnerabilities", link:"../Vulnerabilities/vulnerabilities.html"}, 
   {name:"isra-report", link:"../Report/report.html"}]
 
-  /**
+const SCROLL_KEY = 'scrollPosition__';
+const SCROLL_RESTORE_TIMEOUT_MS = 2000;
+const MAX_STABLE_SCROLL_RETRIES = 10;
+const scrollBox = document.querySelector('.scrollingWrapper');
+let restoring = false;
+let restoreCancelled = false;
+
+const panelId = () => document.getElementsByClassName('tab-button active')[0]?.getAttribute('data-id');
+
+const saveScrollPosition = () => {
+  if (!scrollBox || restoring) return;
+  const id = panelId();
+  if (id) sessionStorage.setItem(SCROLL_KEY + id, scrollBox.scrollTop);
+};
+
+const clearScrollPositions = () => {
+  restoreCancelled = true;
+  Object.keys(sessionStorage)
+    .filter((key) => key.startsWith(SCROLL_KEY))
+    .forEach((key) => sessionStorage.removeItem(key));
+  if (scrollBox) {
+    scrollBox.scrollTop = 0;
+    scrollBox.style.visibility = 'visible';
+  }
+};
+
+const restoreScrollPosition = () => {
+  if (!scrollBox) return;
+  const id = panelId();
+  const target = id ? Number(sessionStorage.getItem(SCROLL_KEY + id)) : 0;
+
+  const reveal = () => {
+    scrollBox.style.visibility = 'visible';
+    restoring = false;
+  };
+
+  if (!target) return reveal();
+
+  restoreCancelled = false;
+  restoring = true;
+  let stableScrollCount = 0;
+  const expirationTime = performance.now() + SCROLL_RESTORE_TIMEOUT_MS;
+
+  (function attemptRestore() {
+    if (restoreCancelled) {
+      return reveal();
+    }
+    scrollBox.scrollTop = target;
+    stableScrollCount = scrollBox.scrollTop === target ? stableScrollCount + 1 : 0;
+    if (stableScrollCount >= MAX_STABLE_SCROLL_RETRIES || performance.now() >= expirationTime) {
+      return reveal();
+    }
+    requestAnimationFrame(attemptRestore);
+  })();
+};
+
+if (scrollBox) {
+  let pending = false;
+  scrollBox.addEventListener('scroll', () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => {
+      saveScrollPosition();
+      pending = false;
+    });
+  }, { passive: true });
+
+  restoreScrollPosition();
+}
+
+/**
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
  */
-window.project.load(async (data) => {
+window.project.load(async (data, { clearScrollPositions: shouldClearScroll } = {}) => {
+  if (shouldClearScroll) clearScrollPositions();
   const { projectName, classification } = await JSON.parse(data).ISRAmeta;
   $('footer').addClass('text-wrap');
   if(projectName === '') $('footer').text(classification);
@@ -183,6 +254,7 @@ tabs.onclick = (e) => {
   if(id){
     const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     validateTabs(previousActiveTab);
+    saveScrollPosition();
   }
 
   switch (id) {
