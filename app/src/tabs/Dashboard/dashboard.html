@@ -1,0 +1,148 @@
+<!-- /*----------------------------------------------------------------------------
+*
+* Copyright © 2022-2025 THALES. All Rights Reserved.
+*
+* -----------------------------------------------------------------------------
+* THALES MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+* THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+* TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THALES SHALL NOT BE
+* LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+* MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+*
+* THIS SOFTWARE IS NOT DESIGNED OR INTENDED FOR USE OR RESALE AS ON-LINE
+* CONTROL EQUIPMENT IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+* PERFORMANCE, SUCH AS IN THE OPERATION OF NUCLEAR FACILITIES, AIRCRAFT
+* NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, DIRECT LIFE
+* SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH THE FAILURE OF THE
+* SOFTWARE COULD LEAD DIRECTLY TO DEATH, PERSONAL INJURY, OR SEVERE
+* PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH RISK ACTIVITIES"). THALES
+* SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR
+* HIGH RISK ACTIVITIES.
+* -----------------------------------------------------------------------------
+*/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="../../global styles/global-styles.css">
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+
+    <!-- npm modules (minified) -->
+    <script src="../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../../node_modules/chart.js/dist/chart.umd.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="buttonWrapper">
+            <button class="tab-button active" data-id="dashboard">Dashboard</button>
+            <button class="tab-button" data-id="welcome">Welcome</button>
+            <button class="tab-button" data-id="project-context">Project Context</button>
+            <button class="tab-button" data-id="business-assets">Business Assets</button>
+            <button class="tab-button" data-id="supporting-assets">Supporting Assets</button>
+            <button class="tab-button" data-id="risks">Risks</button>
+            <button class="tab-button" data-id="vulnerabilities">Vulnerabilities</button>
+            <button class="tab-button" data-id="isra-report">ISRA Report</button>
+        </div>
+        <div class="scrollingWrapper">
+            <div class="contentWrapper">
+                <div class="content active" id="dashboard">
+                    <header>Risk Dashboard</header>
+                    <h1 class="dashboard__title">
+                        <span id="db-name" class="text-wrap"></span>
+                        <span id="db-version" class="text-wrap"></span>
+                    </h1>
+                    <h2 class="dashboard__subtitle">
+                        Iteration/Revision: <span id="db-iteration"></span>(#<span id="db-revision"></span>)
+                    </h2>
+
+                    <!-- empty state -->
+                    <div id="db-empty" class="dashboard__empty" style="display:none;">
+                        <p>No assessment data yet.</p>
+                        <p>Open a project (<strong>File &rarr; Open</strong>) or start adding assets and risks to see your
+                            risk posture here.</p>
+                    </div>
+
+                    <div id="db-body">
+                        <!-- KPI cards -->
+                        <section class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-value" id="kpi-business-assets">0</div>
+                                <div class="kpi-label">Business Assets</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value" id="kpi-supporting-assets">0</div>
+                                <div class="kpi-label">Supporting Assets</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value" id="kpi-vulnerabilities">0</div>
+                                <div class="kpi-label">Vulnerabilities</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value" id="kpi-risks">0</div>
+                                <div class="kpi-label">Total Risks</div>
+                            </div>
+                            <div class="kpi-card kpi-card--warn">
+                                <div class="kpi-value" id="kpi-untreated">0</div>
+                                <div class="kpi-label">Untreated Risks</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value" id="kpi-cost">0</div>
+                                <div class="kpi-label">Mitigation Cost (md)</div>
+                            </div>
+                        </section>
+
+                        <!-- charts -->
+                        <section class="chart-grid">
+                            <div class="chart-card">
+                                <h3>Residual Risk by Severity</h3>
+                                <div class="chart-box">
+                                    <canvas id="severityChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Risk Reduction: Inherent vs Residual</h3>
+                                <div class="chart-box">
+                                    <canvas id="reductionChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Risk Treatment Decisions</h3>
+                                <div class="chart-box">
+                                    <canvas id="treatmentChart"></canvas>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- top risks -->
+                        <section class="top-risks">
+                            <h3>Top 5 Residual Risks</h3>
+                            <table id="db-top-risks">
+                                <thead>
+                                    <th>Id</th>
+                                    <th>Risk</th>
+                                    <th>Residual Score</th>
+                                    <th>Level</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <footer></footer>
+        </div>
+    </div>
+    <script src="../../javascript/common.js"></script>
+    <script src="../../constants/colors.js"></script>
+    <script src="./renderer.js"></script>
+    <script src="../../javascript/tabs.js"></script>
+</body>
+
+</html>
