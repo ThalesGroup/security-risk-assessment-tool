@@ -37,7 +37,8 @@ const panels = [
   {name:"risks", link:"../Risks/risks.html"}, 
   {name:"vulnerabilities", link:"../Vulnerabilities/vulnerabilities.html"}, 
   {name:"isra-report", link:"../Report/report.html"}]
-/**
+
+  /**
  * loads ISRA Project Data (new project/xml/json)
  * for reference in developer's tool
  */
