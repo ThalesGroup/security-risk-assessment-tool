@@ -1217,43 +1217,67 @@ function enableInteract(){
 
 
     const cloneRisks = async (checkboxes) => {
-      const checkedRisks = [];
-      let lastClonedRiskId = null;
-      checkboxes.forEach((box) => {
-        if (box.checked) checkedRisks.push(Number(box.value));
-      });
-      if (checkedRisks.length === 0) return;
+  const checkedRisks = [];
+  let lastClonedRiskId = null;
 
-      const clonedRisks = [];
-      for (const riskId of checkedRisks) {
-        const [clonedRisk] = await window.risks.cloneRisk(riskId);
-        if (clonedRisk) clonedRisks.push(clonedRisk);
+  checkboxes.forEach((box) => {
+    if (box.checked) checkedRisks.push(Number(box.value));
+    });
+
+    if (checkedRisks.length === 0) return;
+
+    const clonedRisks = [];
+
+    for (const riskId of checkedRisks) {
+      const [clonedRisk] = await window.risks.cloneRisk(riskId);
+
+      if (clonedRisk) {
+        clonedRisks.push(clonedRisk);
       }
+    }
 
-      clonedRisks.forEach((clonedRisk) => {
-        risksData.push(clonedRisk);
-        addRisk(clonedRisk);
-        lastClonedRiskId = clonedRisk.riskId;
-      });
+    clonedRisks.forEach((clonedRisk) => {
+      risksData.push(clonedRisk);
+      addRisk(clonedRisk);
+      lastClonedRiskId = clonedRisk.riskId;
+    });
 
-      currentSort = sortConfigForValue('id-asc');
-      sessionStorage.setItem('risksSort', 'id-asc');
-      const sortSelect = document.getElementById('sort-risk');
-      if (sortSelect && sortSelect.value !== 'id-asc') sortSelect.value = 'id-asc';
-      applyCurrentSort();
-      risksTable.deselectRow();
-      if (lastClonedRiskId !== null) {
-        risksTable.selectRow(lastClonedRiskId);
-        disableInteract();
+    currentSort = sortConfigForValue('id-asc');
+    sessionStorage.setItem('risksSort', 'id-asc');
+
+    const sortSelect = document.getElementById('sort-risk');
+
+    if (sortSelect && sortSelect.value !== 'id-asc') {
+      sortSelect.value = 'id-asc';
+    }
+
+    applyCurrentSort();
+    risksTable.deselectRow();
+
+    if (lastClonedRiskId !== null) {
+      risksTable.selectRow(lastClonedRiskId);
+
+      disableInteract();
+
+      try {
         await addSelectedRowData(lastClonedRiskId);
+      } finally {
         enableInteract();
       }
-    };
+    }
 
-    $('#risks__clone__button').on('click', async () => {
-      const checkboxes = document.getElementsByName('risks__table__checkboxes');
-      await cloneRisks(checkboxes);
+    checkboxes.forEach((box) => {
+      box.checked = false;
     });
+  };
+
+  $('#risks__clone__button').on('click', async () => {
+    const checkboxes = document.getElementsByName(
+      'risks__table__checkboxes'
+    );
+
+    await cloneRisks(checkboxes);
+  });
 
     // delete Risk button
     $('#risks__delete__button').on('click', async () => {
