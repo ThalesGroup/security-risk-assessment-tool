@@ -96,6 +96,7 @@
     },
     "dependencies": {
         "chart.js": "^4.3.2",
+        "dompurify": "^3.4.13",
         "jquery": "^3.6.1",
         "hugerte": "^1.0.11",
         "tabulator-tables": "^5.3.4",
@@ -109,7 +110,7 @@
     "overrides": {
         "got": "^11.8.5",
         "form-data": "^4.0.5",
-        "js-yaml": "^4.3.0",
+        "js-yaml": "^4.3.1",
         "glob": "^10.5.0",
         "tmp": "^0.2.5",
         "brace-expansion": "^5.0.9",

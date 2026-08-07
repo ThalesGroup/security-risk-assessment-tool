@@ -162,7 +162,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
     tableOptions.columns[3].cellEdited = (cell) => {
       const id = cell.getRow().getData().supportingAssetId;
       updateSupportingAsset(id, cell.getField(), cell.getValue());
-      $(`${matrixTable}-${id} td.matrix-sa-name`).html(cell.getValue());
+      $(`${matrixTable}-${id} td.matrix-sa-name`).text(cell.getValue());
     };
 
     tableOptions.columns[0].formatter = (cell) => {
@@ -176,7 +176,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
 
     tableOptions.columns[3].formatter = (cell) => {
       cell.getElement().style.color = validateSAName(cell.getRow().getData())
-      return cell.getValue();
+      return document.createTextNode(cell.getValue() || '');
     }
     const addBusinessAsset = (id, ref, index) => {
       const matrixRow = $(`${matrixTable}-${id} td.matrix-sa-ba`);
@@ -231,7 +231,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
       const row = `
       <tr id="supporting-asset-business-assets__table-${id}">
         <td class="matrix-sa-id">${id}</td>
-        <td class="matrix-sa-name text-wrap">${name}</td>
+        <td class="matrix-sa-name text-wrap"></td>
         <td class="matrix-sa-ba">
            <div class="add-delete-container">
               <button class="addDelete">Add</button> | <button class="addDelete">Delete</button>
@@ -239,7 +239,7 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
         </td>
       </tr>`;
       $(`${matrixTable} tbody`).append(row);
-
+      $(`${matrixTable}-${id} td.matrix-sa-name`).text(name);
       // add business asset ref
       $(`${matrixTable}-${id} button`).first().on('click', async () => {
         let index = $(`${matrixTable}-${id} div:last-of-type input:last-of-type`).attr('data-index');
