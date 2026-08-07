@@ -74,14 +74,16 @@ const getMainWindow = () => {
   * @param app
 */
 const newISRAProject = (win, app) => {
+  let shouldClearScroll = false;
   try {
     if(!israProject) {
       israProject = new ISRAProject();
       DataNew(israProject);
       oldIsraProject = israProject.toJSON();
+      shouldClearScroll = true;
     };
     getMainWindow().title = browserTitle;
-    win.webContents.send('project:load', israProject.toJSON());
+    win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: shouldClearScroll });
   } catch (err) {
     console.log(err);
     dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
@@ -624,7 +626,10 @@ const loadJSONFile = async (win, filePath) => {
   try {
     
     israProject = DataLoad(filePath);
-    win.webContents.send('project:load', israProject.toJSON());
+    win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
+    win.webContents.once('dom-ready', () => {
+      win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+    });
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
@@ -644,7 +649,10 @@ const loadJSONFile = async (win, filePath) => {
 const loadXMLFile = (win, filePath) => {
   try {
     israProject = XML2JSON(filePath);
-    win.webContents.send('project:load', israProject.toJSON());
+    win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
+    win.webContents.once('dom-ready', () => {
+      win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+    });
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
@@ -1040,7 +1048,7 @@ ipcMain.on('import:sendImports', (event, data) => {
 
   importData(data,israProject,importedISRA)
   dialogWindow.close()
-  getMainWindow().webContents.send('project:load', israProject.toJSON());
+  getMainWindow().webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
 })
 ipcMain.handle('render:welcome', () => renderWelcome());
 ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
