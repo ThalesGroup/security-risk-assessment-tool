@@ -1242,15 +1242,6 @@ function enableInteract(){
       lastClonedRiskId = clonedRisk.riskId;
     });
 
-    currentSort = sortConfigForValue('id-asc');
-    sessionStorage.setItem('risksSort', 'id-asc');
-
-    const sortSelect = document.getElementById('sort-risk');
-
-    if (sortSelect && sortSelect.value !== 'id-asc') {
-      sortSelect.value = 'id-asc';
-    }
-
     applyCurrentSort();
     risksTable.deselectRow();
 
