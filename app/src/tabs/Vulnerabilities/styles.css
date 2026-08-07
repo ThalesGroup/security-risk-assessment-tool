@@ -32,6 +32,21 @@ html {
     padding: 5px;
 }
 
+#vulnerabilities h1{
+    font-size:24px;
+}
+
+#vulnerability__scoring__round,
+#vulnerability__level {
+    font-weight: bold;
+    font-size: inherit;
+}
+
+.vul-score-total {
+    font-weight: bold;
+    font-size: inherit;
+}
+
 #vulnerabilityId {
     font-weight: bold;
 }
@@ -162,6 +177,7 @@ span{
     display: inline-flex;
     align-items: center;
 }
+
 
 .info-tooltip {
     position: relative;

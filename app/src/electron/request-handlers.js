@@ -1198,6 +1198,7 @@ ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, ind
 const { 
   addRisk,
   deleteRisk,
+  cloneRisk,
   updateRiskName,
   updateRiskLikelihood,
   updateRiskImpact,
@@ -1225,6 +1226,7 @@ ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
 });
 ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
 ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
+ipcMain.handle('risks:cloneRisk', (event, riskId) => cloneRisk(israProject, riskId));
 ipcMain.handle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId));
 ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
 ipcMain.handle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value));

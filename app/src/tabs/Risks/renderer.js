@@ -55,6 +55,24 @@ const severityRank = (level) => {
       return 0;
   }
 };
+
+const getRiskLevelFromScore = (score) => {
+  if (score == null || isNaN(score)) return '';
+  if (score <= 5) return 'Low';
+  if (score <= 10) return 'Medium';
+  if (score <= 15) return 'High';
+  return 'Critical';
+};
+const styleRiskLevel = (elementId, score) => {
+  const level = getRiskLevelFromScore(score);
+  const $el = $(elementId);
+  if (level === '') {
+    $el.empty();
+  } else {
+    $el.html(`(<span class="risk-level-text">${level}</span>)`);
+    $el.find('.risk-level-text').css('color', getSeverityColor(level));
+  }
+};
 const riskLevelSorter = (a, b, aRow, bRow) => {
   const rankA = severityRank(a);
   const rankB = severityRank(b);
@@ -1083,11 +1101,13 @@ function enableInteract(){
         addVulnerabilitySection(riskAttackPaths, supportingAssetRef);
         $('#all_attack_paths_score').text(allAttackPathsScore == null ? '' : allAttackPathsScore);
         $('#inherent_risk_score').text(inherentRiskScore == null ? '' : inherentRiskScore);
+        styleRiskLevel('#inherent_risk_level', inherentRiskScore); 
 
         //risk mitigation
         $('#risks__risk__mitigation__evaluation section').empty();
         await addMitigationSection(riskMitigation, riskManagementDecision);
         $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
+        styleRiskLevel('#mitigated_risk_level', mitigatedRiskScore);       
 
         //risk management
         $(`input[name='risk__management__decision'][value='${riskManagementDecision}']`).prop('checked', true);
@@ -1220,14 +1240,71 @@ function enableInteract(){
       enableInteract()
     });
 
+
+    const cloneRisks = async (checkboxes) => {
+  const checkedRisks = [];
+  let lastClonedRiskId = null;
+
+  checkboxes.forEach((box) => {
+    if (box.checked) checkedRisks.push(Number(box.value));
+    });
+
+    if (checkedRisks.length === 0) return;
+
+    const clonedRisks = [];
+
+    for (const riskId of checkedRisks) {
+      const [clonedRisk] = await window.risks.cloneRisk(riskId);
+
+      if (clonedRisk) {
+        clonedRisks.push(clonedRisk);
+      }
+    }
+
+    clonedRisks.forEach((clonedRisk) => {
+      risksData.push(clonedRisk);
+      addRisk(clonedRisk);
+      lastClonedRiskId = clonedRisk.riskId;
+    });
+
+    applyCurrentSort();
+    risksTable.deselectRow();
+
+    if (lastClonedRiskId !== null) {
+      risksTable.selectRow(lastClonedRiskId);
+
+      disableInteract();
+
+      try {
+        await addSelectedRowData(lastClonedRiskId);
+      } finally {
+        enableInteract();
+      }
+    }
+
+    checkboxes.forEach((box) => {
+      box.checked = false;
+    });
+  };
+
+  $('#risks__clone__button').on('click', async () => {
+    const checkboxes = document.getElementsByName(
+      'risks__table__checkboxes'
+    );
+
+    await cloneRisks(checkboxes);
+  });
+
     // delete Risk button
-    $('#risks .add-delete-container button:nth-child(2)').on('click', async () => {
+    $('#risks__delete__button').on('click', async () => {
       const checkboxes = document.getElementsByName('risks__table__checkboxes');
       deleteRisks(checkboxes);
     });
 
+
     disableButtons()
     disableInputs()
+
     const assetsRelationshipSetUp = (fetchedData) =>{
       businessAssets = fetchedData.BusinessAsset;
       supportingAssets = fetchedData.SupportingAsset;
@@ -1364,7 +1441,9 @@ function enableInteract(){
       risksTable.updateData([{ riskId: getCurrentRiskId(), riskName: risk.riskName, residualRiskLevel: risk.residualRiskLevel }]);
       if(risk.inherentRiskScore != null){
         $('#inherent_risk_score').text(risk.inherentRiskScore);
+        styleRiskLevel('#inherent_risk_level', risk.inherentRiskScore);     
         $('#mitigated_risk_score').text(risk.mitigatedRiskScore);
+        styleRiskLevel('#mitigated_risk_level', risk.mitigatedRiskScore);   
         $('#residual_risk_score').text(risk.residualRiskScore);
         $('#residual_risk_level').text(risk.residualRiskLevel);
         styleResidualRiskLevel(risk.residualRiskLevel);
