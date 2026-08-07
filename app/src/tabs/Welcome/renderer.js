@@ -34,6 +34,95 @@
     disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.welcome();
+    result[1].editable = true;
+
+    result[1].cellClick = function (e, cell) {
+      cell.edit();
+      return false;
+    };
+
+    result[1].cellEdited = function (cell) {
+      window.welcome.updateTrackingRow(cell.getRow().getData());
+    };
+
+    const trackingCommentColumn = result[1].columns.find(
+      (column) => column.field === 'trackingComment'
+    );
+
+    if (trackingCommentColumn) {
+      /*
+      * Use Tabulator's built-in multiline textarea editor.
+      */
+      trackingCommentColumn.editor = 'textarea';
+      trackingCommentColumn.formatter = 'textarea';
+      trackingCommentColumn.variableHeight = true;
+      trackingCommentColumn.editable = true;
+      trackingCommentColumn.cssClass = 'welcome__tracking-comment-cell';
+
+      trackingCommentColumn.editorParams = {
+        verticalNavigation: 'editor',
+      };
+    }
+
+    /*
+    * When Tabulator opens the trackingComment editor,
+    * allow Shift + Enter to insert a newline without
+    * Tabulator treating Enter as "finish editing".
+    */
+    result[1].cellEditing = function (cell) {
+      if (cell.getField() !== 'trackingComment') {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        const cellElement = cell.getElement();
+        const textarea = cellElement.querySelector('textarea');
+
+        if (!textarea) {
+          return;
+        }
+
+        textarea.addEventListener(
+          'keydown',
+          (event) => {
+            if (event.key === 'Enter' && event.shiftKey) {
+              /*
+              * Stop Tabulator from processing this Enter.
+              */
+              event.preventDefault();
+              event.stopPropagation();
+              event.stopImmediatePropagation();
+
+              const start = textarea.selectionStart;
+              const end = textarea.selectionEnd;
+
+              const value = textarea.value;
+
+              textarea.value =
+                value.substring(0, start) +
+                '\n' +
+                value.substring(end);
+
+              /*
+              * Put the cursor after the new line.
+              */
+              textarea.selectionStart = start + 1;
+              textarea.selectionEnd = start + 1;
+
+              /*
+              * Trigger input so Tabulator knows the textarea changed.
+              */
+              textarea.dispatchEvent(
+                new Event('input', {
+                  bubbles: true,
+                })
+              );
+            }
+          },
+          true
+        );
+      });
+    };
     $('#welcome').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
       const id = cell.getRow().getIndex();
