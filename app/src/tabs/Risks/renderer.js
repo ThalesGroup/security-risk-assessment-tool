@@ -1235,14 +1235,71 @@ function enableInteract(){
       enableInteract()
     });
 
+
+    const cloneRisks = async (checkboxes) => {
+  const checkedRisks = [];
+  let lastClonedRiskId = null;
+
+  checkboxes.forEach((box) => {
+    if (box.checked) checkedRisks.push(Number(box.value));
+    });
+
+    if (checkedRisks.length === 0) return;
+
+    const clonedRisks = [];
+
+    for (const riskId of checkedRisks) {
+      const [clonedRisk] = await window.risks.cloneRisk(riskId);
+
+      if (clonedRisk) {
+        clonedRisks.push(clonedRisk);
+      }
+    }
+
+    clonedRisks.forEach((clonedRisk) => {
+      risksData.push(clonedRisk);
+      addRisk(clonedRisk);
+      lastClonedRiskId = clonedRisk.riskId;
+    });
+
+    applyCurrentSort();
+    risksTable.deselectRow();
+
+    if (lastClonedRiskId !== null) {
+      risksTable.selectRow(lastClonedRiskId);
+
+      disableInteract();
+
+      try {
+        await addSelectedRowData(lastClonedRiskId);
+      } finally {
+        enableInteract();
+      }
+    }
+
+    checkboxes.forEach((box) => {
+      box.checked = false;
+    });
+  };
+
+  $('#risks__clone__button').on('click', async () => {
+    const checkboxes = document.getElementsByName(
+      'risks__table__checkboxes'
+    );
+
+    await cloneRisks(checkboxes);
+  });
+
     // delete Risk button
-    $('#risks .add-delete-container button:nth-child(2)').on('click', async () => {
+    $('#risks__delete__button').on('click', async () => {
       const checkboxes = document.getElementsByName('risks__table__checkboxes');
       deleteRisks(checkboxes);
     });
 
+
     disableButtons()
     disableInputs()
+
     const assetsRelationshipSetUp = (fetchedData) =>{
       businessAssets = fetchedData.BusinessAsset;
       supportingAssets = fetchedData.SupportingAsset;

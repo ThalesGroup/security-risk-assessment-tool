@@ -34,6 +34,7 @@
     disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.welcome();
+    
     $('#welcome').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
       const id = cell.getRow().getIndex();
