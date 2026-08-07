@@ -161,7 +161,7 @@ function enableInteract(){
 
 
       const riskName = cell.getValue();
-      return `<span class="risks-table__name-text text-wrap">${riskName}</span>`;
+      return `<span class="risks-table__name-text text-wrap">${escapeHTML(riskName)}</span>`;
     
     }
     
@@ -373,17 +373,22 @@ function enableInteract(){
 
     // add Supporting Assets Select options
     const addSupportingAssetOptions = (businessAssetRef) =>{
-      let supportingAssetOptions = '<option value="">Select...</option>';
-      $('#risk__supportingAsset').empty();
+      const supportingAssetSelect = $('#risk__supportingAsset');
+      supportingAssetSelect.empty();
+      supportingAssetSelect.append('<option value="">Select...</option>');
       if(businessAssetRef!=null && existBusinessAsset(businessAssetRef)!=null){
         supportingAssets.forEach((sa) =>{
           if(assetsRelationship[sa.supportingAssetId].some((baRef) => baRef === businessAssetRef )){
             const saLabel = sa.supportingAssetName.length > 40 ? sa.supportingAssetName.slice(0, 40) + '\u2026' : sa.supportingAssetName;
-            supportingAssetOptions += `<option value="${sa.supportingAssetId}" title="${sa.supportingAssetName}" style="${checkSupportingAssetRef(sa.supportingAssetId) ? '' : 'color:' + ERROR_COLOR}">${saLabel}</option>`;
+            const option = document.createElement('option');
+            option.value = sa.supportingAssetId;
+            option.title = sa.supportingAssetName;
+            if (!checkSupportingAssetRef(sa.supportingAssetId)) option.style.color = ERROR_COLOR;
+            option.text = saLabel;
+            supportingAssetSelect.append(option);
           }
         });
       }
-      $('#risk__supportingAsset').append(supportingAssetOptions);
     };
 
     const setNaNValues = (riskAttackPathId) => {
@@ -501,7 +506,7 @@ function enableInteract(){
     const addVulnerabilitySection = (riskAttackPaths, supportingAssetRef) =>{
       let vulnerabilityOptions = '<option value="">Select...</option>';
       vulnerabilities.filter(uncheckedV => uncheckedV.supportingAssetRef.includes(supportingAssetRef)).forEach((v)=>{
-        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${v.vulnerabilityId} - ${v.vulnerabilityName}</option>`;
+        vulnerabilityOptions += `<option value="${v.vulnerabilityId}" ${!checkVulnerabilityRef(v.vulnerabilityId,supportingAssetRef) ? `style="color: ${ERROR_COLOR};"` : ''}>${escapeHTML(v.vulnerabilityId)} - ${escapeHTML(v.vulnerabilityName)}</option>`;
       });
 
       riskAttackPaths.forEach((path, i) =>{
@@ -1232,13 +1237,16 @@ function enableInteract(){
       });
 
       $('#risk__businessAsset').empty();
-      let businessAssetsOptions = '<option value="">Select...</option>';
+      $('#risk__businessAsset').append('<option value="">Select...</option>');
       businessAssets.forEach((ba)=>{
         const baLabel = ba.businessAssetName.length > 40 ? ba.businessAssetName.slice(0, 40) + '\u2026' : ba.businessAssetName;
-        businessAssetsOptions += `<option value="${ba.businessAssetId}" title="${ba.businessAssetName}" style="${checkBusinessAssetRef(ba.businessAssetId)?'':'color:' + ERROR_COLOR}">${baLabel}</option>`;
-
+        const option = document.createElement('option');
+        option.value = ba.businessAssetId;
+        option.title = ba.businessAssetName;
+        if (!checkBusinessAssetRef(ba.businessAssetId)) option.style.color = ERROR_COLOR;
+        option.text = baLabel;
+        $('#risk__businessAsset').append(option);
       });
-      $('#risk__businessAsset').append(businessAssetsOptions);
     }
 
     $(document).ready(async function () {

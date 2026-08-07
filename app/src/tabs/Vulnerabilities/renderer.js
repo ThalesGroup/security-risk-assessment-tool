@@ -84,7 +84,7 @@ const getSeverityColor = (level) => {
         else  {
             cell.getElement().style.color = DEFAULT_TEXT_COLOR;
         }
-        return cell.getValue()
+        return document.createTextNode(cell.getValue() || '')
     }
 
     tableOptions.columns[overallLevelIndex].formatter = (cell) => {
@@ -347,7 +347,7 @@ const getSeverityColor = (level) => {
             // add label
             const label = document.createElement('label');
             label.classList.add('text-wrap');
-            label.innerHTML = sa.supportingAssetName;
+            label.textContent = sa.supportingAssetName;
             div.append(label);
             $('.refs').append(div);
             
