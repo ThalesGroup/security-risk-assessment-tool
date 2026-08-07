@@ -39,6 +39,8 @@ const getSeverityColor = (level) => {
   }
 };
 
+
+
 (async () => {
     var fetchedData
     try {
