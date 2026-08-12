@@ -285,7 +285,6 @@ const getSeverityColor = (level) => {
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
                             <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${escapeHTML(riskName)}</div>
-                            <div class="grid-item text-wrap">${DOMPurify.sanitize(riskManagementDetail)}</div>
                             <div class="grid-item text-wrap">${riskManagementDetail}</div>
                         </div>
                     </td>
@@ -358,8 +357,8 @@ const getSeverityColor = (level) => {
                         const { description, decisionDetail, cost, decision } = mitigation;
                         if(decision === 'Accepted'){
                             $('#riskmanagement tbody').append(`<tr>
-                            <td class="text-wrap">${DOMPurify.sanitize(description)}</td>
-                            <td class="text-wrap">${DOMPurify.sanitize(decisionDetail)}</td>
+                            <td class="text-wrap">${description}</td>
+                            <td class="text-wrap">${decisionDetail}</td>
                             <td>${!cost ? '' : cost}</td>
                             </td>`);
 
