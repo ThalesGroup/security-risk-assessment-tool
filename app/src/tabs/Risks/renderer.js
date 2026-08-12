@@ -745,6 +745,9 @@ function enableInteract(){
           width,
           verify_html: true,
           statusbar: false,
+          menu: {
+            file: { title: 'File', items: 'restoredraft | preview | print' },
+          },
           deep: true,
           link_target_list: false,
           removed_menuitems: 'newdocument',
@@ -1343,6 +1346,9 @@ function enableInteract(){
           min_height: 300,
           verify_html: true,
           statusbar: false,
+          menu: {
+            file: { title: 'File', items: 'restoredraft | preview | print' },
+          },
           link_target_list: false,
           removed_menuitems: 'newdocument',
           plugins: 'link lists image autoresize',
