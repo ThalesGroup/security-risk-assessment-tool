@@ -1,0 +1,276 @@
+{
+  "config": {
+    "overwrite_strategy": "Ask"
+  },
+  "topic": {
+    "title": "ISRA — Security Risk Assessment Tool",
+    "path": "docs"
+  },
+  "outline": [
+    {
+      "title": "Architecture Overview",
+      "purpose": "Explain the monorepo structure, Electron + lib separation, and high-level component responsibilities.",
+      "reader_outcomes": "Newcomer understands why the project is split into lib/ and app/, how they relate, and where to add new logic."
+    },
+    {
+      "title": "Data Model",
+      "purpose": "Document every domain class, their properties, relationships, and lifecycle (add/delete/get patterns).",
+      "reader_outcomes": "Developer knows which class to modify for a given data change and understands cross-references between entities."
+    },
+    {
+      "title": "Development Guide",
+      "purpose": "Onboarding guide covering setup, running the app, tests, linting, and building a distributable.",
+      "reader_outcomes": "New contributor can run, test, and lint the project without asking for help."
+    },
+    {
+      "title": "Risk Assessment Workflow",
+      "purpose": "Walk through the ISO 27005 process: project context → business assets → supporting assets → vulnerabilities → risks → mitigation.",
+      "reader_outcomes": "Understand the sequential workflow, what each step produces, and how entities link to each other."
+    },
+    {
+      "title": "File Format & I/O",
+      "purpose": "Document the .sra file format (JSON), legacy XML migration pipeline, and data-load/data-store API.",
+      "reader_outcomes": "Developer understands how projects are persisted, loaded, and migrated from older XML-based InfoPath files."
+    },
+    {
+      "title": "IPC Architecture",
+      "purpose": "Document the full Electron IPC chain from renderer → contextBridge → ipcRenderer → ipcMain → lib API.",
+      "reader_outcomes": "Developer knows how to add a new IPC channel safely and correctly."
+    },
+    {
+      "title": "Validation Pattern",
+      "purpose": "Explain the AJV-based validation approach, JSON Schema, validateClassProperties helper, and per-tab validation in the app.",
+      "reader_outcomes": "Developer knows how to add a new validated field end-to-end."
+    },
+    {
+      "title": "Electron Security",
+      "purpose": "Document Electron security configuration: nodeIntegration, contextIsolation, URL scheme whitelist, and rich-text sanitization.",
+      "reader_outcomes": "Developer knows which security constraints must not be relaxed and why."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "architecture-overview",
+      "title": "Architecture Overview",
+      "intent": "architecture",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/architecture-overview.md",
+        "subheading": "Architecture Overview"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 700,
+        "min_tables": 1,
+        "require_diagram": true,
+        "min_examples": 1
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "Monorepo Structure",
+        "Key Components & Responsibilities",
+        "Technology Stack",
+        "Operational Notes"
+      ],
+      "use_jsdoc": true
+    },
+    {
+      "id": "data-model",
+      "title": "Data Model",
+      "intent": "data-models",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/data-model.md",
+        "subheading": "Data Model"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 800,
+        "min_tables": 2,
+        "require_diagram": true,
+        "min_examples": 2
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "Domain Entity Overview",
+        "Class Details",
+        "Cross-References & Relationships",
+        "ID Management Pattern",
+        "Operational Notes"
+      ],
+      "use_jsdoc": true
+    },
+    {
+      "id": "development",
+      "title": "Development Guide",
+      "intent": "development",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/development.md",
+        "subheading": "Development Guide"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 600,
+        "min_tables": 1,
+        "require_diagram": false,
+        "min_examples": 2
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "Prerequisites & Setup",
+        "Running the Application",
+        "Testing",
+        "Linting",
+        "Building a Distributable",
+        "Operational Notes"
+      ],
+      "use_jsdoc": false
+    },
+    {
+      "id": "risk-assessment-workflow",
+      "title": "Risk Assessment Workflow",
+      "intent": "domain-workflows",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/features/risk-assessment-workflow.md",
+        "subheading": "Risk Assessment Workflow"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 700,
+        "min_tables": 1,
+        "require_diagram": true,
+        "min_examples": 1
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "When to Use / When Not to Use",
+        "Workflow Steps (ISO 27005)",
+        "Key Entities & Their Roles",
+        "Risk Scoring & Mitigation",
+        "Operational Notes"
+      ],
+      "use_jsdoc": true
+    },
+    {
+      "id": "file-format-and-io",
+      "title": "File Format & I/O",
+      "intent": "configuration-policies",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/features/file-format-and-io.md",
+        "subheading": "File Format & I/O"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 600,
+        "min_tables": 1,
+        "require_diagram": false,
+        "min_examples": 1
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "The .sra File Format",
+        "Opening a File (DataLoad)",
+        "Saving a File (DataStore)",
+        "XML to JSON Migration Pipeline",
+        "Schema Version Handling",
+        "Operational Notes"
+      ],
+      "use_jsdoc": true
+    },
+    {
+      "id": "ipc-architecture",
+      "title": "IPC Architecture",
+      "intent": "architecture",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/features/ipc-architecture.md",
+        "subheading": "IPC Architecture"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 600,
+        "min_tables": 2,
+        "require_diagram": false,
+        "min_examples": 1
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "When to Use / When Not to Use",
+        "IPC Channel Reference",
+        "Adding a New IPC Channel",
+        "Security Constraints",
+        "Operational Notes"
+      ],
+      "use_jsdoc": true
+    },
+    {
+      "id": "validation-pattern",
+      "title": "Validation Pattern",
+      "intent": "authentication-security",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/features/validation-pattern.md",
+        "subheading": "Validation Pattern"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 550,
+        "min_tables": 1,
+        "require_diagram": false,
+        "min_examples": 2
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "AJV Instance & JSON Schema",
+        "Adding a New Validated Field",
+        "Per-Tab Validation in the App",
+        "Error Message Format",
+        "Operational Notes"
+      ],
+      "use_jsdoc": true
+    },
+    {
+      "id": "electron-security",
+      "title": "Electron Security",
+      "intent": "authentication-security",
+      "write": {
+        "mode": "write_file",
+        "destination": "docs/features/electron-security.md",
+        "subheading": "Electron Security"
+      },
+      "audience": "newcomers",
+      "depth": {
+        "min_words": 500,
+        "min_tables": 1,
+        "require_diagram": false,
+        "min_examples": 1
+      },
+      "required_sections": [
+        "Purpose & Scope",
+        "Core Security Settings",
+        "URL Scheme Whitelist",
+        "Rich-Text Sanitization",
+        "What Must Never Change",
+        "Operational Notes"
+      ],
+      "use_jsdoc": false
+    }
+  ],
+  "links": {
+    "openapi": []
+  },
+  "assumptions": [
+    "No HTTP server endpoints exist — this is a fully offline Electron desktop app. OpenAPI generation is skipped.",
+    "Audience is newcomers / onboarding developers.",
+    "Config defaults (appVersion: 1.3.0-alpha01, organizations list) are sourced from lib/src/config.js.",
+    "Schema version cap of 3 is based on getJSON() guard in request-handlers.js."
+  ],
+  "open_questions": [
+    "What is the full list of supported schemaVersion values and their migration differences?",
+    "Is there a planned migration path beyond schemaVersion 3?",
+    "Are there plans to add HTTP endpoints or a server mode in future versions?"
+  ]
+}
