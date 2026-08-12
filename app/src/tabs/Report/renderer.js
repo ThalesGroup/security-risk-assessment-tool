@@ -167,7 +167,7 @@ const getSeverityColor = (level) => {
 
                 $('#vulnerabilities tbody').append(`<tr>
                     <td>${vulnerabilityId}</td>
-                    <td class="text-wrap">${vulnerabilityName}</td>
+                    <td class="text-wrap">${escapeHTML(vulnerabilityName)}</td>
                     <td style="color: ${overallScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${overallScore === null ? 'NaN' : overallScore}/10</td>
                     <td style="color: ${color}; font-weight:;">${overallLevel}</td>
                     </td>`);
@@ -284,8 +284,7 @@ const getSeverityColor = (level) => {
                     <td style="padding:0;">
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
-                            <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${riskName}</div>
-                            <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
+                            <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${escapeHTML(riskName)}</div>
                             <div class="grid-item text-wrap">${riskManagementDetail}</div>
                         </div>
                     </td>

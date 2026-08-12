@@ -17,3 +17,11 @@ function enableAllTabs() {
   document.querySelector('button.tab-button[data-id="vulnerabilities"]').disabled = false;
   document.querySelector('button.tab-button[data-id="isra-report"]').disabled = false;
 }
+
+function escapeHTML(value) {
+  const entityMap = {
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+    "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;',
+  };
+  return String(value == null ? '' : value).replace(/[&<>"'`=/]/g, (s) => entityMap[s]);
+}
