@@ -69,7 +69,7 @@ const styleRiskLevel = (elementId, score) => {
   if (level === '') {
     $el.empty();
   } else {
-    $el.html(`(<span class="risk-level-text">${level}</span>)`);
+    $el.html(`<span class="risk-level-text">${level}</span>`);
     $el.find('.risk-level-text').css('color', getSeverityColor(level));
   }
 };
