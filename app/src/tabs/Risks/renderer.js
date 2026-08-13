@@ -69,7 +69,7 @@ const styleRiskLevel = (elementId, score) => {
   if (level === '') {
     $el.empty();
   } else {
-    $el.html(`(<span class="risk-level-text">${level}</span>)`);
+    $el.html(`<span class="risk-level-text">${level}</span>`);
     $el.find('.risk-level-text').css('color', getSeverityColor(level));
   }
 };
@@ -1065,6 +1065,7 @@ function enableInteract(){
         $('select[id="risk__threatAgent"]').val(threatAgent);
         $('select[id="risk__threat"]').val(threatVerb);
         $('#risk__motivation').val(motivation);
+        $('#risk__manual__riskName input').prop('style', `border:${riskName === '' ? '3px solid ' + ERROR_COLOR : 'none'}`);
         $('select[id="risk__businessAsset"]').val(existBusinessAsset(businessAssetRef) == null ? '' : businessAssetRef);
         $('select[id="risk__businessAsset"]').prop('style',`border:${existBusinessAsset(businessAssetRef) != null && checkBusinessAssetRef(businessAssetRef) ? 'none' : '3px solid ' + ERROR_COLOR}`);
         addSupportingAssetOptions(businessAssetRef);
