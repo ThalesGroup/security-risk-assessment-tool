@@ -355,3 +355,48 @@ select{
     justify-items: center;
     visibility:hidden;
 }
+
+.rich-text-cell-preview {
+    width: 100%;
+    min-height: 100%;
+    display: -webkit-box;
+    overflow: hidden;
+    padding: 4px 0;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.rich-text-modal[hidden] {
+    display: none;
+}
+
+.rich-text-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rich-text-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.rich-text-modal__box {
+    position: relative;
+    background: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    width: 700px;
+    max-width: 90vw;
+}
+
+.rich-text-modal__actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}

@@ -22,7 +22,7 @@
 * -----------------------------------------------------------------------------
 */
 
-/* global $ Tabulator */
+/* global $ Tabulator createRichTextCellFormatter */
 
 (async () => {
   try {
@@ -34,7 +34,6 @@
     disableAllTabs()
     window.addEventListener('keydown', handleReload);
     const result = await window.render.welcome();
-    
     $('#welcome').append(result[0]);
     result[1].columns[0].formatter = (cell) => {
       const id = cell.getRow().getIndex();
@@ -44,8 +43,17 @@
         `;
       }
     };
-    let classificationLabel;
 
+    const trackingCommentColumn = result[1].columns.find((c) => c.field === 'trackingComment');
+    if (trackingCommentColumn) {
+      trackingCommentColumn.formatter = (cell) => createRichTextCellFormatter(cell, {
+        showToolbar: true,
+        toolbar: 'undo redo',
+        });
+      }
+    let classificationLabel;
+      
+    
     // result[1]['columnDefaults'] = {
     //   tooltip: function(e, cell, onRendered) {
     //     var el = document.createElement("div");
@@ -57,7 +65,7 @@
     //   },
     // };
 
-
+    
     const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
 
     const appVersion = (value) => {
