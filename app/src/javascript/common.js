@@ -57,11 +57,11 @@ function getOrCreateRichTextModal() {
       <div class="rich-text-modal__box">
         <textarea id="${RICH_TEXT_EDITOR_ID}"></textarea>
         <div class="rich-text-modal__actions">
+         <button type="button" id="${RICH_TEXT_MODAL_ID}__confirm">
+            Confirm
+          </button>
           <button type="button" id="${RICH_TEXT_MODAL_ID}__cancel">
             Cancel
-          </button>
-          <button type="button" id="${RICH_TEXT_MODAL_ID}__confirm">
-            Confirm
           </button>
         </div>
       </div>
