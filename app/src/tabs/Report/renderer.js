@@ -285,7 +285,9 @@ const getSeverityColor = (level) => {
                         <div style="display:grid; grid-template-columns: 6em auto;">
                             <div class="grid-item grid-header" style="font-weight: bold;">Name</div>
                             <div class="grid-item text-wrap" style ="color:${validateRiskName(risk)}">${escapeHTML(riskName)}</div>
+                            <div class="grid-item grid-header" style="font-weight: bold;">Decision</div>
                             <div class="grid-item text-wrap">${riskManagementDetail}</div>
+                            
                         </div>
                     </td>
                     <td style="color: ${inherentRiskScore === null ? ERROR_COLOR : DEFAULT_TEXT_COLOR}">${inherentRiskScore === null ? 'NaN' : inherentRiskScore}/20</td>
