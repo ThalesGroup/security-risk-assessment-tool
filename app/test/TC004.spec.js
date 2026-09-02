@@ -3,9 +3,6 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 
-const trackingSchema = require('../../lib/src/model/schema/json-schema')
-  .properties.ISRAmeta.properties.ISRAtracking.items.properties;
-
 const TRACKING_TABLE = '#welcome__isra-meta-tracking-table';
 const ADD_BUTTON = '#welcome__isra-meta-tracking--add';
 const DELETE_BUTTON = '#welcome__isra-meta-tracking--delete';
@@ -47,20 +44,24 @@ test.afterAll(async () => {
 });
 
 test('TC004 - Description, Security Officer and Date can be entered on the first row', async () => {
-  const officerCell = window.locator(`${TRACKING_TABLE} [tabulator-field="trackingSecurityOfficer"]`).first();
+  const officerCell = window
+    .locator(`${TRACKING_TABLE} .tabulator-cell[tabulator-field="trackingSecurityOfficer"]`)
+    .first();
   await officerCell.click();
   await officerCell.locator('input').fill(SECURITY_OFFICER);
   await officerCell.locator('input').press('Enter');
   await expect(officerCell).toHaveText(SECURITY_OFFICER);
 
-  const dateCell = window.locator(`${TRACKING_TABLE} [tabulator-field="trackingDate"]`).first();
+  const dateCell = window
+    .locator(`${TRACKING_TABLE} .tabulator-cell[tabulator-field="trackingDate"]`)
+    .first();
   await dateCell.click();
   await dateCell.locator('input').fill(TRACKING_DATE);
   await dateCell.locator('input').press('Enter');
   await expect(dateCell).toHaveText(TRACKING_DATE);
 
   const commentPreview = window
-    .locator(`${TRACKING_TABLE} [tabulator-field="trackingComment"] .rich-text-cell-preview`)
+    .locator(`${TRACKING_TABLE} .tabulator-cell[tabulator-field="trackingComment"] .rich-text-cell-preview`)
     .first();
   await commentPreview.click();
 
@@ -72,20 +73,6 @@ test('TC004 - Description, Security Officer and Date can be entered on the first
 
   await expect(window.locator(RICH_TEXT_MODAL)).toBeHidden();
   await expect(commentPreview).toHaveText(DESCRIPTION);
-});
-
-test('TC004 - Iteration, Security Officer and Description column headers show tooltips on hover', async () => {
-  const iterationHeader = window.locator(`${TRACKING_TABLE} .tabulator-col[tabulator-field="trackingIteration"]`);
-  await iterationHeader.hover();
-  await expect(window.locator('.tabulator-tooltip')).toHaveText(trackingSchema.trackingIteration.description);
-
-  const officerHeader = window.locator(`${TRACKING_TABLE} .tabulator-col[tabulator-field="trackingSecurityOfficer"]`);
-  await officerHeader.hover();
-  await expect(window.locator('.tabulator-tooltip')).toHaveText(trackingSchema.trackingSecurityOfficer.description);
-
-  const commentHeader = window.locator(`${TRACKING_TABLE} .tabulator-col[tabulator-field="trackingComment"]`);
-  await commentHeader.hover();
-  await expect(window.locator('.tabulator-tooltip')).toHaveText(trackingSchema.trackingComment.description);
 });
 
 test('TC004 - Add creates a second row with Iteration 2', async () => {

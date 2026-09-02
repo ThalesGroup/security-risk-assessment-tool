@@ -181,8 +181,11 @@ test.describe('TC003 - Organization dropdown and read-only Iteration column', ()
   test('TC003 - Iteration cell in the Iteration History table cannot be edited', async () => {
     await window.waitForSelector('#welcome__isra-meta-tracking-table .tabulator-row');
 
+    // [tabulator-field="..."] alone matches both the header (.tabulator-col)
+    // and the data cell (.tabulator-cell) - scope to .tabulator-cell so this
+    // targets the row, not the header.
     const iterationCell = window
-      .locator('#welcome__isra-meta-tracking-table [tabulator-field="trackingIteration"]')
+      .locator('#welcome__isra-meta-tracking-table .tabulator-cell[tabulator-field="trackingIteration"]')
       .first();
 
     await expect(iterationCell).toHaveText('1');
