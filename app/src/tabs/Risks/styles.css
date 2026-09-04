@@ -63,6 +63,7 @@ section {
 #risk__manual__riskName input{
     width: 100%;
     margin: 2% 0 2% 0;
+    box-sizing: border-box;
 }
 
 .risk__flex {
