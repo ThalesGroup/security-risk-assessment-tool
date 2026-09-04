@@ -79,15 +79,19 @@ const restoreScrollPosition = () => {
   restoreCancelled = false;
   restoring = true;
   let stableScrollCount = 0;
+  let lastScrollTop = -1;
   const expirationTime = performance.now() + SCROLL_RESTORE_TIMEOUT_MS;
 
   (function attemptRestore() {
     if (restoreCancelled) {
       return reveal();
     }
-    scrollBox.scrollTop = target;
-    stableScrollCount = scrollBox.scrollTop === target ? stableScrollCount + 1 : 0;
+    const maxScrollTop = Math.max(scrollBox.scrollHeight - scrollBox.clientHeight, 0);
+    scrollBox.scrollTop = Math.min(target, maxScrollTop);
+    stableScrollCount = scrollBox.scrollTop === lastScrollTop ? stableScrollCount + 1 : 0;
+    lastScrollTop = scrollBox.scrollTop;
     if (stableScrollCount >= MAX_STABLE_SCROLL_RETRIES || performance.now() >= expirationTime) {
+      if (id) sessionStorage.setItem(SCROLL_KEY + id, scrollBox.scrollTop);
       return reveal();
     }
     requestAnimationFrame(attemptRestore);
