@@ -113,6 +113,7 @@
           selector: '.rich-text',
           promotion: false,
           height: 300,
+          ui_mode: 'split',
           min_height: 300,
           verify_html: true,
           statusbar: false,

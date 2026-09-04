@@ -379,6 +379,7 @@ const getSeverityColor = (level) => {
                 height: 300,
                 min_height: 300,
                 verify_html: true,
+                ui_mode: 'split',
                 statusbar: false,
                 link_target_list: false,
                 removed_menuitems: 'newdocument',
