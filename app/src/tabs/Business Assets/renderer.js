@@ -114,6 +114,7 @@ function updateBusinessAssetName(id, field){
         height: 200,
         min_height: 200,
         verify_html: true,
+        ui_mode: 'split',
         statusbar: false,
         link_target_list: false,
         removed_menuitems: 'newdocument',
