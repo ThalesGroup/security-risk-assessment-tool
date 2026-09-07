@@ -465,3 +465,21 @@ function createRichTextCellFormatter(
 
   return preview;
 }
+
+window.diagnostics = {
+  log: (level, ...args) => {
+    const electronLog = window.__electronLog;
+    if (!electronLog || typeof electronLog[level] !== 'function') return;
+    electronLog[level](...args);
+  },
+};
+
+window.addEventListener('error', (event) => {
+  window.diagnostics.log('error', '[RENDERER] Uncaught error', event.message, `${event.filename}:${event.lineno}`);
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  const reason = event.reason;
+  const message = reason && reason.message ? reason.message : String(reason);
+  window.diagnostics.log('error', '[RENDERER] Unhandled promise rejection', message);
+});

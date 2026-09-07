@@ -22,6 +22,9 @@
 * -----------------------------------------------------------------------------
 */
 
+const errorMessages = require('./validation')
+const { log, isLoggingEnabled } = require('./logger');
+
 const {
   dialog, ipcMain, Menu, BrowserWindow
   // nativeTheme,
@@ -52,6 +55,15 @@ const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-pro
 const config = require('../../../lib/src/config')
 
 
+const projectSummary = (project) => {
+  try {
+    const { SupportingAsset = [], BusinessAsset = [], Vulnerability = [], Risk = [] } = project.properties || {};
+    return `riskCount=${Risk.length}, vulnerabilityCount=${Vulnerability.length}, `
+      + `businessAssetCount=${BusinessAsset.length}, supportingAssetCount=${SupportingAsset.length}`;
+  } catch (err) {
+    return 'summary unavailable';
+  }
+};
 
 /**
   * israProject: holds current class for project
@@ -75,17 +87,23 @@ const getMainWindow = () => {
 */
 const newISRAProject = (win, app) => {
   let shouldClearScroll = false;
+  const start = Date.now();
   try {
     if(!israProject) {
+      if (isLoggingEnabled()) log.info('[MAIN] Project initialisation started (new project)');
       israProject = new ISRAProject();
       DataNew(israProject);
       oldIsraProject = israProject.toJSON();
       shouldClearScroll = true;
+      if (isLoggingEnabled()) {
+        log.info(`[MAIN] Project initialisation completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+      }
     };
     getMainWindow().title = browserTitle;
     win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: shouldClearScroll });
   } catch (err) {
     console.log(err);
+    if (isLoggingEnabled()) log.error('[MAIN] Project initialisation failed', err && err.message);
     dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
     app.quit();
   }
@@ -623,12 +641,22 @@ const exit = (e, app) => {
   * @param {string} filePath path of selected json file
 */
 const loadJSONFile = async (win, filePath) => {
+  const start = Date.now();
+  const extension = filePath.split('.').pop();
+  if (isLoggingEnabled()) {
+    let sizeLabel = 'unknown';
+    try { sizeLabel = `${fs.statSync(filePath).size}B`; } catch (statErr) { }
+    log.info(`[MAIN] Project load started: extension=${extension}, size=${sizeLabel}`);
+  }
   try {
-    
+    if (isLoggingEnabled()) log.info('[MAIN] File read + parsing started');
     israProject = DataLoad(filePath);
+    if (isLoggingEnabled()) log.info(`[MAIN] File read + parsing completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+
     win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
     win.webContents.once('dom-ready', () => {
       win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+      if (isLoggingEnabled()) log.info(`[MAIN] Project load completed in ${Date.now() - start}ms (including UI load)`);
     });
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
@@ -636,6 +664,7 @@ const loadJSONFile = async (win, filePath) => {
     oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
+    if (isLoggingEnabled()) log.error(`[MAIN] Project load failed after ${Date.now() - start}ms`, err && err.message);
     const errorMessage = getError(err)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
   }
@@ -646,18 +675,59 @@ const loadJSONFile = async (win, filePath) => {
   * @param {string} win Browser window
   * @param {string} filePath path of selected xml file
 */
-const loadXMLFile = (win, filePath) => {
+const loadJSONFile = async (win, filePath) => {
+  const start = Date.now();
+  const extension = filePath.split('.').pop();
+  if (isLoggingEnabled()) {
+    let sizeLabel = 'unknown';
+    try { sizeLabel = `${fs.statSync(filePath).size}B`; } catch (statErr) { /* ignore */ }
+    log.info(`[MAIN] Project load started: extension=${extension}, size=${sizeLabel}`);
+  }
   try {
-    israProject = XML2JSON(filePath);
+    if (isLoggingEnabled()) log.info('[MAIN] File read + parsing started');
+    israProject = DataLoad(filePath);
+    if (isLoggingEnabled()) log.info(`[MAIN] File read + parsing completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+
     win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
     win.webContents.once('dom-ready', () => {
       win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+      if (isLoggingEnabled()) log.info(`[MAIN] Project load completed in ${Date.now() - start}ms (including UI load)`);
+    });
+    jsonFilePath = filePath;
+    browserTitle = `ISRA Risk Assessment - ${filePath}`;
+    getMainWindow().title = browserTitle;
+    oldIsraProject = israProject.toJSON();
+  } catch (err) {
+    console.log(err);
+    if (isLoggingEnabled()) log.error(`[MAIN] Project load failed after ${Date.now() - start}ms`, err && err.message);
+    const errorMessage = getError(err)
+    dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
+  }
+};
+
+const loadXMLFile = (win, filePath) => {
+  const start = Date.now();
+  if (isLoggingEnabled()) {
+    let sizeLabel = 'unknown';
+    try { sizeLabel = `${fs.statSync(filePath).size}B`; } catch (statErr) { }
+    log.info(`[MAIN] Project load started: extension=xml, size=${sizeLabel}`);
+  }
+  try {
+    if (isLoggingEnabled()) log.info('[MAIN] File read + parsing started');
+    israProject = XML2JSON(filePath);
+    if (isLoggingEnabled()) log.info(`[MAIN] File read + parsing completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+
+    win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
+    win.webContents.once('dom-ready', () => {
+      win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+      if (isLoggingEnabled()) log.info(`[MAIN] Project load completed in ${Date.now() - start}ms (including UI load)`);
     });
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
+    if (isLoggingEnabled()) log.error(`[MAIN] Project load failed after ${Date.now() - start}ms`, err && err.message);
     const errorMessage = getError(err)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${errorMessage}` });
   }

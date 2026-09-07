@@ -23,7 +23,7 @@
 */
 
 const { contextBridge, ipcRenderer } = require('electron');
-
+require('electron-log/preload');
 
 const onIpc = (channel, data) => {
   ipcRenderer.on(channel, (_event, ...args) => data(...args));

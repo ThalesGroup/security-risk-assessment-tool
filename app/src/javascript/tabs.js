@@ -38,6 +38,18 @@ const panels = [
   {name:"vulnerabilities", link:"../Vulnerabilities/vulnerabilities.html"}, 
   {name:"isra-report", link:"../Report/report.html"}]
 
+const NAV_KEY = 'diagNavStart';
+
+(() => {
+  const raw = sessionStorage.getItem(NAV_KEY);
+  if (!raw) return;
+  sessionStorage.removeItem(NAV_KEY);
+  try {
+    const { tab, start } = JSON.parse(raw);
+    window.diagnostics?.log('info', `[RENDERER] Navigation completed: ${tab} in ${Date.now() - start}ms`);
+  } catch (err) { }
+})();
+
 const SCROLL_KEY = 'scrollPosition__';
 const SCROLL_RESTORE_TIMEOUT_MS = 2000;
 const MAX_STABLE_SCROLL_RETRIES = 10;
@@ -254,6 +266,8 @@ tabs.onclick = (e) => {
   if(id){
     const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     validateTabs(previousActiveTab);
+    window.diagnostics?.log('info', `[RENDERER] Navigation started: ${id}`);
+    sessionStorage.setItem(NAV_KEY, JSON.stringify({ tab: id, start: Date.now() }));
   }
 
   switch (id) {

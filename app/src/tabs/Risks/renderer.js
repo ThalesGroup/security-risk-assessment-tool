@@ -191,7 +191,14 @@ function enableInteract(){
     }
     tableOptions.columns[riskLevelIndex].sorter = riskLevelSorter;
     
+    window.diagnostics?.log('info', '[RENDERER] Risks Tabulator initialization started');
+    const risksTableInitStart = performance.now();
     const risksTable = new Tabulator('#risks__table', result[1]);
+    risksTable.on('tableBuilt', () => {
+      const duration = Math.round(performance.now() - risksTableInitStart);
+      window.diagnostics?.log('info', `[RENDERER] Risks Tabulator initialization completed in ${duration}ms, rowCount=${risksTable.getData().length}`);
+    });
+    
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
     const sortConfigForValue = (value) => {

@@ -67,6 +67,14 @@
 
     
     const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
+    
+    window.diagnostics?.log('info', '[RENDERER] Welcome tracking Tabulator initialization started');
+    const trackingTableInitStart = performance.now();
+    const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
+    trackingtable.on('tableBuilt', () => {
+      const duration = Math.round(performance.now() - trackingTableInitStart);
+      window.diagnostics?.log('info', `[RENDERER] Welcome tracking Tabulator initialization completed in ${duration}ms, rowCount=${trackingtable.getData().length}`);
+    });
 
     const appVersion = (value) => {
       $('#details__app-version').val(`App Version: ${value}`);

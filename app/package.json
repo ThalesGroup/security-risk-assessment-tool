@@ -102,7 +102,8 @@
         "jquery": "^3.6.1",
         "hugerte": "^1.0.11",
         "tabulator-tables": "^5.3.4",
-        "xml2js": "^0.6.2"
+        "xml2js": "^0.6.2",
+        "electron-log": "^5.4.4"
     },
     "devDependencies": {
         "@playwright/test": "^1.61.1",
