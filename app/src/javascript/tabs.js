@@ -48,9 +48,7 @@ let restoreCancelled = false;
 const panelId = () => document.getElementsByClassName('tab-button active')[0]?.getAttribute('data-id');
 
 const saveScrollPosition = () => {
-  if (!scrollBox || restoring) return;
-  const id = panelId();
-  if (id) sessionStorage.setItem(SCROLL_KEY + id, scrollBox.scrollTop);
+  sessionStorage.setItem(SCROLL_KEY + panelId(), scrollBox.scrollTop);
 };
 
 const clearScrollPositions = () => {
@@ -68,6 +66,7 @@ const restoreScrollPosition = () => {
   if (!scrollBox) return;
   const id = panelId();
   const target = id ? Number(sessionStorage.getItem(SCROLL_KEY + id)) : 0;
+
 
   const reveal = () => {
     scrollBox.style.visibility = 'visible';
@@ -88,10 +87,14 @@ const restoreScrollPosition = () => {
     }
     const maxScrollTop = Math.max(scrollBox.scrollHeight - scrollBox.clientHeight, 0);
     scrollBox.scrollTop = Math.min(target, maxScrollTop);
+    if (scrollBox.scrollTop === target) {
+      saveScrollPosition();
+      return reveal();
+    }
     stableScrollCount = scrollBox.scrollTop === lastScrollTop ? stableScrollCount + 1 : 0;
     lastScrollTop = scrollBox.scrollTop;
     if (stableScrollCount >= MAX_STABLE_SCROLL_RETRIES || performance.now() >= expirationTime) {
-      if (id) sessionStorage.setItem(SCROLL_KEY + id, scrollBox.scrollTop);
+      saveScrollPosition();
       return reveal();
     }
     requestAnimationFrame(attemptRestore);
@@ -104,13 +107,16 @@ if (scrollBox) {
     if (pending) return;
     pending = true;
     requestAnimationFrame(() => {
-      saveScrollPosition();
+      if (!restoring) {
+        saveScrollPosition();
+      }
       pending = false;
     });
   }, { passive: true });
 
   restoreScrollPosition();
 }
+
 
 /**
  * loads ISRA Project Data (new project/xml/json)
