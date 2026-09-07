@@ -48,9 +48,7 @@ let restoreCancelled = false;
 const panelId = () => document.getElementsByClassName('tab-button active')[0]?.getAttribute('data-id');
 
 const saveScrollPosition = () => {
-  if (!scrollBox || restoring) return;
-  const id = panelId();
-  if (id) sessionStorage.setItem(SCROLL_KEY + id, scrollBox.scrollTop);
+  sessionStorage.setItem(SCROLL_KEY + panelId(), scrollBox.scrollTop);
 };
 
 const clearScrollPositions = () => {
@@ -69,6 +67,7 @@ const restoreScrollPosition = () => {
   const id = panelId();
   const target = id ? Number(sessionStorage.getItem(SCROLL_KEY + id)) : 0;
 
+
   const reveal = () => {
     scrollBox.style.visibility = 'visible';
     restoring = false;
@@ -79,15 +78,20 @@ const restoreScrollPosition = () => {
   restoreCancelled = false;
   restoring = true;
   let stableScrollCount = 0;
+  let lastScrollTop = -1;
   const expirationTime = performance.now() + SCROLL_RESTORE_TIMEOUT_MS;
 
   (function attemptRestore() {
     if (restoreCancelled) {
       return reveal();
     }
-    scrollBox.scrollTop = target;
-    stableScrollCount = scrollBox.scrollTop === target ? stableScrollCount + 1 : 0;
+    const maxScrollTop = Math.max(scrollBox.scrollHeight - scrollBox.clientHeight, 0);
+    scrollBox.scrollTop = Math.min(target, maxScrollTop);
+    
+    stableScrollCount = scrollBox.scrollTop === lastScrollTop ? stableScrollCount + 1 : 0;
+    lastScrollTop = scrollBox.scrollTop;
     if (stableScrollCount >= MAX_STABLE_SCROLL_RETRIES || performance.now() >= expirationTime) {
+      saveScrollPosition();
       return reveal();
     }
     requestAnimationFrame(attemptRestore);
@@ -100,13 +104,16 @@ if (scrollBox) {
     if (pending) return;
     pending = true;
     requestAnimationFrame(() => {
-      saveScrollPosition();
+      if (!restoring) {
+        saveScrollPosition();
+      }
       pending = false;
     });
   }, { passive: true });
 
   restoreScrollPosition();
 }
+
 
 /**
  * loads ISRA Project Data (new project/xml/json)
