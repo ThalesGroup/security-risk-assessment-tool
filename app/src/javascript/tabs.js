@@ -87,10 +87,10 @@ const restoreScrollPosition = () => {
     }
     const maxScrollTop = Math.max(scrollBox.scrollHeight - scrollBox.clientHeight, 0);
     scrollBox.scrollTop = Math.min(target, maxScrollTop);
-    if (scrollBox.scrollTop === target) {
-      saveScrollPosition();
-      return reveal();
-    }
+    // if (scrollBox.scrollTop === target) {
+    //   saveScrollPosition();
+    //   return reveal();
+    // }
     stableScrollCount = scrollBox.scrollTop === lastScrollTop ? stableScrollCount + 1 : 0;
     lastScrollTop = scrollBox.scrollTop;
     if (stableScrollCount >= MAX_STABLE_SCROLL_RETRIES || performance.now() >= expirationTime) {
