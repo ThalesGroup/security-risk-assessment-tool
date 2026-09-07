@@ -22,9 +22,6 @@
 * -----------------------------------------------------------------------------
 */
 
-const errorMessages = require('./validation')
-const { log, isLoggingEnabled } = require('./logger');
-
 const {
   dialog, ipcMain, Menu, BrowserWindow
   // nativeTheme,
@@ -41,7 +38,7 @@ const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra')
 const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
 
 const errorMessages = require('./validation')
-
+const { log, isLoggingEnabled } = require('./logger');
 
 
 const {
