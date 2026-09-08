@@ -270,6 +270,7 @@ select option {
     z-index:1;
     box-sizing:border-box;
     border:1px solid #bcbcbc;
+    white-space: nowrap;
     visibility:hidden;
     opacity:0;
     transition-delay: 0.2s;

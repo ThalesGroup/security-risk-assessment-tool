@@ -214,7 +214,15 @@ function updateBusinessAssetName(id, field){
 
       // add rich text box
       section.append('<p class="business-assets__sections-description">Description</p>');
-      section.append(`<textarea class="business-assets-rich-text" id="business-assets__section-text-${id}" name="business-assets__section-text-${id}"></textarea>`);
+      section.append(`
+      <div class="btn btn-primary tooltip">
+        <textarea class="business-assets-rich-text" id="business-assets__section-text-${id}" name="business-assets__section-text-${id}"></textarea>
+        <div class="top">
+          <p>Add your formatted rich text and your pictures.</p>
+          <i></i>
+        </div>
+      </div>
+      `);
       await addDesc(id, asset.businessAssetDescription);
     };
 
