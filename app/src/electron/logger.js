@@ -25,7 +25,7 @@
 const path = require('path');
 const fs = require('fs');
 const { app, ipcMain } = require('electron');
-const log = require('electron-log');
+const log = require('electron-log/main');
 
 const MAX_RETAINED_SESSIONS = 20;
 const MAX_LOG_FILE_BYTES = 5 * 1024 * 1024; 
