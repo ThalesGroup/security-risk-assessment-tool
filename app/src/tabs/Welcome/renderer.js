@@ -64,16 +64,13 @@
     //     return el;
     //   },
     // };
-
     
-    const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
-    
-    window.diagnostics?.log('info', '[RENDERER] Welcome tracking Tabulator initialization started');
+    window.diagnostics?.log('info', '[RENDERER] Welcome tracking Tabulator initialisation started');
     const trackingTableInitStart = performance.now();
     const trackingtable = new Tabulator('#welcome__isra-meta-tracking-table', result[1]);
     trackingtable.on('tableBuilt', () => {
       const duration = Math.round(performance.now() - trackingTableInitStart);
-      window.diagnostics?.log('info', `[RENDERER] Welcome tracking Tabulator initialization completed in ${duration}ms, rowCount=${trackingtable.getData().length}`);
+      window.diagnostics?.log('info', `[RENDERER] Welcome tracking Tabulator initialisation completed in ${duration}ms, rowCount=${trackingtable.getData().length}`);
     });
 
     const appVersion = (value) => {

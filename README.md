@@ -160,6 +160,28 @@ npm run dist-windows
 
 The output files should find themselves in the `dist` directory.
 
+## Diagnostic logging ##
+
+Optional, disabled by default. Enable with `--logging`
+
+Packaged build:
+```
+sratool.exe --logging
+```
+Dev:
+``` 
+npm start -- --logging 
+```
+
+A confirmation line prints to the terminal on startup, and a log file is written per session under Electron's `userData` directory:
+
+* Windows: `%APPDATA%\sratool\logs\`
+* macOS: `~/Library/Logs/sratool/`
+* Linux: `~/.config/sratool/logs/`
+
+Files are named `sratool-<dev|packaged>-<timestamp>-<pid>.log`, and only the last 20 sessions are kept.
+
+Each log captures: app/platform info, `BrowserWindow` lifecycle events (unresponsive, crashed, failed/finished load) for every window, every IPC call with a sequence number and timing, a 15s heartbeat, and project load/save timing with safe metadata only.
 
 ## Documentation
 

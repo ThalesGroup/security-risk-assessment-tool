@@ -468,7 +468,7 @@ function createRichTextCellFormatter(
 
 window.diagnostics = {
   log: (level, ...args) => {
-    const electronLog = window.__electronLog;
+    const electronLog = window.__srDiagnosticsLog;    
     if (!electronLog || typeof electronLog[level] !== 'function') return;
     electronLog[level](...args);
   },

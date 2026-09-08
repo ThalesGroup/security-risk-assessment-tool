@@ -23,7 +23,12 @@
 */
 
 const { contextBridge, ipcRenderer } = require('electron');
-require('electron-log/preload');
+
+contextBridge.exposeInMainWorld('__srDiagnosticsLog', {
+  info: (...args) => ipcRenderer.send('diagnostics:log', 'info', args),
+  warn: (...args) => ipcRenderer.send('diagnostics:log', 'warn', args),
+  error: (...args) => ipcRenderer.send('diagnostics:log', 'error', args),
+});
 
 const onIpc = (channel, data) => {
   ipcRenderer.on(channel, (_event, ...args) => data(...args));
