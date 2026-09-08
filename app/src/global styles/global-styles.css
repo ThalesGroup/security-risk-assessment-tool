@@ -257,7 +257,8 @@ select option {
     text-align:left;
 }
 
-.tooltip .top {
+.tooltip .top,
+.tooltip .tooltip-top {
     top:-20px;
     left:50%;
     transform:translate(-50%, -100%);
@@ -276,11 +277,13 @@ select option {
     transition-delay: 0.2s;
 }
 
-.tooltip:hover .top {
+.tooltip:hover .top,
+.tooltip:hover .tooltip-top {
     visibility:visible; opacity:1;
 }
 
-.tooltip .top p {
+.tooltip .top p,
+.tooltip .tooltip-top p {
     margin: 5px 2px;
 }
 

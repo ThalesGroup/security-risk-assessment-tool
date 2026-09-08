@@ -865,7 +865,7 @@ function enableInteract(){
         textArea1.attr('class', 'rich-text');
         textArea1.attr('id', `security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`);
         textArea1.attr('name', `security__control__desc__rich-text__${riskMitigationId}`);
-        const tooltip1 = $('<div class="btn btn-primary tooltip"><div class="top"><p>Add your formatted rich text and your pictures</p><i></i></div></div>');
+        const tooltip1 = $('<div class="btn btn-primary tooltip"><div class="tooltip-top"><p>Add your formatted rich text and your pictures</p><i></i></div></div>');
         tooltip1.prepend(textArea1);
         securityControlDescSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Security control Description</p>');
         securityControlDescSection.append(tooltip1);
@@ -1107,6 +1107,7 @@ function enableInteract(){
         styleRiskLevel('#inherent_risk_level', inherentRiskScore); 
 
         //risk mitigation
+        hugerte.remove('#risks__risk__mitigation__evaluation .rich-text');
         $('#risks__risk__mitigation__evaluation section').empty();
         await addMitigationSection(riskMitigation, riskManagementDecision);
         $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
