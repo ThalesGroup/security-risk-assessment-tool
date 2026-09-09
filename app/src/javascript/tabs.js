@@ -183,6 +183,7 @@ const validateTabs = (tab) => {
   };
 
   const validateRisks = () => {
+    window.diagnostics?.log('info', '[RISK-VALIDATE][renderer:save] triggered');
     let data = {
       riskLikelihood: {}
     };
@@ -203,7 +204,13 @@ const validateTabs = (tab) => {
         data.riskMitigation.push(mitigation);
       });
       data.riskManagementDetail = hugerte.get('risk__management__detail__rich-text').getContent();
-      window.validate.risks(data);
+      const start = Date.now();
+      window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:save] riskId=${data.riskId} -> invoke validate:risks (mitigations=${data.riskMitigation.length})`);
+      window.validate.risks(data)
+        .then(() => window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:save] riskId=${data.riskId} <- OK (${Date.now() - start}ms)`))
+        .catch((err) => window.diagnostics?.log('error', `[RISK-VALIDATE][renderer:save] riskId=${data.riskId} <- FAIL (${Date.now() - start}ms): ${err && err.message}`));
+    } else {
+      window.diagnostics?.log('info', '[RISK-VALIDATE][renderer:save] skipped (no row selected)');
     }
   };
 
