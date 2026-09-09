@@ -735,8 +735,17 @@ function enableInteract(){
       $('select[id="risk__likelihood"]').val(riskLikelihood.riskLikelihood == null? 'null' : riskLikelihood.riskLikelihood);
     };
 
+    const RICH_TEXT_INIT_TIMEOUT_MS = 15000;
+
     const addRichTextArea = async(selector, desc, width, riskMitigationId) => {
+      let settled = false;
       const promiseSetup = new Promise((resolveSetup, rejectSetup) => {
+        const timeoutId = setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          rejectSetup(new Error(`hugerte.init timed out for ${selector}`));
+        }, RICH_TEXT_INIT_TIMEOUT_MS);
+
         hugerte.init({
           selector,
           promotion: false,
@@ -824,7 +833,11 @@ function enableInteract(){
             });
             // Wait for init to finish, ensure content is displayed
             await promiseInit
-            resolveSetup()
+            if (!settled) {
+              settled = true;
+              clearTimeout(timeoutId);
+              resolveSetup()
+            }
           },
         });
       });
@@ -1024,6 +1037,7 @@ function enableInteract(){
     const addSelectedRowData = async (id) =>{
       if (!addSelectedRowDataExecuting && risksData.find((risk) => risk.riskId == id)){
         addSelectedRowDataExecuting = true;
+        try {
         const {
           riskId,
           riskName,
@@ -1105,6 +1119,7 @@ function enableInteract(){
         styleRiskLevel('#inherent_risk_level', inherentRiskScore); 
 
         //risk mitigation
+        hugerte.remove('#risks__risk__mitigation__evaluation .rich-text');
         $('#risks__risk__mitigation__evaluation section').empty();
         await addMitigationSection(riskMitigation, riskManagementDecision);
         $('#mitigated_risk_score').text(mitigatedRiskScore == null ? '' : mitigatedRiskScore);
@@ -1127,8 +1142,11 @@ function enableInteract(){
             } else setNaNValues();
           }
         })
-        enableInteract()
-        addSelectedRowDataExecuting = false;
+        } catch (err) {
+        } finally {
+          enableInteract()
+          addSelectedRowDataExecuting = false;
+        }
       }
     };
 
