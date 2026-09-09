@@ -26,9 +26,18 @@
     "xml2js": "^0.5.0"
   },
   "overrides": {
-    "js-yaml": "^4.3.1",
+    "js-yaml": "^4.3.2",
     "fast-uri": "^3.1.6",
     "brace-expansion": "^5.0.9",
-    "linkify-it": "^5.0.2"
+    "linkify-it": "^5.0.2",
+    "@jest/reporters": {
+      "glob": "^13.0.6"
+    },
+    "jest-config": {
+      "glob": "^13.0.6"
+    },
+    "jest-runtime": {
+      "glob": "^13.0.6"
+    }
   }
 }
