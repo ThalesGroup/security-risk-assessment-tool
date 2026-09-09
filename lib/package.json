@@ -7,7 +7,7 @@
         "node": ">=26.3.1"
     },
   "scripts": {
-    "test": "jest --coverage --testPathPatterns=test",
+    "test": "jest --coverage --coverageProvider=v8 --testPathPatterns=test",
     "jsdoc": "jsdoc -c doc/config/jsdoc.json"
   },
   "author": "ThalesDIS",
