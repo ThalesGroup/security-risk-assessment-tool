@@ -736,6 +736,7 @@ function enableInteract(){
     };
 
     const addRichTextArea = async(selector, desc, width, riskMitigationId) => {
+      console.log(`starting editor ${selector}`);
       const promiseSetup = new Promise((resolveSetup, rejectSetup) => {
         hugerte.init({
           selector,
@@ -791,8 +792,10 @@ function enableInteract(){
             }
           },
           setup: async (editor) => {
+            console.log(`editor setup running ${selector}`);
             const promiseInit = new Promise((resolveInit, rejectInit) => {
               editor.on('init', () => {
+                console.log(`editor init fired ${selector}`);
                 const content = desc;
                 editor.setContent(content);
                 resolveInit()
@@ -823,17 +826,21 @@ function enableInteract(){
               }
             });
             // Wait for init to finish, ensure content is displayed
+            console.log(`waiting for editor init ${selector}`);
             await promiseInit
+            console.log(`editor setup done ${selector}`);
             resolveSetup()
           },
         });
       });
       // Wait for setup to finish
       await promiseSetup
+      console.log(`editor ready ${selector}`);
     }
 
     // add Mitigation evaluation section
     const addMitigationSection = async (riskMitigations, riskManagementDecision)=> {
+      console.log(`building mitigations, count=${riskMitigations.length}`);
       const promises = riskMitigations.map(async (mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
         const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
@@ -871,7 +878,6 @@ function enableInteract(){
         section.append(topSection);
         mainSection.append(section);
         mitigationSections.append(mainSection);
-        const promiseDescription = addRichTextArea(`#security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, description, '100%', riskMitigationId);  
         // expected benefits
         const benefitsSection = $('<section>');
         benefitsSection.css('background-color', 'transparent');
@@ -997,13 +1003,20 @@ function enableInteract(){
         section.append(bottomSection);
         mainSection.append(section);
         mitigationSections.append(mainSection);
+        console.log(`dom ready, making editors for mitigation ${riskMitigationId}`);
+        const promiseDescription = addRichTextArea(`#security__control__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, description, '100%', riskMitigationId);
         const promiseDecisionDetail = addRichTextArea(`#comment__desc__rich-text__${getCurrentRiskId()}__${riskMitigationId}`, decisionDetail, '100%', riskMitigationId);
-       
-        await promiseDecisionDetail 
+
+        console.log(`waiting on decision comment ${riskMitigationId}`);
+        await promiseDecisionDetail
+        console.log(`decision comment ok, waiting on description ${riskMitigationId}`);
         await promiseDescription
+        console.log(`description ok, mitigation ${riskMitigationId} done`);
       });
       // Wait for all the risk mitigations to be assigned
+      console.log(`waiting on all ${promises.length} mitigation(s)`);
       await Promise.all(promises)
+      console.log(`all mitigations done`);
     };
 
     const styleResidualRiskLevelTable = (id, residualRiskLevel) => {
@@ -1133,26 +1146,33 @@ function enableInteract(){
     };
 
     const validatePreviousRisk = async (id) => {
+      console.log(`validating previous risk ${id}`);
       let risk = risksData.find((risk) => risk.riskId === id);
       const isRiskExist = await window.risks.isRiskExist(risk.riskId);
 
       if (isRiskExist) {
+        console.log(`sending risk ${id} to backend`);
         const risks = await window.validate.risks(risk);
         risksData = risks;
-      } 
+        console.log(`risk ${id} came back ok`);
+      }
     };
 
     risksTable.on("rowDeselected", (row) => {
+      console.log(`row ${row.getIndex()} deselected`);
       validatePreviousRisk(row.getIndex());
     });
 
 
     // row is clicked & selected
     risksTable.on('rowClick', async(e, row) => {
+      console.log(`clicked row ${row.getIndex()}`);
       risksTable.selectRow(row.getIndex());
       disableInteract()
+      console.log(`tabs off, loading risk ${row.getIndex()}`);
       await addSelectedRowData(row.getIndex());
       enableInteract()
+      console.log(`tabs back on, risk ${row.getIndex()} done`);
     });
 
     const addRisk = (risk) => {
