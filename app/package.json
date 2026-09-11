@@ -112,7 +112,7 @@
     "overrides": {
         "got": "^11.8.5",
         "form-data": "^4.0.5",
-        "js-yaml": "^4.3.1",
+        "js-yaml": "^4.3.2",
         "glob": "^13.0.6",
         "tmp": "^0.2.5",
         "brace-expansion": "^5.0.9",
