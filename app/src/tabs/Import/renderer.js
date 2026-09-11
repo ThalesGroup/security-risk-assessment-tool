@@ -48,7 +48,7 @@ const getSeverityColor = (level) => {
     const levelIndex = 2
 
   const businessAssetsTableConfig = {
-    selectable: 1,
+    selectableRows: 1,
       layout: 'fitColumns',
       height: '100%',
       index: 'businessAssetId',
@@ -75,7 +75,7 @@ const getSeverityColor = (level) => {
 
 
   const supportingAssetsTableConfig = {
-    selectable: 1,
+    selectableRows: 1,
       layout: 'fitColumns',
       height: '100%',
       index: 'supportingAssetId',
@@ -99,7 +99,7 @@ const getSeverityColor = (level) => {
 };
 
   const risksTableConfig = {
-    selectable: 1,
+    selectableRows: 1,
       layout: 'fitColumns',
       height: '100%',
       index: 'riskId',
@@ -138,7 +138,7 @@ risksTableConfig.columns[levelIndex].formatter = (cell) => {
 }
 
   const vulnerabilityTableConfig = {
-    selectable: 1,
+    selectableRows: 1,
       layout: 'fitColumns',
       height: '100%',
       index: 'vulnerabilityId',
