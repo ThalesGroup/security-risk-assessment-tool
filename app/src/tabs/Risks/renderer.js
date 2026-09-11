@@ -736,6 +736,7 @@ function enableInteract(){
     };
 
     const addRichTextArea = async(selector, desc, width, riskMitigationId) => {
+      hugerte.remove(selector);
       const promiseSetup = new Promise((resolveSetup, rejectSetup) => {
         hugerte.init({
           selector,
@@ -834,6 +835,18 @@ function enableInteract(){
 
     // add Mitigation evaluation section
     const addMitigationSection = async (riskMitigations, riskManagementDecision)=> {
+      const expectedBenefitsOptions = {};
+      const options = await window.risks.expectedBenefitsOptions();
+      options.forEach((option)=> {
+        if(option.title) expectedBenefitsOptions[option.const] = option.title;
+      });
+
+      const mitigationDecisionOptions = {};
+      const decisionOptions = await window.risks.mitigationDecisionOptions();
+      decisionOptions.forEach((option) => {
+        mitigationDecisionOptions[option.title] = option.const;
+      });
+
       const promises = riskMitigations.map(async (mitigation)=> {
         const { description, benefits, cost, decision, decisionDetail, riskMitigationId } = mitigation;
         const mitigationSections = $('#risks__risk__mitigation__evaluation .mitigations');
@@ -878,12 +891,6 @@ function enableInteract(){
         benefitsSection.css('margin', '0');
         benefitsSection.css('padding', '5px');
         benefitsSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Expected benefits</p>');
-        // to get from schema
-        const expectedBenefitsOptions = {};
-        const options = await window.risks.expectedBenefitsOptions();
-        options.forEach((option)=> {
-          if(option.title) expectedBenefitsOptions[option.const] = option.title;
-        });
         const div = $('<div>');
         for (const [key, value] of Object.entries(expectedBenefitsOptions)) {
           const input = $('<input>');
@@ -952,12 +959,6 @@ function enableInteract(){
         mitigationDecisionSection.css('margin', '0');
         mitigationDecisionSection.css('padding', '5px');
         mitigationDecisionSection.append('<p style="font-size: small; font-weight: bold; font-style: italic; text-align: center;">Mitigation Decision</p>');
-        // to get from schema
-        const mitigationDecisionOptions = {};
-        const decisionOptions = await window.risks.mitigationDecisionOptions();
-        decisionOptions.forEach((option) => {
-          mitigationDecisionOptions[option.title] = option.const;
-        });
         const div2 = $('<div>');
         for (const [key, value] of Object.entries(mitigationDecisionOptions)) {
           const input = $('<input>');
