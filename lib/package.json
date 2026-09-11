@@ -10,6 +10,9 @@
     "test": "jest --coverage --testPathPatterns=test",
     "jsdoc": "jsdoc -c doc/config/jsdoc.json"
   },
+  "jest": {
+    "coverageProvider": "v8"
+  },
   "author": "ThalesDIS",
   "license": "Apache-2.0 License",
   "devDependencies": {
@@ -29,6 +32,7 @@
     "js-yaml": "^4.3.2",
     "fast-uri": "^3.1.6",
     "brace-expansion": "^5.0.9",
-    "linkify-it": "^5.0.2"
+    "linkify-it": "^5.0.2",
+    "glob": "^13.0.6"
   }
 }
