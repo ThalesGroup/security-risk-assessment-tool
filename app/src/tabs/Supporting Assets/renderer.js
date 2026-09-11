@@ -132,8 +132,13 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
       ))
     }
 
+    window.diagnostics?.log('info', '[RENDERER] Supporting Assets Tabulator initialisation started');
+    const supportingAssetsTableInitStart = performance.now();
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
-
+    supportingAssetsTable.on('tableBuilt', () => {
+      const duration = Math.round(performance.now() - supportingAssetsTableInitStart);
+      window.diagnostics?.log('info', `[RENDERER] Supporting Assets Tabulator initialisation completed in ${duration}ms, rowCount=${supportingAssetsTable.getData().length}`);
+    });
     const updateSupportingAsset = (id, field, value) => {
       if (field === 'businessAssetRef') {
         validate(id, field, value);

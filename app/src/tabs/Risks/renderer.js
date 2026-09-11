@@ -191,7 +191,14 @@ function enableInteract(){
     }
     tableOptions.columns[riskLevelIndex].sorter = riskLevelSorter;
     
+    window.diagnostics?.log('info', '[RENDERER] Risks Tabulator initialisation started');
+    const risksTableInitStart = performance.now();
     const risksTable = new Tabulator('#risks__table', result[1]);
+    risksTable.on('tableBuilt', () => {
+      const duration = Math.round(performance.now() - risksTableInitStart);
+      window.diagnostics?.log('info', `[RENDERER] Risks Tabulator initialisation completed in ${duration}ms, rowCount=${risksTable.getData().length}`);
+    });
+    
     let risksData, businessAssets, supportingAssets, vulnerabilities;
     let assetsRelationship = {};
     const sortConfigForValue = (value) => {
@@ -1137,13 +1144,23 @@ function enableInteract(){
     };
 
     const validatePreviousRisk = async (id) => {
+      window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:deselect] riskId=${id} triggered`);
       let risk = risksData.find((risk) => risk.riskId === id);
       const isRiskExist = await window.risks.isRiskExist(risk.riskId);
 
       if (isRiskExist) {
-        const risks = await window.validate.risks(risk);
-        risksData = risks;
-      } 
+        const start = Date.now();
+        window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:deselect] riskId=${risk.riskId} -> invoke validate:risks (mitigations=${risk.riskMitigation && risk.riskMitigation.length})`);
+        try {
+          const risks = await window.validate.risks(risk);
+          window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:deselect] riskId=${risk.riskId} <- OK (${Date.now() - start}ms)`);
+          risksData = risks;
+        } catch (err) {
+          window.diagnostics?.log('error', `[RISK-VALIDATE][renderer:deselect] riskId=${risk.riskId} <- FAIL (${Date.now() - start}ms): ${err && err.message}`);
+        }
+      } else {
+        window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:deselect] riskId=${id} skipped (risk no longer exists)`);
+      }
     };
 
     risksTable.on("rowDeselected", (row) => {

@@ -38,6 +38,18 @@ const panels = [
   {name:"vulnerabilities", link:"../Vulnerabilities/vulnerabilities.html"}, 
   {name:"isra-report", link:"../Report/report.html"}]
 
+const NAV_KEY = 'diagNavStart';
+
+(() => {
+  const raw = sessionStorage.getItem(NAV_KEY);
+  if (!raw) return;
+  sessionStorage.removeItem(NAV_KEY);
+  try {
+    const { tab, start } = JSON.parse(raw);
+    window.diagnostics?.log('info', `[RENDERER] Navigation completed: ${tab} in ${Date.now() - start}ms`);
+  } catch (err) { }
+})();
+
 const SCROLL_KEY = 'scrollPosition__';
 const SCROLL_RESTORE_TIMEOUT_MS = 2000;
 const MAX_STABLE_SCROLL_RETRIES = 10;
@@ -171,6 +183,7 @@ const validateTabs = (tab) => {
   };
 
   const validateRisks = () => {
+    window.diagnostics?.log('info', '[RISK-VALIDATE][renderer:save] triggered');
     let data = {
       riskLikelihood: {}
     };
@@ -191,7 +204,13 @@ const validateTabs = (tab) => {
         data.riskMitigation.push(mitigation);
       });
       data.riskManagementDetail = hugerte.get('risk__management__detail__rich-text').getContent();
-      window.validate.risks(data);
+      const start = Date.now();
+      window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:save] riskId=${data.riskId} -> invoke validate:risks (mitigations=${data.riskMitigation.length})`);
+      window.validate.risks(data)
+        .then(() => window.diagnostics?.log('info', `[RISK-VALIDATE][renderer:save] riskId=${data.riskId} <- OK (${Date.now() - start}ms)`))
+        .catch((err) => window.diagnostics?.log('error', `[RISK-VALIDATE][renderer:save] riskId=${data.riskId} <- FAIL (${Date.now() - start}ms): ${err && err.message}`));
+    } else {
+      window.diagnostics?.log('info', '[RISK-VALIDATE][renderer:save] skipped (no row selected)');
     }
   };
 
@@ -261,6 +280,8 @@ tabs.onclick = (e) => {
   if(id){
     const previousActiveTab = document.getElementsByClassName('tab-button active')[0].getAttribute('data-id');
     validateTabs(previousActiveTab);
+    window.diagnostics?.log('info', `[RENDERER] Navigation started: ${id}`);
+    sessionStorage.setItem(NAV_KEY, JSON.stringify({ tab: id, start: Date.now() }));
   }
 
   switch (id) {

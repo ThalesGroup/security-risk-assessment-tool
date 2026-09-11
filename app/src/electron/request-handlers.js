@@ -38,7 +38,9 @@ const alterISRA = require('../../../lib/src/api/xml-json/alter-isra/alter-isra')
 const validateJsonSchema = require('../../../lib/src/api/xml-json/validate-json-schema');
 
 const errorMessages = require('./validation')
-
+const {
+  log, isLoggingEnabled, loggedHandle, loggedOn, instrumentWindow,
+} = require('./logger');
 
 
 const {
@@ -52,6 +54,15 @@ const ISRAProject = require('../../../lib/src/model/classes/ISRAProject/isra-pro
 const config = require('../../../lib/src/config')
 
 
+const projectSummary = (project) => {
+  try {
+    const { SupportingAsset = [], BusinessAsset = [], Vulnerability = [], Risk = [] } = project.properties || {};
+    return `riskCount=${Risk.length}, vulnerabilityCount=${Vulnerability.length}, `
+      + `businessAssetCount=${BusinessAsset.length}, supportingAssetCount=${SupportingAsset.length}`;
+  } catch (err) {
+    return 'summary unavailable';
+  }
+};
 
 /**
   * israProject: holds current class for project
@@ -75,17 +86,23 @@ const getMainWindow = () => {
 */
 const newISRAProject = (win, app) => {
   let shouldClearScroll = false;
+  const start = Date.now();
   try {
     if(!israProject) {
+      if (isLoggingEnabled()) log.info('[MAIN] Project initialisation started (new project)');
       israProject = new ISRAProject();
       DataNew(israProject);
       oldIsraProject = israProject.toJSON();
       shouldClearScroll = true;
+      if (isLoggingEnabled()) {
+        log.info(`[MAIN] Project initialisation completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+      }
     };
     getMainWindow().title = browserTitle;
     win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: shouldClearScroll });
   } catch (err) {
     console.log(err);
+    if (isLoggingEnabled()) log.error('[MAIN] Project initialisation failed', err && err.message);
     dialog.showMessageBoxSync(getMainWindow(), { message: 'Failed to create new project' });
     app.quit();
   }
@@ -114,10 +131,13 @@ const newISRAProject = (win, app) => {
 let jsonFilePath = '', electronApp = null;
 
 const savetoPath = async (filePath, saveAs = false) => {
+  const start = Date.now();
   if (jsonFilePath === '' || saveAs) {
     // save as new project in selected directory (save as)
     try {
+      if (isLoggingEnabled()) log.info('[MAIN] Project save started (save as)');
       await DataStore(israProject, filePath);
+      if (isLoggingEnabled()) log.info(`[MAIN] Project save completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
       jsonFilePath = filePath;
       browserTitle = `ISRA Risk Assessment - ${filePath}`;
       getMainWindow().title = browserTitle;
@@ -126,17 +146,21 @@ const savetoPath = async (filePath, saveAs = false) => {
       if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
+      if (isLoggingEnabled()) log.error(`[MAIN] Project save failed after ${Date.now() - start}ms`, err && err.message);
       dialog.showMessageBoxSync(getMainWindow(), { message: `Error in saving form to ${filePath}` });
     }
   } else {
     // override data in existing json file (save)
     try {
+      if (isLoggingEnabled()) log.info('[MAIN] Project save started');
       await DataStore(israProject, jsonFilePath);
+      if (isLoggingEnabled()) log.info(`[MAIN] Project save completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
       oldIsraProject = israProject.toJSON();
       dialog.showMessageBoxSync(getMainWindow(), { message: 'Successfully saved form' });
       if (electronApp) electronApp.exit([0]);
     } catch (err) {
       console.log(err);
+      if (isLoggingEnabled()) log.error(`[MAIN] Project save failed after ${Date.now() - start}ms`, err && err.message);
       dialog.showMessageBoxSync(getMainWindow(), { message: 'Error in saving form' });
     }
   }
@@ -475,7 +499,7 @@ const validateClasses = () => {
 /**
   *  @param {string} filePath path of current file
 */
-ipcMain.on('validate:allTabs', async (event, labelSelected) => {
+loggedOn('validate:allTabs', async (event, labelSelected) => {
   const saveChangesDialog = () => {
     return dialog.showMessageBoxSync(getMainWindow(), {
       type: 'warning',
@@ -623,12 +647,22 @@ const exit = (e, app) => {
   * @param {string} filePath path of selected json file
 */
 const loadJSONFile = async (win, filePath) => {
+  const start = Date.now();
+  const extension = filePath.split('.').pop();
+  if (isLoggingEnabled()) {
+    let sizeLabel = 'unknown';
+    try { sizeLabel = `${fs.statSync(filePath).size}B`; } catch (statErr) { }
+    log.info(`[MAIN] Project load started: extension=${extension}, size=${sizeLabel}`);
+  }
   try {
-    
+    if (isLoggingEnabled()) log.info('[MAIN] File read + parsing started');
     israProject = DataLoad(filePath);
+    if (isLoggingEnabled()) log.info(`[MAIN] File read + parsing completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+
     win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
     win.webContents.once('dom-ready', () => {
       win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+      if (isLoggingEnabled()) log.info(`[MAIN] Project load completed in ${Date.now() - start}ms (including UI load)`);
     });
     jsonFilePath = filePath;
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
@@ -636,6 +670,7 @@ const loadJSONFile = async (win, filePath) => {
     oldIsraProject = israProject.toJSON();
   } catch (err) {
     console.log(err);
+    if (isLoggingEnabled()) log.error(`[MAIN] Project load failed after ${Date.now() - start}ms`, err && err.message);
     const errorMessage = getError(err)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid JSON File \n\n${errorMessage}` });
   }
@@ -647,17 +682,28 @@ const loadJSONFile = async (win, filePath) => {
   * @param {string} filePath path of selected xml file
 */
 const loadXMLFile = (win, filePath) => {
+  const start = Date.now();
+  if (isLoggingEnabled()) {
+    let sizeLabel = 'unknown';
+    try { sizeLabel = `${fs.statSync(filePath).size}B`; } catch (statErr) { }
+    log.info(`[MAIN] Project load started: extension=xml, size=${sizeLabel}`);
+  }
   try {
+    if (isLoggingEnabled()) log.info('[MAIN] File read + parsing started');
     israProject = XML2JSON(filePath);
+    if (isLoggingEnabled()) log.info(`[MAIN] File read + parsing completed in ${Date.now() - start}ms, ${projectSummary(israProject)}`);
+
     win.loadFile(path.join(__dirname, '../tabs/Welcome/welcome.html'));
     win.webContents.once('dom-ready', () => {
       win.webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
+      if (isLoggingEnabled()) log.info(`[MAIN] Project load completed in ${Date.now() - start}ms (including UI load)`);
     });
     jsonFilePath = '';
     browserTitle = `ISRA Risk Assessment - ${filePath}`;
     getMainWindow().title = browserTitle;
   } catch (err) {
     console.log(err);
+    if (isLoggingEnabled()) log.error(`[MAIN] Project load failed after ${Date.now() - start}ms`, err && err.message);
     const errorMessage = getError(err)
     dialog.showMessageBoxSync(getMainWindow(), { type: 'error', title: 'Invalid File Opened', message: `Invalid XML File: \n\n${errorMessage}` });
   }
@@ -857,6 +903,7 @@ const loadData = async (win) => {
         },
       });
       dialogWindow.loadFile(path.join(__dirname,'../tabs/Import/import_dialog.html'));
+      instrumentWindow(dialogWindow, 'import-dialog');
 
       
       dialogWindow.webContents.on('dom-ready', () => {
@@ -943,6 +990,7 @@ const downloadReport = async (app) => {
           preload: path.join(__dirname, './preload.js'),
         },
       });
+      instrumentWindow(win, 'report');
       win.loadFile(path.join(__dirname, '../tabs/Report/report.html'));
       win.webContents.on('dom-ready', () => {
         newISRAProject(win, app);
@@ -1028,7 +1076,7 @@ const {
 
 // Utility APIs (Common Functions)
 
-ipcMain.on('utility:openURL', (event, url, userStatus) => {
+loggedOn('utility:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
 });
 
@@ -1044,24 +1092,24 @@ const {
 } = require('../../../lib/src/api/ISRAProject/handler-event');
 const { renderWelcome } = require('../../../lib/src/api/ISRAProject/render-welcome');
 const { importData } = require('./import')
-ipcMain.on('import:sendImports', (event, data) => {
+loggedOn('import:sendImports', (event, data) => {
 
   importData(data,israProject,importedISRA)
   dialogWindow.close()
   getMainWindow().webContents.send('project:load', israProject.toJSON(), { clearScrollPositions: true });
 })
-ipcMain.handle('render:welcome', () => renderWelcome());
-ipcMain.handle('welcome:addTrackingRow', () => addTrackingRow(israProject));
-ipcMain.handle('welcome:getConfig', () => getConfig());
-ipcMain.handle('welcome:updateConfigOrg', (event, data) => updateConfigOrg(data));
-ipcMain.handle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
-ipcMain.on('welcome:updateTrackingRow', (event, rowData) => {
+loggedHandle('render:welcome', () => renderWelcome());
+loggedHandle('welcome:addTrackingRow', () => addTrackingRow(israProject));
+loggedHandle('welcome:getConfig', () => getConfig());
+loggedHandle('welcome:updateConfigOrg', (event, data) => updateConfigOrg(data));
+loggedHandle('welcome:deleteTrackingRow', (event, iterations) => deleteTrackingRow(israProject, iterations));
+loggedOn('welcome:updateTrackingRow', (event, rowData) => {
   updateTrackingRow(israProject, rowData);
 });
-ipcMain.on('welcome:updateProjectNameAndVersionRef', (event, field, value) => {
+loggedOn('welcome:updateProjectNameAndVersionRef', (event, field, value) => {
   updateProjectNameAndVersionRef(israProject, field, value);
 });
-ipcMain.on('validate:welcome', (event, arr) => {
+loggedOn('validate:welcome', (event, arr) => {
   validateISRAmeta(israProject, arr);
 });
 
@@ -1076,11 +1124,11 @@ const { renderProjectContext } = require('../../../lib/src/api/ISRAProjectContex
 */
 let projectContextFileName;
 
-ipcMain.handle('render:projectContext', () => renderProjectContext());
-ipcMain.on('projectContext:openURL', (event, url, userStatus) => {
+loggedHandle('render:projectContext', () => renderProjectContext());
+loggedOn('projectContext:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
 });
-ipcMain.handle('projectContext:urlPrompt', async (event, currentURL) => {
+loggedHandle('projectContext:urlPrompt', async (event, currentURL) => {
   const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.israProjectContext.projectURL = url;
   return url;
@@ -1132,12 +1180,12 @@ const projectContextAttachmentOptions = () => {
   ];
 };
 
-ipcMain.on('projectContext:attachment', () => {
+loggedOn('projectContext:attachment', () => {
   const contextMenu = Menu.buildFromTemplate(projectContextAttachmentOptions());
   contextMenu.popup();
 });
 
-ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
+loggedHandle('projectContext:decodeAttachment', async (event, base64) => {
   try {
     const [fileName, base64data] = decodeFile(base64);
     projectContextFileName = fileName;
@@ -1151,7 +1199,7 @@ ipcMain.handle('projectContext:decodeAttachment', async (event, base64) => {
   }
 });
 
-ipcMain.on('validate:projectContext', (event, arr) => {
+loggedOn('validate:projectContext', (event, arr) => {
   validateProjectContext(israProject, arr);
 });
 
@@ -1161,15 +1209,15 @@ const {
 } = require('../../../lib/src/api/Business Asset/handler-event');
 const { renderBusinessAssets } = require('../../../lib/src/api/Business Asset/render-business-assets');
 
-ipcMain.handle('render:businessAssets', () => renderBusinessAssets());
-ipcMain.handle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject, getMainWindow()));
-ipcMain.on('businessAssets:deleteBusinessAsset', (event, ids) => {
+loggedHandle('render:businessAssets', () => renderBusinessAssets());
+loggedHandle('businessAssets:addBusinessAsset', () => addBusinessAsset(israProject, getMainWindow()));
+loggedOn('businessAssets:deleteBusinessAsset', (event, ids) => {
   deleteBusinessAsset(israProject, ids, getMainWindow());
 });
-ipcMain.on('businessAssets:updateBusinessAsset', (event, id, field, value) => {
+loggedOn('businessAssets:updateBusinessAsset', (event, id, field, value) => {
   updateBusinessAsset(israProject, getMainWindow(), id, field, value);
 });
-ipcMain.on('validate:businessAssets', (event, arr) => {
+loggedOn('validate:businessAssets', (event, arr) => {
   validateBusinessAsset(israProject, arr);
 });
 
@@ -1179,20 +1227,20 @@ const {
 } = require('../../../lib/src/api/Supporting Asset/handler-event');
 const { renderSupportingAssets } = require('../../../lib/src/api/Supporting Asset/render-supporting-assets');
 
-ipcMain.handle('render:supportingAssets', () => renderSupportingAssets());
-ipcMain.handle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
-ipcMain.on('supportingAssets:deleteSupportingAsset', (event, ids) => {
+loggedHandle('render:supportingAssets', () => renderSupportingAssets());
+loggedHandle('supportingAssets:addSupportingAsset', () => addSupportingAsset(israProject));
+loggedOn('supportingAssets:deleteSupportingAsset', (event, ids) => {
   deleteSupportingAsset(israProject, ids, getMainWindow());
 });
-ipcMain.on('supportingAssets:updateSupportingAsset', (event, id, field, value) => {
+loggedOn('supportingAssets:updateSupportingAsset', (event, id, field, value) => {
   updateSupportingAsset(israProject, getMainWindow(), id, field, value);
 });
-ipcMain.on('validate:supportingAssets', (event, arr, desc) => {
+loggedOn('validate:supportingAssets', (event, arr, desc) => {
   validateSupportingAssets(israProject, arr, desc);
 });
-ipcMain.on('supportingAssets:addBusinessAssetRef', (event, id, value) => addBusinessAssetRef(israProject, id, value));
-ipcMain.on('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => deleteBusinessAssetRef(israProject, id, indexes, getMainWindow()));
-ipcMain.handle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index, getMainWindow()));
+loggedOn('supportingAssets:addBusinessAssetRef', (event, id, value) => addBusinessAssetRef(israProject, id, value));
+loggedOn('supportingAssets:deleteBusinessAssetRef', (event, id, indexes) => deleteBusinessAssetRef(israProject, id, indexes, getMainWindow()));
+loggedHandle('supportingAssets:updateBusinessAssetRef', (event, id, value, index) => updateBusinessAssetRef(israProject, id, value, index, getMainWindow()));
 
 // Risks Tab
 const { 
@@ -1218,28 +1266,28 @@ const { renderRisks } = require('../../../lib/src/api/Risk/render-risks');
 const jsonSchema = require('../../../lib/src/model/schema/json-schema');
 const riskMitigationSchema = jsonSchema.properties.Risk.items.properties.riskMitigation.items.properties;
 
-ipcMain.handle('render:risks', () => renderRisks());
-ipcMain.handle('risks:addRisk', () => addRisk(israProject));
-ipcMain.on('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
-ipcMain.handle('risks:updateRiskName', (event, id, field, value) => {
+loggedHandle('render:risks', () => renderRisks());
+loggedHandle('risks:addRisk', () => addRisk(israProject));
+loggedOn('risks:deleteRisk', (event, ids) => deleteRisk(israProject, ids));
+loggedHandle('risks:updateRiskName', (event, id, field, value) => {
   return updateRiskName(israProject, getMainWindow(), id, field, value);
 });
-ipcMain.handle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
-ipcMain.handle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
-ipcMain.handle('risks:cloneRisk', (event, riskId) => cloneRisk(israProject, riskId));
-ipcMain.handle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId));
-ipcMain.handle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
-ipcMain.handle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value));
-ipcMain.handle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId, vulnerabilityId) => addVulnerabilityRef(israProject, riskId, riskAttackPathId, vulnerabilityId));
-ipcMain.handle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids));
-ipcMain.handle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId));
-ipcMain.handle('risks:deleteRiskMitigation', (event, riskId, ids) => deleteRiskMitigation(israProject, riskId, ids));
-ipcMain.handle('risks:updateRiskMitigation', (event, riskId, riskMitigationId, field, value) => updateRiskMitigation(israProject, riskId, riskMitigationId, field, value));
-ipcMain.handle('risks:updateRiskManagement', (event, riskId, field, value) => updateRiskManagement(israProject, riskId, field, value));
-ipcMain.handle('risks:isRiskExist', (event, id) => isRiskExist(israProject, id));
-ipcMain.handle('validate:risks', (event, currentRisk) => validateRisks(israProject, currentRisk));
-ipcMain.handle('risks:expectedBenefitsOptions', () => riskMitigationSchema.benefits.anyOf);
-ipcMain.handle('risks:mitigationDecisionOptions', () => riskMitigationSchema.decision.anyOf);
+loggedHandle('risks:updateRiskLikelihood', (event, id, field, value) => updateRiskLikelihood(israProject, id, field, value));
+loggedHandle('risks:updateRiskImpact', (event, id, field, value) => updateRiskImpact(israProject, id, field, value));
+loggedHandle('risks:cloneRisk', (event, riskId) => cloneRisk(israProject, riskId));
+loggedHandle('risks:addRiskAttackPath', (event, riskId) => addRiskAttackPath(israProject, riskId));
+loggedHandle('risks:deleteRiskAttackPath', (event, riskId, ids) => deleteRiskAttackPath(israProject, riskId, ids));
+loggedHandle('risks:updateRiskAttackPath', (event, riskId, riskAttackPathId, rowid, field, value) => updateRiskAttackPath(israProject, riskId, riskAttackPathId, rowid, field, value));
+loggedHandle('risks:addRiskVulnerabilityRef', (event, riskId, riskAttackPathId, vulnerabilityId) => addVulnerabilityRef(israProject, riskId, riskAttackPathId, vulnerabilityId));
+loggedHandle('risks:deleteRiskVulnerabilityRef', (event, riskId, riskAttackPathId, ids) => deleteVulnerabilityRef(israProject, riskId, riskAttackPathId, ids));
+loggedHandle('risks:addRiskMitigation', (event, riskId) => addRiskMitigation(israProject, riskId));
+loggedHandle('risks:deleteRiskMitigation', (event, riskId, ids) => deleteRiskMitigation(israProject, riskId, ids));
+loggedHandle('risks:updateRiskMitigation', (event, riskId, riskMitigationId, field, value) => updateRiskMitigation(israProject, riskId, riskMitigationId, field, value));
+loggedHandle('risks:updateRiskManagement', (event, riskId, field, value) => updateRiskManagement(israProject, riskId, field, value));
+loggedHandle('risks:isRiskExist', (event, id) => isRiskExist(israProject, id));
+loggedHandle('validate:risks', (event, currentRisk) => validateRisks(israProject, currentRisk));
+loggedHandle('risks:expectedBenefitsOptions', () => riskMitigationSchema.benefits.anyOf);
+loggedHandle('risks:mitigationDecisionOptions', () => riskMitigationSchema.decision.anyOf);
 
 
 // Vulnerability Tab
@@ -1247,18 +1295,18 @@ const { addVulnerability, deleteVulnerability, updateVulnerability, validateVuln
 const { renderVulnerabilities } = require('../../../lib/src/api/Vulnerability/render-vulnerabilities');
 const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
-ipcMain.handle('render:vulnerabilities', () => renderVulnerabilities());
-ipcMain.handle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
-ipcMain.on('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));
-ipcMain.handle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
+loggedHandle('render:vulnerabilities', () => renderVulnerabilities());
+loggedHandle('vulnerabilities:addVulnerability', () => addVulnerability(israProject));
+loggedOn('vulnerabilities:deleteVulnerability', (event, ids) => deleteVulnerability(israProject, ids, getMainWindow()));
+loggedHandle('vulnerabilities:updateVulnerability', (event, id, field, value) => {
   return updateVulnerability(israProject, id, field, value);
 });
-ipcMain.handle('vulnerabilities:urlPrompt', async (event, id, currentURL) => {
+loggedHandle('vulnerabilities:urlPrompt', async (event, id, currentURL) => {
   const url = await urlPrompt(currentURL);
   if (url !== 'cancelled') israProject.getVulnerability(id).vulnerabilityTrackingURI = url;
   return url;
 });
-ipcMain.on('vulnerabilities:openURL', (event, url, userStatus) => {
+loggedOn('vulnerabilities:openURL', (event, url, userStatus) => {
   openUrl(url, userStatus);
 });
 
@@ -1316,12 +1364,12 @@ const vulnerabilitiesAttachmentOptions = (id) => {
   ];
 };
 
-ipcMain.on('vulnerabilities:attachment', (event, id) => {
+loggedOn('vulnerabilities:attachment', (event, id) => {
   const contextMenu = Menu.buildFromTemplate(vulnerabilitiesAttachmentOptions(id));
   contextMenu.popup();
 });
 
-ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => {
+loggedHandle('vulnerabilities:decodeAttachment', async (event, id, base64) => {
   try {
     const vulnerability = israProject.getVulnerability(id);
     const [fileName, base64data] = decodeFile(base64);
@@ -1335,9 +1383,9 @@ ipcMain.handle('vulnerabilities:decodeAttachment', async (event, id, base64) => 
   }
 });
 
-ipcMain.handle('validate:vulnerabilities', (event, currentVulnerability) => validateVulnerabilities(israProject, currentVulnerability));
-ipcMain.handle('vulnerabilities:isVulnerabilityExist', (event, id) => isVulnerabilityExist(israProject, id));
-ipcMain.on('israreport:saveGraph',  (event,graph) => {
+loggedHandle('validate:vulnerabilities', (event, currentVulnerability) => validateVulnerabilities(israProject, currentVulnerability));
+loggedHandle('vulnerabilities:isVulnerabilityExist', (event, id) => isVulnerabilityExist(israProject, id));
+loggedOn('israreport:saveGraph',  (event,graph) => {
 
   const contextMenu = Menu.buildFromTemplate([{
     label: 'Save chart as image',

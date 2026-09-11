@@ -95,8 +95,13 @@ const getSeverityColor = (level) => {
         return overallLevel;
     }
 
+    window.diagnostics?.log('info', '[RENDERER] Vulnerabilities Tabulator initialisation started');
+    const vulnerabilitiesTableInitStart = performance.now();
     const vulnerabilitiesTable = new Tabulator('#vulnerabilties__table', result[1]);
-    
+    vulnerabilitiesTable.on('tableBuilt', () => {
+        const duration = Math.round(performance.now() - vulnerabilitiesTableInitStart);
+        window.diagnostics?.log('info', `[RENDERER] Vulnerabilities Tabulator initialisation completed in ${duration}ms, rowCount=${vulnerabilitiesTable.getData().length}`);
+    });
 
     // filter
     const clearFunction = () => {
