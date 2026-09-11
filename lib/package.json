@@ -7,8 +7,11 @@
         "node": ">=26.3.1"
     },
   "scripts": {
-    "test": "jest --coverage --testPathPatterns=test",
+    "test": "jest",
     "jsdoc": "jsdoc -c doc/config/jsdoc.json"
+  },
+  "jest": {
+    "coverageProvider": "v8"
   },
   "author": "ThalesDIS",
   "license": "Apache-2.0 License",
