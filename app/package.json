@@ -11,14 +11,15 @@
     "scripts": {
         "start": "electron .",
         "test": "playwright test",
-        "pack": "electron-builder --dir",
-        "dist": "electron-builder",
-        "dist-all": "electron-builder -mwl",
-        "build-dis": "export QUALIFIER=-DIS && electron-builder -mwl",
-        "build-oss": "export QUALIFIER='' && electron-builder -mwl",
-        "dist-linux": "electron-builder -l",
-        "dist-mac": "electron-builder -m",
-        "dist-windows": "electron-builder -w"
+        "prod-lib": "node -e \"const f=require('fs');f.rmSync('../.lib-prod',{recursive:true,force:true});f.mkdirSync('../.lib-prod');for(const x of ['package.json','package-lock.json'])f.copyFileSync('../lib/'+x,'../.lib-prod/'+x)\" && npm ci --omit=dev --prefix ../.lib-prod",
+        "pack": "npm run prod-lib && electron-builder --dir",
+        "dist": "npm run prod-lib && electron-builder",
+        "dist-all": "npm run prod-lib && electron-builder -mwl",
+        "build-dis": "npm run prod-lib && export QUALIFIER=-DIS && electron-builder -mwl",
+        "build-oss": "npm run prod-lib && export QUALIFIER='' && electron-builder -mwl",
+        "dist-linux": "npm run prod-lib && electron-builder -l",
+        "dist-mac": "npm run prod-lib && electron-builder -m",
+        "dist-windows": "npm run prod-lib && electron-builder -w"
     },
     "build": {
         "fileAssociations": [
