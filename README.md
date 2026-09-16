@@ -160,6 +160,20 @@ npm run dist-windows
 
 The output files should find themselves in the `dist` directory.
 
+### AppImage
+
+The Linux build can also be distributed as an AppImage. The AppImage will be created in the `app/dist` directory.
+
+If the system reports that FUSE is required, install it first:
+
+```bash
+sudo apt update
+sudo apt install -y libfuse2t64
+```
+
+Then run the AppImage from the `app/dist` directory
+
+FUSE only needs to be installed once per Linux environment.
 
 ## Documentation
 
