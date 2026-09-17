@@ -38,7 +38,7 @@
             "oneClick": false,
             "perMachine": true,
             "allowToChangeInstallationDirectory": true,
-            "artifactName": "${name}-setup-${version}-${os}-${arch}${env.QUALIFIER}.${ext}"    
+            "artifactName": "${name}-setup-${version}-${os}-${arch}${env.QUALIFIER}.${ext}"
         },
         "artifactName": "${name}-${version}-${os}-${arch}${env.QUALIFIER}.${ext}",
         "extraResources": [
@@ -52,7 +52,7 @@
                 ]
             },
             {
-                "from": "../lib/node_modules",
+                "from": "../.lib-prod/node_modules",
                 "to": "lib/node_modules",
                 "filter": [
                     "**/*",
@@ -127,7 +127,6 @@
         "app-builder-lib": {
             "@noble/hashes": "^1.8.0",
             "undici": "^7.29.0"
-            }
-
+        }
     }
 }
