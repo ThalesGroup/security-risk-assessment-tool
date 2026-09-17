@@ -26,9 +26,25 @@ In some cases, vulnerabilities may be found before the risks are actually define
 
 ## How to run ##
 
-Just download the zip file for your platform and unzip it and execute `sratool` or `SRATool`, depending on your platform. It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
+Just download the zip file for your platform and unzip it and execute `sratool` or `SRATool`, depending on your platform (see also below for Linux). It is generic enough to be used by any organization, but some of the items may be more related to Thales DIS, in that case the `json-schema.js` should be adapted accordingly to your organization needs.
 
 Supported URI schemes for vulnerabilities URL are as follows: ftp, http, https, mailto, tel and urn
+
+### Linux ###
+
+For certain versions and flavors of Linux, such as Ubuntu, the AppImage version should be the one used.
+
+When trying to run the AppImage, if the system reports that FUSE is required when trying to execute the AppImage, install it first:
+
+```bash
+sudo apt update
+sudo apt install -y libfuse2t64
+```
+
+Then run the AppImage.
+
+FUSE only needs to be installed once per Linux environment.
+
 
 # Development information
 
