@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+coverage/
+
+# Generated API docs
+lib/doc/APIdocumentation/
+
+# Binary / image assets (no value to read)
+app/src/asset/*.png
+app/src/asset/*.ico
+app/src/asset/*.jpg
+app/src/asset/*.gif
+app/src/asset/*.svg
+
+# Test fixture data files (large JSON/XML, Claude reads these on demand)
+lib/test/integration/fixtures/
+
+# Office documents
+doc/*.xlsx
+
+# Lock files
+package-lock.json
+app/package-lock.json
+lib/package-lock.json
