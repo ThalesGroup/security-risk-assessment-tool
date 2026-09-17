@@ -11,7 +11,7 @@
     "scripts": {
         "start": "electron .",
         "test": "playwright test",
-        "prod-lib": "node -e \"const f=require('fs');f.rmSync('../.lib-prod',{recursive:true,force:true});f.mkdirSync('../.lib-prod');for(const x of ['package.json','package-lock.json'])f.copyFileSync('../lib/'+x,'../.lib-prod/'+x)\" && npm ci --omit=dev --prefix ../.lib-prod",
+        "prod-lib": "node prepare-prod-lib.js",
         "pack": "npm run prod-lib && electron-builder --dir",
         "dist": "npm run prod-lib && electron-builder",
         "dist-all": "npm run prod-lib && electron-builder -mwl",
@@ -48,7 +48,10 @@
                 "filter": [
                     "**/*",
                     "!**/node_modules",
-                    "!**/test/**"
+                    "!**/test/**",
+                    "!**/coverage/**",
+                    "!**/.npmrc",
+                    "!**/eslint.config.js"
                 ]
             },
             {
