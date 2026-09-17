@@ -11,7 +11,7 @@
     "scripts": {
         "start": "electron .",
         "test": "playwright test",
-        "prod-lib": "node -e \"const f=require('fs');f.rmSync('../.lib-prod',{recursive:true,force:true});f.mkdirSync('../.lib-prod');for(const x of ['package.json','package-lock.json'])f.copyFileSync('../lib/'+x,'../.lib-prod/'+x)\" && npm ci --omit=dev --prefix ../.lib-prod",
+        "prod-lib": "node prepare-prod-lib.js",
         "pack": "npm run prod-lib && electron-builder --dir",
         "dist": "npm run prod-lib && electron-builder",
         "dist-all": "npm run prod-lib && electron-builder -mwl",
@@ -38,7 +38,7 @@
             "oneClick": false,
             "perMachine": true,
             "allowToChangeInstallationDirectory": true,
-            "artifactName": "${name}-setup-${version}-${os}-${arch}${env.QUALIFIER}.${ext}"    
+            "artifactName": "${name}-setup-${version}-${os}-${arch}${env.QUALIFIER}.${ext}"
         },
         "artifactName": "${name}-${version}-${os}-${arch}${env.QUALIFIER}.${ext}",
         "extraResources": [
@@ -48,11 +48,14 @@
                 "filter": [
                     "**/*",
                     "!**/node_modules",
-                    "!**/test/**"
+                    "!**/test/**",
+                    "!**/coverage/**",
+                    "!**/.npmrc",
+                    "!**/eslint.config.js"
                 ]
             },
             {
-                "from": "../lib/node_modules",
+                "from": "../.lib-prod/node_modules",
                 "to": "lib/node_modules",
                 "filter": [
                     "**/*",
@@ -127,7 +130,6 @@
         "app-builder-lib": {
             "@noble/hashes": "^1.8.0",
             "undici": "^7.29.0"
-            }
-
+        }
     }
 }
