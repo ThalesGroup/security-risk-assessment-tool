@@ -22,6 +22,8 @@
         "dist-windows": "npm run prod-lib && electron-builder -w"
     },
     "build": {
+        "afterPack": "./set-build-timestamp.cjs",
+        "afterAllArtifactBuild": "./set-build-timestamp.cjs",
         "fileAssociations": [
             {
                 "ext": "sra",
