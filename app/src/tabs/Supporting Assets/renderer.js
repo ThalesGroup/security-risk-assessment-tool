@@ -132,6 +132,32 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
       ))
     }
 
+    // Inject 'Used in Risk(s)?' column dynamically
+    result[1].columns.push({
+      title: 'Used in Risk(s)?',
+      field: 'usedByRisk',
+      headerSort: true,
+      headerHozAlign: 'center',
+      hozAlign: 'center',
+      width: 120,
+      formatter: (cell) => {
+        const saId = cell.getRow().getData().supportingAssetId;
+        const usedSAIds = new Set();
+        if (fetchedData && fetchedData.Risk) {
+          fetchedData.Risk.forEach(r => {
+            if (r.supportingAssetRef !== null) {
+              usedSAIds.add(Number(r.supportingAssetRef));
+            }
+          });
+        }
+        if (usedSAIds.has(Number(saId))) {
+          return `<span style="color: green;">Yes</span>`;
+        } else {
+          return `<span style="color: ${ERROR_COLOR}; font-weight: bold;">No</span>`;
+        }
+      }
+    });
+
     const supportingAssetsTable = new Tabulator('#supporting-assets__section-table', result[1]);
 
     const updateSupportingAsset = (id, field, value) => {
