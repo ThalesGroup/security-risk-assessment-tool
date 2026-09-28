@@ -334,6 +334,9 @@ const DEFAULT_TEXT_COLOR = TEXT_COLOR.DEFAULT;
           verify_html: true,
           ui_mode: 'split',
           statusbar: false,
+          menu: {
+            file: { title: 'File', items: 'restoredraft | preview | print' },
+          },
           link_target_list: false,
           removed_menuitems: 'newdocument',
           plugins: 'link lists image autoresize',
