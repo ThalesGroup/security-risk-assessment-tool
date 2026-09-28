@@ -1,3 +1,5 @@
+const { dialog, BrowserWindow } = require('electron');
+
 const BusinessAsset = require('../../../lib/src/model/classes/BusinessAsset/business-asset');
 const SupportingAsset = require('../../../lib/src/model/classes/SupportingAsset/supporting-asset');
 const Vulnerability = require('../../../lib/src/model/classes/Vulnerability/vulnerability');
@@ -6,8 +8,36 @@ const RiskLikelihood = require('../../../lib/src/model/classes/Risk/risk-likelih
 const RiskImpact = require('../../../lib/src/model/classes/Risk/risk-impact');
 const BusinessAssetProperties = require('../../../lib/src/model/classes/BusinessAsset/business-asset-properties');
 
+// Prompt the user when an imported item collides with an existing one by name.
+// Returns one of 'replace' | 'skip' | 'replaceAll' | 'skipAll'.
+function promptDuplicate(itemType, itemName) {
+  const parent = BrowserWindow.getFocusedWindow();
+  const choice = dialog.showMessageBoxSync(parent, {
+    type: 'question',
+    buttons: ['Replace', 'Skip', 'Replace All', 'Skip All'],
+    defaultId: 1,
+    cancelId: 1,
+    title: 'Duplicate item',
+    message: `${itemType} "${itemName}" already exists.`,
+    detail: 'Replace the existing item with the imported one, or skip it?',
+  });
+  return ['replace', 'skip', 'replaceAll', 'skipAll'][choice];
+}
+
+// Resolve what to do with a single duplicate, honoring any bulk decision already
+// taken in this import run. Returns { action: 'replace'|'skip', bulkDecision }.
+function resolveDuplicate(bulkDecision, itemType, itemName) {
+  if (bulkDecision === 'replaceAll') return { action: 'replace', bulkDecision };
+  if (bulkDecision === 'skipAll') return { action: 'skip', bulkDecision };
+
+  const choice = promptDuplicate(itemType, itemName);
+  if (choice === 'replaceAll') return { action: 'replace', bulkDecision: 'replaceAll' };
+  if (choice === 'skipAll') return { action: 'skip', bulkDecision: 'skipAll' };
+  return { action: choice, bulkDecision };
+}
+
 function importData(importSelection, currentISRA, importedISRA) {
-  
+
   if (importSelection.businessAssets.length > 0) {
     importBA( currentISRA, importedISRA, importSelection.businessAssets)
   }
@@ -28,56 +58,58 @@ function importData(importSelection, currentISRA, importedISRA) {
 }
 
 
+function buildBusinessAssetProperties(source) {
+  const props = new BusinessAssetProperties();
+  props.businessAssetConfidentiality = source.businessAssetConfidentiality;
+  props.businessAssetIntegrity = source.businessAssetIntegrity;
+  props.businessAssetAvailability = source.businessAssetAvailability;
+  props.businessAssetAuthenticity = source.businessAssetAuthenticity;
+  props.businessAssetAuthorization = source.businessAssetAuthorization;
+  props.businessAssetNonRepudiation = source.businessAssetNonRepudiation;
+  return props;
+}
+
 function importBA(currentISRA, importedISRA, selectedBAIds) {
   let highestBAId = currentISRA.properties.ISRAmeta.latestBusinessAssetId;
   const currentBusinessAssets = currentISRA.properties.BusinessAsset
   const importedBusinessAssets = importedISRA.BusinessAsset
 
-  // get selected imports
-  const selectedBusinessAssets = []
-  importedBusinessAssets.forEach ((importedBA) => {
-    if (selectedBAIds.includes(importedBA.businessAssetId)) {
-      selectedBusinessAssets.push(importedBA)
-    }
-    
-  });
+  const selectedBusinessAssets = importedBusinessAssets.filter(
+    (importedBA) => selectedBAIds.includes(importedBA.businessAssetId),
+  );
 
-  // Compare the business assets name before adding
+  let bulkDecision = null;
+
   selectedBusinessAssets.forEach((selectedBA) => {
-    let notSame = true;
-    currentBusinessAssets.forEach((currentBA) => {
-      if (selectedBA.businessAssetName === currentBA.businessAssetName) {
-        notSame = false;
-      }
-    });
-    
-    if (notSame) {
+    const existing = currentBusinessAssets.find(
+      (currentBA) => currentBA.businessAssetName === selectedBA.businessAssetName,
+    );
 
+    if (!existing) {
       highestBAId += 1;
-      
-      //importedBAMap[Number(importedBA.businessAssetId)] = highestBAId;
 
       const newBusinessAsset = new BusinessAsset();
-      const newBusinessAssetProperties = new BusinessAssetProperties();
-      newBusinessAssetProperties.businessAssetConfidentiality = selectedBA.businessAssetProperties.businessAssetConfidentiality;
-      newBusinessAssetProperties.businessAssetIntegrity = selectedBA.businessAssetProperties.businessAssetIntegrity
-      newBusinessAssetProperties.businessAssetAvailability = selectedBA.businessAssetProperties.businessAssetAvailability
-      newBusinessAssetProperties.businessAssetAuthenticity = selectedBA.businessAssetProperties.businessAssetAuthenticity
-      newBusinessAssetProperties.businessAssetAuthorization = selectedBA.businessAssetProperties.businessAssetAuthorization
-      newBusinessAssetProperties.businessAssetNonRepudiation = selectedBA.businessAssetProperties.businessAssetNonRepudiation
-
       newBusinessAsset.businessAssetId = highestBAId;
       newBusinessAsset.businessAssetName = selectedBA.businessAssetName;
       newBusinessAsset.businessAssetType = selectedBA.businessAssetType;
       newBusinessAsset.businessAssetDescription = selectedBA.businessAssetDescription;
-      newBusinessAsset.businessAssetProperties = newBusinessAssetProperties;
-      currentISRA.addBusinessAsset(newBusinessAsset)
+      newBusinessAsset.businessAssetProperties = buildBusinessAssetProperties(selectedBA.businessAssetProperties);
+      currentISRA.addBusinessAsset(newBusinessAsset);
+      return;
     }
-    
+
+    const decision = resolveDuplicate(bulkDecision, 'Business Asset', selectedBA.businessAssetName);
+    bulkDecision = decision.bulkDecision;
+    if (decision.action === 'skip') return;
+
+    // Replace: overwrite fields on the existing instance, keep its id so any
+    // references from supporting assets / risks remain valid.
+    const target = currentISRA.getBusinessAsset(existing.businessAssetId);
+    target.businessAssetName = selectedBA.businessAssetName;
+    target.businessAssetType = selectedBA.businessAssetType;
+    target.businessAssetDescription = selectedBA.businessAssetDescription;
+    target.businessAssetProperties = buildBusinessAssetProperties(selectedBA.businessAssetProperties);
   });
-
-
-              
 }
 
 function importSA(currentISRA, importedISRA,  selectedSAIds) {
@@ -85,24 +117,18 @@ function importSA(currentISRA, importedISRA,  selectedSAIds) {
   const currentSupportingAssets = currentISRA.properties.SupportingAsset
   const importedSupportingAssets = importedISRA.SupportingAsset
 
-  const selectedSupportingAssets = []
-  importedSupportingAssets.forEach ((importedSA) => {
-    if (selectedSAIds.includes(importedSA.supportingAssetId)) {
-      selectedSupportingAssets.push(importedSA)
-    }
-    
-  });
+  const selectedSupportingAssets = importedSupportingAssets.filter(
+    (importedSA) => selectedSAIds.includes(importedSA.supportingAssetId),
+  );
+
+  let bulkDecision = null;
 
   selectedSupportingAssets.forEach((selectedSA) => {
-                
-    let notSame = true;
-    currentSupportingAssets.forEach((currentSA) => {
-      if (selectedSA.supportingAssetName === currentSA.supportingAssetName) {
-        notSame = false;
-      }
-    });
+    const existing = currentSupportingAssets.find(
+      (currentSA) => currentSA.supportingAssetName === selectedSA.supportingAssetName,
+    );
 
-    if (notSame) {
+    if (!existing) {
       highestSAId += 1;
 
       const newSupportingAsset = new SupportingAsset();
@@ -111,13 +137,63 @@ function importSA(currentISRA, importedISRA,  selectedSAIds) {
       newSupportingAsset.supportingAssetType = selectedSA.supportingAssetType;
       newSupportingAsset.supportingAssetSecurityLevel = selectedSA.supportingAssetSecurityLevel;
 
-
-      currentISRA.addSupportingAsset(newSupportingAsset)
+      currentISRA.addSupportingAsset(newSupportingAsset);
+      return;
     }
-    
-  });
-              
 
+    const decision = resolveDuplicate(bulkDecision, 'Supporting Asset', selectedSA.supportingAssetName);
+    bulkDecision = decision.bulkDecision;
+    if (decision.action === 'skip') return;
+
+    const target = currentISRA.getSupportingAsset(existing.supportingAssetId);
+    target.supportingAssetName = selectedSA.supportingAssetName;
+    target.supportingAssetType = selectedSA.supportingAssetType;
+    target.supportingAssetSecurityLevel = selectedSA.supportingAssetSecurityLevel;
+  });
+}
+
+function applyRiskFields(target, source) {
+  target.riskName = source.riskName;
+  target.threatAgent = source.threatAgent;
+  target.threatAgentDetail = source.threatAgentDetail;
+  target.threatVerb  = source.threatVerb;
+  target.threatVerbDetail = source.threatVerbDetail;
+  target.motivation = source.motivation;
+  target.motivationDetail = source.motivationDetail;
+  target.isAutomaticRiskName = source.isAutomaticRiskName;
+  target.mitigationsBenefits = source.mitigationsBenefits;
+  target.mitigationsDoneBenefits = source.mitigationsDoneBenefits;
+  target.mitigatedRiskScore = source.mitigatedRiskScore;
+  target.riskManagementDecision = source.riskManagementDecision;
+  target.riskManagementDetail = source.riskManagementDetail;
+  target.residualRiskScore = source.residualRiskScore;
+  target.residualRiskLevel = source.residualRiskLevel;
+
+  const newRiskLikelihood = new RiskLikelihood();
+  newRiskLikelihood.riskLikelihood = source.riskLikelihood.riskLikelihood;
+  newRiskLikelihood.riskLikelihoodDetail = source.riskLikelihood.riskLikelihoodDetail;
+  newRiskLikelihood.skillLevel = source.riskLikelihood.skillLevel;
+  newRiskLikelihood.reward = source.riskLikelihood.reward;
+  newRiskLikelihood.accessResources = source.riskLikelihood.accessResources;
+  newRiskLikelihood.intrusionDetection = source.riskLikelihood.intrusionDetection;
+  newRiskLikelihood.size = source.riskLikelihood.size;
+  newRiskLikelihood.threatFactorScore = source.riskLikelihood.threatFactorScore;
+  newRiskLikelihood.threatFactorLevel = source.riskLikelihood.threatFactorLevel;
+  newRiskLikelihood.occurrence = source.riskLikelihood.occurrence;
+  newRiskLikelihood.occurrenceLevel = source.riskLikelihood.occurrenceLevel;
+  newRiskLikelihood.isOWASPLikelihood = source.riskLikelihood.isOWASPLikelihood;
+  target.riskLikelihood = newRiskLikelihood;
+
+  const newRiskImpact = new RiskImpact();
+  newRiskImpact.businessAssetConfidentialityFlag = source.riskImpact.businessAssetConfidentialityFlag;
+  newRiskImpact.businessAssetIntegrityFlag = source.riskImpact.businessAssetIntegrityFlag;
+  newRiskImpact.businessAssetAvailabilityFlag = source.riskImpact.businessAssetAvailabilityFlag;
+  newRiskImpact.businessAssetAuthenticityFlag = source.riskImpact.businessAssetAuthenticityFlag;
+  newRiskImpact.businessAssetAuthorizationFlag = source.riskImpact.businessAssetAuthorizationFlag;
+  newRiskImpact.businessAssetNonRepudiationFlag = source.riskImpact.businessAssetNonRepudiationFlag;
+  target.riskImpact = newRiskImpact;
+
+  target.riskAttackPaths = source.riskAttackPaths;
 }
 
 function importRisk(currentISRA, importedISRA, selectedRiskIds) {
@@ -125,81 +201,33 @@ function importRisk(currentISRA, importedISRA, selectedRiskIds) {
   const currentRisks = currentISRA.properties.Risk;
   const importedRisks = importedISRA.Risk;
 
-  const selectedRisks = []
-  importedRisks.forEach ((importedRisk) => {
-    if (selectedRiskIds.includes(importedRisk.riskId)) {
-      selectedRisks.push(importedRisk)
-    }
-    
-  });
+  const selectedRisks = importedRisks.filter(
+    (importedRisk) => selectedRiskIds.includes(importedRisk.riskId),
+  );
 
-  selectedRisks.forEach ((selectedRisk) => {
-                
-    let notSame = true;
-    currentRisks.forEach ((currentRisk) => {
-      if (selectedRisk.riskName === currentRisk.riskName) {
-        notSame = false;
-      }
-    });
+  let bulkDecision = null;
 
-    if (notSame) {
+  selectedRisks.forEach((selectedRisk) => {
+    const existing = currentRisks.find(
+      (currentRisk) => currentRisk.riskName === selectedRisk.riskName,
+    );
 
+    if (!existing) {
       highestRiskId += 1;
       const newRisk = new Risk();
-      
-      newRisk.riskName = selectedRisk.riskName;
-      newRisk.threatAgent = selectedRisk.threatAgent;
-      newRisk.threatAgentDetail = selectedRisk.threatAgentDetail;
-      newRisk.threatVerb  = selectedRisk.threatVerb;
-      newRisk.threatVerbDetail = selectedRisk.threatVerbDetail;
-      newRisk.motivation = selectedRisk.motivation;
-      newRisk.motivationDetail = selectedRisk.motivationDetail;
-
-      newRisk.isAutomaticRiskName = selectedRisk.isAutomaticRiskName;
-
-      // Need to change to account for schema update
       newRisk.riskId = highestRiskId;
-      newRisk.riskName  = selectedRisk.riskName;
-      newRisk.mitigationsBenefits = selectedRisk.mitigationsBenefits;
-      newRisk.mitigationsDoneBenefits = selectedRisk.mitigationsDoneBenefits;
-      newRisk.mitigatedRiskScore = selectedRisk.mitigatedRiskScore;
-      newRisk.riskManagementDecision = selectedRisk.riskManagementDecision;
-      newRisk.riskManagementDetail = selectedRisk.riskManagementDetail;
-      newRisk.residualRiskScore = selectedRisk.residualRiskScore;
-      newRisk.residualRiskLevel = selectedRisk.residualRiskLevel;
-      const newRiskLikelihood = new RiskLikelihood();
-      newRiskLikelihood.riskLikelihood = selectedRisk.riskLikelihood.riskLikelihood;
-      newRiskLikelihood.riskLikelihoodDetail = selectedRisk.riskLikelihood.riskLikelihoodDetail;
-      newRiskLikelihood.skillLevel = selectedRisk.riskLikelihood.skillLevel;
-      newRiskLikelihood.reward = selectedRisk.riskLikelihood.reward;
-      newRiskLikelihood.accessResources = selectedRisk.riskLikelihood.accessResources;
-      newRiskLikelihood.intrusionDetection = selectedRisk.riskLikelihood.intrusionDetection;
-      newRiskLikelihood.size = selectedRisk.riskLikelihood.size;
-      newRiskLikelihood.threatFactorScore = selectedRisk.riskLikelihood.threatFactorScore;
-      newRiskLikelihood.threatFactorLevel = selectedRisk.riskLikelihood.threatFactorLevel;
-      newRiskLikelihood.occurrence = selectedRisk.riskLikelihood.occurrence;
-      newRiskLikelihood.occurrenceLevel = selectedRisk.riskLikelihood.occurrenceLevel;
-      newRiskLikelihood.isOWASPLikelihood = selectedRisk.riskLikelihood.isOWASPLikelihood;
-      newRisk.riskLikelihood = newRiskLikelihood;
-      const newRiskImpact = new RiskImpact();
-      newRiskImpact.businessAssetConfidentialityFlag = selectedRisk.riskImpact.businessAssetConfidentialityFlag;
-      newRiskImpact.businessAssetIntegrityFlag = selectedRisk.riskImpact.businessAssetIntegrityFlag;
-      newRiskImpact.businessAssetAvailabilityFlag = selectedRisk.riskImpact.businessAssetAvailabilityFlag;
-      newRiskImpact.businessAssetAuthenticityFlag = selectedRisk.riskImpact.businessAssetAuthenticityFlag;
-      newRiskImpact.businessAssetAuthorizationFlag = selectedRisk.riskImpact.businessAssetAuthorizationFlag;
-      newRiskImpact.businessAssetNonRepudiationFlag = selectedRisk.riskImpact.businessAssetNonRepudiationFlag;
-      newRisk.riskImpact = newRiskImpact;
-      //riskAttackPaths need to use new RiskAttackPaths()
-      newRisk.riskAttackPaths = selectedRisk.riskAttackPaths
-      newRisk.residualRiskLevel = selectedRisk.residualRiskLevel;
-      
-     
-      currentISRA.addRisk(newRisk)
+      applyRiskFields(newRisk, selectedRisk);
+      currentISRA.addRisk(newRisk);
+      return;
     }
-    
-  });
 
-              
+    const decision = resolveDuplicate(bulkDecision, 'Risk', selectedRisk.riskName);
+    bulkDecision = decision.bulkDecision;
+    if (decision.action === 'skip') return;
+
+    const target = currentISRA.getRisk(existing.riskId);
+    applyRiskFields(target, selectedRisk);
+  });
 }
 
 function importVul(currentISRA, importedISRA, selectedVulIds) {
@@ -207,24 +235,18 @@ function importVul(currentISRA, importedISRA, selectedVulIds) {
   const currentVuls = currentISRA.properties.Vulnerability
   const importedVuls = importedISRA.Vulnerability
 
-  const selectedVuls = []
-  importedVuls.forEach ((importedVul) => {
-    if (selectedVulIds.includes(importedVul.vulnerabilityId)) {
-      selectedVuls.push(importedVul)
-    }
-    
-  });
+  const selectedVuls = importedVuls.filter(
+    (importedVul) => selectedVulIds.includes(importedVul.vulnerabilityId),
+  );
 
-  selectedVuls.forEach ((selectedVul) => {
-                
-    let notSame = true;
-    currentVuls.forEach ((currentVul) => {
-      if (selectedVul.vulnerabilityName === currentVul.vulnerabilityName) {
-        notSame = false;
-      }
-    });
+  let bulkDecision = null;
 
-    if (notSame) {
+  selectedVuls.forEach((selectedVul) => {
+    const existing = currentVuls.find(
+      (currentVul) => currentVul.vulnerabilityName === selectedVul.vulnerabilityName,
+    );
+
+    if (!existing) {
       highestVulId += 1;
 
       const newVulnerability = new Vulnerability();
@@ -236,18 +258,30 @@ function importVul(currentISRA, importedISRA, selectedVulIds) {
       newVulnerability.vulnerabilityCVE = selectedVul.vulnerabilityCVE;
       newVulnerability.vulnerabilityDescription = selectedVul.vulnerabilityDescription;
       newVulnerability.vulnerabilityDescriptionAttachment = selectedVul.vulnerabilityDescriptionAttachment;
-      
       newVulnerability.overallScore = selectedVul.overallScore;
       newVulnerability.overallLevel = selectedVul.overallLevel;
       newVulnerability.cveScore = selectedVul.cveScore;
 
-      currentISRA.addVulnerability(newVulnerability)
+      currentISRA.addVulnerability(newVulnerability);
+      return;
     }
 
+    const decision = resolveDuplicate(bulkDecision, 'Vulnerability', selectedVul.vulnerabilityName);
+    bulkDecision = decision.bulkDecision;
+    if (decision.action === 'skip') return;
+
+    const target = currentISRA.getVulnerability(existing.vulnerabilityId);
+    target.vulnerabilityName = selectedVul.vulnerabilityName;
+    target.vulnerabilityFamily = selectedVul.vulnerabilityFamily;
+    target.vulnerabilityTrackingID = selectedVul.vulnerabilityTrackingID;
+    target.vulnerabilityTrackingURI = selectedVul.vulnerabilityTrackingURI;
+    target.vulnerabilityCVE = selectedVul.vulnerabilityCVE;
+    target.vulnerabilityDescription = selectedVul.vulnerabilityDescription;
+    target.vulnerabilityDescriptionAttachment = selectedVul.vulnerabilityDescriptionAttachment;
+    target.overallScore = selectedVul.overallScore;
+    target.overallLevel = selectedVul.overallLevel;
+    target.cveScore = selectedVul.cveScore;
   });
-
-
-              
 }
 
 module.exports = {
