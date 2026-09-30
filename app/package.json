@@ -114,7 +114,7 @@
     },
     "devDependencies": {
         "@playwright/test": "^1.61.1",
-        "electron": "^42.5.0",
+        "electron": "^42.10.0",
         "electron-builder": "^26.16.1"
     },
     "overrides": {
@@ -129,7 +129,7 @@
         "@xmldom/xmldom": "^0.8.15",
         "app-builder-lib": {
             "@noble/hashes": "^1.8.0",
-            "undici": "^7.29.0"
+            "undici": "^7.29.1"
         }
     }
 }
