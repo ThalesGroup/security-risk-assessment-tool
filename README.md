@@ -197,7 +197,7 @@ Documentation for lib is available at [lib/doc/index.html](lib/doc/index.html).
 
 ## Contact
 
-* Carl Eric Codere and Sebastien Petit are currently overseeing the project in Thales DIS
+* Carl Eric Codere, Alvin John Pagente and Sebastien Petit are currently overseeing the project in Thales DIS
 
 ## Credits
 
@@ -206,6 +206,7 @@ Documentation for lib is available at [lib/doc/index.html](lib/doc/index.html).
 * Alvin Siah for the major improvements to the Electron version.
 * Sun Fang who reviewed and helped us improve the JSON Schema
 * Thomas Delplanque who improved error management and corrected several issues.
+* Nanami Arai who corrected multiple issues and stabilized the application.
 * All other people including Philippe Biton, Frank Converset,  Antoine Galland,  Patrick George, Karen Lu, Sebastien Petit, Petr Skripal, who improved, commented and/or worked on the ISRA methodology throughout the years.
 
 Since this methodology has been around for several years internally, we may have missed some names who contributed to it, our apologies if its the case. 
